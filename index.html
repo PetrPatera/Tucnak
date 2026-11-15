@@ -7,12 +7,13 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Tučňákův svět — Hravé učení (5–7 let)</title>
-  <link rel="manifest" href="./assets/manifest-Bdw-YLXF.webmanifest" />
-  <link rel="icon" type="image/svg+xml" href="./assets/icon-CCydZH2F.svg" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/icon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" crossorigin href="./assets/index-4NL5EYon.css">
+  <style>.hidden { display: none !important; }</style>
+  <link rel="stylesheet" href="./css/styles.css?v=5" />
 </head>
 <body>
   <div id="app-shell" class="app-shell">
@@ -202,7 +203,7 @@
         <div id="karaoke-text" class="karaoke-text">
           AHOJ KAMARÁDE! JÁ JSEM TUČŇÁK PIKO.
         </div>
-        <div id="penguin-state-pill" class="penguin-state-pill">IDLE</div>
+        <div id="penguin-state-pill" class="penguin-state-pill hidden">IDLE</div>
       </div>
 
       <!-- Vždy dostupné tlačítko pro zopakování hlasové instrukce -->
@@ -322,7 +323,7 @@
     </div>
   </div>
 
-  <script src="./js/data-bundle.js"></script>
-  <script src="./js/app.js"></script>
+  <script src="./js/data-bundle.js?v=5"></script>
+  <script src="./js/app.js?v=5"></script>
 </body>
 </html>

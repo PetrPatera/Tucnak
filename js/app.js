@@ -556,7 +556,7 @@
         </div>
         <div class="studio-layout">
           <div class="canvas-frame">
-            <canvas id="step-draw-canvas" class="draw-canvas" width="${cfg.canvasWidth}" height="${cfg.canvasHeight}"></canvas>
+            <canvas id="step-draw-canvas" class="draw-canvas" width="${cfg.canvasWidth}" height="${cfg.canvasHeight}" draggable="false" style="touch-action:none; user-select:none;"></canvas>
           </div>
           <aside class="studio-sidebar">
             <div class="tool-box">
@@ -621,15 +621,36 @@
     bindEvents() {
       const getPos = (e) => {
         const rect = this.canvas.getBoundingClientRect();
+        const scaleX = rect.width > 0 ? this.canvas.width / rect.width : 1;
+        const scaleY = rect.height > 0 ? this.canvas.height / rect.height : 1;
         return {
-          x: ((e.clientX - rect.left) / rect.width) * this.canvas.width,
-          y: ((e.clientY - rect.top) / rect.height) * this.canvas.height
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY
         };
       };
 
+      const drawStrokeSegment = (fromPt, toPt) => {
+        this.paintCtx.beginPath();
+        this.paintCtx.moveTo(fromPt.x, fromPt.y);
+        this.paintCtx.lineTo(toPt.x, toPt.y);
+        this.paintCtx.strokeStyle = this.activeColor;
+        this.paintCtx.lineWidth = this.brushSize;
+        this.paintCtx.lineCap = "round";
+        this.paintCtx.lineJoin = "round";
+        this.paintCtx.stroke();
+      };
+
+      this.canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+      this.canvas.addEventListener("dragstart", (e) => e.preventDefault());
+
       this.canvas.addEventListener("pointerdown", (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
         e.preventDefault();
-        this.canvas.setPointerCapture(e.pointerId);
+        try {
+          this.canvas.setPointerCapture(e.pointerId);
+        } catch (_err) {
+          // Ignorovat, pokud prohlížeč pointerCapture nepodporuje
+        }
         this.isDrawing = true;
         this.lastPt = getPos(e);
         this.paintCtx.beginPath();
@@ -642,34 +663,44 @@
       });
 
       this.canvas.addEventListener("pointermove", (e) => {
-        if (!this.isDrawing) return;
+        if (!this.isDrawing) {
+          if (e.buttons === 1) {
+            this.isDrawing = true;
+            this.lastPt = getPos(e);
+          } else {
+            return;
+          }
+        }
+        e.preventDefault();
         const pt = getPos(e);
-        const mid = {
-          x: (this.lastPt.x + pt.x) / 2,
-          y: (this.lastPt.y + pt.y) / 2
-        };
-        this.paintCtx.beginPath();
-        this.paintCtx.moveTo(this.lastPt.x, this.lastPt.y);
-        this.paintCtx.quadraticCurveTo(this.lastPt.x, this.lastPt.y, mid.x, mid.y);
-        this.paintCtx.strokeStyle = this.activeColor;
-        this.paintCtx.lineWidth = this.brushSize;
-        this.paintCtx.lineCap = "round";
-        this.paintCtx.lineJoin = "round";
-        this.paintCtx.stroke();
-
+        if (!this.lastPt) {
+          this.lastPt = pt;
+        }
+        drawStrokeSegment(this.lastPt, pt);
+        this.checkSegmentHit(this.lastPt, pt);
         this.lastPt = pt;
-        this.checkPointHit(pt);
         this.redraw();
       });
 
-      const endStroke = () => {
+      const endStroke = (e) => {
         if (!this.isDrawing) return;
+        if (e && e.pointerId !== undefined) {
+          try {
+            if (this.canvas.hasPointerCapture(e.pointerId)) {
+              this.canvas.releasePointerCapture(e.pointerId);
+            }
+          } catch (_err) {
+            // Ignorovat
+          }
+        }
         this.isDrawing = false;
+        this.lastPt = null;
         this.evaluateStepProgress();
       };
 
       this.canvas.addEventListener("pointerup", endStroke);
       this.canvas.addEventListener("pointercancel", endStroke);
+      this.canvas.addEventListener("lostpointercapture", endStroke);
 
       // Barvy
       this.hostEl.querySelectorAll("#draw-swatches .btn-swatch").forEach((btn) => {
@@ -797,17 +828,30 @@
     checkPointHit(pt) {
       if (this.coloringMode) return;
       for (const cp of this.checkpoints) {
-        if (!cp.hit && Math.hypot(cp.x - pt.x, cp.y - pt.y) < 42) {
+        if (!cp.hit && Math.hypot(cp.x - pt.x, cp.y - pt.y) < 44) {
           cp.hit = true;
           this.hitCount += 1;
         }
       }
     }
 
+    checkSegmentHit(p1, p2) {
+      if (this.coloringMode) return;
+      const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      const steps = Math.max(1, Math.ceil(dist / 12));
+      for (let i = 1; i <= steps; i++) {
+        const t = i / steps;
+        this.checkPointHit({
+          x: p1.x + (p2.x - p1.x) * t,
+          y: p1.y + (p2.y - p1.y) * t
+        });
+      }
+    }
+
     evaluateStepProgress() {
       if (this.coloringMode || !this.checkpoints.length) return;
       const ratio = this.hitCount / this.checkpoints.length;
-      if (ratio >= 0.58) {
+      if (ratio >= 0.72) {
         this.completeCurrentStep();
       }
     }
@@ -963,7 +1007,7 @@
         </div>
         <div class="studio-layout">
           <div class="canvas-frame">
-            <canvas id="sym-canvas" class="draw-canvas" width="760" height="460"></canvas>
+            <canvas id="sym-canvas" class="draw-canvas" width="760" height="460" draggable="false" style="touch-action:none; user-select:none;"></canvas>
           </div>
           <aside class="studio-sidebar">
             <div class="tool-box">
@@ -992,9 +1036,11 @@
 
       const getPos = (e) => {
         const rect = this.canvas.getBoundingClientRect();
+        const scaleX = rect.width > 0 ? this.canvas.width / rect.width : 1;
+        const scaleY = rect.height > 0 ? this.canvas.height / rect.height : 1;
         return {
-          x: ((e.clientX - rect.left) / rect.width) * this.canvas.width,
-          y: ((e.clientY - rect.top) / rect.height) * this.canvas.height
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY
         };
       };
 
@@ -1005,6 +1051,7 @@
         this.ctx.strokeStyle = this.activeColor;
         this.ctx.lineWidth = 10;
         this.ctx.lineCap = "round";
+        this.ctx.lineJoin = "round";
         this.ctx.stroke();
 
         if (this.autoMirror) {
@@ -1012,13 +1059,25 @@
           this.ctx.beginPath();
           this.ctx.moveTo(w - p1.x, p1.y);
           this.ctx.lineTo(w - p2.x, p2.y);
+          this.ctx.strokeStyle = this.activeColor;
+          this.ctx.lineWidth = 10;
+          this.ctx.lineCap = "round";
+          this.ctx.lineJoin = "round";
           this.ctx.stroke();
         }
       };
 
+      this.canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+      this.canvas.addEventListener("dragstart", (e) => e.preventDefault());
+
       this.canvas.addEventListener("pointerdown", (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
         e.preventDefault();
-        this.canvas.setPointerCapture(e.pointerId);
+        try {
+          this.canvas.setPointerCapture(e.pointerId);
+        } catch (_err) {
+          // Ignorovat
+        }
         this.isDrawing = true;
         this.lastPt = getPos(e);
         drawSegment(this.lastPt, { x: this.lastPt.x + 0.1, y: this.lastPt.y + 0.1 });
@@ -1026,13 +1085,39 @@
       });
 
       this.canvas.addEventListener("pointermove", (e) => {
-        if (!this.isDrawing) return;
+        if (!this.isDrawing) {
+          if (e.buttons === 1) {
+            this.isDrawing = true;
+            this.lastPt = getPos(e);
+          } else {
+            return;
+          }
+        }
+        e.preventDefault();
         const pt = getPos(e);
+        if (!this.lastPt) this.lastPt = pt;
         drawSegment(this.lastPt, pt);
         this.lastPt = pt;
       });
 
-      this.canvas.addEventListener("pointerup", () => (this.isDrawing = false));
+      const stopSymDraw = (e) => {
+        if (!this.isDrawing) return;
+        if (e && e.pointerId !== undefined) {
+          try {
+            if (this.canvas.hasPointerCapture(e.pointerId)) {
+              this.canvas.releasePointerCapture(e.pointerId);
+            }
+          } catch (_err) {
+            // Ignorovat
+          }
+        }
+        this.isDrawing = false;
+        this.lastPt = null;
+      };
+
+      this.canvas.addEventListener("pointerup", stopSymDraw);
+      this.canvas.addEventListener("pointercancel", stopSymDraw);
+      this.canvas.addEventListener("lostpointercapture", stopSymDraw);
 
       this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => {
         b.addEventListener("click", () => {
@@ -2027,21 +2112,20 @@
       listEl.innerHTML = acts
         .map((act) => {
           const earned = this.store.state.starsEarned[act.id] || 0;
-          const starBadge = earned ? `⭐ ${earned}/3` : "NOVÉ";
+          const starBadge = earned ? "⭐".repeat(earned) : "⭐";
           return `
             <div class="activity-card-row ${act.implementedInPrototype ? "playable" : ""}">
               <div class="activity-row-info">
                 <span class="activity-row-icon">${act.icon}</span>
                 <div>
-                  <div class="activity-row-title">${act.number}. ${act.title}</div>
-                  <div class="activity-row-goal">${act.pedagogicalGoal}</div>
+                  <div class="activity-row-title">${act.title.toUpperCase()}</div>
                 </div>
               </div>
               <div class="activity-row-actions">
                 ${
                   act.implementedInPrototype
-                    ? `<button class="btn-touch btn-primary btn-launch-act" data-act-id="${act.id}">▶ HRÁT (${starBadge})</button>`
-                    : `<button class="btn-touch btn-secondary btn-preview-act" data-act-id="${act.id}">🔊 UKÁZKA</button>`
+                    ? `<button class="btn-touch btn-primary btn-launch-act" data-act-id="${act.id}">▶ HRÁT ${starBadge}</button>`
+                    : `<button class="btn-touch btn-secondary btn-preview-act" data-act-id="${act.id}">🔊 POSLECHNOUT</button>`
                 }
               </div>
             </div>
@@ -2261,8 +2345,24 @@
         // Offline / lokální záloha z data-bundle.js
       }
 
+      if ("caches" in window) {
+        caches
+          .keys()
+          .then((keys) =>
+            Promise.all(
+              keys.filter((k) => k !== "tucnakuv-svet-v5").map((k) => caches.delete(k))
+            )
+          )
+          .catch(() => {});
+      }
+
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js").catch(() => {});
+        navigator.serviceWorker
+          .register("./sw.js?v=5")
+          .then((reg) => {
+            reg.update().catch(() => {});
+          })
+          .catch(() => {});
       }
     }
 
