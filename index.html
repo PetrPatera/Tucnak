@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#277DA1" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Tučňákův svět — Hravé učení (5–7 let)</title>
+  <link rel="manifest" href="./assets/manifest-Bdw-YLXF.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./assets/icon-CCydZH2F.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" crossorigin href="./assets/index-DxsdCNRV.css">
+</head>
+<body>
+  <div id="app-shell" class="app-shell">
+    <!-- Horní lišta -->
+    <header id="top-bar" class="top-bar">
+      <div class="top-left">
+        <button id="btn-home" class="btn-touch btn-home hidden" aria-label="Zpět na mapu ostrovů">
+          <span class="btn-icon">🗺️</span>
+          <span class="btn-label">MAPA</span>
+        </button>
+        <div id="brand-badge" class="brand-badge">
+          <span class="brand-emoji">🐧</span>
+          <span class="brand-title">TUČŇÁKŮV SVĚT</span>
+        </div>
+        <div id="level-stars-bar" class="level-stars-bar hidden" aria-label="Výběr obtížnosti">
+          <button class="btn-touch btn-star-level" data-stars="1" aria-label="Úroveň 1 hvězdička">★</button>
+          <button class="btn-touch btn-star-level" data-stars="2" aria-label="Úroveň 2 hvězdičky">★★</button>
+          <button class="btn-touch btn-star-level" data-stars="3" aria-label="Úroveň 3 hvězdičky">★★★</button>
+        </div>
+      </div>
+
+      <!-- Rychlé přepínání hratelných aktivit -->
+      <nav id="quick-switch-bar" class="quick-switch-bar" aria-label="Ukázkové aktivity">
+        <button class="btn-touch btn-quick" data-act="act_01_step_draw">
+          <span>✏️</span><span>KRESLENÍ</span>
+        </button>
+        <button class="btn-touch btn-quick" data-act="act_03_symmetry">
+          <span>🦋</span><span>SYMETRIE</span>
+        </button>
+        <button class="btn-touch btn-quick" data-act="act_06_tangram">
+          <span>🔷</span><span>TANGRAM</span>
+        </button>
+        <button class="btn-touch btn-quick" data-act="act_10_first_letter">
+          <span>🔤</span><span>PÍSMENO</span>
+        </button>
+        <button class="btn-touch btn-quick" data-act="act_14_feed_penguin">
+          <span>🐟</span><span>POČÍTÁNÍ</span>
+        </button>
+      </nav>
+
+      <!-- Rodičovský zámek a časovač -->
+      <div class="top-right">
+        <div id="session-timer-badge" class="timer-badge" title="Zbývající čas hry">
+          <span>⏱️</span>
+          <span id="session-timer-text">30:00</span>
+        </div>
+        <button id="btn-parent-gate" class="btn-touch btn-parent-gate" aria-label="Rodičovská zóna — podržte 3 sekundy">
+          <svg class="hold-ring-svg" viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="hold-ring-bg" cx="32" cy="32" r="28" />
+            <circle id="parent-hold-ring" class="hold-ring-fg" cx="32" cy="32" r="28" />
+          </svg>
+          <span class="parent-lock-icon">🔒</span>
+          <span class="parent-lock-text">RODIČE (3s)</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hlavní herní plocha -->
+    <main id="main-stage" class="main-stage">
+      <!-- POHLED 1: Hlavní mapa 5 ostrovů -->
+      <section id="view-map" class="view-map">
+        <svg class="map-backdrop-svg" viewBox="0 0 1280 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#DDF2FD" />
+              <stop offset="55%" stop-color="#EAF7FF" />
+              <stop offset="100%" stop-color="#BCE3FA" />
+            </linearGradient>
+            <linearGradient id="seaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#A8DCFA" />
+              <stop offset="100%" stop-color="#7AC7F4" />
+            </linearGradient>
+          </defs>
+          <rect width="1280" height="620" fill="url(#skyGrad)" />
+          <!-- Obláčky a jemné ledovce v pozadí -->
+          <g fill="#FFFFFF" opacity="0.82">
+            <ellipse cx="180" cy="85" rx="75" ry="28" />
+            <ellipse cx="220" cy="75" rx="50" ry="25" />
+            <ellipse cx="640" cy="68" rx="90" ry="26" />
+            <ellipse cx="1050" cy="95" rx="80" ry="28" />
+          </g>
+          <!-- Vzdálené zasněžené hory -->
+          <path d="M0,250 L140,145 L270,235 L430,130 L590,240 L760,150 L930,240 L1110,135 L1280,235 L1280,620 L0,620 Z" fill="#E8F6FF" />
+          <path d="M0,260 Q320,230 640,260 T1280,255 L1280,620 L0,620 Z" fill="url(#seaGrad)" />
+          <!-- Plovoucí ledové kry -->
+          <ellipse cx="160" cy="495" rx="85" ry="22" fill="#F0FAFF" opacity="0.7" />
+          <ellipse cx="640" cy="390" rx="95" ry="24" fill="#F0FAFF" opacity="0.65" />
+          <ellipse cx="1110" cy="495" rx="90" ry="22" fill="#F0FAFF" opacity="0.7" />
+          <!-- Propojovací plavební trasy mezi ostrovy -->
+          <path d="M235,205 Q430,120 625,155 T1015,210" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="14 12" stroke-linecap="round" opacity="0.85" />
+          <path d="M235,215 Q320,340 435,415 T865,415 Q965,330 1015,210" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="14 12" stroke-linecap="round" opacity="0.85" />
+        </svg>
+
+        <div id="islands-layer" class="islands-layer">
+          <!-- Generováno dynamicky z katalogu 5 zón -->
+        </div>
+
+        <!-- Výsuvný šuplík zóny s aktivitami -->
+        <aside id="zone-drawer" class="zone-drawer hidden" aria-label="Aktivity ostrova">
+          <div class="zone-drawer-header">
+            <div class="zone-drawer-title-wrap">
+              <span id="drawer-zone-icon" class="drawer-zone-icon">🎨</span>
+              <div>
+                <h2 id="drawer-zone-title">Umělecký ateliér</h2>
+                <p id="drawer-zone-subtitle">Kreslení, míchání barev a tvoření</p>
+              </div>
+            </div>
+            <button id="btn-close-drawer" class="btn-touch btn-close-drawer" aria-label="Zavřít nabídku ostrova">✕</button>
+          </div>
+          <div id="drawer-activities-list" class="drawer-activities-list">
+            <!-- Kartičky aktivit dané zóny -->
+          </div>
+        </aside>
+      </section>
+
+      <!-- POHLED 2: Obrazovka aktivní hry -->
+      <section id="view-activity" class="view-activity hidden">
+        <div id="activity-workspace" class="activity-workspace">
+          <!-- Dynamicky osazeno herním enginem dle typu aktivity -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Trvalá lišta s maskotem tučňákem a karaoke titulky -->
+    <footer id="mascot-dock" class="mascot-dock">
+      <div id="penguin-container" class="penguin-container state-idle">
+        <div id="penguin-particles" class="penguin-particles" aria-hidden="true"></div>
+        <!-- Interaktivní SVG maskot Tučňák Piko se stavovým automatem -->
+        <svg id="penguin-svg" class="penguin-svg" viewBox="0 0 180 190" role="img" aria-label="Tučňák Piko">
+          <!-- Stín na ledu -->
+          <ellipse cx="90" cy="176" rx="52" ry="10" fill="#89C2D9" opacity="0.45" />
+          <!-- Nožičky -->
+          <g class="penguin-feet">
+            <ellipse cx="67" cy="168" rx="18" ry="9" fill="#F77F00" />
+            <ellipse cx="113" cy="168" rx="18" ry="9" fill="#F77F00" />
+          </g>
+          <!-- Tělo -->
+          <g class="penguin-body-group">
+            <!-- Levé křídlo -->
+            <path class="penguin-wing-left" d="M36,92 C12,112 18,144 38,148 C48,148 52,126 48,100 Z" fill="#1D3557" />
+            <!-- Pravé křídlo -->
+            <path class="penguin-wing-right" d="M144,92 C168,112 162,144 142,148 C132,148 128,126 132,100 Z" fill="#1D3557" />
+            <!-- Ovál těla -->
+            <ellipse cx="90" cy="118" rx="50" ry="54" fill="#1D3557" />
+            <ellipse cx="90" cy="124" rx="34" ry="42" fill="#FFFFFF" />
+            <!-- Zimní šála -->
+            <path d="M52,88 Q90,104 128,88 L124,98 Q90,114 56,98 Z" fill="#EF476F" />
+            <path d="M104,95 L118,124 L104,126 L94,98 Z" fill="#D90429" />
+            <!-- Hlava -->
+            <g class="penguin-head">
+              <circle cx="90" cy="64" r="38" fill="#1D3557" />
+              <!-- Bílý obličejový srdcový vzor -->
+              <path d="M62,60 C62,40 85,42 90,55 C95,42 118,40 118,60 C118,82 104,90 90,90 C76,90 62,82 62,60 Z" fill="#FFFFFF" />
+              <!-- Růžové tvářičky -->
+              <ellipse cx="66" cy="72" rx="7" ry="4" fill="#FFAFCC" opacity="0.8" />
+              <ellipse cx="114" cy="72" rx="7" ry="4" fill="#FFAFCC" opacity="0.8" />
+              <!-- Oči -->
+              <g class="penguin-eyes">
+                <circle class="eye-ball" cx="76" cy="60" r="6.5" fill="#1D3557" />
+                <circle class="eye-glint" cx="78" cy="58" r="2.2" fill="#FFFFFF" />
+                <circle class="eye-ball" cx="104" cy="60" r="6.5" fill="#1D3557" />
+                <circle class="eye-glint" cx="106" cy="58" r="2.2" fill="#FFFFFF" />
+                <!-- Zavřená spící víčka pro režim SLEEPY -->
+                <path class="eye-sleep" d="M69,60 Q76,66 83,60" fill="none" stroke="#1D3557" stroke-width="3" stroke-linecap="round" />
+                <path class="eye-sleep" d="M97,60 Q104,66 111,60" fill="none" stroke="#1D3557" stroke-width="3" stroke-linecap="round" />
+              </g>
+              <!-- Zobáček (horní a dolní část pro animaci mluvení) -->
+              <polygon class="beak-top" points="80,68 100,68 90,79" fill="#FFB703" />
+              <polygon class="beak-bottom" points="83,75 97,75 90,84" fill="#FB8500" />
+              <!-- Spící pyžamková čepička (zobrazí se v SLEEPY režimu) -->
+              <g class="penguin-nightcap">
+                <path d="M58,42 Q90,10 124,38 Q138,44 134,56 Q116,46 90,42 Q68,42 58,42 Z" fill="#4361EE" />
+                <path d="M55,41 Q90,32 124,41" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" />
+                <circle cx="136" cy="58" r="8" fill="#FFFFFF" />
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Karaoke bublina s textem VELKÝMI TISKACÍMI PÍSMENY -->
+      <div id="karaoke-bubble" class="karaoke-bubble" aria-live="polite">
+        <div id="karaoke-text" class="karaoke-text">
+          AHOJ KAMARÁDE! JÁ JSEM TUČŇÁK PIKO.
+        </div>
+        <div id="penguin-state-pill" class="penguin-state-pill">IDLE</div>
+      </div>
+
+      <!-- Vždy dostupné tlačítko pro zopakování hlasové instrukce -->
+      <button id="btn-repeat-audio" class="btn-touch btn-repeat-audio" aria-label="Zopakovat hlasovou instrukci">
+        <span class="repeat-icon">🔊</span>
+        <span class="repeat-label">ZOPAKOVAT</span>
+      </button>
+    </footer>
+
+    <!-- Vrstva konfet a oslav -->
+    <div id="celebration-layer" class="celebration-layer" aria-hidden="true"></div>
+
+    <!-- MODÁLNÍ OKNO: Rodičovská brána (Matematický zámek) -->
+    <div id="modal-parent-gate" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+      <div class="modal-card gate-card">
+        <h2 id="gate-title">🔒 Vstup pro rodiče</h2>
+        <p class="gate-subtitle">Pro odemčení rodičovské zóny spočítejte příklad:</p>
+        <div id="gate-question" class="gate-question">14 + 7 = ?</div>
+        <div id="gate-answer-display" class="gate-answer-display">_</div>
+        <div id="gate-error-msg" class="gate-error-msg hidden">Zkuste to prosím znovu.</div>
+        <div class="numpad-grid">
+          <button class="btn-touch numpad-key" data-digit="1">1</button>
+          <button class="btn-touch numpad-key" data-digit="2">2</button>
+          <button class="btn-touch numpad-key" data-digit="3">3</button>
+          <button class="btn-touch numpad-key" data-digit="4">4</button>
+          <button class="btn-touch numpad-key" data-digit="5">5</button>
+          <button class="btn-touch numpad-key" data-digit="6">6</button>
+          <button class="btn-touch numpad-key" data-digit="7">7</button>
+          <button class="btn-touch numpad-key" data-digit="8">8</button>
+          <button class="btn-touch numpad-key" data-digit="9">9</button>
+          <button class="btn-touch numpad-key numpad-clear" data-action="clear">⌫</button>
+          <button class="btn-touch numpad-key" data-digit="0">0</button>
+          <button class="btn-touch numpad-key numpad-ok" data-action="submit">✓</button>
+        </div>
+        <button id="btn-gate-cancel" class="btn-touch btn-secondary">Zavřít</button>
+      </div>
+    </div>
+
+    <!-- MODÁLNÍ OKNO: Rodičovská zóna -->
+    <div id="modal-parent-zone" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="pz-title">
+      <div class="modal-card parent-zone-card">
+        <div class="pz-header">
+          <h2 id="pz-title">👨‍👩‍👧 Rodičovská zóna — Tučňákův svět</h2>
+          <button id="btn-pz-close" class="btn-touch btn-close-drawer" aria-label="Zavřít rodičovskou zónu">✕</button>
+        </div>
+        <div class="pz-tabs" role="tablist">
+          <button class="btn-touch pz-tab active" data-tab="progress">📊 Přehled pokroku</button>
+          <button class="btn-touch pz-tab" data-tab="screentime">⏱️ Časový limit</button>
+          <button class="btn-touch pz-tab" data-tab="gallery">🖼️ Galerie výtvorů</button>
+          <button class="btn-touch pz-tab" data-tab="audio">🔊 Nastavení zvuku</button>
+        </div>
+
+        <div class="pz-body">
+          <!-- Tab 1: Přehled pokroku -->
+          <div id="pz-tab-progress" class="pz-tab-panel active">
+            <p class="pz-lead">Dítě postupuje vlastním tempem bez známek a stresu. Zde vidíte oblasti, které ho nejvíce baví:</p>
+            <div id="pz-progress-list" class="pz-progress-list"></div>
+          </div>
+
+          <!-- Tab 2: Časový limit -->
+          <div id="pz-tab-screentime" class="pz-tab-panel">
+            <p class="pz-lead">Nastavte délku herního sezení. Po vypršení času si Piko oblékne pyžamko a jemně hru ukončí.</p>
+            <div class="limit-options">
+              <button class="btn-touch btn-limit" data-minutes="15">15 minut</button>
+              <button class="btn-touch btn-limit active" data-minutes="30">30 minut</button>
+              <button class="btn-touch btn-limit" data-minutes="45">45 minut</button>
+              <button class="btn-touch btn-limit" data-minutes="0">Bez limitu</button>
+            </div>
+            <div class="bedtime-demo-box">
+              <p>Chcete si prohlédnout jemné večerní ukončení hry bez pláče?</p>
+              <button id="btn-trigger-bedtime" class="btn-touch btn-primary">🌙 Ukázka večerního ukončení (Pyžamko)</button>
+            </div>
+          </div>
+
+          <!-- Tab 3: Galerie výtvorů -->
+          <div id="pz-tab-gallery" class="pz-tab-panel">
+            <p class="pz-lead">Obrázky uložené dítětem v Uměleckém ateliéru (Zóna A) s možností stažení do tabletu:</p>
+            <div id="pz-gallery-grid" class="pz-gallery-grid"></div>
+          </div>
+
+          <!-- Tab 4: Nastavení zvuku -->
+          <div id="pz-tab-audio" class="pz-tab-panel">
+            <p class="pz-lead">Samostatné ovládání hlasitosti všech zvukových vrstev:</p>
+            <div class="audio-sliders">
+              <label class="slider-row">
+                <span>🗣️ Dabing tučňáka</span>
+                <input id="vol-voice" type="range" min="0" max="100" value="90" />
+                <span id="vol-voice-val">90 %</span>
+              </label>
+              <label class="slider-row">
+                <span>🔔 Zvukové efekty</span>
+                <input id="vol-sfx" type="range" min="0" max="100" value="75" />
+                <span id="vol-sfx-val">75 %</span>
+              </label>
+              <label class="slider-row">
+                <span>🎶 Hudba na pozadí</span>
+                <input id="vol-music" type="range" min="0" max="100" value="35" />
+                <span id="vol-music-val">35 %</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERLAY: Jemné večerní ukončení (Bedtime Mode) -->
+    <div id="bedtime-overlay" class="bedtime-overlay hidden" role="dialog" aria-modal="true">
+      <div class="bedtime-stars" aria-hidden="true">✨ 🌙 ⭐ ❄️ ✨</div>
+      <div class="bedtime-card">
+        <div id="bedtime-penguin-slot" class="bedtime-penguin-slot">
+          <div class="bedtime-emoji">🐧💤</div>
+        </div>
+        <h2>DOBROU NOC, KAMARÁDE!</h2>
+        <p id="bedtime-subtitle">OBLÉKÁM SI TEPLÉ PYŽAMKO A JDU SE VYSPAT DO IGLÚ. TĚŠÍM SE ZASE ZÍTRA!</p>
+        <button id="btn-bedtime-parent-unlock" class="btn-touch btn-secondary">🔓 Rodičovské odemčení (nové sezení)</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/data-bundle.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
