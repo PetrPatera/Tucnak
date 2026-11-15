@@ -7,58 +7,58 @@
     "words": [
       {
         "word": "VÍTEJ",
-        "startMs": 103,
-        "endMs": 633
+        "startMs": 98,
+        "endMs": 558
       },
       {
         "word": "V",
-        "startMs": 647,
-        "endMs": 729
+        "startMs": 570,
+        "endMs": 641
       },
       {
         "word": "UMĚLECKÉM",
-        "startMs": 783,
-        "endMs": 1517
+        "startMs": 688,
+        "endMs": 1325
       },
       {
         "word": "ATELIÉRU",
-        "startMs": 1530,
-        "endMs": 2386
+        "startMs": 1336,
+        "endMs": 2079
       },
       {
         "word": "TADY",
-        "startMs": 3465,
-        "endMs": 3777
+        "startMs": 3007,
+        "endMs": 3278
       },
       {
         "word": "BUDEME",
-        "startMs": 3777,
-        "endMs": 4157
+        "startMs": 3278,
+        "endMs": 3608
       },
       {
         "word": "KRESLIT",
-        "startMs": 4158,
-        "endMs": 4742
+        "startMs": 3608,
+        "endMs": 4115
       },
       {
         "word": "A",
-        "startMs": 4796,
-        "endMs": 4932
+        "startMs": 4163,
+        "endMs": 4281
       },
       {
         "word": "MÍCHAT",
-        "startMs": 4946,
-        "endMs": 5354
+        "startMs": 4292,
+        "endMs": 4646
       },
       {
         "word": "KOUZELNÉ",
-        "startMs": 5380,
-        "endMs": 6141
+        "startMs": 4670,
+        "endMs": 5330
       },
       {
         "word": "BARVY",
-        "startMs": 6155,
-        "endMs": 6617
+        "startMs": 5342,
+        "endMs": 5743
       }
     ]
   },
@@ -70,48 +70,48 @@
     "words": [
       {
         "word": "ŤUKNI",
-        "startMs": 104,
-        "endMs": 512
+        "startMs": 97,
+        "endMs": 451
       },
       {
         "word": "NA",
-        "startMs": 512,
-        "endMs": 648
+        "startMs": 451,
+        "endMs": 569
       },
       {
         "word": "NĚKTERÝ",
-        "startMs": 648,
-        "endMs": 1178
+        "startMs": 569,
+        "endMs": 1029
       },
       {
         "word": "OSTROV",
-        "startMs": 1205,
-        "endMs": 1708
+        "startMs": 1052,
+        "endMs": 1488
       },
       {
         "word": "NEBO",
-        "startMs": 1708,
-        "endMs": 1953
+        "startMs": 1489,
+        "endMs": 1701
       },
       {
         "word": "SI",
-        "startMs": 1952,
-        "endMs": 2169
+        "startMs": 1701,
+        "endMs": 1890
       },
       {
         "word": "VYBER",
-        "startMs": 2170,
-        "endMs": 2510
+        "startMs": 1890,
+        "endMs": 2185
       },
       {
         "word": "HRU",
-        "startMs": 2523,
-        "endMs": 2781
+        "startMs": 2196,
+        "endMs": 2420
       },
       {
         "word": "NAHOŘE",
-        "startMs": 2781,
-        "endMs": 3297
+        "startMs": 2420,
+        "endMs": 2868
       }
     ]
   },
@@ -123,63 +123,63 @@
     "words": [
       {
         "word": "TOHLE",
-        "startMs": 104,
-        "endMs": 457
+        "startMs": 97,
+        "endMs": 404
       },
       {
         "word": "JE",
-        "startMs": 458,
-        "endMs": 594
+        "startMs": 404,
+        "endMs": 522
       },
       {
         "word": "SVĚT",
-        "startMs": 593,
-        "endMs": 946
+        "startMs": 522,
+        "endMs": 829
       },
       {
         "word": "TVARŮ",
-        "startMs": 974,
-        "endMs": 1422
+        "startMs": 852,
+        "endMs": 1241
       },
       {
         "word": "A",
-        "startMs": 1436,
-        "endMs": 1531
+        "startMs": 1253,
+        "endMs": 1336
       },
       {
         "word": "PROSTORU",
-        "startMs": 1545,
-        "endMs": 2211
+        "startMs": 1347,
+        "endMs": 1925
       },
       {
         "word": "POJĎ",
-        "startMs": 3261,
-        "endMs": 3546
+        "startMs": 2830,
+        "endMs": 3078
       },
       {
         "word": "SKLÁDAT",
-        "startMs": 3560,
-        "endMs": 4185
+        "startMs": 3090,
+        "endMs": 3632
       },
       {
         "word": "OBRÁZKY",
-        "startMs": 4253,
-        "endMs": 4960
+        "startMs": 3691,
+        "endMs": 4304
       },
       {
         "word": "A",
-        "startMs": 4959,
-        "endMs": 5081
+        "startMs": 4304,
+        "endMs": 4410
       },
       {
         "word": "HLEDAT",
-        "startMs": 5095,
-        "endMs": 5503
+        "startMs": 4422,
+        "endMs": 4776
       },
       {
         "word": "STÍNY",
-        "startMs": 5516,
-        "endMs": 6087
+        "startMs": 4788,
+        "endMs": 5283
       }
     ]
   },
@@ -191,58 +191,58 @@
     "words": [
       {
         "word": "JSME",
-        "startMs": 104,
-        "endMs": 410
+        "startMs": 98,
+        "endMs": 357
       },
       {
         "word": "U",
-        "startMs": 493,
-        "endMs": 535
+        "startMs": 428,
+        "endMs": 463
       },
       {
         "word": "PRVNÍCH",
-        "startMs": 549,
-        "endMs": 1021
+        "startMs": 475,
+        "endMs": 876
       },
       {
         "word": "KRŮČKŮ",
-        "startMs": 1021,
-        "endMs": 1632
+        "startMs": 876,
+        "endMs": 1395
       },
       {
         "word": "KE",
-        "startMs": 1632,
-        "endMs": 1813
+        "startMs": 1395,
+        "endMs": 1548
       },
       {
         "word": "ČTENÍ",
-        "startMs": 1826,
-        "endMs": 2423
+        "startMs": 1560,
+        "endMs": 2067
       },
       {
         "word": "SPOLU",
-        "startMs": 3485,
-        "endMs": 3860
+        "startMs": 2961,
+        "endMs": 3279
       },
       {
         "word": "PROZKOUMÁME",
-        "startMs": 3860,
-        "endMs": 4721
+        "startMs": 3279,
+        "endMs": 4010
       },
       {
         "word": "PÍSMENKA",
-        "startMs": 4721,
-        "endMs": 5527
+        "startMs": 4010,
+        "endMs": 4694
       },
       {
         "word": "A",
-        "startMs": 5554,
-        "endMs": 5651
+        "startMs": 4718,
+        "endMs": 4801
       },
       {
         "word": "SLABIKY",
-        "startMs": 5665,
-        "endMs": 6359
+        "startMs": 4812,
+        "endMs": 5402
       }
     ]
   },
@@ -254,58 +254,58 @@
     "words": [
       {
         "word": "VÍTEJ",
-        "startMs": 103,
-        "endMs": 633
+        "startMs": 98,
+        "endMs": 558
       },
       {
         "word": "NA",
-        "startMs": 633,
-        "endMs": 755
+        "startMs": 558,
+        "endMs": 664
       },
       {
         "word": "OSTROVĚ",
-        "startMs": 823,
-        "endMs": 1353
+        "startMs": 723,
+        "endMs": 1183
       },
       {
         "word": "LOGIKY",
-        "startMs": 1353,
-        "endMs": 1842
+        "startMs": 1183,
+        "endMs": 1607
       },
       {
         "word": "A",
-        "startMs": 1842,
-        "endMs": 1964
+        "startMs": 1607,
+        "endMs": 1713
       },
       {
         "word": "PAMĚTI",
-        "startMs": 1978,
-        "endMs": 2671
+        "startMs": 1725,
+        "endMs": 2326
       },
       {
         "word": "ČEKÁ",
-        "startMs": 3723,
-        "endMs": 4171
+        "startMs": 3231,
+        "endMs": 3620
       },
       {
         "word": "NÁS",
-        "startMs": 4171,
-        "endMs": 4497
+        "startMs": 3620,
+        "endMs": 3903
       },
       {
         "word": "BLUDIŠTĚ",
-        "startMs": 4497,
-        "endMs": 5095
+        "startMs": 3903,
+        "endMs": 4422
       },
       {
         "word": "I",
-        "startMs": 5149,
-        "endMs": 5231
+        "startMs": 4469,
+        "endMs": 4540
       },
       {
         "word": "PEXESO",
-        "startMs": 5245,
-        "endMs": 5924
+        "startMs": 4552,
+        "endMs": 5142
       }
     ]
   },
@@ -317,53 +317,53 @@
     "words": [
       {
         "word": "POJĎ",
-        "startMs": 106,
-        "endMs": 370
+        "startMs": 98,
+        "endMs": 326
       },
       {
         "word": "KRESLIT",
-        "startMs": 411,
-        "endMs": 939
+        "startMs": 362,
+        "endMs": 819
       },
       {
         "word": "KROK",
-        "startMs": 967,
-        "endMs": 1259
+        "startMs": 843,
+        "endMs": 1095
       },
       {
         "word": "ZA",
-        "startMs": 1258,
-        "endMs": 1425
+        "startMs": 1096,
+        "endMs": 1240
       },
       {
         "word": "KROKEM",
-        "startMs": 1425,
-        "endMs": 2050
+        "startMs": 1240,
+        "endMs": 1781
       },
       {
         "word": "NEJPRVE",
-        "startMs": 3167,
-        "endMs": 3709
+        "startMs": 2740,
+        "endMs": 3209
       },
       {
         "word": "PRSTEM",
-        "startMs": 3708,
-        "endMs": 4166
+        "startMs": 3209,
+        "endMs": 3606
       },
       {
         "word": "OBTÁHNI",
-        "startMs": 4208,
-        "endMs": 4861
+        "startMs": 3642,
+        "endMs": 4207
       },
       {
         "word": "PŘERUŠOVANÝ",
-        "startMs": 4861,
-        "endMs": 5722
+        "startMs": 4207,
+        "endMs": 4952
       },
       {
         "word": "TVAR",
-        "startMs": 5736,
-        "endMs": 6125
+        "startMs": 4964,
+        "endMs": 5301
       }
     ]
   },
@@ -375,58 +375,58 @@
     "words": [
       {
         "word": "SPOJUJ",
-        "startMs": 103,
-        "endMs": 606
+        "startMs": 99,
+        "endMs": 544
       },
       {
         "word": "TEČKY",
-        "startMs": 620,
-        "endMs": 1028
+        "startMs": 555,
+        "endMs": 916
       },
       {
         "word": "PĚKNĚ",
-        "startMs": 1027,
-        "endMs": 1462
+        "startMs": 916,
+        "endMs": 1301
       },
       {
         "word": "PO",
-        "startMs": 1462,
-        "endMs": 1625
+        "startMs": 1300,
+        "endMs": 1444
       },
       {
         "word": "JEDNÉ",
-        "startMs": 1625,
-        "endMs": 2005
+        "startMs": 1445,
+        "endMs": 1782
       },
       {
         "word": "PODLE",
-        "startMs": 2019,
-        "endMs": 2345
+        "startMs": 1793,
+        "endMs": 2081
       },
       {
         "word": "ČÍSEL",
-        "startMs": 2345,
-        "endMs": 2984
+        "startMs": 2082,
+        "endMs": 2647
       },
       {
         "word": "A",
-        "startMs": 3011,
-        "endMs": 3106
+        "startMs": 2671,
+        "endMs": 2755
       },
       {
         "word": "ODHAL",
-        "startMs": 3242,
-        "endMs": 3595
+        "startMs": 2875,
+        "endMs": 3187
       },
       {
         "word": "TAJNÝ",
-        "startMs": 3595,
-        "endMs": 4057
+        "startMs": 3188,
+        "endMs": 3597
       },
       {
         "word": "OBRÁZEK",
-        "startMs": 4098,
-        "endMs": 4845
+        "startMs": 3632,
+        "endMs": 4293
       }
     ]
   },
@@ -438,53 +438,53 @@
     "words": [
       {
         "word": "HURÁ",
-        "startMs": 103,
-        "endMs": 551
+        "startMs": 98,
+        "endMs": 487
       },
       {
         "word": "DO",
-        "startMs": 565,
-        "endMs": 701
+        "startMs": 499,
+        "endMs": 617
       },
       {
         "word": "HRAVÉ",
-        "startMs": 701,
-        "endMs": 1163
+        "startMs": 617,
+        "endMs": 1018
       },
       {
         "word": "MATEMATIKY",
-        "startMs": 1177,
-        "endMs": 2006
+        "startMs": 1030,
+        "endMs": 1749
       },
       {
         "word": "SPOČÍTÁME",
-        "startMs": 3029,
-        "endMs": 3926
+        "startMs": 2630,
+        "endMs": 3408
       },
       {
         "word": "RYBIČKY",
-        "startMs": 3926,
-        "endMs": 4442
+        "startMs": 3409,
+        "endMs": 3857
       },
       {
         "word": "A",
-        "startMs": 4442,
-        "endMs": 4564
+        "startMs": 3857,
+        "endMs": 3963
       },
       {
         "word": "ZVÁŽÍME",
-        "startMs": 4578,
-        "endMs": 5312
+        "startMs": 3975,
+        "endMs": 4612
       },
       {
         "word": "LEDOVÉ",
-        "startMs": 5311,
-        "endMs": 5814
+        "startMs": 4612,
+        "endMs": 5048
       },
       {
         "word": "KRY",
-        "startMs": 5828,
-        "endMs": 6154
+        "startMs": 5060,
+        "endMs": 5343
       }
     ]
   },
@@ -496,68 +496,68 @@
     "words": [
       {
         "word": "AHOJ",
-        "startMs": 103,
-        "endMs": 415
+        "startMs": 98,
+        "endMs": 369
       },
       {
         "word": "KAMARÁDE",
-        "startMs": 429,
-        "endMs": 1190
+        "startMs": 381,
+        "endMs": 1041
       },
       {
         "word": "JÁ",
-        "startMs": 2255,
-        "endMs": 2391
+        "startMs": 1958,
+        "endMs": 2076
       },
       {
         "word": "JSEM",
-        "startMs": 2486,
-        "endMs": 2758
+        "startMs": 2158,
+        "endMs": 2394
       },
       {
         "word": "TUČŇÁK",
-        "startMs": 2758,
-        "endMs": 3261
+        "startMs": 2394,
+        "endMs": 2830
       },
       {
         "word": "PIKO",
-        "startMs": 3288,
-        "endMs": 3696
+        "startMs": 2854,
+        "endMs": 3208
       },
       {
         "word": "VYBER",
-        "startMs": 4783,
-        "endMs": 5163
+        "startMs": 4151,
+        "endMs": 4481
       },
       {
         "word": "SI",
-        "startMs": 5177,
-        "endMs": 5381
+        "startMs": 4493,
+        "endMs": 4670
       },
       {
         "word": "OSTROV",
-        "startMs": 5448,
-        "endMs": 5937
+        "startMs": 4729,
+        "endMs": 5154
       },
       {
         "word": "A",
-        "startMs": 5965,
-        "endMs": 6060
+        "startMs": 5177,
+        "endMs": 5260
       },
       {
         "word": "POJĎ",
-        "startMs": 6101,
-        "endMs": 6373
+        "startMs": 5295,
+        "endMs": 5531
       },
       {
         "word": "SI",
-        "startMs": 6399,
-        "endMs": 6603
+        "startMs": 5554,
+        "endMs": 5731
       },
       {
         "word": "HRÁT",
-        "startMs": 6603,
-        "endMs": 7106
+        "startMs": 5731,
+        "endMs": 6167
       }
     ]
   },
@@ -569,38 +569,38 @@
     "words": [
       {
         "word": "POSLOUCHEJ",
-        "startMs": 106,
-        "endMs": 814
+        "startMs": 97,
+        "endMs": 698
       },
       {
         "word": "POZORNĚ",
-        "startMs": 828,
-        "endMs": 1481
+        "startMs": 710,
+        "endMs": 1264
       },
       {
         "word": "ZOPAKUJI",
-        "startMs": 1758,
-        "endMs": 2397
+        "startMs": 1500,
+        "endMs": 2042
       },
       {
         "word": "TI",
-        "startMs": 2397,
-        "endMs": 2550
+        "startMs": 2043,
+        "endMs": 2173
       },
       {
         "word": "ÚKOL",
-        "startMs": 2633,
-        "endMs": 3036
+        "startMs": 2243,
+        "endMs": 2585
       },
       {
         "word": "JEŠTĚ",
-        "startMs": 3036,
-        "endMs": 3425
+        "startMs": 2585,
+        "endMs": 2915
       },
       {
         "word": "JEDNOU",
-        "startMs": 3425,
-        "endMs": 3911
+        "startMs": 2916,
+        "endMs": 3329
       }
     ]
   },
@@ -612,43 +612,43 @@
     "words": [
       {
         "word": "NAJDI",
-        "startMs": 104,
-        "endMs": 539
+        "startMs": 98,
+        "endMs": 483
       },
       {
         "word": "KE",
-        "startMs": 539,
-        "endMs": 716
+        "startMs": 483,
+        "endMs": 639
       },
       {
         "word": "KAŽDÉMU",
-        "startMs": 716,
-        "endMs": 1382
+        "startMs": 639,
+        "endMs": 1228
       },
       {
         "word": "OBRÁZKU",
-        "startMs": 1436,
-        "endMs": 2047
+        "startMs": 1276,
+        "endMs": 1817
       },
       {
         "word": "JEHO",
-        "startMs": 2047,
-        "endMs": 2278
+        "startMs": 1817,
+        "endMs": 2021
       },
       {
         "word": "SPRÁVNÝ",
-        "startMs": 2278,
-        "endMs": 2985
+        "startMs": 2021,
+        "endMs": 2646
       },
       {
         "word": "TMAVÝ",
-        "startMs": 2998,
-        "endMs": 3406
+        "startMs": 2658,
+        "endMs": 3019
       },
       {
         "word": "STÍN",
-        "startMs": 3433,
-        "endMs": 3949
+        "startMs": 3043,
+        "endMs": 3500
       }
     ]
   },
@@ -660,58 +660,58 @@
     "words": [
       {
         "word": "POSKLÁDEJ",
-        "startMs": 106,
-        "endMs": 912
+        "startMs": 98,
+        "endMs": 795
       },
       {
         "word": "OBRÁZEK",
-        "startMs": 939,
-        "endMs": 1606
+        "startMs": 819,
+        "endMs": 1396
       },
       {
         "word": "Z",
-        "startMs": 1619,
-        "endMs": 1772
+        "startMs": 1408,
+        "endMs": 1540
       },
       {
         "word": "BAREVNÝCH",
-        "startMs": 1772,
-        "endMs": 2369
+        "startMs": 1540,
+        "endMs": 2057
       },
       {
         "word": "TVARŮ",
-        "startMs": 2369,
-        "endMs": 2897
+        "startMs": 2057,
+        "endMs": 2514
       },
       {
         "word": "PŘETÁHNI",
-        "startMs": 4014,
-        "endMs": 4750
+        "startMs": 3474,
+        "endMs": 4111
       },
       {
         "word": "KAŽDÝ",
-        "startMs": 4750,
-        "endMs": 5278
+        "startMs": 4111,
+        "endMs": 4568
       },
       {
         "word": "DÍLEK",
-        "startMs": 5278,
-        "endMs": 5778
+        "startMs": 4567,
+        "endMs": 5000
       },
       {
         "word": "NA",
-        "startMs": 5819,
-        "endMs": 5972
+        "startMs": 5036,
+        "endMs": 5168
       },
       {
         "word": "JEHO",
-        "startMs": 5972,
-        "endMs": 6264
+        "startMs": 5168,
+        "endMs": 5420
       },
       {
         "word": "MÍSTO",
-        "startMs": 6264,
-        "endMs": 6764
+        "startMs": 5421,
+        "endMs": 5854
       }
     ]
   },
@@ -723,58 +723,58 @@
     "words": [
       {
         "word": "OBRÁZEK",
-        "startMs": 104,
-        "endMs": 702
+        "startMs": 98,
+        "endMs": 627
       },
       {
         "word": "SE",
-        "startMs": 702,
-        "endMs": 906
+        "startMs": 627,
+        "endMs": 807
       },
       {
         "word": "NÁM",
-        "startMs": 906,
-        "endMs": 1205
+        "startMs": 807,
+        "endMs": 1071
       },
       {
         "word": "ROZSYPAL",
-        "startMs": 1205,
-        "endMs": 1871
+        "startMs": 1072,
+        "endMs": 1661
       },
       {
         "word": "SLOŽ",
-        "startMs": 2907,
-        "endMs": 3260
+        "startMs": 2573,
+        "endMs": 2885
       },
       {
         "word": "VŠECHNY",
-        "startMs": 3260,
-        "endMs": 3736
+        "startMs": 2885,
+        "endMs": 3306
       },
       {
         "word": "DÍLKY",
-        "startMs": 3735,
-        "endMs": 4211
+        "startMs": 3306,
+        "endMs": 3727
       },
       {
         "word": "PUZZLE",
-        "startMs": 4211,
-        "endMs": 4564
+        "startMs": 3726,
+        "endMs": 4038
       },
       {
         "word": "ZASE",
-        "startMs": 4564,
-        "endMs": 4904
+        "startMs": 4039,
+        "endMs": 4339
       },
       {
         "word": "K",
-        "startMs": 4904,
-        "endMs": 4972
+        "startMs": 4339,
+        "endMs": 4399
       },
       {
         "word": "SOBĚ",
-        "startMs": 4972,
-        "endMs": 5461
+        "startMs": 4400,
+        "endMs": 4833
       }
     ]
   },
@@ -786,48 +786,48 @@
     "words": [
       {
         "word": "POSLOUCHEJ",
-        "startMs": 106,
-        "endMs": 828
+        "startMs": 98,
+        "endMs": 723
       },
       {
         "word": "DOBŘE",
-        "startMs": 828,
-        "endMs": 1175
+        "startMs": 723,
+        "endMs": 1023
       },
       {
         "word": "PRVNÍ",
-        "startMs": 1175,
-        "endMs": 1578
+        "startMs": 1024,
+        "endMs": 1373
       },
       {
         "word": "HLÁSKU",
-        "startMs": 1578,
-        "endMs": 2092
+        "startMs": 1372,
+        "endMs": 1817
       },
       {
         "word": "SLOVA",
-        "startMs": 2092,
-        "endMs": 2592
+        "startMs": 1817,
+        "endMs": 2250
       },
       {
         "word": "A",
-        "startMs": 2647,
-        "endMs": 2744
+        "startMs": 2298,
+        "endMs": 2382
       },
       {
         "word": "VYBER",
-        "startMs": 2786,
-        "endMs": 3147
+        "startMs": 2418,
+        "endMs": 2730
       },
       {
         "word": "SPRÁVNÉ",
-        "startMs": 3161,
-        "endMs": 3842
+        "startMs": 2742,
+        "endMs": 3331
       },
       {
         "word": "PÍSMENKO",
-        "startMs": 3869,
-        "endMs": 4675
+        "startMs": 3355,
+        "endMs": 4052
       }
     ]
   },
@@ -839,53 +839,53 @@
     "words": [
       {
         "word": "VYBARVI",
-        "startMs": 104,
-        "endMs": 647
+        "startMs": 98,
+        "endMs": 579
       },
       {
         "word": "OBRÁZEK",
-        "startMs": 689,
-        "endMs": 1341
+        "startMs": 615,
+        "endMs": 1192
       },
       {
         "word": "A",
-        "startMs": 1341,
-        "endMs": 1477
+        "startMs": 1192,
+        "endMs": 1312
       },
       {
         "word": "ZKUS",
-        "startMs": 1490,
-        "endMs": 1830
+        "startMs": 1324,
+        "endMs": 1624
       },
       {
         "word": "V",
-        "startMs": 1830,
-        "endMs": 1939
+        "startMs": 1624,
+        "endMs": 1720
       },
       {
         "word": "PALETĚ",
-        "startMs": 1939,
-        "endMs": 2306
+        "startMs": 1721,
+        "endMs": 2045
       },
       {
         "word": "SMÍCHAT",
-        "startMs": 2305,
-        "endMs": 2862
+        "startMs": 2045,
+        "endMs": 2538
       },
       {
         "word": "DVĚ",
-        "startMs": 2890,
-        "endMs": 3148
+        "startMs": 2562,
+        "endMs": 2790
       },
       {
         "word": "BARVY",
-        "startMs": 3148,
-        "endMs": 3528
+        "startMs": 2790,
+        "endMs": 3127
       },
       {
         "word": "DOHROMADY",
-        "startMs": 3528,
-        "endMs": 4248
+        "startMs": 3127,
+        "endMs": 3764
       }
     ]
   },
@@ -897,53 +897,53 @@
     "words": [
       {
         "word": "OTÁČEJ",
-        "startMs": 104,
-        "endMs": 702
+        "startMs": 98,
+        "endMs": 627
       },
       {
         "word": "KARTIČKY",
-        "startMs": 702,
-        "endMs": 1381
+        "startMs": 627,
+        "endMs": 1228
       },
       {
         "word": "A",
-        "startMs": 1382,
-        "endMs": 1531
+        "startMs": 1228,
+        "endMs": 1360
       },
       {
         "word": "NAJDI",
-        "startMs": 1531,
-        "endMs": 1884
+        "startMs": 1360,
+        "endMs": 1672
       },
       {
         "word": "DVOJICE",
-        "startMs": 1884,
-        "endMs": 2373
+        "startMs": 1673,
+        "endMs": 2106
       },
       {
         "word": "SLOV",
-        "startMs": 2373,
-        "endMs": 2794
+        "startMs": 2105,
+        "endMs": 2478
       },
       {
         "word": "KTERÁ",
-        "startMs": 2903,
-        "endMs": 3365
+        "startMs": 2574,
+        "endMs": 2983
       },
       {
         "word": "SE",
-        "startMs": 3365,
-        "endMs": 3528
+        "startMs": 2983,
+        "endMs": 3127
       },
       {
         "word": "SPOLU",
-        "startMs": 3528,
-        "endMs": 3922
+        "startMs": 3127,
+        "endMs": 3476
       },
       {
         "word": "RÝMUJÍ",
-        "startMs": 3922,
-        "endMs": 4547
+        "startMs": 3476,
+        "endMs": 4029
       }
     ]
   },
@@ -955,48 +955,48 @@
     "words": [
       {
         "word": "KRESLI",
-        "startMs": 104,
-        "endMs": 539
+        "startMs": 98,
+        "endMs": 483
       },
       {
         "word": "NA",
-        "startMs": 539,
-        "endMs": 661
+        "startMs": 483,
+        "endMs": 591
       },
       {
         "word": "PRAVOU",
-        "startMs": 661,
-        "endMs": 1001
+        "startMs": 591,
+        "endMs": 891
       },
       {
         "word": "STRANU",
-        "startMs": 1028,
-        "endMs": 1449
+        "startMs": 915,
+        "endMs": 1288
       },
       {
         "word": "PLÁTNA",
-        "startMs": 1449,
-        "endMs": 2060
+        "startMs": 1288,
+        "endMs": 1829
       },
       {
         "word": "A",
-        "startMs": 2074,
-        "endMs": 2156
+        "startMs": 1841,
+        "endMs": 1913
       },
       {
         "word": "SLEDUJ",
-        "startMs": 2170,
-        "endMs": 2591
+        "startMs": 1925,
+        "endMs": 2298
       },
       {
         "word": "KOUZELNÉ",
-        "startMs": 2604,
-        "endMs": 3338
+        "startMs": 2310,
+        "endMs": 2959
       },
       {
         "word": "ZRCADLENÍ",
-        "startMs": 3338,
-        "endMs": 4221
+        "startMs": 2959,
+        "endMs": 3740
       }
     ]
   },
@@ -1008,63 +1008,63 @@
     "words": [
       {
         "word": "PODÍVEJ",
-        "startMs": 104,
-        "endMs": 702
+        "startMs": 98,
+        "endMs": 627
       },
       {
         "word": "SE",
-        "startMs": 702,
-        "endMs": 865
+        "startMs": 627,
+        "endMs": 771
       },
       {
         "word": "POZORNĚ",
-        "startMs": 865,
-        "endMs": 1395
+        "startMs": 771,
+        "endMs": 1240
       },
       {
         "word": "NA",
-        "startMs": 1395,
-        "endMs": 1544
+        "startMs": 1240,
+        "endMs": 1372
       },
       {
         "word": "CELÝ",
-        "startMs": 1545,
-        "endMs": 1898
+        "startMs": 1372,
+        "endMs": 1684
       },
       {
         "word": "OBRÁZEK",
-        "startMs": 1911,
-        "endMs": 2631
+        "startMs": 1697,
+        "endMs": 2334
       },
       {
         "word": "A",
-        "startMs": 2645,
-        "endMs": 2794
+        "startMs": 2346,
+        "endMs": 2478
       },
       {
         "word": "NAJDI",
-        "startMs": 2808,
-        "endMs": 3161
+        "startMs": 2490,
+        "endMs": 2802
       },
       {
         "word": "VĚCI",
-        "startMs": 3161,
-        "endMs": 3596
+        "startMs": 2802,
+        "endMs": 3187
       },
       {
         "word": "KTERÉ",
-        "startMs": 3718,
-        "endMs": 4098
+        "startMs": 3295,
+        "endMs": 3632
       },
       {
         "word": "SEM",
-        "startMs": 4099,
-        "endMs": 4371
+        "startMs": 3632,
+        "endMs": 3872
       },
       {
         "word": "NEPATŘÍ",
-        "startMs": 4371,
-        "endMs": 5037
+        "startMs": 3872,
+        "endMs": 4461
       }
     ]
   },
@@ -1076,53 +1076,53 @@
     "words": [
       {
         "word": "PROJEĎ",
-        "startMs": 106,
-        "endMs": 537
+        "startMs": 98,
+        "endMs": 471
       },
       {
         "word": "PRSTEM",
-        "startMs": 564,
-        "endMs": 1050
+        "startMs": 495,
+        "endMs": 916
       },
       {
         "word": "PO",
-        "startMs": 1050,
-        "endMs": 1217
+        "startMs": 915,
+        "endMs": 1059
       },
       {
         "word": "LEDOVÉ",
-        "startMs": 1217,
-        "endMs": 1648
+        "startMs": 1060,
+        "endMs": 1433
       },
       {
         "word": "DRÁZE",
-        "startMs": 1661,
-        "endMs": 2161
+        "startMs": 1444,
+        "endMs": 1877
       },
       {
         "word": "PODLE",
-        "startMs": 2161,
-        "endMs": 2494
+        "startMs": 1877,
+        "endMs": 2165
       },
       {
         "word": "ŠIPEK",
-        "startMs": 2494,
-        "endMs": 2980
+        "startMs": 2165,
+        "endMs": 2586
       },
       {
         "word": "A",
-        "startMs": 3036,
-        "endMs": 3133
+        "startMs": 2634,
+        "endMs": 2718
       },
       {
         "word": "NAPIŠ",
-        "startMs": 3175,
-        "endMs": 3592
+        "startMs": 2754,
+        "endMs": 3115
       },
       {
         "word": "PÍSMENKO",
-        "startMs": 3606,
-        "endMs": 4412
+        "startMs": 3127,
+        "endMs": 3824
       }
     ]
   },
@@ -1134,68 +1134,68 @@
     "words": [
       {
         "word": "V",
-        "startMs": 103,
-        "endMs": 198
+        "startMs": 99,
+        "endMs": 183
       },
       {
         "word": "PŘÍBĚHU",
-        "startMs": 198,
-        "endMs": 837
+        "startMs": 183,
+        "endMs": 748
       },
       {
         "word": "NĚCO",
-        "startMs": 851,
-        "endMs": 1150
+        "startMs": 760,
+        "endMs": 1024
       },
       {
         "word": "CHYBÍ",
-        "startMs": 1149,
-        "endMs": 1665
+        "startMs": 1024,
+        "endMs": 1481
       },
       {
         "word": "PODÍVEJ",
-        "startMs": 2704,
-        "endMs": 3302
+        "startMs": 2392,
+        "endMs": 2921
       },
       {
         "word": "SE",
-        "startMs": 3302,
-        "endMs": 3492
+        "startMs": 2921,
+        "endMs": 3089
       },
       {
         "word": "NA",
-        "startMs": 3492,
-        "endMs": 3614
+        "startMs": 3089,
+        "endMs": 3197
       },
       {
         "word": "OBRÁZEK",
-        "startMs": 3668,
-        "endMs": 4320
+        "startMs": 3245,
+        "endMs": 3822
       },
       {
         "word": "A",
-        "startMs": 4334,
-        "endMs": 4470
+        "startMs": 3834,
+        "endMs": 3954
       },
       {
         "word": "DOKRESLI",
-        "startMs": 4497,
-        "endMs": 5217
+        "startMs": 3978,
+        "endMs": 4615
       },
       {
         "word": "CO",
-        "startMs": 5462,
-        "endMs": 5679
+        "startMs": 4832,
+        "endMs": 5024
       },
       {
         "word": "JE",
-        "startMs": 5679,
-        "endMs": 5815
+        "startMs": 5024,
+        "endMs": 5144
       },
       {
         "word": "POTŘEBA",
-        "startMs": 5815,
-        "endMs": 6413
+        "startMs": 5144,
+        "endMs": 5673
       }
     ]
   },
@@ -1207,73 +1207,73 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 106,
-        "endMs": 412
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 425,
-        "endMs": 911
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 911,
-        "endMs": 1328
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2431,
-        "endMs": 2667
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2694,
-        "endMs": 2819
+        "startMs": 2332,
+        "endMs": 2440
       },
       {
         "word": "PROSÍM",
-        "startMs": 2819,
-        "endMs": 3347
+        "startMs": 2440,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3347,
-        "endMs": 3500
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3500,
-        "endMs": 3875
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3875,
-        "endMs": 4361
+        "startMs": 3353,
+        "endMs": 3774
       },
       {
         "word": "TOLIK",
-        "startMs": 4361,
-        "endMs": 4708
+        "startMs": 3774,
+        "endMs": 4074
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4722,
-        "endMs": 5319
+        "startMs": 4087,
+        "endMs": 4604
       },
       {
         "word": "KOLIK",
-        "startMs": 5597,
-        "endMs": 5986
+        "startMs": 4844,
+        "endMs": 5181
       },
       {
         "word": "SI",
-        "startMs": 6000,
-        "endMs": 6181
+        "startMs": 5192,
+        "endMs": 5348
       },
       {
         "word": "PŘEJI",
-        "startMs": 6181,
-        "endMs": 6639
+        "startMs": 5349,
+        "endMs": 5746
       }
     ]
   },
@@ -1285,58 +1285,58 @@
     "words": [
       {
         "word": "VYROVNEJ",
-        "startMs": 103,
-        "endMs": 674
+        "startMs": 99,
+        "endMs": 604
       },
       {
         "word": "LEDOVÉ",
-        "startMs": 674,
-        "endMs": 1109
+        "startMs": 603,
+        "endMs": 988
       },
       {
         "word": "VÁHY",
-        "startMs": 1122,
-        "endMs": 1502
+        "startMs": 1000,
+        "endMs": 1337
       },
       {
         "word": "TAK",
-        "startMs": 1503,
-        "endMs": 1829
+        "startMs": 1337,
+        "endMs": 1625
       },
       {
         "word": "ABY",
-        "startMs": 2060,
-        "endMs": 2372
+        "startMs": 1829,
+        "endMs": 2105
       },
       {
         "word": "NA",
-        "startMs": 2372,
-        "endMs": 2508
+        "startMs": 2106,
+        "endMs": 2226
       },
       {
         "word": "OBOU",
-        "startMs": 2576,
-        "endMs": 2848
+        "startMs": 2286,
+        "endMs": 2526
       },
       {
         "word": "MISKÁCH",
-        "startMs": 2875,
-        "endMs": 3459
+        "startMs": 2550,
+        "endMs": 3067
       },
       {
         "word": "BYLO",
-        "startMs": 3459,
-        "endMs": 3704
+        "startMs": 3067,
+        "endMs": 3283
       },
       {
         "word": "ÚPLNĚ",
-        "startMs": 3785,
-        "endMs": 4206
+        "startMs": 3356,
+        "endMs": 3729
       },
       {
         "word": "STEJNĚ",
-        "startMs": 4207,
-        "endMs": 4750
+        "startMs": 3728,
+        "endMs": 4209
       }
     ]
   },
@@ -1348,48 +1348,48 @@
     "words": [
       {
         "word": "ŤUKNI",
-        "startMs": 106,
-        "endMs": 509
+        "startMs": 98,
+        "endMs": 447
       },
       {
         "word": "NA",
-        "startMs": 508,
-        "endMs": 661
+        "startMs": 447,
+        "endMs": 579
       },
       {
         "word": "SLABIKY",
-        "startMs": 661,
-        "endMs": 1258
+        "startMs": 579,
+        "endMs": 1096
       },
       {
         "word": "A",
-        "startMs": 1258,
-        "endMs": 1369
+        "startMs": 1096,
+        "endMs": 1192
       },
       {
         "word": "POSKLÁDEJ",
-        "startMs": 1397,
-        "endMs": 2203
+        "startMs": 1216,
+        "endMs": 1913
       },
       {
         "word": "Z",
-        "startMs": 2203,
-        "endMs": 2328
+        "startMs": 1913,
+        "endMs": 2021
       },
       {
         "word": "NICH",
-        "startMs": 2328,
-        "endMs": 2550
+        "startMs": 2021,
+        "endMs": 2213
       },
       {
         "word": "CELÉ",
-        "startMs": 2550,
-        "endMs": 2911
+        "startMs": 2213,
+        "endMs": 2525
       },
       {
         "word": "SLOVO",
-        "startMs": 2911,
-        "endMs": 3397
+        "startMs": 2526,
+        "endMs": 2947
       }
     ]
   },
@@ -1401,53 +1401,53 @@
     "words": [
       {
         "word": "SEŘAĎ",
-        "startMs": 103,
-        "endMs": 511
+        "startMs": 99,
+        "endMs": 460
       },
       {
         "word": "VŠECHNY",
-        "startMs": 538,
-        "endMs": 1027
+        "startMs": 483,
+        "endMs": 916
       },
       {
         "word": "OBRÁZKY",
-        "startMs": 1041,
-        "endMs": 1666
+        "startMs": 928,
+        "endMs": 1481
       },
       {
         "word": "PĚKNĚ",
-        "startMs": 1666,
-        "endMs": 2114
+        "startMs": 1481,
+        "endMs": 1878
       },
       {
         "word": "ZA",
-        "startMs": 2114,
-        "endMs": 2250
+        "startMs": 1877,
+        "endMs": 1997
       },
       {
         "word": "SEBOU",
-        "startMs": 2250,
-        "endMs": 2617
+        "startMs": 1998,
+        "endMs": 2322
       },
       {
         "word": "OD",
-        "startMs": 2685,
-        "endMs": 2821
+        "startMs": 2382,
+        "endMs": 2502
       },
       {
         "word": "NEJMENŠÍHO",
-        "startMs": 2848,
-        "endMs": 3595
+        "startMs": 2526,
+        "endMs": 3187
       },
       {
         "word": "PO",
-        "startMs": 3595,
-        "endMs": 3785
+        "startMs": 3188,
+        "endMs": 3356
       },
       {
         "word": "NEJVĚTŠÍ",
-        "startMs": 3785,
-        "endMs": 4492
+        "startMs": 3356,
+        "endMs": 3981
       }
     ]
   },
@@ -1459,68 +1459,68 @@
     "words": [
       {
         "word": "PROCVIČ",
-        "startMs": 104,
-        "endMs": 607
+        "startMs": 98,
+        "endMs": 543
       },
       {
         "word": "SI",
-        "startMs": 621,
-        "endMs": 784
+        "startMs": 555,
+        "endMs": 699
       },
       {
         "word": "OUŠKA",
-        "startMs": 824,
-        "endMs": 1272
+        "startMs": 735,
+        "endMs": 1132
       },
       {
         "word": "I",
-        "startMs": 1314,
-        "endMs": 1396
+        "startMs": 1168,
+        "endMs": 1240
       },
       {
         "word": "OČIČKA",
-        "startMs": 1449,
-        "endMs": 2047
+        "startMs": 1288,
+        "endMs": 1817
       },
       {
         "word": "NAJDI",
-        "startMs": 3111,
-        "endMs": 3532
+        "startMs": 2752,
+        "endMs": 3125
       },
       {
         "word": "DVĚ",
-        "startMs": 3533,
-        "endMs": 3778
+        "startMs": 3125,
+        "endMs": 3341
       },
       {
         "word": "KARTIČKY",
-        "startMs": 3777,
-        "endMs": 4429
+        "startMs": 3341,
+        "endMs": 3918
       },
       {
         "word": "SE",
-        "startMs": 4429,
-        "endMs": 4551
+        "startMs": 3918,
+        "endMs": 4026
       },
       {
         "word": "STEJNÝM",
-        "startMs": 4552,
-        "endMs": 5109
+        "startMs": 4026,
+        "endMs": 4519
       },
       {
         "word": "OBRÁZKEM",
-        "startMs": 5122,
-        "endMs": 5883
+        "startMs": 4531,
+        "endMs": 5204
       },
       {
         "word": "NEBO",
-        "startMs": 5883,
-        "endMs": 6155
+        "startMs": 5204,
+        "endMs": 5444
       },
       {
         "word": "ZVUKEM",
-        "startMs": 6155,
-        "endMs": 6821
+        "startMs": 5445,
+        "endMs": 6034
       }
     ]
   },
@@ -1532,63 +1532,63 @@
     "words": [
       {
         "word": "PODÍVEJ",
-        "startMs": 104,
-        "endMs": 702
+        "startMs": 98,
+        "endMs": 627
       },
       {
         "word": "SE",
-        "startMs": 702,
-        "endMs": 906
+        "startMs": 627,
+        "endMs": 807
       },
       {
         "word": "NA",
-        "startMs": 906,
-        "endMs": 1055
+        "startMs": 807,
+        "endMs": 939
       },
       {
         "word": "ŘADU",
-        "startMs": 1055,
-        "endMs": 1340
+        "startMs": 939,
+        "endMs": 1191
       },
       {
         "word": "OBRÁZKŮ",
-        "startMs": 1382,
-        "endMs": 2129
+        "startMs": 1228,
+        "endMs": 1889
       },
       {
         "word": "A",
-        "startMs": 2156,
-        "endMs": 2251
+        "startMs": 1913,
+        "endMs": 1997
       },
       {
         "word": "DOPLŇ",
-        "startMs": 2292,
-        "endMs": 2645
+        "startMs": 2033,
+        "endMs": 2345
       },
       {
         "word": "TEN",
-        "startMs": 2659,
-        "endMs": 3012
+        "startMs": 2358,
+        "endMs": 2670
       },
       {
         "word": "KTERÝ",
-        "startMs": 3229,
-        "endMs": 3677
+        "startMs": 2862,
+        "endMs": 3259
       },
       {
         "word": "V",
-        "startMs": 3691,
-        "endMs": 3773
+        "startMs": 3271,
+        "endMs": 3343
       },
       {
         "word": "NÍ",
-        "startMs": 3773,
-        "endMs": 3963
+        "startMs": 3343,
+        "endMs": 3511
       },
       {
         "word": "CHYBÍ",
-        "startMs": 3977,
-        "endMs": 4520
+        "startMs": 3524,
+        "endMs": 4005
       }
     ]
   },
@@ -1600,53 +1600,53 @@
     "words": [
       {
         "word": "POMOZ",
-        "startMs": 104,
-        "endMs": 498
+        "startMs": 98,
+        "endMs": 447
       },
       {
         "word": "TUČŇÁKOVI",
-        "startMs": 498,
-        "endMs": 1259
+        "startMs": 447,
+        "endMs": 1120
       },
       {
         "word": "NAJÍT",
-        "startMs": 1259,
-        "endMs": 1599
+        "startMs": 1120,
+        "endMs": 1420
       },
       {
         "word": "BEZPEČNOU",
-        "startMs": 1626,
-        "endMs": 2210
+        "startMs": 1444,
+        "endMs": 1961
       },
       {
         "word": "CESTU",
-        "startMs": 2251,
-        "endMs": 2713
+        "startMs": 1997,
+        "endMs": 2406
       },
       {
         "word": "LEDOVÝM",
-        "startMs": 2713,
-        "endMs": 3175
+        "startMs": 2406,
+        "endMs": 2815
       },
       {
         "word": "BLUDIŠTĚM",
-        "startMs": 3175,
-        "endMs": 3854
+        "startMs": 2814,
+        "endMs": 3415
       },
       {
         "word": "AŽ",
-        "startMs": 3882,
-        "endMs": 4086
+        "startMs": 3439,
+        "endMs": 3619
       },
       {
         "word": "K",
-        "startMs": 4085,
-        "endMs": 4153
+        "startMs": 3620,
+        "endMs": 3680
       },
       {
         "word": "POKLADU",
-        "startMs": 4180,
-        "endMs": 4764
+        "startMs": 3704,
+        "endMs": 4221
       }
     ]
   },
@@ -1658,53 +1658,53 @@
     "words": [
       {
         "word": "ZAŘAĎ",
-        "startMs": 104,
-        "endMs": 465
+        "startMs": 99,
+        "endMs": 411
       },
       {
         "word": "OBRÁZKY",
-        "startMs": 507,
-        "endMs": 1132
+        "startMs": 447,
+        "endMs": 988
       },
       {
         "word": "DO",
-        "startMs": 1132,
-        "endMs": 1257
+        "startMs": 988,
+        "endMs": 1096
       },
       {
         "word": "TABULKY",
-        "startMs": 1257,
-        "endMs": 1799
+        "startMs": 1096,
+        "endMs": 1565
       },
       {
         "word": "PODLE",
-        "startMs": 1799,
-        "endMs": 2160
+        "startMs": 1565,
+        "endMs": 1877
       },
       {
         "word": "JEJICH",
-        "startMs": 2160,
-        "endMs": 2493
+        "startMs": 1877,
+        "endMs": 2165
       },
       {
         "word": "BARVY",
-        "startMs": 2493,
-        "endMs": 2937
+        "startMs": 2166,
+        "endMs": 2551
       },
       {
         "word": "I",
-        "startMs": 2993,
-        "endMs": 3049
+        "startMs": 2599,
+        "endMs": 2647
       },
       {
         "word": "TVARU",
-        "startMs": 3076,
-        "endMs": 3437
+        "startMs": 2671,
+        "endMs": 2983
       },
       {
         "word": "ZÁROVEŇ",
-        "startMs": 3438,
-        "endMs": 4188
+        "startMs": 2983,
+        "endMs": 3632
       }
     ]
   },
@@ -1716,33 +1716,33 @@
     "words": [
       {
         "word": "VÝBORNĚ",
-        "startMs": 104,
-        "endMs": 838
+        "startMs": 98,
+        "endMs": 741
       },
       {
         "word": "TEĎ",
-        "startMs": 1889,
-        "endMs": 2079
+        "startMs": 1655,
+        "endMs": 1822
       },
       {
         "word": "NAHOŘE",
-        "startMs": 2120,
-        "endMs": 2568
+        "startMs": 1857,
+        "endMs": 2250
       },
       {
         "word": "PŘIKRESLI",
-        "startMs": 2568,
-        "endMs": 3220
+        "startMs": 2250,
+        "endMs": 2821
       },
       {
         "word": "KULATOU",
-        "startMs": 3220,
-        "endMs": 3696
+        "startMs": 2821,
+        "endMs": 3238
       },
       {
         "word": "HLAVIČKU",
-        "startMs": 3736,
-        "endMs": 4429
+        "startMs": 3274,
+        "endMs": 3881
       }
     ]
   },
@@ -1754,68 +1754,68 @@
     "words": [
       {
         "word": "SLOŽ",
-        "startMs": 103,
-        "endMs": 415
+        "startMs": 99,
+        "endMs": 375
       },
       {
         "word": "CESTU",
-        "startMs": 416,
-        "endMs": 837
+        "startMs": 375,
+        "endMs": 748
       },
       {
         "word": "ZE",
-        "startMs": 837,
-        "endMs": 1000
+        "startMs": 748,
+        "endMs": 892
       },
       {
         "word": "ŠIPEK",
-        "startMs": 1000,
-        "endMs": 1435
+        "startMs": 892,
+        "endMs": 1277
       },
       {
         "word": "A",
-        "startMs": 1448,
-        "endMs": 1584
+        "startMs": 1288,
+        "endMs": 1408
       },
       {
         "word": "PAK",
-        "startMs": 1598,
-        "endMs": 1815
+        "startMs": 1421,
+        "endMs": 1613
       },
       {
         "word": "ZMÁČKNI",
-        "startMs": 1815,
-        "endMs": 2413
+        "startMs": 1613,
+        "endMs": 2142
       },
       {
         "word": "ZELENÉ",
-        "startMs": 2413,
-        "endMs": 2861
+        "startMs": 2142,
+        "endMs": 2539
       },
       {
         "word": "TLAČÍTKO",
-        "startMs": 2875,
-        "endMs": 3663
+        "startMs": 2550,
+        "endMs": 3247
       },
       {
         "word": "AŤ",
-        "startMs": 3976,
-        "endMs": 4153
+        "startMs": 3524,
+        "endMs": 3680
       },
       {
         "word": "VYRAZÍM",
-        "startMs": 4193,
-        "endMs": 4736
+        "startMs": 3716,
+        "endMs": 4197
       },
       {
         "word": "ZA",
-        "startMs": 4736,
-        "endMs": 4899
+        "startMs": 4197,
+        "endMs": 4341
       },
       {
         "word": "POKLADEM",
-        "startMs": 4899,
-        "endMs": 5606
+        "startMs": 4341,
+        "endMs": 4966
       }
     ]
   },
@@ -1827,38 +1827,38 @@
     "words": [
       {
         "word": "PARÁDA",
-        "startMs": 104,
-        "endMs": 743
+        "startMs": 98,
+        "endMs": 658
       },
       {
         "word": "PŘIDEJ",
-        "startMs": 1807,
-        "endMs": 2296
+        "startMs": 1583,
+        "endMs": 2012
       },
       {
         "word": "PO",
-        "startMs": 2310,
-        "endMs": 2459
+        "startMs": 2024,
+        "endMs": 2155
       },
       {
         "word": "STRANÁCH",
-        "startMs": 2459,
-        "endMs": 3098
+        "startMs": 2155,
+        "endMs": 2715
       },
       {
         "word": "DVĚ",
-        "startMs": 3098,
-        "endMs": 3343
+        "startMs": 2714,
+        "endMs": 2928
       },
       {
         "word": "MÁVAJÍCÍ",
-        "startMs": 3342,
-        "endMs": 4103
+        "startMs": 2929,
+        "endMs": 3596
       },
       {
         "word": "KŘIDÉLKA",
-        "startMs": 4130,
-        "endMs": 4918
+        "startMs": 3619,
+        "endMs": 4309
       }
     ]
   },
@@ -1870,53 +1870,53 @@
     "words": [
       {
         "word": "A",
-        "startMs": 103,
-        "endMs": 171
+        "startMs": 98,
+        "endMs": 158
       },
       {
         "word": "NAKONEC",
-        "startMs": 198,
-        "endMs": 687
+        "startMs": 182,
+        "endMs": 611
       },
       {
         "word": "OČÍČKA",
-        "startMs": 783,
-        "endMs": 1394
+        "startMs": 693,
+        "endMs": 1229
       },
       {
         "word": "A",
-        "startMs": 1394,
-        "endMs": 1489
+        "startMs": 1229,
+        "endMs": 1312
       },
       {
         "word": "ŠPIČATÝ",
-        "startMs": 1489,
-        "endMs": 2073
+        "startMs": 1312,
+        "endMs": 1824
       },
       {
         "word": "ZOBÁČEK",
-        "startMs": 2087,
-        "endMs": 2861
+        "startMs": 1836,
+        "endMs": 2515
       },
       {
         "word": "AŤ",
-        "startMs": 3174,
-        "endMs": 3351
+        "startMs": 2789,
+        "endMs": 2944
       },
       {
         "word": "NA",
-        "startMs": 3405,
-        "endMs": 3541
+        "startMs": 2991,
+        "endMs": 3110
       },
       {
         "word": "TEBE",
-        "startMs": 3541,
-        "endMs": 3826
+        "startMs": 3110,
+        "endMs": 3360
       },
       {
         "word": "KOUKÁ",
-        "startMs": 3826,
-        "endMs": 4505
+        "startMs": 3360,
+        "endMs": 3955
       }
     ]
   },
@@ -1928,58 +1928,58 @@
     "words": [
       {
         "word": "POSLOUCHEJ",
-        "startMs": 106,
-        "endMs": 814
+        "startMs": 98,
+        "endMs": 711
       },
       {
         "word": "KRÁTKÝ",
-        "startMs": 814,
-        "endMs": 1383
+        "startMs": 711,
+        "endMs": 1204
       },
       {
         "word": "PŘÍBĚH",
-        "startMs": 1411,
-        "endMs": 1953
+        "startMs": 1228,
+        "endMs": 1697
       },
       {
         "word": "A",
-        "startMs": 1953,
-        "endMs": 2064
+        "startMs": 1697,
+        "endMs": 1793
       },
       {
         "word": "SPOČÍTEJ",
-        "startMs": 2078,
-        "endMs": 2870
+        "startMs": 1805,
+        "endMs": 2490
       },
       {
         "word": "KOLIK",
-        "startMs": 3036,
-        "endMs": 3411
+        "startMs": 2634,
+        "endMs": 2958
       },
       {
         "word": "TUČŇÁKŮ",
-        "startMs": 3439,
-        "endMs": 4300
+        "startMs": 2983,
+        "endMs": 3728
       },
       {
         "word": "JE",
-        "startMs": 4314,
-        "endMs": 4481
+        "startMs": 3740,
+        "endMs": 3884
       },
       {
         "word": "NA",
-        "startMs": 4481,
-        "endMs": 4606
+        "startMs": 3884,
+        "endMs": 3992
       },
       {
         "word": "KŘE",
-        "startMs": 4606,
-        "endMs": 4870
+        "startMs": 3992,
+        "endMs": 4220
       },
       {
         "word": "DOHROMADY",
-        "startMs": 4869,
-        "endMs": 5591
+        "startMs": 4221,
+        "endMs": 4846
       }
     ]
   },
@@ -1991,68 +1991,68 @@
     "words": [
       {
         "word": "JÉ",
-        "startMs": 103,
-        "endMs": 369
+        "startMs": 98,
+        "endMs": 336
       },
       {
         "word": "TVŮJ",
-        "startMs": 635,
-        "endMs": 981
+        "startMs": 574,
+        "endMs": 884
       },
       {
         "word": "OBRÁZEK",
-        "startMs": 1034,
-        "endMs": 1672
+        "startMs": 931,
+        "endMs": 1502
       },
       {
         "word": "OŽIL",
-        "startMs": 1726,
-        "endMs": 2245
+        "startMs": 1550,
+        "endMs": 2014
       },
       {
         "word": "TEĎ",
-        "startMs": 3298,
-        "endMs": 3458
+        "startMs": 2952,
+        "endMs": 3095
       },
       {
         "word": "SI",
-        "startMs": 3471,
-        "endMs": 3670
+        "startMs": 3107,
+        "endMs": 3286
       },
       {
         "word": "HO",
-        "startMs": 3670,
-        "endMs": 3803
+        "startMs": 3286,
+        "endMs": 3405
       },
       {
         "word": "MŮŽEŠ",
-        "startMs": 3803,
-        "endMs": 4242
+        "startMs": 3405,
+        "endMs": 3798
       },
       {
         "word": "VYBARVIT",
-        "startMs": 4242,
-        "endMs": 4787
+        "startMs": 3798,
+        "endMs": 4286
       },
       {
         "word": "A",
-        "startMs": 4827,
-        "endMs": 4973
+        "startMs": 4321,
+        "endMs": 4452
       },
       {
         "word": "NAMÍCHAT",
-        "startMs": 4987,
-        "endMs": 5519
+        "startMs": 4464,
+        "endMs": 4940
       },
       {
         "word": "KOUZELNÉ",
-        "startMs": 5545,
-        "endMs": 6276
+        "startMs": 4964,
+        "endMs": 5619
       },
       {
         "word": "BARVY",
-        "startMs": 6290,
-        "endMs": 6742
+        "startMs": 5631,
+        "endMs": 6036
       }
     ]
   },
@@ -2064,48 +2064,48 @@
     "words": [
       {
         "word": "KOUZLO",
-        "startMs": 104,
-        "endMs": 647
+        "startMs": 98,
+        "endMs": 574
       },
       {
         "word": "SMÍCHÁNÍM",
-        "startMs": 1657,
-        "endMs": 2499
+        "startMs": 1453,
+        "endMs": 2191
       },
       {
         "word": "ŽLUTÉ",
-        "startMs": 2499,
-        "endMs": 3070
+        "startMs": 2191,
+        "endMs": 2691
       },
       {
         "word": "A",
-        "startMs": 3083,
-        "endMs": 3219
+        "startMs": 2703,
+        "endMs": 2822
       },
       {
         "word": "MODRÉ",
-        "startMs": 3246,
-        "endMs": 3654
+        "startMs": 2846,
+        "endMs": 3203
       },
       {
         "word": "BARVY",
-        "startMs": 3667,
-        "endMs": 4047
+        "startMs": 3215,
+        "endMs": 3548
       },
       {
         "word": "VZNIKLA",
-        "startMs": 4048,
-        "endMs": 4551
+        "startMs": 3548,
+        "endMs": 3988
       },
       {
         "word": "KRÁSNÁ",
-        "startMs": 4551,
-        "endMs": 5244
+        "startMs": 3989,
+        "endMs": 4596
       },
       {
         "word": "ZELENÁ",
-        "startMs": 5243,
-        "endMs": 5882
+        "startMs": 4596,
+        "endMs": 5156
       }
     ]
   },
@@ -2117,43 +2117,43 @@
     "words": [
       {
         "word": "NAKRESLI",
-        "startMs": 104,
-        "endMs": 688
+        "startMs": 98,
+        "endMs": 610
       },
       {
         "word": "VYSOKÝ",
-        "startMs": 689,
-        "endMs": 1178
+        "startMs": 610,
+        "endMs": 1039
       },
       {
         "word": "TRUP",
-        "startMs": 1191,
-        "endMs": 1476
+        "startMs": 1050,
+        "endMs": 1300
       },
       {
         "word": "VESMÍRNÉ",
-        "startMs": 1490,
-        "endMs": 2237
+        "startMs": 1312,
+        "endMs": 1967
       },
       {
         "word": "RAKETY",
-        "startMs": 2238,
-        "endMs": 2727
+        "startMs": 1967,
+        "endMs": 2396
       },
       {
         "word": "A",
-        "startMs": 2740,
-        "endMs": 2822
+        "startMs": 2407,
+        "endMs": 2478
       },
       {
         "word": "KULATÉ",
-        "startMs": 2890,
-        "endMs": 3447
+        "startMs": 2538,
+        "endMs": 3026
       },
       {
         "word": "OKÉNKO",
-        "startMs": 3515,
-        "endMs": 4194
+        "startMs": 3086,
+        "endMs": 3681
       }
     ]
   },
@@ -2165,43 +2165,43 @@
     "words": [
       {
         "word": "PRVNÍ",
-        "startMs": 106,
-        "endMs": 578
+        "startMs": 98,
+        "endMs": 503
       },
       {
         "word": "KROK",
-        "startMs": 578,
-        "endMs": 953
+        "startMs": 502,
+        "endMs": 823
       },
       {
         "word": "NAKRESLI",
-        "startMs": 1300,
-        "endMs": 1939
+        "startMs": 1121,
+        "endMs": 1669
       },
       {
         "word": "VELKÝ",
-        "startMs": 1939,
-        "endMs": 2370
+        "startMs": 1669,
+        "endMs": 2038
       },
       {
         "word": "KULATÝ",
-        "startMs": 2383,
-        "endMs": 2925
+        "startMs": 2050,
+        "endMs": 2514
       },
       {
         "word": "OVÁL",
-        "startMs": 2939,
-        "endMs": 3411
+        "startMs": 2526,
+        "endMs": 2931
       },
       {
         "word": "PRO",
-        "startMs": 3411,
-        "endMs": 3619
+        "startMs": 2931,
+        "endMs": 3110
       },
       {
         "word": "TĚLÍČKO",
-        "startMs": 3633,
-        "endMs": 4369
+        "startMs": 3121,
+        "endMs": 3752
       }
     ]
   },
@@ -2213,43 +2213,43 @@
     "words": [
       {
         "word": "PŘIKRESLI",
-        "startMs": 104,
-        "endMs": 770
+        "startMs": 98,
+        "endMs": 681
       },
       {
         "word": "DVĚ",
-        "startMs": 770,
-        "endMs": 1001
+        "startMs": 681,
+        "endMs": 883
       },
       {
         "word": "ŠPIČATÁ",
-        "startMs": 1001,
-        "endMs": 1599
+        "startMs": 883,
+        "endMs": 1407
       },
       {
         "word": "KOČIČÍ",
-        "startMs": 1599,
-        "endMs": 2170
+        "startMs": 1407,
+        "endMs": 1907
       },
       {
         "word": "OUŠKA",
-        "startMs": 2210,
-        "endMs": 2726
+        "startMs": 1943,
+        "endMs": 2395
       },
       {
         "word": "A",
-        "startMs": 2781,
-        "endMs": 2849
+        "startMs": 2443,
+        "endMs": 2503
       },
       {
         "word": "DLOUHÉ",
-        "startMs": 2890,
-        "endMs": 3352
+        "startMs": 2538,
+        "endMs": 2943
       },
       {
         "word": "FOUSKY",
-        "startMs": 3365,
-        "endMs": 4017
+        "startMs": 2955,
+        "endMs": 3526
       }
     ]
   },
@@ -2261,48 +2261,48 @@
     "words": [
       {
         "word": "PODÍVEJ",
-        "startMs": 104,
-        "endMs": 824
+        "startMs": 98,
+        "endMs": 729
       },
       {
         "word": "ČERVENÁ",
-        "startMs": 1848,
-        "endMs": 2514
+        "startMs": 1619,
+        "endMs": 2202
       },
       {
         "word": "A",
-        "startMs": 2541,
-        "endMs": 2623
+        "startMs": 2226,
+        "endMs": 2297
       },
       {
         "word": "ŽLUTÁ",
-        "startMs": 2649,
-        "endMs": 3111
+        "startMs": 2321,
+        "endMs": 2726
       },
       {
         "word": "SE",
-        "startMs": 3111,
-        "endMs": 3260
+        "startMs": 2726,
+        "endMs": 2857
       },
       {
         "word": "SPOJILY",
-        "startMs": 3261,
-        "endMs": 3764
+        "startMs": 2857,
+        "endMs": 3297
       },
       {
         "word": "V",
-        "startMs": 3764,
-        "endMs": 3832
+        "startMs": 3298,
+        "endMs": 3358
       },
       {
         "word": "ZÁŘIVĚ",
-        "startMs": 3832,
-        "endMs": 4457
+        "startMs": 3357,
+        "endMs": 3905
       },
       {
         "word": "ORANŽOVOU",
-        "startMs": 4552,
-        "endMs": 5245
+        "startMs": 3988,
+        "endMs": 4595
       }
     ]
   },
@@ -2314,48 +2314,48 @@
     "words": [
       {
         "word": "PARÁDA",
-        "startMs": 104,
-        "endMs": 743
+        "startMs": 98,
+        "endMs": 658
       },
       {
         "word": "Z",
-        "startMs": 1806,
-        "endMs": 1888
+        "startMs": 1584,
+        "endMs": 1655
       },
       {
         "word": "ČERVENÉ",
-        "startMs": 1888,
-        "endMs": 2581
+        "startMs": 1655,
+        "endMs": 2262
       },
       {
         "word": "A",
-        "startMs": 2594,
-        "endMs": 2716
+        "startMs": 2274,
+        "endMs": 2381
       },
       {
         "word": "MODRÉ",
-        "startMs": 2730,
-        "endMs": 3124
+        "startMs": 2393,
+        "endMs": 2738
       },
       {
         "word": "JSI",
-        "startMs": 3124,
-        "endMs": 3314
+        "startMs": 2739,
+        "endMs": 2906
       },
       {
         "word": "VYKOUZLIL",
-        "startMs": 3314,
-        "endMs": 3953
+        "startMs": 2905,
+        "endMs": 3465
       },
       {
         "word": "KOUZELNOU",
-        "startMs": 3953,
-        "endMs": 4673
+        "startMs": 3465,
+        "endMs": 4096
       },
       {
         "word": "FIALOVOU",
-        "startMs": 4700,
-        "endMs": 5461
+        "startMs": 4120,
+        "endMs": 4787
       }
     ]
   },
@@ -2367,43 +2367,43 @@
     "words": [
       {
         "word": "NÁDHERNÁ",
-        "startMs": 104,
-        "endMs": 851
+        "startMs": 98,
+        "endMs": 753
       },
       {
         "word": "SOUMĚRNÁ",
-        "startMs": 852,
-        "endMs": 1599
+        "startMs": 752,
+        "endMs": 1407
       },
       {
         "word": "KRESBA",
-        "startMs": 1599,
-        "endMs": 2170
+        "startMs": 1407,
+        "endMs": 1907
       },
       {
         "word": "OBĚ",
-        "startMs": 3220,
-        "endMs": 3478
+        "startMs": 2821,
+        "endMs": 3047
       },
       {
         "word": "STRANY",
-        "startMs": 3478,
-        "endMs": 3926
+        "startMs": 3048,
+        "endMs": 3441
       },
       {
         "word": "JSOU",
-        "startMs": 3927,
-        "endMs": 4158
+        "startMs": 3440,
+        "endMs": 3642
       },
       {
         "word": "KRÁSNĚ",
-        "startMs": 4185,
-        "endMs": 4742
+        "startMs": 3667,
+        "endMs": 4155
       },
       {
         "word": "VYVÁŽENÉ",
-        "startMs": 4742,
-        "endMs": 5571
+        "startMs": 4155,
+        "endMs": 4881
       }
     ]
   },
@@ -2415,63 +2415,63 @@
     "words": [
       {
         "word": "ZKUS",
-        "startMs": 104,
-        "endMs": 423
+        "startMs": 100,
+        "endMs": 388
       },
       {
         "word": "SE",
-        "startMs": 424,
-        "endMs": 618
+        "startMs": 388,
+        "endMs": 563
       },
       {
         "word": "PODÍVAT",
-        "startMs": 618,
-        "endMs": 1243
+        "startMs": 562,
+        "endMs": 1124
       },
       {
         "word": "KOLIK",
-        "startMs": 1410,
-        "endMs": 1827
+        "startMs": 1275,
+        "endMs": 1650
       },
       {
         "word": "MÁ",
-        "startMs": 1840,
-        "endMs": 2062
+        "startMs": 1662,
+        "endMs": 1862
       },
       {
         "word": "TEN",
-        "startMs": 2062,
-        "endMs": 2284
+        "startMs": 1862,
+        "endMs": 2062
       },
       {
         "word": "TVAR",
-        "startMs": 2299,
-        "endMs": 2591
+        "startMs": 2075,
+        "endMs": 2337
       },
       {
         "word": "ROHŮ",
-        "startMs": 2604,
-        "endMs": 3076
+        "startMs": 2350,
+        "endMs": 2775
       },
       {
         "word": "A",
-        "startMs": 3438,
-        "endMs": 3507
+        "startMs": 3100,
+        "endMs": 3162
       },
       {
         "word": "NAJDI",
-        "startMs": 3576,
-        "endMs": 3937
+        "startMs": 3225,
+        "endMs": 3550
       },
       {
         "word": "STEJNÝ",
-        "startMs": 3938,
-        "endMs": 4466
+        "startMs": 3550,
+        "endMs": 4025
       },
       {
         "word": "OBRYS",
-        "startMs": 4535,
-        "endMs": 5063
+        "startMs": 4088,
+        "endMs": 4563
       }
     ]
   },
@@ -2483,53 +2483,53 @@
     "words": [
       {
         "word": "NA",
-        "startMs": 104,
-        "endMs": 240
+        "startMs": 98,
+        "endMs": 217
       },
       {
         "word": "VRŠEK",
-        "startMs": 281,
-        "endMs": 675
+        "startMs": 252,
+        "endMs": 597
       },
       {
         "word": "RAKETY",
-        "startMs": 689,
-        "endMs": 1110
+        "startMs": 610,
+        "endMs": 979
       },
       {
         "word": "NAKRESLI",
-        "startMs": 1110,
-        "endMs": 1653
+        "startMs": 979,
+        "endMs": 1455
       },
       {
         "word": "ŠPIČATOU",
-        "startMs": 1653,
-        "endMs": 2210
+        "startMs": 1455,
+        "endMs": 1943
       },
       {
         "word": "STŘECHU",
-        "startMs": 2251,
-        "endMs": 2822
+        "startMs": 1979,
+        "endMs": 2479
       },
       {
         "word": "A",
-        "startMs": 2862,
-        "endMs": 2903
+        "startMs": 2514,
+        "endMs": 2550
       },
       {
         "word": "DOLŮ",
-        "startMs": 2998,
-        "endMs": 3351
+        "startMs": 2633,
+        "endMs": 2943
       },
       {
         "word": "DVĚ",
-        "startMs": 3352,
-        "endMs": 3610
+        "startMs": 2943,
+        "endMs": 3169
       },
       {
         "word": "KŘIDÉLKA",
-        "startMs": 3610,
-        "endMs": 4384
+        "startMs": 3169,
+        "endMs": 3848
       }
     ]
   },
@@ -2541,58 +2541,58 @@
     "words": [
       {
         "word": "PODÍVEJ",
-        "startMs": 106,
-        "endMs": 717
+        "startMs": 100,
+        "endMs": 650
       },
       {
         "word": "SE",
-        "startMs": 717,
-        "endMs": 925
+        "startMs": 650,
+        "endMs": 838
       },
       {
         "word": "NA",
-        "startMs": 925,
-        "endMs": 1078
+        "startMs": 838,
+        "endMs": 976
       },
       {
         "word": "VELIKOST",
-        "startMs": 1078,
-        "endMs": 1703
+        "startMs": 975,
+        "endMs": 1537
       },
       {
         "word": "A",
-        "startMs": 1731,
-        "endMs": 1898
+        "startMs": 1562,
+        "endMs": 1712
       },
       {
         "word": "BARVU",
-        "startMs": 1897,
-        "endMs": 2258
+        "startMs": 1712,
+        "endMs": 2037
       },
       {
         "word": "MÍSTA",
-        "startMs": 2258,
-        "endMs": 2772
+        "startMs": 2038,
+        "endMs": 2500
       },
       {
         "word": "KTERÉ",
-        "startMs": 2883,
-        "endMs": 3383
+        "startMs": 2600,
+        "endMs": 3050
       },
       {
         "word": "TI",
-        "startMs": 3383,
-        "endMs": 3522
+        "startMs": 3050,
+        "endMs": 3175
       },
       {
         "word": "TADY",
-        "startMs": 3522,
-        "endMs": 3814
+        "startMs": 3175,
+        "endMs": 3437
       },
       {
         "word": "SVÍTÍ",
-        "startMs": 3814,
-        "endMs": 4481
+        "startMs": 3438,
+        "endMs": 4038
       }
     ]
   },
@@ -2604,58 +2604,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 106,
-        "endMs": 412
+        "startMs": 100,
+        "endMs": 375
       },
       {
         "word": "JEŠTĚ",
-        "startMs": 425,
-        "endMs": 786
+        "startMs": 388,
+        "endMs": 713
       },
       {
         "word": "TROCHU",
-        "startMs": 786,
-        "endMs": 1203
+        "startMs": 712,
+        "endMs": 1087
       },
       {
         "word": "HLAD",
-        "startMs": 1203,
-        "endMs": 1606
+        "startMs": 1088,
+        "endMs": 1450
       },
       {
         "word": "ZKUS",
-        "startMs": 2707,
-        "endMs": 3068
+        "startMs": 2438,
+        "endMs": 2763
       },
       {
         "word": "DO",
-        "startMs": 3068,
-        "endMs": 3221
+        "startMs": 2762,
+        "endMs": 2900
       },
       {
         "word": "MISKY",
-        "startMs": 3221,
-        "endMs": 3596
+        "startMs": 2900,
+        "endMs": 3238
       },
       {
         "word": "PŘIDAT",
-        "startMs": 3596,
-        "endMs": 4027
+        "startMs": 3238,
+        "endMs": 3626
       },
       {
         "word": "JEŠTĚ",
-        "startMs": 4040,
-        "endMs": 4415
+        "startMs": 3638,
+        "endMs": 3976
       },
       {
         "word": "PÁR",
-        "startMs": 4415,
-        "endMs": 4734
+        "startMs": 3975,
+        "endMs": 4263
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4735,
-        "endMs": 5346
+        "startMs": 4262,
+        "endMs": 4812
       }
     ]
   },
@@ -2667,73 +2667,73 @@
     "words": [
       {
         "word": "ŘEKNI",
-        "startMs": 104,
-        "endMs": 521
+        "startMs": 100,
+        "endMs": 475
       },
       {
         "word": "SI",
-        "startMs": 521,
-        "endMs": 702
+        "startMs": 475,
+        "endMs": 637
       },
       {
         "word": "OBRÁZKY",
-        "startMs": 743,
-        "endMs": 1326
+        "startMs": 675,
+        "endMs": 1200
       },
       {
         "word": "V",
-        "startMs": 1326,
-        "endMs": 1409
+        "startMs": 1200,
+        "endMs": 1275
       },
       {
         "word": "ŘADĚ",
-        "startMs": 1410,
-        "endMs": 1702
+        "startMs": 1275,
+        "endMs": 1537
       },
       {
         "word": "NAHLAS",
-        "startMs": 1701,
-        "endMs": 2145
+        "startMs": 1538,
+        "endMs": 1938
       },
       {
         "word": "ZA",
-        "startMs": 2146,
-        "endMs": 2299
+        "startMs": 1938,
+        "endMs": 2076
       },
       {
         "word": "SEBOU",
-        "startMs": 2299,
-        "endMs": 2757
+        "startMs": 2075,
+        "endMs": 2487
       },
       {
         "word": "A",
-        "startMs": 2812,
-        "endMs": 2881
+        "startMs": 2538,
+        "endMs": 2600
       },
       {
         "word": "HNED",
-        "startMs": 2910,
-        "endMs": 3188
+        "startMs": 2625,
+        "endMs": 2875
       },
       {
         "word": "POZNÁŠ",
-        "startMs": 3215,
-        "endMs": 3896
+        "startMs": 2900,
+        "endMs": 3512
       },
       {
         "word": "KTERÝ",
-        "startMs": 4090,
-        "endMs": 4493
+        "startMs": 3688,
+        "endMs": 4050
       },
       {
         "word": "BUDE",
-        "startMs": 4507,
-        "endMs": 4757
+        "startMs": 4062,
+        "endMs": 4287
       },
       {
         "word": "DALŠÍ",
-        "startMs": 4757,
-        "endMs": 5326
+        "startMs": 4288,
+        "endMs": 4800
       }
     ]
   },
@@ -2745,58 +2745,58 @@
     "words": [
       {
         "word": "ZKUS",
-        "startMs": 105,
-        "endMs": 417
+        "startMs": 100,
+        "endMs": 375
       },
       {
         "word": "SI",
-        "startMs": 418,
-        "endMs": 603
+        "startMs": 375,
+        "endMs": 537
       },
       {
         "word": "TO",
-        "startMs": 602,
-        "endMs": 730
+        "startMs": 538,
+        "endMs": 650
       },
       {
         "word": "SLOVO",
-        "startMs": 730,
-        "endMs": 1128
+        "startMs": 650,
+        "endMs": 1000
       },
       {
         "word": "ŘÍCT",
-        "startMs": 1128,
-        "endMs": 1540
+        "startMs": 1000,
+        "endMs": 1362
       },
       {
         "word": "NAHLAS",
-        "startMs": 1568,
-        "endMs": 2065
+        "startMs": 1388,
+        "endMs": 1826
       },
       {
         "word": "A",
-        "startMs": 2122,
-        "endMs": 2236
+        "startMs": 1875,
+        "endMs": 1975
       },
       {
         "word": "POSLOUCHEJ",
-        "startMs": 2264,
-        "endMs": 2988
+        "startMs": 2000,
+        "endMs": 2638
       },
       {
         "word": "ÚPLNĚ",
-        "startMs": 3074,
-        "endMs": 3557
+        "startMs": 2712,
+        "endMs": 3137
       },
       {
         "word": "PRVNÍ",
-        "startMs": 3557,
-        "endMs": 3969
+        "startMs": 3138,
+        "endMs": 3500
       },
       {
         "word": "HLÁSKU",
-        "startMs": 3969,
-        "endMs": 4679
+        "startMs": 3500,
+        "endMs": 4125
       }
     ]
   },
@@ -2808,8 +2808,8 @@
     "words": [
       {
         "word": "DVĚ",
-        "startMs": 103,
-        "endMs": 445
+        "startMs": 97,
+        "endMs": 404
       }
     ]
   },
@@ -2821,8 +2821,8 @@
     "words": [
       {
         "word": "TŘI",
-        "startMs": 103,
-        "endMs": 392
+        "startMs": 97,
+        "endMs": 356
       }
     ]
   },
@@ -2834,8 +2834,8 @@
     "words": [
       {
         "word": "ČTYŘI",
-        "startMs": 103,
-        "endMs": 564
+        "startMs": 97,
+        "endMs": 510
       }
     ]
   },
@@ -2847,58 +2847,58 @@
     "words": [
       {
         "word": "TEN",
-        "startMs": 106,
-        "endMs": 314
+        "startMs": 100,
+        "endMs": 288
       },
       {
         "word": "DÍLEK",
-        "startMs": 328,
-        "endMs": 786
+        "startMs": 300,
+        "endMs": 712
       },
       {
         "word": "TAM",
-        "startMs": 800,
-        "endMs": 1036
+        "startMs": 725,
+        "endMs": 937
       },
       {
         "word": "SKORO",
-        "startMs": 1036,
-        "endMs": 1453
+        "startMs": 938,
+        "endMs": 1313
       },
       {
         "word": "PASUJE",
-        "startMs": 1453,
-        "endMs": 2022
+        "startMs": 1312,
+        "endMs": 1824
       },
       {
         "word": "ZKUS",
-        "startMs": 3096,
-        "endMs": 3443
+        "startMs": 2788,
+        "endMs": 3100
       },
       {
         "word": "HO",
-        "startMs": 3443,
-        "endMs": 3568
+        "startMs": 3100,
+        "endMs": 3212
       },
       {
         "word": "TROCHU",
-        "startMs": 3568,
-        "endMs": 3957
+        "startMs": 3212,
+        "endMs": 3562
       },
       {
         "word": "POOTOČIT",
-        "startMs": 3957,
-        "endMs": 4582
+        "startMs": 3562,
+        "endMs": 4124
       },
       {
         "word": "TLAČÍTKEM",
-        "startMs": 4610,
-        "endMs": 5360
+        "startMs": 4150,
+        "endMs": 4825
       },
       {
         "word": "OTOČIT",
-        "startMs": 5388,
-        "endMs": 6055
+        "startMs": 4850,
+        "endMs": 5450
       }
     ]
   },
@@ -2910,8 +2910,8 @@
     "words": [
       {
         "word": "JEDNA",
-        "startMs": 103,
-        "endMs": 550
+        "startMs": 97,
+        "endMs": 498
       }
     ]
   },
@@ -2923,8 +2923,8 @@
     "words": [
       {
         "word": "PĚT",
-        "startMs": 103,
-        "endMs": 485
+        "startMs": 97,
+        "endMs": 439
       }
     ]
   },
@@ -2936,8 +2936,8 @@
     "words": [
       {
         "word": "ŠEST",
-        "startMs": 102,
-        "endMs": 602
+        "startMs": 98,
+        "endMs": 546
       }
     ]
   },
@@ -2949,8 +2949,8 @@
     "words": [
       {
         "word": "DESET",
-        "startMs": 103,
-        "endMs": 616
+        "startMs": 97,
+        "endMs": 557
       }
     ]
   },
@@ -2962,8 +2962,8 @@
     "words": [
       {
         "word": "OSM",
-        "startMs": 103,
-        "endMs": 511
+        "startMs": 97,
+        "endMs": 463
       }
     ]
   },
@@ -2975,68 +2975,68 @@
     "words": [
       {
         "word": "JSEM",
-        "startMs": 106,
-        "endMs": 412
+        "startMs": 100,
+        "endMs": 375
       },
       {
         "word": "TADY",
-        "startMs": 411,
-        "endMs": 689
+        "startMs": 375,
+        "endMs": 625
       },
       {
         "word": "S",
-        "startMs": 689,
-        "endMs": 814
+        "startMs": 625,
+        "endMs": 737
       },
       {
         "word": "TEBOU",
-        "startMs": 814,
-        "endMs": 1231
+        "startMs": 738,
+        "endMs": 1113
       },
       {
         "word": "JESTLI",
-        "startMs": 2333,
-        "endMs": 2736
+        "startMs": 2100,
+        "endMs": 2462
       },
       {
         "word": "CHCEŠ",
-        "startMs": 2736,
-        "endMs": 3222
+        "startMs": 2462,
+        "endMs": 2900
       },
       {
         "word": "ŤUKNI",
-        "startMs": 3444,
-        "endMs": 3875
+        "startMs": 3100,
+        "endMs": 3488
       },
       {
         "word": "NA",
-        "startMs": 3875,
-        "endMs": 4042
+        "startMs": 3488,
+        "endMs": 3638
       },
       {
         "word": "TO",
-        "startMs": 4042,
-        "endMs": 4292
+        "startMs": 3638,
+        "endMs": 3863
       },
       {
         "word": "CO",
-        "startMs": 4514,
-        "endMs": 4708
+        "startMs": 4062,
+        "endMs": 4237
       },
       {
         "word": "TI",
-        "startMs": 4708,
-        "endMs": 4861
+        "startMs": 4238,
+        "endMs": 4376
       },
       {
         "word": "ZROVNA",
-        "startMs": 4861,
-        "endMs": 5292
+        "startMs": 4375,
+        "endMs": 4763
       },
       {
         "word": "BLIKÁ",
-        "startMs": 5292,
-        "endMs": 5889
+        "startMs": 4762,
+        "endMs": 5300
       }
     ]
   },
@@ -3048,8 +3048,8 @@
     "words": [
       {
         "word": "JEDENÁCT",
-        "startMs": 103,
-        "endMs": 892
+        "startMs": 97,
+        "endMs": 805
       }
     ]
   },
@@ -3061,8 +3061,8 @@
     "words": [
       {
         "word": "DEVĚT",
-        "startMs": 103,
-        "endMs": 629
+        "startMs": 97,
+        "endMs": 569
       }
     ]
   },
@@ -3074,78 +3074,78 @@
     "words": [
       {
         "word": "JÉ",
-        "startMs": 106,
-        "endMs": 384
+        "startMs": 100,
+        "endMs": 350
       },
       {
         "word": "TO",
-        "startMs": 633,
-        "endMs": 800
+        "startMs": 575,
+        "endMs": 725
       },
       {
         "word": "JE",
-        "startMs": 800,
-        "endMs": 925
+        "startMs": 725,
+        "endMs": 837
       },
       {
         "word": "TROCHU",
-        "startMs": 925,
-        "endMs": 1328
+        "startMs": 838,
+        "endMs": 1200
       },
       {
         "word": "MOC",
-        "startMs": 1328,
-        "endMs": 1675
+        "startMs": 1200,
+        "endMs": 1512
       },
       {
         "word": "ŤUKNI",
-        "startMs": 2806,
-        "endMs": 3209
+        "startMs": 2525,
+        "endMs": 2887
       },
       {
         "word": "NA",
-        "startMs": 3208,
-        "endMs": 3361
+        "startMs": 2888,
+        "endMs": 3026
       },
       {
         "word": "RYBIČKU",
-        "startMs": 3361,
-        "endMs": 3847
+        "startMs": 3025,
+        "endMs": 3463
       },
       {
         "word": "V",
-        "startMs": 3847,
-        "endMs": 3944
+        "startMs": 3462,
+        "endMs": 3550
       },
       {
         "word": "MISCE",
-        "startMs": 3944,
-        "endMs": 4458
+        "startMs": 3550,
+        "endMs": 4012
       },
       {
         "word": "A",
-        "startMs": 4472,
-        "endMs": 4569
+        "startMs": 4025,
+        "endMs": 4113
       },
       {
         "word": "JEDNU",
-        "startMs": 4611,
-        "endMs": 4986
+        "startMs": 4150,
+        "endMs": 4488
       },
       {
         "word": "VRAŤ",
-        "startMs": 4986,
-        "endMs": 5292
+        "startMs": 4488,
+        "endMs": 4763
       },
       {
         "word": "DO",
-        "startMs": 5333,
-        "endMs": 5486
+        "startMs": 4800,
+        "endMs": 4938
       },
       {
         "word": "JEZÍRKA",
-        "startMs": 5486,
-        "endMs": 6236
+        "startMs": 4938,
+        "endMs": 5613
       }
     ]
   },
@@ -3157,8 +3157,8 @@
     "words": [
       {
         "word": "PATNÁCT",
-        "startMs": 103,
-        "endMs": 866
+        "startMs": 97,
+        "endMs": 781
       }
     ]
   },
@@ -3170,8 +3170,8 @@
     "words": [
       {
         "word": "SEDM",
-        "startMs": 102,
-        "endMs": 576
+        "startMs": 98,
+        "endMs": 523
       }
     ]
   },
@@ -3183,8 +3183,8 @@
     "words": [
       {
         "word": "DVANÁCT",
-        "startMs": 103,
-        "endMs": 853
+        "startMs": 97,
+        "endMs": 769
       }
     ]
   },
@@ -3196,8 +3196,8 @@
     "words": [
       {
         "word": "ČTRNÁCT",
-        "startMs": 103,
-        "endMs": 814
+        "startMs": 97,
+        "endMs": 734
       }
     ]
   },
@@ -3209,48 +3209,48 @@
     "words": [
       {
         "word": "KRESLI",
-        "startMs": 106,
-        "endMs": 523
+        "startMs": 100,
+        "endMs": 475
       },
       {
         "word": "PRSTEM",
-        "startMs": 522,
-        "endMs": 980
+        "startMs": 475,
+        "endMs": 887
       },
       {
         "word": "POMALU",
-        "startMs": 981,
-        "endMs": 1398
+        "startMs": 888,
+        "endMs": 1263
       },
       {
         "word": "PO",
-        "startMs": 1397,
-        "endMs": 1550
+        "startMs": 1262,
+        "endMs": 1400
       },
       {
         "word": "PŘERUŠOVANÉ",
-        "startMs": 1550,
-        "endMs": 2356
+        "startMs": 1400,
+        "endMs": 2125
       },
       {
         "word": "ČÁŘE",
-        "startMs": 2369,
-        "endMs": 2952
+        "startMs": 2138,
+        "endMs": 2663
       },
       {
         "word": "VEDEŠ",
-        "startMs": 3300,
-        "endMs": 3689
+        "startMs": 2975,
+        "endMs": 3325
       },
       {
         "word": "SI",
-        "startMs": 3689,
-        "endMs": 3842
+        "startMs": 3325,
+        "endMs": 3463
       },
       {
         "word": "SKVĚLE",
-        "startMs": 3842,
-        "endMs": 4411
+        "startMs": 3462,
+        "endMs": 3974
       }
     ]
   },
@@ -3262,8 +3262,8 @@
     "words": [
       {
         "word": "TŘINÁCT",
-        "startMs": 103,
-        "endMs": 827
+        "startMs": 97,
+        "endMs": 746
       }
     ]
   },
@@ -3275,8 +3275,8 @@
     "words": [
       {
         "word": "DEVATENÁCT",
-        "startMs": 103,
-        "endMs": 971
+        "startMs": 97,
+        "endMs": 875
       }
     ]
   },
@@ -3288,48 +3288,48 @@
     "words": [
       {
         "word": "SKVĚLÁ",
-        "startMs": 102,
-        "endMs": 660
+        "startMs": 97,
+        "endMs": 583
       },
       {
         "word": "PRÁCE",
-        "startMs": 661,
-        "endMs": 1233
+        "startMs": 583,
+        "endMs": 1081
       },
       {
         "word": "KRÁSNĚ",
-        "startMs": 1379,
-        "endMs": 1964
+        "startMs": 1208,
+        "endMs": 1717
       },
       {
         "word": "JSI",
-        "startMs": 1964,
-        "endMs": 2124
+        "startMs": 1718,
+        "endMs": 1857
       },
       {
         "word": "TO",
-        "startMs": 2124,
-        "endMs": 2257
+        "startMs": 1856,
+        "endMs": 1972
       },
       {
         "word": "SLADIL",
-        "startMs": 2257,
-        "endMs": 2815
+        "startMs": 1972,
+        "endMs": 2458
       },
       {
         "word": "A",
-        "startMs": 2855,
-        "endMs": 2961
+        "startMs": 2493,
+        "endMs": 2586
       },
       {
         "word": "NEVZDAL",
-        "startMs": 2988,
-        "endMs": 3480
+        "startMs": 2609,
+        "endMs": 3037
       },
       {
         "word": "SES",
-        "startMs": 3480,
-        "endMs": 3919
+        "startMs": 3037,
+        "endMs": 3419
       }
     ]
   },
@@ -3341,8 +3341,8 @@
     "words": [
       {
         "word": "ŠESTNÁCT",
-        "startMs": 102,
-        "endMs": 944
+        "startMs": 98,
+        "endMs": 853
       }
     ]
   },
@@ -3354,8 +3354,8 @@
     "words": [
       {
         "word": "OSMNÁCT",
-        "startMs": 103,
-        "endMs": 906
+        "startMs": 97,
+        "endMs": 816
       }
     ]
   },
@@ -3367,8 +3367,8 @@
     "words": [
       {
         "word": "SEDMNÁCT",
-        "startMs": 102,
-        "endMs": 970
+        "startMs": 98,
+        "endMs": 876
       }
     ]
   },
@@ -3380,8 +3380,8 @@
     "words": [
       {
         "word": "DVACET",
-        "startMs": 103,
-        "endMs": 682
+        "startMs": 97,
+        "endMs": 616
       }
     ]
   },
@@ -3393,58 +3393,58 @@
     "words": [
       {
         "word": "VÝBORNĚ",
-        "startMs": 103,
-        "endMs": 821
+        "startMs": 96,
+        "endMs": 721
       },
       {
         "word": "POZNAL",
-        "startMs": 1140,
-        "endMs": 1659
+        "startMs": 999,
+        "endMs": 1450
       },
       {
         "word": "JSI",
-        "startMs": 1659,
-        "endMs": 1832
+        "startMs": 1450,
+        "endMs": 1600
       },
       {
         "word": "PRVNÍ",
-        "startMs": 1832,
-        "endMs": 2204
+        "startMs": 1601,
+        "endMs": 1925
       },
       {
         "word": "HLÁSKU",
-        "startMs": 2204,
-        "endMs": 2736
+        "startMs": 1925,
+        "endMs": 2388
       },
       {
         "word": "ÚPLNĚ",
-        "startMs": 2803,
-        "endMs": 3229
+        "startMs": 2446,
+        "endMs": 2816
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3228,
-        "endMs": 3813
+        "startMs": 2816,
+        "endMs": 3325
       },
       {
         "word": "MÁŠ",
-        "startMs": 4840,
-        "endMs": 5212
+        "startMs": 4213,
+        "endMs": 4537
       },
       {
         "word": "UŠI",
-        "startMs": 5306,
-        "endMs": 5599
+        "startMs": 4618,
+        "endMs": 4873
       },
       {
         "word": "JAKO",
-        "startMs": 5598,
-        "endMs": 5917
+        "startMs": 4873,
+        "endMs": 5151
       },
       {
         "word": "RYS",
-        "startMs": 5918,
-        "endMs": 6264
+        "startMs": 5150,
+        "endMs": 5451
       }
     ]
   },
@@ -3456,48 +3456,48 @@
     "words": [
       {
         "word": "HURÁ",
-        "startMs": 102,
-        "endMs": 554
+        "startMs": 97,
+        "endMs": 491
       },
       {
         "word": "MÁŠ",
-        "startMs": 1609,
-        "endMs": 1915
+        "startMs": 1400,
+        "endMs": 1666
       },
       {
         "word": "SKVĚLÉ",
-        "startMs": 1915,
-        "endMs": 2473
+        "startMs": 1667,
+        "endMs": 2153
       },
       {
         "word": "OKO",
-        "startMs": 2540,
-        "endMs": 2833
+        "startMs": 2211,
+        "endMs": 2466
       },
       {
         "word": "A",
-        "startMs": 2859,
-        "endMs": 2979
+        "startMs": 2488,
+        "endMs": 2592
       },
       {
         "word": "MOC",
-        "startMs": 2992,
-        "endMs": 3231
+        "startMs": 2604,
+        "endMs": 2812
       },
       {
         "word": "PĚKNĚ",
-        "startMs": 3258,
-        "endMs": 3657
+        "startMs": 2836,
+        "endMs": 3183
       },
       {
         "word": "JSI",
-        "startMs": 3657,
-        "endMs": 3843
+        "startMs": 3183,
+        "endMs": 3345
       },
       {
         "word": "PŘEMÝŠLEL",
-        "startMs": 3843,
-        "endMs": 4707
+        "startMs": 3345,
+        "endMs": 4097
       }
     ]
   },
@@ -3509,53 +3509,53 @@
     "words": [
       {
         "word": "BRAVO",
-        "startMs": 103,
-        "endMs": 582
+        "startMs": 96,
+        "endMs": 513
       },
       {
         "word": "MLADÝ",
-        "startMs": 874,
-        "endMs": 1339
+        "startMs": 768,
+        "endMs": 1173
       },
       {
         "word": "UMĚLČE",
-        "startMs": 1393,
-        "endMs": 2058
+        "startMs": 1219,
+        "endMs": 1798
       },
       {
         "word": "TOHLE",
-        "startMs": 3098,
-        "endMs": 3430
+        "startMs": 2697,
+        "endMs": 2986
       },
       {
         "word": "DÍLO",
-        "startMs": 3431,
-        "endMs": 3870
+        "startMs": 2986,
+        "endMs": 3368
       },
       {
         "word": "JE",
-        "startMs": 3870,
-        "endMs": 3990
+        "startMs": 3368,
+        "endMs": 3472
       },
       {
         "word": "JAK",
-        "startMs": 3989,
-        "endMs": 4162
+        "startMs": 3472,
+        "endMs": 3622
       },
       {
         "word": "Z",
-        "startMs": 4162,
-        "endMs": 4282
+        "startMs": 3623,
+        "endMs": 3727
       },
       {
         "word": "POHÁDKOVÉ",
-        "startMs": 4282,
-        "endMs": 5053
+        "startMs": 3727,
+        "endMs": 4398
       },
       {
         "word": "KNÍŽKY",
-        "startMs": 5066,
-        "endMs": 5691
+        "startMs": 4410,
+        "endMs": 4954
       }
     ]
   },
@@ -3567,63 +3567,63 @@
     "words": [
       {
         "word": "ÁÁÁCH",
-        "startMs": 107,
-        "endMs": 1000
+        "startMs": 103,
+        "endMs": 918
       },
       {
         "word": "JO",
-        "startMs": 1000,
-        "endMs": 1223
+        "startMs": 918,
+        "endMs": 1122
       },
       {
         "word": "DNES",
-        "startMs": 1491,
-        "endMs": 1818
+        "startMs": 1367,
+        "endMs": 1666
       },
       {
         "word": "JSME",
-        "startMs": 1818,
-        "endMs": 2071
+        "startMs": 1666,
+        "endMs": 1897
       },
       {
         "word": "SI",
-        "startMs": 2071,
-        "endMs": 2279
+        "startMs": 1897,
+        "endMs": 2087
       },
       {
         "word": "BÁJEČNĚ",
-        "startMs": 2280,
-        "endMs": 2920
+        "startMs": 2087,
+        "endMs": 2671
       },
       {
         "word": "POHRÁLI",
-        "startMs": 2920,
-        "endMs": 3709
+        "startMs": 2671,
+        "endMs": 3391
       },
       {
         "word": "ALE",
-        "startMs": 4036,
-        "endMs": 4334
+        "startMs": 3690,
+        "endMs": 3962
       },
       {
         "word": "MNĚ",
-        "startMs": 4333,
-        "endMs": 4541
+        "startMs": 3962,
+        "endMs": 4152
       },
       {
         "word": "UŽ",
-        "startMs": 4616,
-        "endMs": 4795
+        "startMs": 4220,
+        "endMs": 4383
       },
       {
         "word": "PADAJÍ",
-        "startMs": 4795,
-        "endMs": 5286
+        "startMs": 4383,
+        "endMs": 4831
       },
       {
         "word": "VÍČKA",
-        "startMs": 5301,
-        "endMs": 5896
+        "startMs": 4845,
+        "endMs": 5388
       }
     ]
   },
@@ -3635,93 +3635,93 @@
     "words": [
       {
         "word": "OBLÉKÁM",
-        "startMs": 111,
-        "endMs": 827
+        "startMs": 104,
+        "endMs": 743
       },
       {
         "word": "SI",
-        "startMs": 827,
-        "endMs": 1010
+        "startMs": 743,
+        "endMs": 906
       },
       {
         "word": "TEPLÉ",
-        "startMs": 1010,
-        "endMs": 1467
+        "startMs": 906,
+        "endMs": 1314
       },
       {
         "word": "PYŽAMKO",
-        "startMs": 1483,
-        "endMs": 2199
+        "startMs": 1327,
+        "endMs": 1966
       },
       {
         "word": "A",
-        "startMs": 2215,
-        "endMs": 2306
+        "startMs": 1979,
+        "endMs": 2061
       },
       {
         "word": "JDU",
-        "startMs": 2352,
-        "endMs": 2581
+        "startMs": 2102,
+        "endMs": 2306
       },
       {
         "word": "SE",
-        "startMs": 2580,
-        "endMs": 2824
+        "startMs": 2305,
+        "endMs": 2522
       },
       {
         "word": "VYSPAT",
-        "startMs": 2824,
-        "endMs": 3281
+        "startMs": 2523,
+        "endMs": 2931
       },
       {
         "word": "DO",
-        "startMs": 3312,
-        "endMs": 3449
+        "startMs": 2958,
+        "endMs": 3080
       },
       {
         "word": "IGLÚ",
-        "startMs": 3526,
-        "endMs": 4380
+        "startMs": 3148,
+        "endMs": 3909
       },
       {
         "word": "MOC",
-        "startMs": 5640,
-        "endMs": 5899
+        "startMs": 5027,
+        "endMs": 5258
       },
       {
         "word": "SE",
-        "startMs": 5915,
-        "endMs": 6189
+        "startMs": 5272,
+        "endMs": 5517
       },
       {
         "word": "NA",
-        "startMs": 6189,
-        "endMs": 6311
+        "startMs": 5516,
+        "endMs": 5625
       },
       {
         "word": "TEBE",
-        "startMs": 6311,
-        "endMs": 6601
+        "startMs": 5625,
+        "endMs": 5883
       },
       {
         "word": "TĚŠÍM",
-        "startMs": 6601,
-        "endMs": 7104
+        "startMs": 5883,
+        "endMs": 6331
       },
       {
         "word": "ZASE",
-        "startMs": 7104,
-        "endMs": 7455
+        "startMs": 6332,
+        "endMs": 6644
       },
       {
         "word": "ZÍTRA",
-        "startMs": 7454,
-        "endMs": 8079
+        "startMs": 6644,
+        "endMs": 7201
       },
       {
         "word": "AHOJ",
-        "startMs": 8460,
-        "endMs": 8978
+        "startMs": 7541,
+        "endMs": 8003
       }
     ]
   },
@@ -3733,48 +3733,48 @@
     "words": [
       {
         "word": "TLESKÁM",
-        "startMs": 103,
-        "endMs": 675
+        "startMs": 96,
+        "endMs": 594
       },
       {
         "word": "TI",
-        "startMs": 675,
-        "endMs": 821
+        "startMs": 594,
+        "endMs": 721
       },
       {
         "word": "KŘÍDLY",
-        "startMs": 821,
-        "endMs": 1393
+        "startMs": 721,
+        "endMs": 1219
       },
       {
         "word": "ZÍSKÁVÁŠ",
-        "startMs": 2406,
-        "endMs": 3257
+        "startMs": 2096,
+        "endMs": 2837
       },
       {
         "word": "ZLATOU",
-        "startMs": 3257,
-        "endMs": 3709
+        "startMs": 2837,
+        "endMs": 3231
       },
       {
         "word": "HVĚZDIČKU",
-        "startMs": 3736,
-        "endMs": 4441
+        "startMs": 3253,
+        "endMs": 3866
       },
       {
         "word": "ZA",
-        "startMs": 4441,
-        "endMs": 4587
+        "startMs": 3867,
+        "endMs": 3994
       },
       {
         "word": "SKVĚLOU",
-        "startMs": 4587,
-        "endMs": 5106
+        "startMs": 3994,
+        "endMs": 4445
       },
       {
         "word": "SNAHU",
-        "startMs": 5145,
-        "endMs": 5610
+        "startMs": 4480,
+        "endMs": 4885
       }
     ]
   },
@@ -3786,58 +3786,58 @@
     "words": [
       {
         "word": "MŇAM",
-        "startMs": 103,
-        "endMs": 529
+        "startMs": 96,
+        "endMs": 466
       },
       {
         "word": "TO",
-        "startMs": 808,
-        "endMs": 968
+        "startMs": 710,
+        "endMs": 849
       },
       {
         "word": "BYLA",
-        "startMs": 981,
-        "endMs": 1247
+        "startMs": 860,
+        "endMs": 1092
       },
       {
         "word": "DOBROTA",
-        "startMs": 1247,
-        "endMs": 1792
+        "startMs": 1092,
+        "endMs": 1567
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 2806,
-        "endMs": 3338
+        "startMs": 2442,
+        "endMs": 2905
       },
       {
         "word": "TOLIK",
-        "startMs": 3338,
-        "endMs": 3684
+        "startMs": 2905,
+        "endMs": 3206
       },
       {
         "word": "RYBIČEK",
-        "startMs": 3697,
-        "endMs": 4149
+        "startMs": 3218,
+        "endMs": 3612
       },
       {
         "word": "JSEM",
-        "startMs": 4149,
-        "endMs": 4388
+        "startMs": 3611,
+        "endMs": 3819
       },
       {
         "word": "SI",
-        "startMs": 4388,
-        "endMs": 4561
+        "startMs": 3819,
+        "endMs": 3969
       },
       {
         "word": "PŘÁL",
-        "startMs": 4561,
-        "endMs": 5053
+        "startMs": 3970,
+        "endMs": 4398
       },
       {
         "word": "DĚKUJI",
-        "startMs": 5372,
-        "endMs": 5970
+        "startMs": 4676,
+        "endMs": 5197
       }
     ]
   },
@@ -3849,48 +3849,48 @@
     "words": [
       {
         "word": "L",
-        "startMs": 103,
-        "endMs": 375
+        "startMs": 99,
+        "endMs": 339
       },
       {
         "word": "L",
-        "startMs": 688,
-        "endMs": 960
+        "startMs": 615,
+        "endMs": 855
       },
       {
         "word": "LIŠKA",
-        "startMs": 1258,
-        "endMs": 1801
+        "startMs": 1120,
+        "endMs": 1601
       },
       {
         "word": "NA",
-        "startMs": 2880,
-        "endMs": 3029
+        "startMs": 2548,
+        "endMs": 2680
       },
       {
         "word": "JAKÉ",
-        "startMs": 3043,
-        "endMs": 3410
+        "startMs": 2692,
+        "endMs": 3016
       },
       {
         "word": "PÍSMENO",
-        "startMs": 3438,
-        "endMs": 3995
+        "startMs": 3041,
+        "endMs": 3534
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 3995,
-        "endMs": 4579
+        "startMs": 3534,
+        "endMs": 4051
       },
       {
         "word": "SLOVO",
-        "startMs": 4592,
-        "endMs": 4986
+        "startMs": 4062,
+        "endMs": 4411
       },
       {
         "word": "LIŠKA",
-        "startMs": 4986,
-        "endMs": 5448
+        "startMs": 4411,
+        "endMs": 4820
       }
     ]
   },
@@ -3902,48 +3902,48 @@
     "words": [
       {
         "word": "R",
-        "startMs": 103,
-        "endMs": 293
+        "startMs": 99,
+        "endMs": 267
       },
       {
         "word": "R",
-        "startMs": 565,
-        "endMs": 769
+        "startMs": 507,
+        "endMs": 687
       },
       {
         "word": "RYBA",
-        "startMs": 1095,
-        "endMs": 1503
+        "startMs": 976,
+        "endMs": 1337
       },
       {
         "word": "NA",
-        "startMs": 2541,
-        "endMs": 2690
+        "startMs": 2248,
+        "endMs": 2380
       },
       {
         "word": "JAKÉ",
-        "startMs": 2717,
-        "endMs": 3084
+        "startMs": 2404,
+        "endMs": 2728
       },
       {
         "word": "PÍSMENO",
-        "startMs": 3111,
-        "endMs": 3668
+        "startMs": 2752,
+        "endMs": 3245
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 3668,
-        "endMs": 4266
+        "startMs": 3245,
+        "endMs": 3774
       },
       {
         "word": "SLOVO",
-        "startMs": 4280,
-        "endMs": 4674
+        "startMs": 3786,
+        "endMs": 4135
       },
       {
         "word": "RYBA",
-        "startMs": 4674,
-        "endMs": 5000
+        "startMs": 4135,
+        "endMs": 4423
       }
     ]
   },
@@ -3955,48 +3955,48 @@
     "words": [
       {
         "word": "Ž",
-        "startMs": 103,
-        "endMs": 429
+        "startMs": 99,
+        "endMs": 387
       },
       {
         "word": "Ž",
-        "startMs": 674,
-        "endMs": 1041
+        "startMs": 603,
+        "endMs": 927
       },
       {
         "word": "ŽÁBA",
-        "startMs": 1285,
-        "endMs": 1856
+        "startMs": 1144,
+        "endMs": 1649
       },
       {
         "word": "NA",
-        "startMs": 2894,
-        "endMs": 3043
+        "startMs": 2560,
+        "endMs": 2692
       },
       {
         "word": "JAKÉ",
-        "startMs": 3057,
-        "endMs": 3410
+        "startMs": 2704,
+        "endMs": 3016
       },
       {
         "word": "PÍSMENO",
-        "startMs": 3438,
-        "endMs": 3995
+        "startMs": 3041,
+        "endMs": 3534
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 3995,
-        "endMs": 4579
+        "startMs": 3534,
+        "endMs": 4051
       },
       {
         "word": "SLOVO",
-        "startMs": 4592,
-        "endMs": 4959
+        "startMs": 4062,
+        "endMs": 4386
       },
       {
         "word": "ŽÁBA",
-        "startMs": 4959,
-        "endMs": 5462
+        "startMs": 4387,
+        "endMs": 4832
       }
     ]
   },
@@ -4008,48 +4008,48 @@
     "words": [
       {
         "word": "K",
-        "startMs": 104,
-        "endMs": 145
+        "startMs": 98,
+        "endMs": 134
       },
       {
         "word": "K",
-        "startMs": 295,
-        "endMs": 390
+        "startMs": 266,
+        "endMs": 350
       },
       {
         "word": "KOČKA",
-        "startMs": 539,
-        "endMs": 1110
+        "startMs": 483,
+        "endMs": 988
       },
       {
         "word": "NA",
-        "startMs": 2147,
-        "endMs": 2296
+        "startMs": 1899,
+        "endMs": 2031
       },
       {
         "word": "JAKÉ",
-        "startMs": 2310,
-        "endMs": 2677
+        "startMs": 2043,
+        "endMs": 2367
       },
       {
         "word": "PÍSMENO",
-        "startMs": 2704,
-        "endMs": 3261
+        "startMs": 2392,
+        "endMs": 2885
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 3261,
-        "endMs": 3859
+        "startMs": 2885,
+        "endMs": 3414
       },
       {
         "word": "SLOVO",
-        "startMs": 3872,
-        "endMs": 4239
+        "startMs": 3426,
+        "endMs": 3750
       },
       {
         "word": "KOČKA",
-        "startMs": 4239,
-        "endMs": 4769
+        "startMs": 3750,
+        "endMs": 4219
       }
     ]
   },
@@ -4061,48 +4061,48 @@
     "words": [
       {
         "word": "S",
-        "startMs": 103,
-        "endMs": 266
+        "startMs": 99,
+        "endMs": 243
       },
       {
         "word": "S",
-        "startMs": 511,
-        "endMs": 688
+        "startMs": 459,
+        "endMs": 615
       },
       {
         "word": "SLUNCE",
-        "startMs": 905,
-        "endMs": 1544
+        "startMs": 808,
+        "endMs": 1373
       },
       {
         "word": "NA",
-        "startMs": 2595,
-        "endMs": 2744
+        "startMs": 2296,
+        "endMs": 2428
       },
       {
         "word": "JAKÉ",
-        "startMs": 2758,
-        "endMs": 3138
+        "startMs": 2440,
+        "endMs": 2777
       },
       {
         "word": "PÍSMENO",
-        "startMs": 3166,
-        "endMs": 3723
+        "startMs": 2800,
+        "endMs": 3293
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 3723,
-        "endMs": 4307
+        "startMs": 3293,
+        "endMs": 3810
       },
       {
         "word": "SLOVO",
-        "startMs": 4307,
-        "endMs": 4660
+        "startMs": 3810,
+        "endMs": 4122
       },
       {
         "word": "SLUNCE",
-        "startMs": 4660,
-        "endMs": 5258
+        "startMs": 4123,
+        "endMs": 4652
       }
     ]
   },
@@ -4114,48 +4114,48 @@
     "words": [
       {
         "word": "T",
-        "startMs": 104,
-        "endMs": 376
+        "startMs": 98,
+        "endMs": 338
       },
       {
         "word": "T",
-        "startMs": 539,
-        "endMs": 838
+        "startMs": 483,
+        "endMs": 747
       },
       {
         "word": "TUČŇÁK",
-        "startMs": 1137,
-        "endMs": 1871
+        "startMs": 1012,
+        "endMs": 1661
       },
       {
         "word": "NA",
-        "startMs": 2921,
-        "endMs": 3070
+        "startMs": 2584,
+        "endMs": 2716
       },
       {
         "word": "JAKÉ",
-        "startMs": 3084,
-        "endMs": 3451
+        "startMs": 2728,
+        "endMs": 3052
       },
       {
         "word": "PÍSMENO",
-        "startMs": 3478,
-        "endMs": 4035
+        "startMs": 3077,
+        "endMs": 3570
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 4035,
-        "endMs": 4619
+        "startMs": 3570,
+        "endMs": 4087
       },
       {
         "word": "SLOVO",
-        "startMs": 4620,
-        "endMs": 4987
+        "startMs": 4087,
+        "endMs": 4411
       },
       {
         "word": "TUČŇÁK",
-        "startMs": 4986,
-        "endMs": 5706
+        "startMs": 4411,
+        "endMs": 5048
       }
     ]
   },
@@ -4167,58 +4167,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4280
+        "startMs": 3353,
+        "endMs": 3786
       },
       {
         "word": "TŘI",
-        "startMs": 4280,
-        "endMs": 4579
+        "startMs": 3786,
+        "endMs": 4050
       },
       {
         "word": "RYBIČKY",
-        "startMs": 4579,
-        "endMs": 5163
+        "startMs": 4050,
+        "endMs": 4567
       }
     ]
   },
@@ -4230,58 +4230,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4267
+        "startMs": 3353,
+        "endMs": 3774
       },
       {
         "word": "ČTYŘI",
-        "startMs": 4280,
-        "endMs": 4742
+        "startMs": 3786,
+        "endMs": 4195
       },
       {
         "word": "RYBIČKY",
-        "startMs": 4742,
-        "endMs": 5326
+        "startMs": 4195,
+        "endMs": 4712
       }
     ]
   },
@@ -4293,48 +4293,48 @@
     "words": [
       {
         "word": "Š",
-        "startMs": 103,
-        "endMs": 375
+        "startMs": 99,
+        "endMs": 339
       },
       {
         "word": "Š",
-        "startMs": 592,
-        "endMs": 891
+        "startMs": 531,
+        "endMs": 795
       },
       {
         "word": "ŠNEK",
-        "startMs": 1014,
-        "endMs": 1462
+        "startMs": 904,
+        "endMs": 1301
       },
       {
         "word": "NA",
-        "startMs": 2568,
-        "endMs": 2717
+        "startMs": 2272,
+        "endMs": 2404
       },
       {
         "word": "JAKÉ",
-        "startMs": 2731,
-        "endMs": 3111
+        "startMs": 2416,
+        "endMs": 2753
       },
       {
         "word": "PÍSMENO",
-        "startMs": 3139,
-        "endMs": 3696
+        "startMs": 2776,
+        "endMs": 3269
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 3696,
-        "endMs": 4294
+        "startMs": 3269,
+        "endMs": 3798
       },
       {
         "word": "SLOVO",
-        "startMs": 4293,
-        "endMs": 4660
+        "startMs": 3798,
+        "endMs": 4122
       },
       {
         "word": "ŠNEK",
-        "startMs": 4660,
-        "endMs": 5108
+        "startMs": 4123,
+        "endMs": 4520
       }
     ]
   },
@@ -4346,58 +4346,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4267
+        "startMs": 3353,
+        "endMs": 3774
       },
       {
         "word": "OSM",
-        "startMs": 4348,
-        "endMs": 4688
+        "startMs": 3846,
+        "endMs": 4146
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4688,
-        "endMs": 5286
+        "startMs": 4147,
+        "endMs": 4676
       }
     ]
   },
@@ -4409,58 +4409,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4280
+        "startMs": 3353,
+        "endMs": 3786
       },
       {
         "word": "ŠEST",
-        "startMs": 4280,
-        "endMs": 4647
+        "startMs": 3786,
+        "endMs": 4110
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4660,
-        "endMs": 5271
+        "startMs": 4123,
+        "endMs": 4664
       }
     ]
   },
@@ -4472,48 +4472,48 @@
     "words": [
       {
         "word": "A",
-        "startMs": 103,
-        "endMs": 185
+        "startMs": 99,
+        "endMs": 171
       },
       {
         "word": "A",
-        "startMs": 497,
-        "endMs": 619
+        "startMs": 447,
+        "endMs": 555
       },
       {
         "word": "AUTO",
-        "startMs": 946,
-        "endMs": 1394
+        "startMs": 844,
+        "endMs": 1241
       },
       {
         "word": "NA",
-        "startMs": 2459,
-        "endMs": 2608
+        "startMs": 2176,
+        "endMs": 2308
       },
       {
         "word": "JAKÉ",
-        "startMs": 2636,
-        "endMs": 3030
+        "startMs": 2332,
+        "endMs": 2681
       },
       {
         "word": "PÍSMENO",
-        "startMs": 3057,
-        "endMs": 3614
+        "startMs": 2704,
+        "endMs": 3197
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 3614,
-        "endMs": 4212
+        "startMs": 3197,
+        "endMs": 3726
       },
       {
         "word": "SLOVO",
-        "startMs": 4212,
-        "endMs": 4579
+        "startMs": 3726,
+        "endMs": 4050
       },
       {
         "word": "AUTO",
-        "startMs": 4620,
-        "endMs": 5068
+        "startMs": 4087,
+        "endMs": 4484
       }
     ]
   },
@@ -4525,38 +4525,38 @@
     "words": [
       {
         "word": "MŇAM",
-        "startMs": 104,
-        "endMs": 552
+        "startMs": 96,
+        "endMs": 478
       },
       {
         "word": "VÝBORNĚ",
-        "startMs": 865,
-        "endMs": 1639
+        "startMs": 744,
+        "endMs": 1404
       },
       {
         "word": "POJĎME",
-        "startMs": 2717,
-        "endMs": 3206
+        "startMs": 2315,
+        "endMs": 2732
       },
       {
         "word": "NA",
-        "startMs": 3207,
-        "endMs": 3343
+        "startMs": 2732,
+        "endMs": 2848
       },
       {
         "word": "DALŠÍ",
-        "startMs": 3342,
-        "endMs": 3790
+        "startMs": 2847,
+        "endMs": 3229
       },
       {
         "word": "PORCI",
-        "startMs": 3818,
-        "endMs": 4307
+        "startMs": 3252,
+        "endMs": 3669
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4307,
-        "endMs": 4932
+        "startMs": 3669,
+        "endMs": 4201
       }
     ]
   },
@@ -4568,48 +4568,48 @@
     "words": [
       {
         "word": "M",
-        "startMs": 103,
-        "endMs": 361
+        "startMs": 99,
+        "endMs": 327
       },
       {
         "word": "M",
-        "startMs": 715,
-        "endMs": 973
+        "startMs": 639,
+        "endMs": 867
       },
       {
         "word": "MOTÝL",
-        "startMs": 1285,
-        "endMs": 1910
+        "startMs": 1144,
+        "endMs": 1697
       },
       {
         "word": "NA",
-        "startMs": 2976,
-        "endMs": 3125
+        "startMs": 2632,
+        "endMs": 2764
       },
       {
         "word": "JAKÉ",
-        "startMs": 3139,
-        "endMs": 3519
+        "startMs": 2776,
+        "endMs": 3113
       },
       {
         "word": "PÍSMENO",
-        "startMs": 3546,
-        "endMs": 4103
+        "startMs": 3137,
+        "endMs": 3630
       },
       {
         "word": "ZAČÍNÁ",
-        "startMs": 4103,
-        "endMs": 4687
+        "startMs": 3630,
+        "endMs": 4147
       },
       {
         "word": "SLOVO",
-        "startMs": 4701,
-        "endMs": 5068
+        "startMs": 4159,
+        "endMs": 4483
       },
       {
         "word": "MOTÝL",
-        "startMs": 5068,
-        "endMs": 5639
+        "startMs": 4483,
+        "endMs": 4988
       }
     ]
   },
@@ -4621,58 +4621,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4294
+        "startMs": 3353,
+        "endMs": 3798
       },
       {
         "word": "DVANÁCT",
-        "startMs": 4293,
-        "endMs": 4918
+        "startMs": 3798,
+        "endMs": 4351
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4932,
-        "endMs": 5530
+        "startMs": 4363,
+        "endMs": 4892
       }
     ]
   },
@@ -4684,58 +4684,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4294
+        "startMs": 3353,
+        "endMs": 3798
       },
       {
         "word": "PĚT",
-        "startMs": 4293,
-        "endMs": 4592
+        "startMs": 3798,
+        "endMs": 4062
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4620,
-        "endMs": 5231
+        "startMs": 4087,
+        "endMs": 4628
       }
     ]
   },
@@ -4747,58 +4747,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4280
+        "startMs": 3353,
+        "endMs": 3786
       },
       {
         "word": "ČTRNÁCT",
-        "startMs": 4280,
-        "endMs": 4987
+        "startMs": 3786,
+        "endMs": 4411
       },
       {
         "word": "RYBIČEK",
-        "startMs": 5000,
-        "endMs": 5598
+        "startMs": 4423,
+        "endMs": 4952
       }
     ]
   },
@@ -4810,58 +4810,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4280
+        "startMs": 3353,
+        "endMs": 3786
       },
       {
         "word": "PATNÁCT",
-        "startMs": 4280,
-        "endMs": 4973
+        "startMs": 3786,
+        "endMs": 4399
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4986,
-        "endMs": 5584
+        "startMs": 4411,
+        "endMs": 4940
       }
     ]
   },
@@ -4873,58 +4873,58 @@
     "words": [
       {
         "word": "MÁM",
-        "startMs": 104,
-        "endMs": 403
+        "startMs": 98,
+        "endMs": 362
       },
       {
         "word": "VELIKÝ",
-        "startMs": 417,
-        "endMs": 893
+        "startMs": 374,
+        "endMs": 795
       },
       {
         "word": "HLAD",
-        "startMs": 892,
-        "endMs": 1300
+        "startMs": 795,
+        "endMs": 1156
       },
       {
         "word": "DEJ",
-        "startMs": 2378,
-        "endMs": 2609
+        "startMs": 2103,
+        "endMs": 2307
       },
       {
         "word": "MI",
-        "startMs": 2649,
-        "endMs": 2771
+        "startMs": 2344,
+        "endMs": 2452
       },
       {
         "word": "PROSÍM",
-        "startMs": 2772,
-        "endMs": 3275
+        "startMs": 2452,
+        "endMs": 2897
       },
       {
         "word": "DO",
-        "startMs": 3274,
-        "endMs": 3423
+        "startMs": 2897,
+        "endMs": 3029
       },
       {
         "word": "MISKY",
-        "startMs": 3424,
-        "endMs": 3791
+        "startMs": 3029,
+        "endMs": 3353
       },
       {
         "word": "PŘESNĚ",
-        "startMs": 3791,
-        "endMs": 4294
+        "startMs": 3353,
+        "endMs": 3798
       },
       {
         "word": "DEVĚT",
-        "startMs": 4293,
-        "endMs": 4687
+        "startMs": 3798,
+        "endMs": 4147
       },
       {
         "word": "RYBIČEK",
-        "startMs": 4715,
-        "endMs": 5326
+        "startMs": 4171,
+        "endMs": 4712
       }
     ]
   }
