@@ -894,9 +894,8 @@
       <div class="pen-size-row">
         ${PEN_SIZES.map(
           (p) => `
-          <button class="btn-touch btn-pen-size ${p.size === activeSize ? "active" : ""}" data-pen-size="${p.size}" data-spoken="${p.spoken}" title="${p.label}">
+          <button class="btn-touch btn-pen-size ${p.size === activeSize ? "active" : ""}" data-pen-size="${p.size}" data-spoken="${p.spoken}" title="${p.label}" aria-label="${p.label}">
             <span class="pen-size-dot" style="width:${p.dot}px; height:${p.dot}px;"></span>
-            <span>${p.label}</span>
           </button>
         `
         ).join("")}
@@ -904,51 +903,380 @@
     `;
   }
 
-  function buildProceduralStepTemplates() {
-    const defs = [
-      { title: "ZLATÁ RYBIČKA", main: { type: "ellipse", cx: 330, cy: 235, rx: 135, ry: 85, label: "Tělíčko rybičky" }, detail1: { type: "arcs", paths: [[[465, 235], [565, 155], [545, 315], [465, 235]], [[310, 150], [350, 95], [390, 155]]], label: "Ocásek a ploutvička" }, detail2: { type: "circle", cx: 245, cy: 215, r: 18, label: "Očičko" } },
-      { title: "VESELÉ SLUNÍČKO", main: { type: "circle", cx: 360, cy: 230, r: 95, label: "Kulaté sluníčko" }, detail1: { type: "arcs", paths: [[[360, 115], [360, 55]], [[360, 345], [360, 405]], [[245, 230], [175, 230]], [[475, 230], [545, 230]], [[275, 145], [225, 95]], [[445, 145], [495, 95]], [[275, 315], [225, 365]], [[445, 315], [495, 365]]], label: "Paprsky" }, detail2: { type: "arcs", paths: [[[320, 255], [360, 285], [400, 255]]], label: "Úsměv" } },
-      { title: "RYCHLÉ AUTÍČKO", main: { type: "ellipse", cx: 360, cy: 265, rx: 165, ry: 65, label: "Karoserie autíčka" }, detail1: { type: "arcs", paths: [[[245, 210], [295, 135], [425, 135], [470, 210]]], label: "Střecha" }, detail2: { type: "circle", cx: 265, cy: 330, r: 42, label: "Přední a zadní kolo" } },
-      { title: "MOUDRÁ SOVIČKA", main: { type: "ellipse", cx: 360, cy: 255, rx: 110, ry: 130, label: "Bříško sovičky" }, detail1: { type: "arcs", paths: [[[280, 150], [260, 85], [320, 128]], [[440, 150], [460, 85], [400, 128]]], label: "Ouška" }, detail2: { type: "circle", cx: 325, cy: 205, r: 24, label: "Kulaté oči" } },
-      { title: "SNĚHULÁK KULÍŠEK", main: { type: "circle", cx: 360, cy: 310, r: 95, label: "Spodní koule" }, detail1: { type: "circle", cx: 360, cy: 170, r: 65, label: "Hlava sněhuláka" }, detail2: { type: "arcs", paths: [[[360, 170], [425, 180], [360, 190]]], label: "Mrkvička" } },
-      { title: "VESMÍRNÁ RAKETA", main: { type: "ellipse", cx: 360, cy: 235, rx: 75, ry: 145, label: "Trup rakety" }, detail1: { type: "arcs", paths: [[[285, 310], [220, 380], [305, 360]], [[435, 310], [500, 380], [415, 360]]], label: "Křidélka" }, detail2: { type: "circle", cx: 360, cy: 195, r: 32, label: "Okénko" } },
-      { title: "ROZKVETLÁ KYTIČKA", main: { type: "circle", cx: 360, cy: 190, r: 48, label: "Střed kytičky" }, detail1: { type: "ellipse", cx: 360, cy: 190, rx: 115, ry: 115, label: "Okvětní lístky" }, detail2: { type: "arcs", paths: [[[360, 305], [360, 420]], [[360, 365], [430, 330]]], label: "Stonek a lístek" } },
-      { title: "ZELENÁ ŽELVIČKA", main: { type: "ellipse", cx: 360, cy: 240, rx: 140, ry: 95, label: "Krunýř želvičky" }, detail1: { type: "circle", cx: 525, cy: 220, r: 38, label: "Hlavička" }, detail2: { type: "arcs", paths: [[[260, 325], [240, 385]], [[450, 325], [470, 385]]], label: "Nožičky" } },
-      { title: "MODRÁ VELRYBA", main: { type: "ellipse", cx: 330, cy: 260, rx: 155, ry: 90, label: "Tělo velryby" }, detail1: { type: "arcs", paths: [[[485, 260], [575, 190], [555, 320], [485, 260]]], label: "Ocasní ploutev" }, detail2: { type: "arcs", paths: [[[310, 170], [280, 90]], [[310, 170], [345, 90]]], label: "Vodotrysk" } },
-      { title: "ČERVENÁ BERUŠKA", main: { type: "circle", cx: 360, cy: 250, r: 115, label: "Krovky berušky" }, detail1: { type: "arcs", paths: [[[360, 135], [360, 365]], [[320, 135], [290, 80]], [[400, 135], [430, 80]]], label: "Čára a tykadla" }, detail2: { type: "circle", cx: 310, cy: 230, r: 22, label: "Puntíky" } },
-      { title: "HŘÍBEK V LESE", main: { type: "ellipse", cx: 360, cy: 170, rx: 145, ry: 75, label: "Klobouček hříbku" }, detail1: { type: "ellipse", cx: 360, cy: 310, rx: 55, ry: 90, label: "Nožička hříbku" }, detail2: { type: "circle", cx: 310, cy: 155, r: 20, label: "Tečky na kloboučku" } },
-      { title: "POHÁDKOVÝ DOMEČEK", main: { type: "arcs", paths: [[[220, 210], [500, 210], [500, 395], [220, 395], [220, 210]]], label: "Zdi domečku" }, detail1: { type: "arcs", paths: [[[195, 210], [360, 85], [525, 210]]], label: "Špičatá střecha" }, detail2: { type: "circle", cx: 360, cy: 160, r: 24, label: "Kulaté okénko" } },
-      { title: "PLACHETNICE NA MOŘI", main: { type: "arcs", paths: [[[200, 300], [520, 300], [460, 385], [260, 385], [200, 300]]], label: "Trup loďky" }, detail1: { type: "arcs", paths: [[[360, 90], [360, 300], [495, 280], [360, 90]]], label: "Plachta" }, detail2: { type: "arcs", paths: [[[360, 90], [420, 105], [360, 120]]], label: "Vlaječka" } },
-      { title: "SLADKÁ JAHŮDKA", main: { type: "ellipse", cx: 360, cy: 255, rx: 105, ry: 125, label: "Červená jahůdka" }, detail1: { type: "arcs", paths: [[[290, 135], [360, 95], [430, 135]]], label: "Zelená korunka" }, detail2: { type: "circle", cx: 335, cy: 235, r: 14, label: "Zrníčka" } },
-      { title: "VESELÁ CHOBOTNICE", main: { type: "circle", cx: 360, cy: 175, r: 85, label: "Hlava chobotnice" }, detail1: { type: "arcs", paths: [[[290, 250], [210, 370]], [[335, 260], [310, 390]], [[385, 260], [410, 390]], [[430, 250], [510, 370]]], label: "Chapadla" }, detail2: { type: "circle", cx: 335, cy: 165, r: 16, label: "Očička" } },
-      { title: "BAREVNÝ BALÓNEK", main: { type: "ellipse", cx: 360, cy: 185, rx: 95, ry: 115, label: "Kulatý balónek" }, detail1: { type: "arcs", paths: [[[345, 300], [375, 300], [360, 320], [345, 300]]], label: "Uzlík" }, detail2: { type: "arcs", paths: [[[360, 320], [335, 370], [380, 420]]], label: "Provázek" } },
-      { title: "ZELENÝ STROMEČEK", main: { type: "arcs", paths: [[[360, 75], [220, 235], [500, 235], [360, 75]]], label: "Horní větve" }, detail1: { type: "arcs", paths: [[[360, 185], [195, 345], [525, 345], [360, 185]]], label: "Spodní větve" }, detail2: { type: "arcs", paths: [[[330, 345], [330, 415], [390, 415], [390, 345]]], label: "Kmen stromu" } },
-      { title: "UŠATÝ KRÁLÍČEK", main: { type: "circle", cx: 360, cy: 275, r: 90, label: "Hlavička králíčka" }, detail1: { type: "ellipse", cx: 320, cy: 125, rx: 26, ry: 75, label: "Levý ušák" }, detail2: { type: "ellipse", cx: 400, cy: 125, rx: 26, ry: 75, label: "Pravý ušák" } },
-      { title: "MLSNÝ MEDVÍDEK", main: { type: "circle", cx: 360, cy: 245, r: 105, label: "Hlava medvídka" }, detail1: { type: "circle", cx: 270, cy: 155, r: 38, label: "Levé ouško" }, detail2: { type: "circle", cx: 450, cy: 155, r: 38, label: "Pravé ouško" } },
-      { title: "ZMRZLINOVÝ KORNOUTEK", main: { type: "arcs", paths: [[[275, 225], [445, 225], [360, 410], [275, 225]]], label: "Křupavý kornoutek" }, detail1: { type: "circle", cx: 360, cy: 170, r: 78, label: "Kopeček zmrzliny" }, detail2: { type: "circle", cx: 360, cy: 85, r: 22, label: "Třešnička na vrchu" } },
-      { title: "LÉTAJÍCÍ DRÁČEK", main: { type: "arcs", paths: [[[360, 75], [485, 210], [360, 345], [235, 210], [360, 75]]], label: "Tělo draka" }, detail1: { type: "arcs", paths: [[[360, 75], [360, 345]], [[235, 210], [485, 210]]], label: "Zkřížené špejle" }, detail2: { type: "arcs", paths: [[[360, 345], [410, 395], [350, 435]]], label: "Mašličkový ocas" } },
-      { title: "ŠŤAVNATÉ JABLÍČKO", main: { type: "circle", cx: 360, cy: 255, r: 108, label: "Červené jablíčko" }, detail1: { type: "arcs", paths: [[[360, 148], [365, 95]]], label: "Stopka" }, detail2: { type: "ellipse", cx: 405, cy: 118, rx: 35, ry: 18, label: "Zelený lístek" } },
-      { title: "NOČNÍ MĚSÍČEK", main: { type: "circle", cx: 360, cy: 235, r: 105, label: "Zlatý měsíc" }, detail1: { type: "circle", cx: 215, cy: 135, r: 22, label: "První hvězdička" }, detail2: { type: "circle", cx: 505, cy: 165, r: 26, label: "Druhá hvězdička" } },
-      { title: "KRÁLOVSKÁ KORUNA", main: { type: "arcs", paths: [[[200, 340], [520, 340], [540, 150], [430, 240], [360, 110], [290, 240], [180, 150], [200, 340]]], label: "Zlatá koruna" }, detail1: { type: "circle", cx: 360, cy: 285, r: 24, label: "Středový drahokam" }, detail2: { type: "circle", cx: 265, cy: 290, r: 18, label: "Boční drahokamy" } },
-      { title: "ZVONEČEK CINKÁLEK", main: { type: "ellipse", cx: 360, cy: 235, rx: 105, ry: 115, label: "Tělo zvonečku" }, detail1: { type: "arcs", paths: [[[225, 340], [495, 340]]], label: "Spodní okraj" }, detail2: { type: "circle", cx: 360, cy: 365, r: 24, label: "Srdíčko zvonečku" } }
-    ];
+  function floodFillCanvas(ctx, startX, startY, fillColorHex) {
+    const w = ctx.canvas.width;
+    const h = ctx.canvas.height;
+    const x0 = Math.floor(startX);
+    const y0 = Math.floor(startY);
+    if (x0 < 0 || x0 >= w || y0 < 0 || y0 >= h) return;
 
-    return defs.map((d) => ({
-      title: d.title,
+    const imgData = ctx.getImageData(0, 0, w, h);
+    const data = new Uint32Array(imgData.data.buffer);
+
+    const rgb = hexToRgbObj(fillColorHex);
+    const fillVal = (255 << 24) | (rgb.b << 16) | (rgb.g << 8) | rgb.r;
+    const targetVal = data[y0 * w + x0];
+
+    if (targetVal === fillVal) return;
+
+    const tr = targetVal & 0xff;
+    const tg = (targetVal >> 8) & 0xff;
+    const tb = (targetVal >> 16) & 0xff;
+    const ta = (targetVal >> 24) & 0xff;
+
+    const isMatch = (idx) => {
+      const val = data[idx];
+      if (val === targetVal) return true;
+      const r = val & 0xff;
+      const g = (val >> 8) & 0xff;
+      const b = (val >> 16) & 0xff;
+      const a = (val >> 24) & 0xff;
+      return Math.abs(r - tr) <= 32 && Math.abs(g - tg) <= 32 && Math.abs(b - tb) <= 32 && Math.abs(a - ta) <= 32;
+    };
+
+    const queue = [x0, y0];
+    const visited = new Uint8Array(w * h);
+    visited[y0 * w + x0] = 1;
+
+    while (queue.length > 0) {
+      const cy = queue.pop();
+      const cx = queue.pop();
+      const idx = cy * w + cx;
+      data[idx] = fillVal;
+
+      const neighbors = [
+        cx + 1, cy,
+        cx - 1, cy,
+        cx, cy + 1,
+        cx, cy - 1
+      ];
+
+      for (let i = 0; i < neighbors.length; i += 2) {
+        const nx = neighbors[i];
+        const ny = neighbors[i + 1];
+        if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+          const nidx = ny * w + nx;
+          if (!visited[nidx] && isMatch(nidx)) {
+            visited[nidx] = 1;
+            queue.push(nx, ny);
+          }
+        }
+      }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+  }
+
+  // --- REÁLNÉ ŠABLONY PRO KRESLENÍ KROK ZA KROKEM (25 OBJEKTŮ DLE 1★–5★) ---
+  const REAL_STEP_DRAW_CATALOG = [
+    // 1★ ZÁKLADNÍ TVARY A PŘEDMĚTY (3 KROKY)
+    {
+      stars: 1,
+      title: "VESELÉ SLUNÍČKO",
       canvasWidth: 720,
       canvasHeight: 460,
       steps: [
-        { id: "s1", label: d.main.label, audioId: "draw_step_oval", ...d.main, strokeColor: "#1D3557", fillColor: "#FFB703" },
-        { id: "s2", label: d.detail1.label, audioId: "draw_step_wings", ...d.detail1, strokeColor: "#1D3557", fillColor: "#4CC9F0" },
-        { id: "s3", label: d.detail2.label, audioId: "draw_step_face", ...d.detail2, strokeColor: "#1D3557", fillColor: "#E63946" }
+        { id: "s1", label: "Kruh sluníčka", type: "circle", cx: 360, cy: 230, r: 85, strokeColor: "#E76F51" },
+        { id: "s2", label: "Hřejivé paprsky", type: "arcs", paths: [[[360, 120], [360, 50]], [[360, 340], [360, 410]], [[250, 230], [180, 230]], [[470, 230], [540, 230]], [[280, 150], [230, 100]], [[440, 150], [490, 100]], [[280, 310], [230, 360]], [[440, 310], [490, 360]]], strokeColor: "#F77F00" },
+        { id: "s3", label: "Očička a úsměv", type: "arcs", paths: [[[320, 210], [320, 215]], [[400, 210], [400, 215]], [[320, 255], [360, 285], [400, 255]]], strokeColor: "#1D3557" }
       ]
-    }));
-  }
+    },
+    {
+      stars: 1,
+      title: "POHÁDKOVÝ DOMEČEK",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Zdi domečku", type: "arcs", paths: [[[230, 220], [490, 220], [490, 400], [230, 400], [230, 220]]], strokeColor: "#1D3557" },
+        { id: "s2", label: "Špičatá střecha", type: "arcs", paths: [[[190, 220], [360, 90], [530, 220], [190, 220]]], strokeColor: "#E63946" },
+        { id: "s3", label: "Dveře a okénka", type: "arcs", paths: [[[325, 400], [325, 290], [395, 290], [395, 400]], [[255, 260], [305, 260], [305, 310], [255, 310], [255, 260]], [[415, 260], [465, 260], [465, 310], [415, 310], [415, 260]]], strokeColor: "#2A9D8F" },
+        { id: "s4", label: "Komín a kouř", type: "arcs", paths: [[[420, 140], [420, 70], [455, 70], [455, 170]], [[437, 50], [445, 30], [437, 10]]], strokeColor: "#8D5B4C" }
+      ]
+    },
+    {
+      stars: 1,
+      title: "LESNÍ HŘÍBEK",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Silná nožička", type: "arcs", paths: [[[310, 230], [290, 390], [430, 390], [410, 230]]], strokeColor: "#E9C46A" },
+        { id: "s2", label: "Kulatý klobouček", type: "arcs", paths: [[[190, 230], [210, 140], [360, 90], [510, 140], [530, 230], [190, 230]]], strokeColor: "#E76F51" },
+        { id: "s3", label: "Tečky a tráva", type: "arcs", paths: [[[260, 170], [280, 170]], [[360, 140], [380, 140]], [[440, 170], [460, 170]], [[260, 390], [280, 360], [300, 390], [320, 360], [460, 390]]], strokeColor: "#2A9D8F" }
+      ]
+    },
+    {
+      stars: 1,
+      title: "ROZKVETLÁ KYTIČKA",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Kulatý střed", type: "circle", cx: 360, cy: 180, r: 42, strokeColor: "#E9C46A" },
+        { id: "s2", label: "Okvětní lístky", type: "arcs", paths: [[[360, 138], [330, 80], [390, 80], [360, 138]], [[360, 222], [330, 280], [390, 280], [360, 222]], [[318, 180], [260, 150], [260, 210], [318, 180]], [[402, 180], [460, 150], [460, 210], [402, 180]]], strokeColor: "#E63946" },
+        { id: "s3", label: "Stonek a lístky", type: "arcs", paths: [[[360, 222], [360, 410]], [[360, 310], [290, 280], [360, 330]], [[360, 330], [430, 300], [360, 350]]], strokeColor: "#2A9D8F" }
+      ]
+    },
+    {
+      stars: 1,
+      title: "ZLATÁ RYBIČKA",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Tělíčko rybky", type: "ellipse", cx: 340, cy: 235, rx: 125, ry: 75, strokeColor: "#F4A261" },
+        { id: "s2", label: "Ocásek a ploutve", type: "arcs", paths: [[[465, 235], [560, 160], [540, 310], [465, 235]], [[320, 160], [360, 100], [390, 160]]], strokeColor: "#E76F51" },
+        { id: "s3", label: "Očičko a bublinka", type: "circle", cx: 250, cy: 220, r: 16, strokeColor: "#1D3557" }
+      ]
+    },
 
-  const EXTRA_STEP_DRAW_TEMPLATES = buildProceduralStepTemplates();
+    // 2★ ZVÍŘÁTKA A DOPRAVNÍ PROSTŘEDKY (3-4 KROKY)
+    {
+      stars: 2,
+      title: "VESELÝ TUČŇÁK PIKO",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Velké tělo", type: "ellipse", cx: 360, cy: 240, rx: 110, ry: 140, strokeColor: "#1D3557" },
+        { id: "s2", label: "Bříško a křídla", type: "arcs", paths: [[[250, 210], [180, 260], [230, 310]], [[470, 210], [540, 260], [490, 310]], [[360, 170], [310, 250], [360, 350], [410, 250], [360, 170]]], strokeColor: "#457B9D" },
+        { id: "s3", label: "Oči, zobáček a nožky", type: "arcs", paths: [[[335, 170], [335, 175]], [[385, 170], [385, 175]], [[340, 195], [360, 220], [380, 195], [340, 195]], [[310, 380], [330, 410]], [[390, 380], [410, 410]]], strokeColor: "#F77F00" }
+      ]
+    },
+    {
+      stars: 2,
+      title: "SNĚHULÁK KULÍŠEK",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Spodní koule", type: "circle", cx: 360, cy: 320, r: 85, strokeColor: "#457B9D" },
+        { id: "s2", label: "Hlava s hrncem", type: "arcs", paths: [[[360, 170], [300, 170], [300, 235], [420, 235], [420, 170], [360, 170]], [[310, 170], [320, 100], [400, 100], [410, 170]]], strokeColor: "#1D3557" },
+        { id: "s3", label: "Mrkev a knoflíky", type: "arcs", paths: [[[360, 205], [430, 215], [360, 225], [360, 205]], [[360, 280], [360, 285]], [[360, 330], [360, 335]]], strokeColor: "#E76F51" },
+        { id: "s4", label: "Větvičkové ruce", type: "arcs", paths: [[[275, 290], [180, 250], [160, 230]], [[445, 290], [540, 250], [560, 230]]], strokeColor: "#8D5B4C" }
+      ]
+    },
+    {
+      stars: 2,
+      title: "RYCHLÉ AUTÍČKO",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Karoserie a střecha", type: "arcs", paths: [[[190, 310], [190, 250], [270, 250], [320, 170], [460, 170], [510, 250], [550, 250], [550, 310], [190, 310]]], strokeColor: "#E63946" },
+        { id: "s2", label: "Okna auta", type: "arcs", paths: [[[290, 240], [330, 185], [380, 185], [380, 240], [290, 240]], [[400, 240], [400, 185], [450, 185], [480, 240], [400, 240]]], strokeColor: "#457B9D" },
+        { id: "s3", label: "Přední a zadní kolo", type: "arcs", paths: [[[260, 310], [260, 360], [310, 360], [310, 310]], [[430, 310], [430, 360], [480, 360], [480, 310]]], strokeColor: "#1D3557" },
+        { id: "s4", label: "Světla a kliky", type: "arcs", paths: [[[540, 260], [550, 260]], [[340, 260], [360, 260]]], strokeColor: "#FFB703" }
+      ]
+    },
+    {
+      stars: 2,
+      title: "PLACHETNICE NA MOŘI",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Trup lodičky", type: "arcs", paths: [[[190, 290], [530, 290], [470, 380], [250, 380], [190, 290]]], strokeColor: "#8D5B4C" },
+        { id: "s2", label: "Stěžeň a plachta", type: "arcs", paths: [[[360, 80], [360, 290]], [[360, 95], [490, 275], [360, 275], [360, 95]]], strokeColor: "#457B9D" },
+        { id: "s3", label: "Přední plachta a vlajka", type: "arcs", paths: [[[350, 110], [230, 275], [350, 275], [350, 110]], [[360, 80], [410, 95], [360, 110]]], strokeColor: "#E63946" },
+        { id: "s4", label: "Mořské vlnky", type: "arcs", paths: [[[160, 395], [240, 385], [320, 395], [400, 385], [480, 395], [560, 385]]], strokeColor: "#2A9D8F" }
+      ]
+    },
+    {
+      stars: 2,
+      title: "BAREVNÝ MOTÝLEK",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Tělo a tykadla", type: "arcs", paths: [[[360, 140], [360, 360]], [[360, 140], [330, 80]], [[360, 140], [390, 80]]], strokeColor: "#1D3557" },
+        { id: "s2", label: "Horní velká křídla", type: "arcs", paths: [[[360, 180], [210, 110], [190, 240], [360, 250]], [[360, 180], [510, 110], [530, 240], [360, 250]]], strokeColor: "#E76F51" },
+        { id: "s3", label: "Spodní křídla", type: "arcs", paths: [[[360, 250], [240, 350], [360, 330]], [[360, 250], [480, 350], [360, 330]]], strokeColor: "#2A9D8F" },
+        { id: "s4", label: "Ozdobné kroužky", type: "circle", cx: 260, cy: 190, r: 24, strokeColor: "#F4A261" }
+      ]
+    },
+
+    // 3★ DETAILNĚJŠÍ ZVÍŘATA A STROJE (4 KROKY)
+    {
+      stars: 3,
+      title: "ROZTOMILÁ KOČIČKA",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Hlava se špičatýma ušima", type: "arcs", paths: [[[300, 140], [270, 70], [330, 110], [390, 110], [450, 70], [420, 140], [420, 200], [300, 200], [300, 140]]], strokeColor: "#1D3557" },
+        { id: "s2", label: "Tělíčko a nohy", type: "arcs", paths: [[[320, 200], [290, 360], [430, 360], [400, 200]]], strokeColor: "#F4A261" },
+        { id: "s3", label: "Zatočený ocásek", type: "arcs", paths: [[[420, 340], [510, 310], [520, 240], [490, 230]]], strokeColor: "#E76F51" },
+        { id: "s4", label: "Očička a vousky", type: "arcs", paths: [[[335, 160], [340, 160]], [[385, 160], [390, 160]], [[270, 170], [320, 175]], [[445, 170], [400, 175]]], strokeColor: "#1D3557" }
+      ]
+    },
+    {
+      stars: 3,
+      title: "VĚRNÝ PEJSEK",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Hlava s visícíma ušima", type: "arcs", paths: [[[310, 120], [410, 120], [420, 210], [300, 210], [310, 120]], [[300, 130], [260, 220]], [[420, 130], [460, 220]]], strokeColor: "#8D5B4C" },
+        { id: "s2", label: "Tělo pejska", type: "arcs", paths: [[[330, 210], [300, 370], [420, 370], [390, 210]]], strokeColor: "#E9C46A" },
+        { id: "s3", label: "Ocásek a obojek", type: "arcs", paths: [[[420, 330], [490, 280], [510, 250]], [[320, 220], [400, 220]]], strokeColor: "#E63946" },
+        { id: "s4", label: "Čumák a veselý jazyk", type: "arcs", paths: [[[345, 180], [375, 180]], [[360, 195], [360, 230]]], strokeColor: "#1D3557" }
+      ]
+    },
+    {
+      stars: 3,
+      title: "VESMÍRNÁ RAKETA",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Trup rakety se špičkou", type: "arcs", paths: [[[310, 340], [310, 180], [360, 80], [410, 180], [410, 340], [310, 340]]], strokeColor: "#1D3557" },
+        { id: "s2", label: "Boční křidélka", type: "arcs", paths: [[[310, 280], [230, 370], [310, 350]], [[410, 280], [490, 370], [410, 350]]], strokeColor: "#E63946" },
+        { id: "s3", label: "Kulaté okénko", type: "circle", cx: 360, cy: 210, r: 35, strokeColor: "#457B9D" },
+        { id: "s4", label: "Ohnivé plameny", type: "arcs", paths: [[[330, 350], [345, 420], [360, 380], [375, 420], [390, 350]]], strokeColor: "#F77F00" }
+      ]
+    },
+    {
+      stars: 3,
+      title: "PARNÍ LOKOMOTIVA",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Kotel a kabina", type: "arcs", paths: [[[190, 320], [410, 320], [410, 190], [510, 190], [510, 320], [190, 320]]], strokeColor: "#1D3557" },
+        { id: "s2", label: "Komín a nárazník", type: "arcs", paths: [[[240, 230], [230, 160], [280, 160], [270, 230]], [[170, 300], [190, 300]]], strokeColor: "#E63946" },
+        { id: "s3", label: "Velká a malá kola", type: "circle", cx: 460, cy: 345, r: 42, strokeColor: "#2A9D8F" },
+        { id: "s4", label: "Obláčky kouře", type: "arcs", paths: [[[255, 140], [275, 110]], [[275, 95], [310, 70]]], strokeColor: "#457B9D" }
+      ]
+    },
+    {
+      stars: 3,
+      title: "MLSNÝ MEDVÍDEK",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Hlava s oušky", type: "arcs", paths: [[[310, 130], [270, 90], [290, 140], [430, 140], [450, 90], [410, 130], [420, 200], [300, 200], [310, 130]]], strokeColor: "#8D5B4C" },
+        { id: "s2", label: "Baculkaté bříško", type: "ellipse", cx: 360, cy: 280, rx: 95, ry: 90, strokeColor: "#E9C46A" },
+        { id: "s3", label: "Tlapky medvídka", type: "arcs", paths: [[[270, 240], [230, 290]], [[450, 240], [490, 290]], [[290, 360], [270, 400]], [[430, 360], [450, 400]]], strokeColor: "#8D5B4C" },
+        { id: "s4", label: "Čumáček a oči", type: "circle", cx: 360, cy: 175, r: 18, strokeColor: "#1D3557" }
+      ]
+    },
+
+    // 4★ SLOŽITĚJŠÍ ŽIVÉ MODELY A SCÉNY (4 KROKY)
+    {
+      stars: 4,
+      title: "ŽABKA NA LEKNÍNU",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Leknínový list", type: "arcs", paths: [[[200, 360], [360, 410], [520, 360], [450, 320], [360, 340], [270, 320], [200, 360]]], strokeColor: "#2A9D8F" },
+        { id: "s2", label: "Tělo žabky s očima", type: "arcs", paths: [[[310, 220], [300, 160], [340, 180], [380, 180], [420, 160], [410, 220], [430, 310], [290, 310], [310, 220]]], strokeColor: "#52B788" },
+        { id: "s3", label: "Skákací nohy", type: "arcs", paths: [[[290, 270], [220, 320], [260, 350]], [[430, 270], [500, 320], [460, 350]]], strokeColor: "#2D6A4F" },
+        { id: "s4", label: "Široký úsměv", type: "arcs", paths: [[[320, 250], [360, 280], [400, 250]]], strokeColor: "#1D3557" }
+      ]
+    },
+    {
+      stars: 4,
+      title: "DOPRAVNÍ LETADLO",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Trup letadla s ocasem", type: "arcs", paths: [[[170, 240], [510, 220], [560, 140], [540, 220], [510, 250], [170, 250], [170, 240]]], strokeColor: "#1D3557" },
+        { id: "s2", label: "Nosná křídla", type: "arcs", paths: [[[320, 230], [260, 110], [330, 110], [380, 230]], [[340, 250], [290, 370], [360, 370], [400, 250]]], strokeColor: "#457B9D" },
+        { id: "s3", label: "Proudové motory", type: "arcs", paths: [[[280, 290], [330, 290]]], strokeColor: "#E63946" },
+        { id: "s4", label: "Okénka a kokpit", type: "arcs", paths: [[[190, 235], [210, 235]], [[250, 235], [470, 235]]], strokeColor: "#FFB703" }
+      ]
+    },
+    {
+      stars: 4,
+      title: "MOUDRÁ SOVIČKA",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Větev stromu", type: "arcs", paths: [[[160, 370], [560, 370]]], strokeColor: "#8D5B4C" },
+        { id: "s2", label: "Tělo s křídly", type: "ellipse", cx: 360, cy: 235, rx: 110, ry: 130, strokeColor: "#1D3557" },
+        { id: "s3", label: "Obrovské soví oči", type: "circle", cx: 320, cy: 195, r: 28, strokeColor: "#F4A261" },
+        { id: "s4", label: "Zobáček a peříčka", type: "arcs", paths: [[[350, 220], [360, 245], [370, 220]], [[290, 130], [270, 75], [320, 115]], [[430, 130], [450, 75], [400, 115]]], strokeColor: "#E76F51" }
+      ]
+    },
+    {
+      stars: 4,
+      title: "JABLÍČKO S ČERVÍKEM",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Kulaté jablíčko", type: "arcs", paths: [[[360, 140], [250, 160], [240, 310], [360, 380], [480, 310], [470, 160], [360, 140]]], strokeColor: "#E63946" },
+        { id: "s2", label: "Stopka a lístek", type: "arcs", paths: [[[360, 140], [370, 80]], [[370, 100], [430, 85], [390, 120]]], strokeColor: "#2A9D8F" },
+        { id: "s3", label: "Dírka a červík", type: "arcs", paths: [[[410, 250], [470, 220], [460, 180], [430, 190]]], strokeColor: "#52B788" },
+        { id: "s4", label: "Očička červíka", type: "circle", cx: 445, cy: 185, r: 6, strokeColor: "#1D3557" }
+      ]
+    },
+    {
+      stars: 4,
+      title: "ŠNEČEK SE ŠULKEM",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Tělo šnečka", type: "arcs", paths: [[[190, 370], [510, 370], [540, 330], [520, 280], [470, 290]]], strokeColor: "#F4A261" },
+        { id: "s2", label: "Tykadla s očima", type: "arcs", paths: [[[510, 280], [510, 200]], [[535, 280], [545, 200]]], strokeColor: "#E76F51" },
+        { id: "s3", label: "Zatočená ulita", type: "circle", cx: 330, cy: 260, r: 85, strokeColor: "#8D5B4C" },
+        { id: "s4", label: "Spirála v ulitě", type: "arcs", paths: [[[330, 260], [360, 240], [370, 280], [310, 300], [290, 250], [340, 210]]], strokeColor: "#E9C46A" }
+      ]
+    },
+
+    // 5★ POKROČILÉ KRESBY (4 KROKY)
+    {
+      stars: 5,
+      title: "KRÁLOVSKÝ HRAD",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Hradba s bránou", type: "arcs", paths: [[[250, 230], [470, 230], [470, 390], [250, 390], [250, 230]], [[320, 390], [320, 300], [400, 300], [400, 390]]], strokeColor: "#1D3557" },
+        { id: "s2", label: "Dvě vysoké věže", type: "arcs", paths: [[[190, 160], [250, 160], [250, 390], [190, 390], [190, 160]], [[470, 160], [530, 160], [530, 390], [470, 390], [470, 160]]], strokeColor: "#457B9D" },
+        { id: "s3", label: "Střechy a vlajky", type: "arcs", paths: [[[180, 160], [220, 80], [260, 160]], [[460, 160], [500, 80], [540, 160]], [[220, 80], [250, 95], [220, 105]], [[500, 80], [530, 95], [500, 105]]], strokeColor: "#E63946" },
+        { id: "s4", label: "Cimbuří a střílny", type: "arcs", paths: [[[270, 210], [290, 210], [290, 230], [330, 230], [330, 210], [350, 210]], [[215, 220], [225, 220]], [[495, 220], [505, 220]]], strokeColor: "#FFB703" }
+      ]
+    },
+    {
+      stars: 5,
+      title: "VELKÝ DINOSAURUS",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Mohutné tělo", type: "arcs", paths: [[[270, 250], [430, 250], [450, 350], [250, 350], [270, 250]]], strokeColor: "#52B788" },
+        { id: "s2", label: "Dlouhý krk a hlava", type: "arcs", paths: [[[410, 250], [470, 130], [520, 130], [520, 160], [460, 200], [430, 250]]], strokeColor: "#2D6A4F" },
+        { id: "s3", label: "Dlouhý ocas", type: "arcs", paths: [[[270, 270], [170, 320], [140, 340], [250, 340]]], strokeColor: "#40916C" },
+        { id: "s4", label: "Čtyři nohy a oko", type: "arcs", paths: [[[280, 350], [280, 410]], [[330, 350], [330, 410]], [[370, 350], [370, 410]], [[420, 350], [420, 410]], [[495, 145], [500, 145]]], strokeColor: "#1B4332" }
+      ]
+    },
+    {
+      stars: 5,
+      title: "KOSMONAUT VE SKAFANDRU",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Helma kosmonauta", type: "circle", cx: 360, cy: 160, r: 55, strokeColor: "#1D3557" },
+        { id: "s2", label: "Zrcadlové hledí", type: "ellipse", cx: 360, cy: 160, rx: 36, ry: 26, strokeColor: "#FFB703" },
+        { id: "s3", label: "Skafandr a nohy", type: "arcs", paths: [[[320, 215], [300, 330], [345, 330], [345, 410], [375, 410], [375, 330], [420, 330], [400, 215], [320, 215]]], strokeColor: "#457B9D" },
+        { id: "s4", label: "Rukavice a batoh", type: "arcs", paths: [[[310, 240], [240, 280]], [[410, 240], [480, 280]], [[270, 220], [270, 320]], [[450, 220], [450, 320]]], strokeColor: "#E63946" }
+      ]
+    },
+    {
+      stars: 5,
+      title: "HUDEBNÍ KYTARA",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Tělo kytary", type: "arcs", paths: [[[210, 280], [250, 210], [310, 230], [340, 180], [390, 220], [380, 310], [320, 350], [240, 340], [210, 280]]], strokeColor: "#E76F51" },
+        { id: "s2", label: "Krk s pražci", type: "arcs", paths: [[[360, 200], [510, 120]], [[380, 220], [520, 140]]], strokeColor: "#8D5B4C" },
+        { id: "s3", label: "Otvor a struny", type: "circle", cx: 300, cy: 270, r: 28, strokeColor: "#1D3557" },
+        { id: "s4", label: "Hlava s kolíčky", type: "arcs", paths: [[[510, 120], [560, 90], [570, 110], [520, 140]]], strokeColor: "#FFB703" }
+      ]
+    },
+    {
+      stars: 5,
+      title: "POHÁDKOVÝ DRAK",
+      canvasWidth: 720,
+      canvasHeight: 460,
+      steps: [
+        { id: "s1", label: "Dračí tělo s ocasem", type: "arcs", paths: [[[310, 230], [440, 230], [440, 350], [310, 350], [310, 230]], [[310, 320], [180, 350], [150, 380]]], strokeColor: "#2D6A4F" },
+        { id: "s2", label: "Dračí hlava a krk", type: "arcs", paths: [[[420, 230], [460, 140], [530, 130], [540, 160], [490, 180], [440, 230]]], strokeColor: "#40916C" },
+        { id: "s3", label: "Blanitá křídla", type: "arcs", paths: [[[370, 230], [320, 90], [390, 140], [430, 90], [410, 230]]], strokeColor: "#E76F51" },
+        { id: "s4", label: "Ohnivý plamen", type: "arcs", paths: [[[540, 150], [610, 130], [580, 165], [620, 180], [535, 170]]], strokeColor: "#F77F00" }
+      ]
+    }
+  ];
 
   /* =========================================================================
-   * 4. HERNÍ ENGINE: ZÓNA A — KRESLENÍ KROK ZA KROKEM + MÍCHÁNÍ BAREV
+   * 4. HERNÍ ENGINE: ZÓNA A — KRESLENÍ KROK ZA KROKEM + VYBARVOVÁNÍ
    * ========================================================================= */
   class StepDrawActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -959,15 +1287,16 @@
       this.store = store;
       this.onComplete = onComplete;
 
-      this.allTemplates = shuffleArray([
-        ...(activity.levels || []).map((l) => l.config),
-        ...EXTRA_STEP_DRAW_TEMPLATES
-      ]);
+      const star = Math.max(1, Math.min(5, this.level.stars || 1));
+      const pool = REAL_STEP_DRAW_CATALOG.filter((t) => t.stars === star);
+      this.allTemplates = shuffleArray(pool.length ? pool : REAL_STEP_DRAW_CATALOG);
       this.templateIdx = 0;
 
       this.activeColor = "#1D3557";
       this.brushSize = 9;
-      this.isZoomed = false;
+      this.zoomScale = 1.0;
+      this.zoomSteps = [1.0, 1.25, 1.5, 1.8, 2.2];
+      this.activeTool = "brush"; // "brush" nebo "bucket"
       this.mixSlots = [null, null];
       this.loadTemplate(this.allTemplates[0]);
     }
@@ -977,6 +1306,7 @@
       this.steps = cfg.steps || [];
       this.currentStepIdx = 0;
       this.coloringMode = false;
+      this.activeTool = "brush";
       this.isDrawing = false;
       this.checkpoints = [];
       this.hitCount = 0;
@@ -996,6 +1326,17 @@
       this.loadTemplate(this.allTemplates[this.templateIdx]);
     }
 
+    setZoom(scale) {
+      this.zoomScale = scale;
+      const pct = Math.round(scale * 100);
+      const badge = document.getElementById("draw-zoom-badge");
+      if (badge) badge.textContent = `${pct}%`;
+      if (this.canvas) {
+        this.canvas.style.transform = `scale(${scale})`;
+        this.canvas.style.transformOrigin = "center center";
+      }
+    }
+
     render() {
       const cfg = this.currentConfig;
       this.hostEl.innerHTML = `
@@ -1003,17 +1344,29 @@
           <h2 class="workspace-title">✏️ ${cfg.title}</h2>
           <div id="draw-step-pills" class="step-pills"></div>
           <div class="workspace-actions">
-            <button id="btn-draw-preview" class="btn-touch btn-secondary" title="Zvětšit předlohu">🖼️ VZOR</button>
-            <button id="btn-draw-zoom" class="btn-touch btn-secondary" title="Zvětšit kreslící plátno">🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}</button>
+            <div class="zoom-stepper" title="Nastavení vzdálenosti / přiblížení plátna">
+              <button id="btn-draw-zoom-out" class="btn-touch btn-zoom" aria-label="Oddálit">🔍−</button>
+              <span id="draw-zoom-badge" class="zoom-badge">${Math.round(this.zoomScale * 100)}%</span>
+              <button id="btn-draw-zoom-in" class="btn-touch btn-zoom" aria-label="Přiblížit zblízka">🔍+</button>
+            </div>
+            <button id="btn-draw-preview" class="btn-touch btn-secondary" title="Zobrazit vzor">🖼️ VZOR</button>
             <button id="btn-draw-skip-step" class="btn-touch btn-secondary">✨ DALŠÍ KROK</button>
-            <button id="btn-draw-finish" class="btn-touch btn-primary hidden">✅ HOTOVO</button>
+            <button id="btn-draw-finish" class="btn-touch btn-primary ${this.coloringMode ? "" : "hidden"}">✅ HOTOVO A ULOŽIT</button>
           </div>
         </div>
-        <div id="step-studio-layout" class="studio-layout ${this.isZoomed ? "studio-zoomed" : ""}">
+        <div id="step-studio-layout" class="studio-layout">
           <div class="canvas-frame">
-            <canvas id="step-draw-canvas" class="draw-canvas" width="${cfg.canvasWidth}" height="${cfg.canvasHeight}" draggable="false" style="touch-action:none; user-select:none;"></canvas>
+            <canvas id="step-draw-canvas" class="draw-canvas" width="${cfg.canvasWidth}" height="${cfg.canvasHeight}" draggable="false" style="touch-action:none; user-select:none; transform:scale(${this.zoomScale}); transform-origin:center center;"></canvas>
           </div>
           <aside class="studio-sidebar">
+            <div id="draw-color-tools" class="tool-box ${this.coloringMode ? "" : "hidden"}">
+              <div class="tool-box-title">🎨 NÁSTROJ PRO VYBARVENÍ</div>
+              <div class="tool-mode-row">
+                <button id="btn-draw-tool-brush" class="btn-touch btn-tool-mode ${this.activeTool === "brush" ? "active" : ""}">🖌️ ŠTĚTEC</button>
+                <button id="btn-draw-tool-bucket" class="btn-touch btn-tool-mode ${this.activeTool === "bucket" ? "active" : ""}">🪣 PLECHOVKA</button>
+              </div>
+            </div>
+
             <div class="tool-box">
               <div class="tool-box-title">✒️ VELIKOST PERA</div>
               ${renderPenSizeMarkup(this.brushSize)}
@@ -1066,11 +1419,12 @@
       this.canvas = document.getElementById("step-draw-canvas");
       this.ctx = this.canvas.getContext("2d");
 
-      // Offscreen vrstva s vlastní kresbou dítěte (pouze to, co uživatel sám nakreslil)
       this.paintLayer = document.createElement("canvas");
       this.paintLayer.width = cfg.canvasWidth;
       this.paintLayer.height = cfg.canvasHeight;
       this.paintCtx = this.paintLayer.getContext("2d");
+      this.paintCtx.fillStyle = "#FFFFFF";
+      this.paintCtx.fillRect(0, 0, this.paintLayer.width, this.paintLayer.height);
 
       this.bindEvents();
     }
@@ -1103,9 +1457,7 @@
       });
 
       const closeModal = () => {
-        if (modal.parentNode) {
-          modal.remove();
-        }
+        if (modal.parentNode) modal.remove();
       };
       modal.querySelector(".btn-close-preview").addEventListener("click", () => {
         this.mascot.audio.playSfx("pop");
@@ -1150,8 +1502,19 @@
         try {
           this.canvas.setPointerCapture(e.pointerId);
         } catch (_err) {}
+
+        const pt = getPos(e);
+
+        if (this.coloringMode && this.activeTool === "bucket") {
+          // Plechovka s barvou: flood fill
+          floodFillCanvas(this.paintCtx, pt.x, pt.y, this.activeColor);
+          this.redraw();
+          this.mascot.audio.playSfx("pop");
+          return;
+        }
+
         this.isDrawing = true;
-        this.lastPt = getPos(e);
+        this.lastPt = pt;
         this.paintCtx.beginPath();
         this.paintCtx.arc(this.lastPt.x, this.lastPt.y, this.brushSize / 2, 0, Math.PI * 2);
         this.paintCtx.fillStyle = this.activeColor;
@@ -1162,8 +1525,8 @@
       });
 
       this.canvas.addEventListener("pointermove", (e) => {
-        if (!this.isDrawing) {
-          if (e.buttons === 1) {
+        if (!this.isDrawing || (this.coloringMode && this.activeTool === "bucket")) {
+          if (e.buttons === 1 && (!this.coloringMode || this.activeTool === "brush")) {
             this.isDrawing = true;
             this.lastPt = getPos(e);
           } else {
@@ -1172,9 +1535,7 @@
         }
         e.preventDefault();
         const pt = getPos(e);
-        if (!this.lastPt) {
-          this.lastPt = pt;
-        }
+        if (!this.lastPt) this.lastPt = pt;
         drawStrokeSegment(this.lastPt, pt);
         this.checkSegmentHit(this.lastPt, pt);
         this.lastPt = pt;
@@ -1199,6 +1560,38 @@
       this.canvas.addEventListener("pointercancel", endStroke);
       this.canvas.addEventListener("lostpointercapture", endStroke);
 
+      // Zoom Stepper (Nastavení vzdálenosti kreslení)
+      document.getElementById("btn-draw-zoom-in").addEventListener("click", () => {
+        const next = this.zoomSteps.find((s) => s > this.zoomScale) || this.zoomSteps[this.zoomSteps.length - 1];
+        this.setZoom(next);
+        this.mascot.audio.playSfx("pop");
+      });
+
+      document.getElementById("btn-draw-zoom-out").addEventListener("click", () => {
+        const prev = [...this.zoomSteps].reverse().find((s) => s < this.zoomScale) || this.zoomSteps[0];
+        this.setZoom(prev);
+        this.mascot.audio.playSfx("pop");
+      });
+
+      // Přepínání Štětec / Plechovka v režimu vybarvování
+      const btnBrush = document.getElementById("btn-draw-tool-brush");
+      const btnBucket = document.getElementById("btn-draw-tool-bucket");
+      if (btnBrush && btnBucket) {
+        btnBrush.addEventListener("click", () => {
+          this.activeTool = "brush";
+          btnBrush.classList.add("active");
+          btnBucket.classList.remove("active");
+          this.mascot.audio.playSfx("pop");
+        });
+        btnBucket.addEventListener("click", () => {
+          this.activeTool = "bucket";
+          btnBucket.classList.add("active");
+          btnBrush.classList.remove("active");
+          this.mascot.audio.playSfx("pop");
+          this.mascot.audio.speakCustom("Plechovka barvy! Klepni do plochy, kterou chceš vybarvit!");
+        });
+      }
+
       // RGB Kruh
       const rgbPreview = document.getElementById("step-rgb-preview");
       mountRgbColorWheel(document.getElementById("step-rgb-wheel"), rgbPreview, (hex) => {
@@ -1220,7 +1613,7 @@
         });
       });
 
-      // Velikost pera (4 velikosti)
+      // Velikost pera (čisté ikony)
       this.hostEl.querySelectorAll(".btn-pen-size").forEach((btn) => {
         btn.addEventListener("click", () => {
           this.hostEl.querySelectorAll(".btn-pen-size").forEach((b) => b.classList.remove("active"));
@@ -1249,18 +1642,14 @@
         this.showFullPatternPreview(false);
       });
 
-      document.getElementById("btn-draw-zoom").addEventListener("click", (e) => {
-        this.isZoomed = !this.isZoomed;
-        const layout = document.getElementById("step-studio-layout");
-        if (layout) layout.classList.toggle("studio-zoomed", this.isZoomed);
-        e.currentTarget.textContent = `🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}`;
-        this.mascot.audio.playSfx("pop");
-      });
-
       document.getElementById("btn-canvas-clear").addEventListener("click", () => {
-        this.paintCtx.clearRect(0, 0, this.paintLayer.width, this.paintLayer.height);
+        this.paintCtx.fillStyle = "#FFFFFF";
+        this.paintCtx.fillRect(0, 0, this.paintLayer.width, this.paintLayer.height);
         this.canvas.classList.remove("alive-bounce");
         this.coloringMode = false;
+        this.activeTool = "brush";
+        const colorTools = document.getElementById("draw-color-tools");
+        if (colorTools) colorTools.classList.add("hidden");
         document.getElementById("btn-draw-finish").classList.add("hidden");
         document.getElementById("btn-draw-skip-step").classList.remove("hidden");
         this.prepareStep(0);
@@ -1283,7 +1672,7 @@
       showContinueBanner(this.hostEl, {
         icon: "🎨",
         title: `OBRÁZEK „${this.currentConfig.title}“ JE HOTOVÝ!`,
-        subtitle: "Tvůj výtvor jsme uložili do galerie. Pojďme nakreslit další obrázek!",
+        subtitle: "Tvůj krásně vybarvený výtvor jsme uložili do galerie. Pojďme nakreslit další obrázek!",
         spokenText: `Paráda! Obrázek ${this.currentConfig.title} je hotový! Pojďme na další obrázek!`,
         nextLabel: "▶️ DALŠÍ OBRÁZEK ➔",
         onNext: () => this.nextTemplate()
@@ -1417,16 +1806,23 @@
       if (this.currentStepIdx + 1 < this.steps.length) {
         this.prepareStep(this.currentStepIdx + 1);
       } else {
-        // Dokončeno: šablona zmizí, zůstane jen čistý podklad a vlastní kresba dítěte!
+        // Dokončen obrys: Přechod do vybarvování!
         this.coloringMode = true;
         this.currentStepIdx = this.steps.length;
         const pillsEl = document.getElementById("draw-step-pills");
-        pillsEl.innerHTML = `<span class="step-pill done">✨ TVOJE VLASTNÍ KRESBA! MŮŽEŠ JI DOKRESLIT NEBO KLIKNOUT NA HOTOVO!</span>`;
+        pillsEl.innerHTML = `<span class="step-pill done">🎨 SKVĚLÉ! TEĎ SI MŮŽEŠ OBRÁZEK VYBARVIT ŠTĚTCEM NEBO PLECHOVKOU!</span>`;
+
+        const colorTools = document.getElementById("draw-color-tools");
+        if (colorTools) colorTools.classList.remove("hidden");
         document.getElementById("btn-draw-skip-step").classList.add("hidden");
         document.getElementById("btn-draw-finish").classList.remove("hidden");
         this.canvas.classList.add("alive-bounce");
         this.redraw();
-        this.showCompletionModal();
+
+        this.mascot.audio.speakCustom(
+          "Výborně! Celý obrys je hotový! Teď si můžeš obrázek krásně vybarvit štětcem nebo plechovkou barvy!",
+          "🎨 VYBARVI SI SVŮJ OBRÁZEK!"
+        );
       }
     }
 
@@ -1475,17 +1871,16 @@
       const ctx = this.ctx;
       ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      // Čistý podklad (papír)
       ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-      // Jemná tečkovaná nápověda POUZE pro právě kreslený krok (žádné pevné tvary pod kresbou dítěte!)
+      // Kresba dítěte
+      ctx.drawImage(this.paintLayer, 0, 0);
+
+      // Tečkovaná nápověda pouze pro právě kreslený krok
       if (!this.coloringMode && this.currentStepIdx < this.steps.length) {
         this.drawStepShape(ctx, this.steps[this.currentStepIdx]);
       }
-
-      // Pouze to, co uživatel sám nakreslil
-      ctx.drawImage(this.paintLayer, 0, 0);
     }
 
     destroy() {
@@ -3141,83 +3536,4463 @@
     }
   }
 
-  // --- AKTIVITA 4: DOKRESLI PŘÍBĚH (25 SCÉN) ---
-  const STORY_SCENES = [
-    { id: "rain", title: "DEŠTNÍK PRO TUČŇÁKA", backdrop: "🌧️   🐧   🌧️", prompt: "PRŠÍ! DOKRESLI PIKOVI NAD HLAVOU VELKÝ DEŠTNÍK!", guidePts: [[230, 190], [290, 120], [360, 100], [430, 120], [490, 190], [360, 190], [360, 290]] },
-    { id: "car", title: "KOLA PRO AUTÍČKO", backdrop: "🚙", prompt: "AUTÍČKO NEMŮŽE JET! DOKRESLI MU DOLE DVĚ KULATÁ KOLA!", guidePts: [[235, 315], [275, 315], [255, 345], [445, 315], [485, 315], [465, 345]] },
-    { id: "dragon", title: "KŘÍDLA PRO DRÁČKA", backdrop: "🐲", prompt: "DRÁČEK CHCE LÉTAT! DOKRESLI MU NA ZÁDA VELKÁ KŘÍDLA!", guidePts: [[280, 220], [180, 120], [150, 230], [440, 220], [540, 120], [570, 230]] },
-    { id: "boat", title: "PLACHTA PRO LOĎKU", backdrop: "🛶", prompt: "FOUKÁ VÍTR! DOKRESLI LOĎCE VELKOU TROJÚHELNÍKOVOU PLACHTU!", guidePts: [[360, 105], [360, 275], [490, 275], [425, 185]] },
-    { id: "flower", title: "SLUNÍČKO PRO KYTIČKU", backdrop: "🌻 🌱 🌷", prompt: "KYTIČKA CHCE RŮST! DOKRESLI NA OBLOHU ZÁŘIVÉ SLUNÍČKO!", guidePts: [[520, 110], [560, 110], [540, 80], [540, 140]] },
-    { id: "house_roof", title: "STŘECHA PRO DOMEČEK", backdrop: "🧱 🚪 🧱", prompt: "DOMEČKU CHYBÍ STŘECHA! DOKRESLI NAHORU ŠPIČATOU STŘECHU!", guidePts: [[200, 210], [360, 90], [520, 210], [200, 210]] },
-    { id: "snowman_hat", title: "ČEPIČKA PRO SNĚHULÁKA", backdrop: "⛄", prompt: "SNĚHULÁKOVI MRZNOU UŠI! DOKRESLI MU NA HLAVU TEPLOU ČEPIČKU!", guidePts: [[290, 150], [360, 75], [430, 150], [290, 150]] },
-    { id: "cat_tail", title: "OCÁSEK PRO KOČIČKU", backdrop: "🐱", prompt: "KOČIČKA HLEDÁ SVŮJ DLOUHÝ OCÁSEK! DOKRESLI JÍ HO!", guidePts: [[420, 280], [490, 250], [530, 180], [510, 130]] },
-    { id: "rabbit_ears", title: "UŠI PRO KRÁLÍČKA", backdrop: "🐰", prompt: "DOKRESLI KRÁLÍČKOVI NA HLAVU DVĚ DLOUHÁ OUŠKA!", guidePts: [[320, 180], [300, 80], [340, 180], [400, 180], [420, 80]] },
-    { id: "fish_water", title: "VLNKY PRO RYBIČKU", backdrop: "🐟", prompt: "RYBIČKA CHCE PLAVAT! DOKRESLI KOLEM NÍ MODRÉ VODNÍ VLNKY!", guidePts: [[180, 320], [270, 290], [360, 320], [450, 290], [540, 320]] },
-    { id: "bird_nest", title: "HNÍZDEČKO PRO PTÁČKA", backdrop: "🐦", prompt: "PTÁČEK SI CHCE ODPOČINOUT! DOKRESLI POD NĚJ KULATÉ HNÍZDEČKO!", guidePts: [[240, 290], [300, 350], [420, 350], [480, 290]] },
-    { id: "spider_web", title: "PAVUČINKA PRO PAVOUČKA", backdrop: "🕷️", prompt: "DOKRESLI PAVOUČKOVI JEHO KŘÍŽOVOU PAVUČINKU!", guidePts: [[240, 120], [480, 340], [360, 230], [480, 120], [240, 340]] },
-    { id: "balloon_string", title: "PROVÁZEK K BALÓNKU", backdrop: "🎈", prompt: "POZOR, ULETÍ! DOKRESLI K BALÓNKU DLOUHÝ PROVÁZEK!", guidePts: [[360, 240], [340, 300], [380, 350], [350, 410]] },
-    { id: "kite_tail", title: "MAŠLIČKY PRO DRAKA", backdrop: "🪁", prompt: "DOKRESLI PAPÍROVÉMU DRAKOVI DLOUHÝ OCAS S MAŠLIČKAMI!", guidePts: [[380, 260], [430, 310], [400, 360], [460, 405]] },
-    { id: "king_crown", title: "KORUNA PRO KRÁLE", backdrop: "🤴", prompt: "KRÁL ZTRATIL KORUNU! DOKRESLI MU NA HLAVU ZLATOU KORUNU!", guidePts: [[290, 150], [310, 90], [360, 130], [410, 90], [430, 150]] },
-    { id: "cake_candles", title: "SVÍČKY NA DORT", backdrop: "🎂", prompt: "SLAVÍME NAROZENINY! DOKRESLI NA DORT NAROZENINOVÉ SVÍČKY!", guidePts: [[310, 180], [310, 110], [360, 180], [360, 110], [410, 180], [410, 110]] },
-    { id: "tree_apples", title: "JABLÍČKA NA STROM", backdrop: "🌳", prompt: "NA STROMĚ DOZRÁLO OVOCE! NAKRESLI DO KORUNY ČERVENÁ JABLÍČKA!", guidePts: [[310, 170], [360, 140], [410, 175], [340, 210], [390, 210]] },
-    { id: "night_stars", title: "HVĚZDY NA NOČNÍ OBLOHU", backdrop: "🌙", prompt: "MĚSÍČKU JE SMUTNO! DOKRESLI KOLEM NĚJ TŘPYTIVÉ HVĚZDIČKY!", guidePts: [[200, 120], [260, 190], [470, 110], [520, 200], [450, 290]] },
-    { id: "train_tracks", title: "KOLEJE PRO VLÁČEK", backdrop: "🚂", prompt: "VLÁČEK POTŘEBUJE KOLEJE! NAKRESLI POD NĚJ ROVNÉ KOLEJE!", guidePts: [[160, 340], [280, 340], [400, 340], [560, 340]] },
-    { id: "bridge_river", title: "MOST PŘES ŘEKU", backdrop: "🌊   🌊", prompt: "DOKRESLI PŘES ŘEKU OBLOUKOVÝ MOST PRO TUČŇÁKA!", guidePts: [[190, 300], [270, 200], [360, 175], [450, 200], [530, 300]] },
-    { id: "dog_bone", title: "KOSTIČKA PRO PEJSKA", backdrop: "🐶", prompt: "PEJSEK MÁ HLAD! DOKRESLI MU DO MISKY DOBROU KOSTIČKU!", guidePts: [[290, 350], [330, 350], [390, 350], [430, 350]] },
-    { id: "bee_stripes", title: "PRUHY PRO VČELIČKU", backdrop: "🐝", prompt: "DOKRESLI VČELIČCE DRÁHU LETU KE KYTIČCE!", guidePts: [[220, 240], [300, 180], [390, 260], [490, 200]] },
-    { id: "rocket_flame", title: "PLAMEN PRO RAKETU", backdrop: "🚀", prompt: "RAKETA STARTUJE! DOKRESLI POD NI OHNIVÝ PLAMEN!", guidePts: [[330, 310], [360, 410], [390, 310], [360, 375]] },
-    { id: "icecream_scoop", title: "KOPEČEK NA ZMRZLINU", backdrop: "🍦", prompt: "DOKRESLI NA ZMRZLINU DALŠÍ VELKÝ BAREVNÝ KOPEČEK!", guidePts: [[310, 150], [360, 95], [410, 150], [360, 165]] },
-    { id: "rainbow_sky", title: "DUHA PO DEŠTI", backdrop: "🌦️   ☀️", prompt: "VYSVITLO SLUNÍČKO! NAKRESLI NA OBLOHU VELKOU BAREVNOU DUHU!", guidePts: [[180, 320], [250, 180], [360, 130], [470, 180], [540, 320]] }
-  ];
+  // --- AKTIVITA 4: ŠKOLA PSANÍ PÍSMEN A SLOV (74 POLOŽEK DLE OBTÍŽNOSTI + PÍSANKA S LINKAMI) ---
+  function interpolateStrokePoints(waypoints, step = 16) {
+    const points = [];
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      const [x1, y1] = waypoints[i];
+      const [x2, y2] = waypoints[i + 1];
+      const dist = Math.hypot(x2 - x1, y2 - y1);
+      const steps = Math.max(1, Math.round(dist / step));
+      for (let s = 0; s < steps; s++) {
+        const t = s / steps;
+        points.push([Math.round(x1 + (x2 - x1) * t), Math.round(y1 + (y2 - y1) * t)]);
+      }
+    }
+    points.push(waypoints[waypoints.length - 1]);
+    return points;
+  }
 
-  class StoryDrawActivity {
+  function drawHandwritingPaper(ctx, width = 720, height = 460) {
+    ctx.save();
+    ctx.fillStyle = "#FDFEFE";
+    ctx.fillRect(0, 0, width, height);
+
+    // Šikmé pomocné linky písanky (sklon 75°)
+    ctx.strokeStyle = "rgba(186, 230, 253, 0.45)";
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 6]);
+    for (let x = -60; x <= width + 80; x += 65) {
+      ctx.beginPath();
+      ctx.moveTo(x + 72, 90);
+      ctx.lineTo(x, 395);
+      ctx.stroke();
+    }
+
+    // 1. Horní dotažnice (☁️ y=110)
+    ctx.setLineDash([]);
+    ctx.strokeStyle = "#90E0EF";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(35, 110);
+    ctx.lineTo(width - 35, 110);
+    ctx.stroke();
+
+    // 2. Střední pomocná linka (🌿 y=195)
+    ctx.strokeStyle = "#00B4D8";
+    ctx.setLineDash([8, 8]);
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(35, 195);
+    ctx.lineTo(width - 35, 195);
+    ctx.stroke();
+
+    // 3. Základní linka (🏠 y=285) - pevná podlaha písanky
+    ctx.setLineDash([]);
+    ctx.strokeStyle = "#1D3557";
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.moveTo(25, 285);
+    ctx.lineTo(width - 25, 285);
+    ctx.stroke();
+
+    // 4. Dolní dotažnice (⚓ y=375) - nožičky písmen
+    ctx.strokeStyle = "#F4A261";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(35, 375);
+    ctx.lineTo(width - 35, 375);
+    ctx.stroke();
+
+    // Montessori / školní vizuální symboly linek
+    ctx.font = "bold 14px sans-serif";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillText("☁️", 30, 110);
+    ctx.fillText("🌿", 30, 195);
+    ctx.fillText("🏠", 26, 285);
+    ctx.fillText("⚓", 30, 375);
+
+    ctx.restore();
+  }
+
+  const HANDWRITING_CATALOG = [
+  {
+    "id": "up_A",
+    "stars": 1,
+    "char": "A",
+    "title": "VELKÉ TISKACÍ A",
+    "spoken": "velké tiskací A",
+    "prompt": "Napiš velké tiskací A! Začni na špičce nahoře a veď dvě šikmé nožičky dolů, pak udělej příčku uprostřed.",
+    "strokes": [
+      [
+        [
+          360,
+          110
+        ],
+        [
+          305,
+          285
+        ]
+      ],
+      [
+        [
+          360,
+          110
+        ],
+        [
+          415,
+          285
+        ]
+      ],
+      [
+        [
+          328,
+          225
+        ],
+        [
+          392,
+          225
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_B",
+    "stars": 1,
+    "char": "B",
+    "title": "VELKÉ TISKACÍ B",
+    "spoken": "velké tiskací B",
+    "prompt": "Napiš velké tiskací B! Začni svislou čarou shora dolů, a pak přidej dvě kulatá bříška.",
+    "strokes": [
+      [
+        [
+          315,
+          110
+        ],
+        [
+          315,
+          285
+        ]
+      ],
+      [
+        [
+          315,
+          110
+        ],
+        [
+          375,
+          110
+        ],
+        [
+          405,
+          145
+        ],
+        [
+          375,
+          195
+        ],
+        [
+          315,
+          195
+        ]
+      ],
+      [
+        [
+          315,
+          195
+        ],
+        [
+          385,
+          195
+        ],
+        [
+          415,
+          240
+        ],
+        [
+          385,
+          285
+        ],
+        [
+          315,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_C",
+    "stars": 1,
+    "char": "C",
+    "title": "VELKÉ TISKACÍ C",
+    "spoken": "velké tiskací C",
+    "prompt": "Napiš velké tiskací C! Udělej velký oblouček zprava doleva jako otevřený půlměsíc.",
+    "strokes": [
+      [
+        [
+          415,
+          145
+        ],
+        [
+          385,
+          110
+        ],
+        [
+          335,
+          110
+        ],
+        [
+          305,
+          160
+        ],
+        [
+          305,
+          235
+        ],
+        [
+          335,
+          285
+        ],
+        [
+          385,
+          285
+        ],
+        [
+          415,
+          250
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_D",
+    "stars": 1,
+    "char": "D",
+    "title": "VELKÉ TISKACÍ D",
+    "spoken": "velké tiskací D",
+    "prompt": "Napiš velké tiskací D! Začni rovnou čarou dolů a pak přidej jedno velké břicho.",
+    "strokes": [
+      [
+        [
+          315,
+          110
+        ],
+        [
+          315,
+          285
+        ]
+      ],
+      [
+        [
+          315,
+          110
+        ],
+        [
+          375,
+          110
+        ],
+        [
+          415,
+          155
+        ],
+        [
+          415,
+          240
+        ],
+        [
+          375,
+          285
+        ],
+        [
+          315,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_E",
+    "stars": 1,
+    "char": "E",
+    "title": "VELKÉ TISKACÍ E",
+    "spoken": "velké tiskací E",
+    "prompt": "Napiš velké tiskací E! Rovná čára dolů a tři vodorovné nožičky doprava.",
+    "strokes": [
+      [
+        [
+          320,
+          110
+        ],
+        [
+          320,
+          285
+        ]
+      ],
+      [
+        [
+          320,
+          110
+        ],
+        [
+          410,
+          110
+        ]
+      ],
+      [
+        [
+          320,
+          195
+        ],
+        [
+          385,
+          195
+        ]
+      ],
+      [
+        [
+          320,
+          285
+        ],
+        [
+          410,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_K",
+    "stars": 1,
+    "char": "K",
+    "title": "VELKÉ TISKACÍ K",
+    "spoken": "velké tiskací K",
+    "prompt": "Napiš velké tiskací K! Rovná čára dolů, a pak šikmá stříška k ní a od ní nožička.",
+    "strokes": [
+      [
+        [
+          320,
+          110
+        ],
+        [
+          320,
+          285
+        ]
+      ],
+      [
+        [
+          405,
+          110
+        ],
+        [
+          320,
+          195
+        ]
+      ],
+      [
+        [
+          325,
+          195
+        ],
+        [
+          410,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_L",
+    "stars": 1,
+    "char": "L",
+    "title": "VELKÉ TISKACÍ L",
+    "spoken": "velké tiskací L",
+    "prompt": "Napiš velké tiskací L! Rovně dolů a po zemi doprava.",
+    "strokes": [
+      [
+        [
+          320,
+          110
+        ],
+        [
+          320,
+          285
+        ]
+      ],
+      [
+        [
+          320,
+          285
+        ],
+        [
+          410,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_M",
+    "stars": 1,
+    "char": "M",
+    "title": "VELKÉ TISKACÍ M",
+    "spoken": "velké tiskací M",
+    "prompt": "Napiš velké tiskací M! Nahoru, dolů do údolí, nahoru na kopec a dolů k zemi.",
+    "strokes": [
+      [
+        [
+          305,
+          285
+        ],
+        [
+          305,
+          110
+        ]
+      ],
+      [
+        [
+          305,
+          110
+        ],
+        [
+          360,
+          215
+        ]
+      ],
+      [
+        [
+          360,
+          215
+        ],
+        [
+          415,
+          110
+        ]
+      ],
+      [
+        [
+          415,
+          110
+        ],
+        [
+          415,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_O",
+    "stars": 1,
+    "char": "O",
+    "title": "VELKÉ TISKACÍ O",
+    "spoken": "velké tiskací O",
+    "prompt": "Napiš velké tiskací O! Jedno krásné kulaté kolečko odshora dokola.",
+    "strokes": [
+      [
+        [
+          360,
+          110
+        ],
+        [
+          315,
+          145
+        ],
+        [
+          305,
+          195
+        ],
+        [
+          315,
+          250
+        ],
+        [
+          360,
+          285
+        ],
+        [
+          405,
+          250
+        ],
+        [
+          415,
+          195
+        ],
+        [
+          405,
+          145
+        ],
+        [
+          360,
+          110
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_P",
+    "stars": 1,
+    "char": "P",
+    "title": "VELKÉ TISKACÍ P",
+    "spoken": "velké tiskací P",
+    "prompt": "Napiš velké tiskací P! Rovná čára dolů a nahoře jedno kulaté bříško.",
+    "strokes": [
+      [
+        [
+          320,
+          110
+        ],
+        [
+          320,
+          285
+        ]
+      ],
+      [
+        [
+          320,
+          110
+        ],
+        [
+          380,
+          110
+        ],
+        [
+          410,
+          145
+        ],
+        [
+          380,
+          195
+        ],
+        [
+          320,
+          195
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_R",
+    "stars": 1,
+    "char": "R",
+    "title": "VELKÉ TISKACÍ R",
+    "spoken": "velké tiskací R",
+    "prompt": "Napiš velké tiskací R! Rovná čára dolů, horní bříško a šikmá nožička na zem.",
+    "strokes": [
+      [
+        [
+          320,
+          110
+        ],
+        [
+          320,
+          285
+        ]
+      ],
+      [
+        [
+          320,
+          110
+        ],
+        [
+          380,
+          110
+        ],
+        [
+          410,
+          145
+        ],
+        [
+          380,
+          195
+        ],
+        [
+          320,
+          195
+        ]
+      ],
+      [
+        [
+          345,
+          195
+        ],
+        [
+          410,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_S",
+    "stars": 1,
+    "char": "S",
+    "title": "VELKÉ TISKACÍ S",
+    "spoken": "velké tiskací S",
+    "prompt": "Napiš velké tiskací S! Kličkuj jako had, napřed doleva a pak doprava.",
+    "strokes": [
+      [
+        [
+          405,
+          145
+        ],
+        [
+          375,
+          110
+        ],
+        [
+          335,
+          115
+        ],
+        [
+          320,
+          155
+        ],
+        [
+          360,
+          195
+        ],
+        [
+          400,
+          235
+        ],
+        [
+          385,
+          285
+        ],
+        [
+          335,
+          285
+        ],
+        [
+          310,
+          250
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_T",
+    "stars": 1,
+    "char": "T",
+    "title": "VELKÉ TISKACÍ T",
+    "spoken": "velké tiskací T",
+    "prompt": "Napiš velké tiskací T! Rovná čára dolů a nahoře rovná stříška.",
+    "strokes": [
+      [
+        [
+          360,
+          110
+        ],
+        [
+          360,
+          285
+        ]
+      ],
+      [
+        [
+          300,
+          110
+        ],
+        [
+          420,
+          110
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_U",
+    "stars": 1,
+    "char": "U",
+    "title": "VELKÉ TISKACÍ U",
+    "spoken": "velké tiskací U",
+    "prompt": "Napiš velké tiskací U! Sjeď dolů do údolíčka, zaobli a vyjeď zase nahoru.",
+    "strokes": [
+      [
+        [
+          315,
+          110
+        ],
+        [
+          315,
+          240
+        ],
+        [
+          345,
+          285
+        ],
+        [
+          375,
+          285
+        ],
+        [
+          405,
+          240
+        ],
+        [
+          405,
+          110
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_V",
+    "stars": 1,
+    "char": "V",
+    "title": "VELKÉ TISKACÍ V",
+    "spoken": "velké tiskací V",
+    "prompt": "Napiš velké tiskací V! Šikmo dolů do špičky a hned šikmo nahoru.",
+    "strokes": [
+      [
+        [
+          315,
+          110
+        ],
+        [
+          360,
+          285
+        ]
+      ],
+      [
+        [
+          360,
+          285
+        ],
+        [
+          405,
+          110
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "up_Z",
+    "stars": 1,
+    "char": "Z",
+    "title": "VELKÉ TISKACÍ Z",
+    "spoken": "velké tiskací Z",
+    "prompt": "Napiš velké tiskací Z! Vodorovně doprava, šikmo dolů a po zemi doprava jako blesk.",
+    "strokes": [
+      [
+        [
+          315,
+          110
+        ],
+        [
+          405,
+          110
+        ]
+      ],
+      [
+        [
+          405,
+          110
+        ],
+        [
+          315,
+          285
+        ]
+      ],
+      [
+        [
+          315,
+          285
+        ],
+        [
+          405,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_a",
+    "stars": 2,
+    "char": "a",
+    "title": "MALÉ TISKACÍ a",
+    "spoken": "malé tiskací a",
+    "prompt": "Napiš malé tiskací a! Kulaté bříško mezi linkami a svislá nožička vpravo.",
+    "strokes": [
+      [
+        [
+          395,
+          215
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          330,
+          215
+        ],
+        [
+          320,
+          245
+        ],
+        [
+          335,
+          280
+        ],
+        [
+          375,
+          285
+        ],
+        [
+          400,
+          255
+        ],
+        [
+          400,
+          215
+        ]
+      ],
+      [
+        [
+          400,
+          195
+        ],
+        [
+          400,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_b",
+    "stars": 2,
+    "char": "b",
+    "title": "MALÉ TISKACÍ b",
+    "spoken": "malé tiskací b",
+    "prompt": "Napiš malé tiskací b! Dlouhá vysoká čára shora dolů a kulaté bříško vpravo.",
+    "strokes": [
+      [
+        [
+          330,
+          110
+        ],
+        [
+          330,
+          285
+        ]
+      ],
+      [
+        [
+          330,
+          215
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          400,
+          220
+        ],
+        [
+          400,
+          260
+        ],
+        [
+          365,
+          285
+        ],
+        [
+          330,
+          280
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_c",
+    "stars": 2,
+    "char": "c",
+    "title": "MALÉ TISKACÍ c",
+    "spoken": "malé tiskací c",
+    "prompt": "Napiš malé tiskací c! Malý oblouček zprava doleva mezi dvěma linkami.",
+    "strokes": [
+      [
+        [
+          400,
+          215
+        ],
+        [
+          370,
+          195
+        ],
+        [
+          335,
+          215
+        ],
+        [
+          325,
+          245
+        ],
+        [
+          335,
+          275
+        ],
+        [
+          370,
+          285
+        ],
+        [
+          400,
+          265
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_d",
+    "stars": 2,
+    "char": "d",
+    "title": "MALÉ TISKACÍ d",
+    "spoken": "malé tiskací d",
+    "prompt": "Napiš malé tiskací d! Kulaté bříško vlevo a vysoká čára shora dolů vpravo.",
+    "strokes": [
+      [
+        [
+          395,
+          220
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          330,
+          220
+        ],
+        [
+          330,
+          260
+        ],
+        [
+          365,
+          285
+        ],
+        [
+          395,
+          280
+        ]
+      ],
+      [
+        [
+          395,
+          110
+        ],
+        [
+          395,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_e",
+    "stars": 2,
+    "char": "e",
+    "title": "MALÉ TISKACÍ e",
+    "spoken": "malé tiskací e",
+    "prompt": "Napiš malé tiskací e! Vodorovná čárka zevnitř a oblouček dokola.",
+    "strokes": [
+      [
+        [
+          330,
+          245
+        ],
+        [
+          395,
+          245
+        ],
+        [
+          395,
+          220
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          335,
+          215
+        ],
+        [
+          325,
+          250
+        ],
+        [
+          345,
+          285
+        ],
+        [
+          395,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_k",
+    "stars": 2,
+    "char": "k",
+    "title": "MALÉ TISKACÍ k",
+    "spoken": "malé tiskací k",
+    "prompt": "Napiš malé tiskací k! Vysoká čára shora dolů a malé šikmé nožičky.",
+    "strokes": [
+      [
+        [
+          330,
+          110
+        ],
+        [
+          330,
+          285
+        ]
+      ],
+      [
+        [
+          395,
+          195
+        ],
+        [
+          335,
+          245
+        ]
+      ],
+      [
+        [
+          345,
+          235
+        ],
+        [
+          400,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_l",
+    "stars": 2,
+    "char": "l",
+    "title": "MALÉ TISKACÍ l",
+    "spoken": "malé tiskací l",
+    "prompt": "Napiš malé tiskací l! Jedna rovná vysoká čára od horní linky až na zem.",
+    "strokes": [
+      [
+        [
+          360,
+          110
+        ],
+        [
+          360,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_m",
+    "stars": 2,
+    "char": "m",
+    "title": "MALÉ TISKACÍ m",
+    "spoken": "malé tiskací m",
+    "prompt": "Napiš malé tiskací m! Svislá nožička a dva obloučky vedle sebe jako velbloud.",
+    "strokes": [
+      [
+        [
+          315,
+          195
+        ],
+        [
+          315,
+          285
+        ]
+      ],
+      [
+        [
+          315,
+          220
+        ],
+        [
+          340,
+          195
+        ],
+        [
+          365,
+          220
+        ],
+        [
+          365,
+          285
+        ]
+      ],
+      [
+        [
+          365,
+          220
+        ],
+        [
+          390,
+          195
+        ],
+        [
+          415,
+          220
+        ],
+        [
+          415,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_o",
+    "stars": 2,
+    "char": "o",
+    "title": "MALÉ TISKACÍ o",
+    "spoken": "malé tiskací o",
+    "prompt": "Napiš malé tiskací o! Malé kulaté kolečko přesně mezi linkami.",
+    "strokes": [
+      [
+        [
+          360,
+          195
+        ],
+        [
+          330,
+          215
+        ],
+        [
+          325,
+          245
+        ],
+        [
+          335,
+          275
+        ],
+        [
+          360,
+          285
+        ],
+        [
+          385,
+          275
+        ],
+        [
+          395,
+          245
+        ],
+        [
+          385,
+          215
+        ],
+        [
+          360,
+          195
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_p",
+    "stars": 2,
+    "char": "p",
+    "title": "MALÉ TISKACÍ p",
+    "spoken": "malé tiskací p",
+    "prompt": "Napiš malé tiskací p! Nožička dolů pod linku ke kotvě a kulaté bříško nahoře.",
+    "strokes": [
+      [
+        [
+          330,
+          195
+        ],
+        [
+          330,
+          375
+        ]
+      ],
+      [
+        [
+          330,
+          215
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          400,
+          220
+        ],
+        [
+          400,
+          260
+        ],
+        [
+          365,
+          285
+        ],
+        [
+          330,
+          280
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_r",
+    "stars": 2,
+    "char": "r",
+    "title": "MALÉ TISKACÍ r",
+    "spoken": "malé tiskací r",
+    "prompt": "Napiš malé tiskací r! Rovná nožička dolů a nahoře malá větvička doprava.",
+    "strokes": [
+      [
+        [
+          335,
+          195
+        ],
+        [
+          335,
+          285
+        ]
+      ],
+      [
+        [
+          335,
+          220
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          395,
+          205
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_s",
+    "stars": 2,
+    "char": "s",
+    "title": "MALÉ TISKACÍ s",
+    "spoken": "malé tiskací s",
+    "prompt": "Napiš malé tiskací s! Malý hadík kličkuje mezi linkami.",
+    "strokes": [
+      [
+        [
+          390,
+          215
+        ],
+        [
+          370,
+          195
+        ],
+        [
+          345,
+          200
+        ],
+        [
+          335,
+          225
+        ],
+        [
+          360,
+          245
+        ],
+        [
+          385,
+          265
+        ],
+        [
+          370,
+          285
+        ],
+        [
+          340,
+          285
+        ],
+        [
+          325,
+          265
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_t",
+    "stars": 2,
+    "char": "t",
+    "title": "MALÉ TISKACÍ t",
+    "spoken": "malé tiskací t",
+    "prompt": "Napiš malé tiskací t! Svislá hůlka s malým háčkem a vodorovná příčka.",
+    "strokes": [
+      [
+        [
+          360,
+          135
+        ],
+        [
+          360,
+          270
+        ],
+        [
+          380,
+          285
+        ]
+      ],
+      [
+        [
+          330,
+          195
+        ],
+        [
+          390,
+          195
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_u",
+    "stars": 2,
+    "char": "u",
+    "title": "MALÉ TISKACÍ u",
+    "spoken": "malé tiskací u",
+    "prompt": "Napiš malé tiskací u! Malé údolíčko a nožička dolů k zemi.",
+    "strokes": [
+      [
+        [
+          330,
+          195
+        ],
+        [
+          330,
+          260
+        ],
+        [
+          355,
+          285
+        ],
+        [
+          385,
+          285
+        ],
+        [
+          395,
+          260
+        ],
+        [
+          395,
+          195
+        ]
+      ],
+      [
+        [
+          395,
+          195
+        ],
+        [
+          395,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_v",
+    "stars": 2,
+    "char": "v",
+    "title": "MALÉ TISKACÍ v",
+    "spoken": "malé tiskací v",
+    "prompt": "Napiš malé tiskací v! Malá špička dolů a nahoru mezi linkami.",
+    "strokes": [
+      [
+        [
+          330,
+          195
+        ],
+        [
+          365,
+          285
+        ]
+      ],
+      [
+        [
+          365,
+          285
+        ],
+        [
+          400,
+          195
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lp_z",
+    "stars": 2,
+    "char": "z",
+    "title": "MALÉ TISKACÍ z",
+    "spoken": "malé tiskací z",
+    "prompt": "Napiš malé tiskací z! Malý blesk mezi dvěma linkami.",
+    "strokes": [
+      [
+        [
+          330,
+          195
+        ],
+        [
+          390,
+          195
+        ]
+      ],
+      [
+        [
+          390,
+          195
+        ],
+        [
+          330,
+          285
+        ]
+      ],
+      [
+        [
+          330,
+          285
+        ],
+        [
+          395,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_A",
+    "stars": 3,
+    "char": "A",
+    "title": "VELKÉ PSACÍ A",
+    "spoken": "velké psací A",
+    "prompt": "Napiš velké psací A! Začni u základní linky háčkem, vytáhni oblouk nahoru k mráčkům a sjeď dolů k zemi.",
+    "strokes": [
+      [
+        [
+          340,
+          275
+        ],
+        [
+          325,
+          285
+        ],
+        [
+          335,
+          265
+        ],
+        [
+          380,
+          115
+        ],
+        [
+          415,
+          285
+        ],
+        [
+          435,
+          275
+        ]
+      ],
+      [
+        [
+          355,
+          225
+        ],
+        [
+          415,
+          225
+        ],
+        [
+          430,
+          245
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_B",
+    "stars": 3,
+    "char": "B",
+    "title": "VELKÉ PSACÍ B",
+    "spoken": "velké psací B",
+    "prompt": "Napiš velké psací B! Svislá hůlka dolů s malou kličkou, a dvě vázaná bříška.",
+    "strokes": [
+      [
+        [
+          340,
+          120
+        ],
+        [
+          330,
+          285
+        ],
+        [
+          320,
+          280
+        ]
+      ],
+      [
+        [
+          325,
+          140
+        ],
+        [
+          370,
+          115
+        ],
+        [
+          405,
+          145
+        ],
+        [
+          370,
+          195
+        ],
+        [
+          335,
+          195
+        ]
+      ],
+      [
+        [
+          335,
+          195
+        ],
+        [
+          390,
+          195
+        ],
+        [
+          420,
+          235
+        ],
+        [
+          390,
+          285
+        ],
+        [
+          325,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_C",
+    "stars": 3,
+    "char": "C",
+    "title": "VELKÉ PSACÍ C",
+    "spoken": "velké psací C",
+    "prompt": "Napiš velké psací C! Ladný velký oblouk začínající kličkou nahoře u mráčků.",
+    "strokes": [
+      [
+        [
+          405,
+          140
+        ],
+        [
+          370,
+          115
+        ],
+        [
+          330,
+          140
+        ],
+        [
+          320,
+          205
+        ],
+        [
+          335,
+          265
+        ],
+        [
+          375,
+          285
+        ],
+        [
+          420,
+          270
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_D",
+    "stars": 3,
+    "char": "D",
+    "title": "VELKÉ PSACÍ D",
+    "spoken": "velké psací D",
+    "prompt": "Napiš velké psací D! Svislá čára dolů, spodní smyčka po zemi a velké vypouklé břicho.",
+    "strokes": [
+      [
+        [
+          340,
+          120
+        ],
+        [
+          330,
+          285
+        ],
+        [
+          315,
+          280
+        ],
+        [
+          315,
+          260
+        ],
+        [
+          355,
+          285
+        ],
+        [
+          415,
+          260
+        ],
+        [
+          420,
+          150
+        ],
+        [
+          375,
+          115
+        ],
+        [
+          335,
+          130
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_E",
+    "stars": 3,
+    "char": "E",
+    "title": "VELKÉ PSACÍ E",
+    "spoken": "velké psací E",
+    "prompt": "Napiš velké psací E! Horní vázaná mistička s kličkou a dolní bříško na lince.",
+    "strokes": [
+      [
+        [
+          390,
+          140
+        ],
+        [
+          360,
+          115
+        ],
+        [
+          330,
+          140
+        ],
+        [
+          345,
+          185
+        ],
+        [
+          370,
+          190
+        ],
+        [
+          340,
+          195
+        ],
+        [
+          325,
+          240
+        ],
+        [
+          350,
+          285
+        ],
+        [
+          405,
+          280
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_L",
+    "stars": 3,
+    "char": "L",
+    "title": "VELKÉ PSACÍ L",
+    "spoken": "velké psací L",
+    "prompt": "Napiš velké psací L! Krásná horní smyčka dolů k zemi a vlnka na podlaze.",
+    "strokes": [
+      [
+        [
+          345,
+          155
+        ],
+        [
+          360,
+          115
+        ],
+        [
+          345,
+          115
+        ],
+        [
+          325,
+          260
+        ],
+        [
+          315,
+          285
+        ],
+        [
+          340,
+          285
+        ],
+        [
+          410,
+          275
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_M",
+    "stars": 3,
+    "char": "M",
+    "title": "VELKÉ PSACÍ M",
+    "spoken": "velké psací M",
+    "prompt": "Napiš velké psací M! Tři spojené vysoké vlnky se šikmým sklonem.",
+    "strokes": [
+      [
+        [
+          295,
+          270
+        ],
+        [
+          310,
+          125
+        ],
+        [
+          335,
+          115
+        ],
+        [
+          345,
+          280
+        ],
+        [
+          355,
+          130
+        ],
+        [
+          380,
+          115
+        ],
+        [
+          395,
+          280
+        ],
+        [
+          405,
+          135
+        ],
+        [
+          430,
+          120
+        ],
+        [
+          440,
+          275
+        ],
+        [
+          455,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_O",
+    "stars": 3,
+    "char": "O",
+    "title": "VELKÉ PSACÍ O",
+    "spoken": "velké psací O",
+    "prompt": "Napiš velké psací O! Velký vázaný ovál s horní kličkou na uvázání.",
+    "strokes": [
+      [
+        [
+          380,
+          115
+        ],
+        [
+          335,
+          145
+        ],
+        [
+          320,
+          205
+        ],
+        [
+          335,
+          265
+        ],
+        [
+          375,
+          285
+        ],
+        [
+          415,
+          255
+        ],
+        [
+          420,
+          180
+        ],
+        [
+          395,
+          115
+        ],
+        [
+          375,
+          125
+        ],
+        [
+          415,
+          125
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_P",
+    "stars": 3,
+    "char": "P",
+    "title": "VELKÉ PSACÍ P",
+    "spoken": "velké psací P",
+    "prompt": "Napiš velké psací P! Šikmá hůlka a nahoře ladná čepička s bříškem.",
+    "strokes": [
+      [
+        [
+          340,
+          120
+        ],
+        [
+          330,
+          285
+        ],
+        [
+          315,
+          280
+        ]
+      ],
+      [
+        [
+          320,
+          145
+        ],
+        [
+          365,
+          115
+        ],
+        [
+          410,
+          145
+        ],
+        [
+          375,
+          195
+        ],
+        [
+          335,
+          195
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_R",
+    "stars": 3,
+    "char": "R",
+    "title": "VELKÉ PSACÍ R",
+    "spoken": "velké psací R",
+    "prompt": "Napiš velké psací R! Hůlka dolů, horní bříško a šikmá nožička s háčkem.",
+    "strokes": [
+      [
+        [
+          340,
+          120
+        ],
+        [
+          330,
+          285
+        ],
+        [
+          315,
+          280
+        ]
+      ],
+      [
+        [
+          320,
+          145
+        ],
+        [
+          365,
+          115
+        ],
+        [
+          410,
+          145
+        ],
+        [
+          375,
+          195
+        ],
+        [
+          335,
+          195
+        ]
+      ],
+      [
+        [
+          355,
+          195
+        ],
+        [
+          410,
+          285
+        ],
+        [
+          430,
+          280
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_S",
+    "stars": 3,
+    "char": "S",
+    "title": "VELKÉ PSACÍ S",
+    "spoken": "velké psací S",
+    "prompt": "Napiš velké psací S! Náběhová čára ze země nahoru k mráčkům, klička a velké břicho.",
+    "strokes": [
+      [
+        [
+          320,
+          285
+        ],
+        [
+          380,
+          115
+        ],
+        [
+          405,
+          135
+        ],
+        [
+          370,
+          180
+        ],
+        [
+          415,
+          240
+        ],
+        [
+          390,
+          285
+        ],
+        [
+          335,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_T",
+    "stars": 3,
+    "char": "T",
+    "title": "VELKÉ PSACÍ T",
+    "spoken": "velké psací T",
+    "prompt": "Napiš velké psací T! Ladná zvlněná stříška a svislá hůlka s nožičkou.",
+    "strokes": [
+      [
+        [
+          315,
+          120
+        ],
+        [
+          365,
+          115
+        ],
+        [
+          415,
+          120
+        ]
+      ],
+      [
+        [
+          365,
+          115
+        ],
+        [
+          365,
+          265
+        ],
+        [
+          385,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_U",
+    "stars": 3,
+    "char": "U",
+    "title": "VELKÉ PSACÍ U",
+    "spoken": "velké psací U",
+    "prompt": "Napiš velké psací U! Horní háček, hluboké údolíčko k zemi a druhá nožička s kličkou.",
+    "strokes": [
+      [
+        [
+          315,
+          135
+        ],
+        [
+          335,
+          115
+        ],
+        [
+          335,
+          255
+        ],
+        [
+          365,
+          285
+        ],
+        [
+          395,
+          255
+        ],
+        [
+          395,
+          120
+        ],
+        [
+          395,
+          275
+        ],
+        [
+          415,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_V",
+    "stars": 3,
+    "char": "V",
+    "title": "VELKÉ PSACÍ V",
+    "spoken": "velké psací V",
+    "prompt": "Napiš velké psací V! Náběh shora, hluboký oblouk a horní zakončovací vlnka.",
+    "strokes": [
+      [
+        [
+          315,
+          135
+        ],
+        [
+          335,
+          115
+        ],
+        [
+          360,
+          285
+        ],
+        [
+          400,
+          125
+        ],
+        [
+          420,
+          135
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "uc_Z",
+    "stars": 3,
+    "char": "Z",
+    "title": "VELKÉ PSACÍ Z",
+    "spoken": "velké psací Z",
+    "prompt": "Napiš velké psací Z! Horní vlnka, šikmá čára na zem a dolní smyčka pod podlahu ke kotvě.",
+    "strokes": [
+      [
+        [
+          325,
+          125
+        ],
+        [
+          385,
+          115
+        ],
+        [
+          335,
+          285
+        ],
+        [
+          370,
+          285
+        ],
+        [
+          360,
+          365
+        ],
+        [
+          330,
+          365
+        ],
+        [
+          345,
+          305
+        ],
+        [
+          405,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_a",
+    "stars": 4,
+    "char": "a",
+    "title": "MALÉ PSACÍ a",
+    "spoken": "malé psací a",
+    "prompt": "Napiš malé psací a! Náběhový háček k trávě, kulaté bříško a zakončovací ocásek.",
+    "strokes": [
+      [
+        [
+          315,
+          270
+        ],
+        [
+          345,
+          195
+        ]
+      ],
+      [
+        [
+          380,
+          195
+        ],
+        [
+          340,
+          205
+        ],
+        [
+          330,
+          245
+        ],
+        [
+          345,
+          280
+        ],
+        [
+          380,
+          280
+        ],
+        [
+          385,
+          200
+        ]
+      ],
+      [
+        [
+          385,
+          200
+        ],
+        [
+          385,
+          275
+        ],
+        [
+          410,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_b",
+    "stars": 4,
+    "char": "b",
+    "title": "MALÉ PSACÍ b",
+    "spoken": "malé psací b",
+    "prompt": "Napiš malé psací b! Dlouhá vysoká smyčka nahoru k mráčkům a spodní bříško s kličkou.",
+    "strokes": [
+      [
+        [
+          320,
+          285
+        ],
+        [
+          365,
+          115
+        ],
+        [
+          350,
+          115
+        ],
+        [
+          350,
+          280
+        ],
+        [
+          390,
+          280
+        ],
+        [
+          395,
+          235
+        ],
+        [
+          415,
+          235
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_c",
+    "stars": 4,
+    "char": "c",
+    "title": "MALÉ PSACÍ c",
+    "spoken": "malé psací c",
+    "prompt": "Napiš malé psací c! Náběh z podlahy k trávě a ladný otevřený oblouček s ocáskem.",
+    "strokes": [
+      [
+        [
+          315,
+          280
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          340,
+          205
+        ],
+        [
+          330,
+          245
+        ],
+        [
+          345,
+          280
+        ],
+        [
+          400,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_d",
+    "stars": 4,
+    "char": "d",
+    "title": "MALÉ PSACÍ d",
+    "spoken": "malé psací d",
+    "prompt": "Napiš malé psací d! Kulaté bříško na podlaze a vysoká smyčka nahoru do nebe s nožičkou.",
+    "strokes": [
+      [
+        [
+          355,
+          200
+        ],
+        [
+          330,
+          215
+        ],
+        [
+          325,
+          255
+        ],
+        [
+          345,
+          280
+        ],
+        [
+          375,
+          280
+        ],
+        [
+          380,
+          200
+        ]
+      ],
+      [
+        [
+          380,
+          200
+        ],
+        [
+          380,
+          115
+        ],
+        [
+          380,
+          275
+        ],
+        [
+          410,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_e",
+    "stars": 4,
+    "char": "e",
+    "title": "MALÉ PSACÍ e",
+    "spoken": "malé psací e",
+    "prompt": "Napiš malé psací e! Malá smyčka mezi podlahou a trávou s ocáskem pro další písmenko.",
+    "strokes": [
+      [
+        [
+          315,
+          280
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          350,
+          195
+        ],
+        [
+          330,
+          245
+        ],
+        [
+          350,
+          285
+        ],
+        [
+          400,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_l",
+    "stars": 4,
+    "char": "l",
+    "title": "MALÉ PSACÍ l",
+    "spoken": "malé psací l",
+    "prompt": "Napiš malé psací l! Jedna velká štíhlá smyčka od země až k mráčkům a zpět na zem.",
+    "strokes": [
+      [
+        [
+          320,
+          285
+        ],
+        [
+          360,
+          115
+        ],
+        [
+          345,
+          115
+        ],
+        [
+          345,
+          275
+        ],
+        [
+          380,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_m",
+    "stars": 4,
+    "char": "m",
+    "title": "MALÉ PSACÍ m",
+    "spoken": "malé psací m",
+    "prompt": "Napiš malé psací m! Tři spojené kopečky se sklonem a ocáskem.",
+    "strokes": [
+      [
+        [
+          310,
+          265
+        ],
+        [
+          320,
+          200
+        ],
+        [
+          330,
+          280
+        ],
+        [
+          340,
+          205
+        ],
+        [
+          365,
+          200
+        ],
+        [
+          370,
+          280
+        ],
+        [
+          380,
+          205
+        ],
+        [
+          405,
+          200
+        ],
+        [
+          410,
+          275
+        ],
+        [
+          430,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_o",
+    "stars": 4,
+    "char": "o",
+    "title": "MALÉ PSACÍ o",
+    "spoken": "malé psací o",
+    "prompt": "Napiš malé psací o! Kulaté bříško a nahoře malá vázací mistička.",
+    "strokes": [
+      [
+        [
+          315,
+          270
+        ],
+        [
+          345,
+          195
+        ],
+        [
+          375,
+          195
+        ],
+        [
+          335,
+          205
+        ],
+        [
+          330,
+          245
+        ],
+        [
+          345,
+          280
+        ],
+        [
+          380,
+          280
+        ],
+        [
+          380,
+          200
+        ],
+        [
+          410,
+          200
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_p",
+    "stars": 4,
+    "char": "p",
+    "title": "MALÉ PSACÍ p",
+    "spoken": "malé psací p",
+    "prompt": "Napiš malé psací p! Náběh k trávě, rovný seskok hluboko pod zem ke kotvě a bříško s ocáskem.",
+    "strokes": [
+      [
+        [
+          315,
+          280
+        ],
+        [
+          350,
+          195
+        ],
+        [
+          350,
+          375
+        ]
+      ],
+      [
+        [
+          350,
+          235
+        ],
+        [
+          380,
+          195
+        ],
+        [
+          400,
+          235
+        ],
+        [
+          380,
+          280
+        ],
+        [
+          350,
+          280
+        ],
+        [
+          390,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_r",
+    "stars": 4,
+    "char": "r",
+    "title": "MALÉ PSACÍ r",
+    "spoken": "malé psací r",
+    "prompt": "Napiš malé psací r! Náběh nahoru, malý schůdek a sjezd dolů na podlahu s ocáskem.",
+    "strokes": [
+      [
+        [
+          315,
+          280
+        ],
+        [
+          350,
+          195
+        ],
+        [
+          380,
+          195
+        ],
+        [
+          380,
+          275
+        ],
+        [
+          410,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_s",
+    "stars": 4,
+    "char": "s",
+    "title": "MALÉ PSACÍ s",
+    "spoken": "malé psací s",
+    "prompt": "Napiš malé psací s! Šikmý náběh k trávě, bříško a zpátečka k zemi.",
+    "strokes": [
+      [
+        [
+          315,
+          280
+        ],
+        [
+          360,
+          195
+        ],
+        [
+          385,
+          240
+        ],
+        [
+          350,
+          285
+        ],
+        [
+          400,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_t",
+    "stars": 4,
+    "char": "t",
+    "title": "MALÉ PSACÍ t",
+    "spoken": "malé psací t",
+    "prompt": "Napiš malé psací t! Vysoká hůlka z podlahy k mráčkům a zpět s ocáskem a vodorovná čárka.",
+    "strokes": [
+      [
+        [
+          320,
+          280
+        ],
+        [
+          360,
+          130
+        ],
+        [
+          360,
+          275
+        ],
+        [
+          390,
+          285
+        ]
+      ],
+      [
+        [
+          335,
+          185
+        ],
+        [
+          385,
+          185
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_u",
+    "stars": 4,
+    "char": "u",
+    "title": "MALÉ PSACÍ u",
+    "spoken": "malé psací u",
+    "prompt": "Napiš malé psací u! Dvě spojená údolíčka s ocáskem.",
+    "strokes": [
+      [
+        [
+          315,
+          280
+        ],
+        [
+          345,
+          195
+        ],
+        [
+          345,
+          275
+        ],
+        [
+          365,
+          285
+        ],
+        [
+          385,
+          200
+        ],
+        [
+          385,
+          275
+        ],
+        [
+          410,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_v",
+    "stars": 4,
+    "char": "v",
+    "title": "MALÉ PSACÍ v",
+    "spoken": "malé psací v",
+    "prompt": "Napiš malé psací v! Údolíčko s horní vázací mističkou.",
+    "strokes": [
+      [
+        [
+          315,
+          280
+        ],
+        [
+          340,
+          195
+        ],
+        [
+          350,
+          275
+        ],
+        [
+          380,
+          285
+        ],
+        [
+          395,
+          205
+        ],
+        [
+          415,
+          205
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "lc_z",
+    "stars": 4,
+    "char": "z",
+    "title": "MALÉ PSACÍ z",
+    "spoken": "malé psací z",
+    "prompt": "Napiš malé psací z! Horní vlnka a velká smyčka hluboko pod linku ke kotvě.",
+    "strokes": [
+      [
+        [
+          315,
+          280
+        ],
+        [
+          345,
+          195
+        ],
+        [
+          380,
+          195
+        ],
+        [
+          335,
+          285
+        ],
+        [
+          370,
+          285
+        ],
+        [
+          360,
+          370
+        ],
+        [
+          330,
+          370
+        ],
+        [
+          345,
+          310
+        ],
+        [
+          395,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_pes",
+    "stars": 5,
+    "char": "pes",
+    "title": "SLOVO „PES“",
+    "spoken": "slovo pes",
+    "prompt": "Napiš psací slovo PES! Písmenko P sjede pod linku ke kotvě, E udělá smyčku a S uzavře slovo ocáskem.",
+    "strokes": [
+      [
+        [
+          180,
+          280
+        ],
+        [
+          215,
+          195
+        ],
+        [
+          215,
+          375
+        ]
+      ],
+      [
+        [
+          215,
+          235
+        ],
+        [
+          245,
+          195
+        ],
+        [
+          265,
+          235
+        ],
+        [
+          245,
+          280
+        ],
+        [
+          215,
+          280
+        ],
+        [
+          255,
+          285
+        ],
+        [
+          315,
+          195
+        ],
+        [
+          300,
+          195
+        ],
+        [
+          285,
+          245
+        ],
+        [
+          305,
+          285
+        ],
+        [
+          360,
+          285
+        ],
+        [
+          405,
+          195
+        ],
+        [
+          430,
+          240
+        ],
+        [
+          395,
+          285
+        ],
+        [
+          455,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_les",
+    "stars": 5,
+    "char": "les",
+    "title": "SLOVO „LES“",
+    "spoken": "slovo les",
+    "prompt": "Napiš psací slovo LES! Vysoká smyčka L k mráčkům, malé E a krásný hadík S.",
+    "strokes": [
+      [
+        [
+          220,
+          285
+        ],
+        [
+          270,
+          115
+        ],
+        [
+          255,
+          115
+        ],
+        [
+          255,
+          275
+        ],
+        [
+          305,
+          285
+        ],
+        [
+          345,
+          195
+        ],
+        [
+          330,
+          195
+        ],
+        [
+          315,
+          245
+        ],
+        [
+          335,
+          285
+        ],
+        [
+          390,
+          285
+        ],
+        [
+          430,
+          195
+        ],
+        [
+          455,
+          240
+        ],
+        [
+          420,
+          285
+        ],
+        [
+          475,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_mama",
+    "stars": 5,
+    "char": "máma",
+    "title": "SLOVO „MÁMA“",
+    "spoken": "slovo máma",
+    "prompt": "Napiš psací slovo MÁMA! Spoj kopečky M, bříško Á s čárkou a zopakuj to!",
+    "strokes": [
+      [
+        [
+          140,
+          265
+        ],
+        [
+          150,
+          200
+        ],
+        [
+          160,
+          280
+        ],
+        [
+          170,
+          205
+        ],
+        [
+          195,
+          200
+        ],
+        [
+          200,
+          280
+        ],
+        [
+          210,
+          205
+        ],
+        [
+          235,
+          200
+        ],
+        [
+          240,
+          275
+        ],
+        [
+          265,
+          285
+        ]
+      ],
+      [
+        [
+          300,
+          195
+        ],
+        [
+          265,
+          205
+        ],
+        [
+          255,
+          245
+        ],
+        [
+          270,
+          280
+        ],
+        [
+          300,
+          280
+        ],
+        [
+          305,
+          200
+        ],
+        [
+          305,
+          275
+        ],
+        [
+          330,
+          285
+        ]
+      ],
+      [
+        [
+          280,
+          150
+        ],
+        [
+          295,
+          125
+        ]
+      ],
+      [
+        [
+          335,
+          265
+        ],
+        [
+          345,
+          200
+        ],
+        [
+          355,
+          280
+        ],
+        [
+          365,
+          205
+        ],
+        [
+          390,
+          200
+        ],
+        [
+          395,
+          280
+        ],
+        [
+          405,
+          205
+        ],
+        [
+          430,
+          200
+        ],
+        [
+          435,
+          275
+        ],
+        [
+          460,
+          285
+        ]
+      ],
+      [
+        [
+          495,
+          195
+        ],
+        [
+          460,
+          205
+        ],
+        [
+          450,
+          245
+        ],
+        [
+          465,
+          280
+        ],
+        [
+          495,
+          280
+        ],
+        [
+          500,
+          200
+        ],
+        [
+          500,
+          275
+        ],
+        [
+          525,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_tata",
+    "stars": 5,
+    "char": "táta",
+    "title": "SLOVO „TÁTA“",
+    "spoken": "slovo táta",
+    "prompt": "Napiš psací slovo TÁTA! Dvě vysoké hůlky T a dvě spojená A s čárkou.",
+    "strokes": [
+      [
+        [
+          195,
+          280
+        ],
+        [
+          235,
+          130
+        ],
+        [
+          235,
+          275
+        ],
+        [
+          265,
+          285
+        ]
+      ],
+      [
+        [
+          210,
+          185
+        ],
+        [
+          260,
+          185
+        ]
+      ],
+      [
+        [
+          305,
+          195
+        ],
+        [
+          270,
+          205
+        ],
+        [
+          260,
+          245
+        ],
+        [
+          275,
+          280
+        ],
+        [
+          305,
+          280
+        ],
+        [
+          310,
+          200
+        ],
+        [
+          310,
+          275
+        ],
+        [
+          335,
+          285
+        ]
+      ],
+      [
+        [
+          285,
+          150
+        ],
+        [
+          300,
+          125
+        ]
+      ],
+      [
+        [
+          340,
+          280
+        ],
+        [
+          380,
+          130
+        ],
+        [
+          380,
+          275
+        ],
+        [
+          410,
+          285
+        ]
+      ],
+      [
+        [
+          355,
+          185
+        ],
+        [
+          405,
+          185
+        ]
+      ],
+      [
+        [
+          450,
+          195
+        ],
+        [
+          415,
+          205
+        ],
+        [
+          405,
+          245
+        ],
+        [
+          420,
+          280
+        ],
+        [
+          450,
+          280
+        ],
+        [
+          455,
+          200
+        ],
+        [
+          455,
+          275
+        ],
+        [
+          480,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_ryba",
+    "stars": 5,
+    "char": "ryba",
+    "title": "SLOVO „RYBA“",
+    "spoken": "slovo ryba",
+    "prompt": "Napiš psací slovo RYBA! R na zemi, Y jde pod linku ke kotvě, B se smyčkou a A na konci.",
+    "strokes": [
+      [
+        [
+          180,
+          280
+        ],
+        [
+          215,
+          195
+        ],
+        [
+          245,
+          195
+        ],
+        [
+          245,
+          275
+        ],
+        [
+          270,
+          285
+        ]
+      ],
+      [
+        [
+          275,
+          280
+        ],
+        [
+          295,
+          200
+        ],
+        [
+          300,
+          275
+        ],
+        [
+          320,
+          285
+        ],
+        [
+          335,
+          205
+        ],
+        [
+          335,
+          370
+        ],
+        [
+          310,
+          370
+        ],
+        [
+          325,
+          310
+        ],
+        [
+          355,
+          285
+        ]
+      ],
+      [
+        [
+          360,
+          285
+        ],
+        [
+          405,
+          115
+        ],
+        [
+          390,
+          115
+        ],
+        [
+          390,
+          280
+        ],
+        [
+          430,
+          280
+        ],
+        [
+          435,
+          235
+        ],
+        [
+          455,
+          235
+        ]
+      ],
+      [
+        [
+          495,
+          195
+        ],
+        [
+          460,
+          205
+        ],
+        [
+          450,
+          245
+        ],
+        [
+          465,
+          280
+        ],
+        [
+          495,
+          280
+        ],
+        [
+          500,
+          200
+        ],
+        [
+          500,
+          275
+        ],
+        [
+          525,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_dum",
+    "stars": 5,
+    "char": "dům",
+    "title": "SLOVO „DŮM“",
+    "spoken": "slovo dům",
+    "prompt": "Napiš psací slovo DŮM! Vysoké D, Ů s kroužkem nahoře a tři kopečky M.",
+    "strokes": [
+      [
+        [
+          215,
+          200
+        ],
+        [
+          190,
+          215
+        ],
+        [
+          185,
+          255
+        ],
+        [
+          205,
+          280
+        ],
+        [
+          235,
+          280
+        ],
+        [
+          240,
+          200
+        ],
+        [
+          240,
+          115
+        ],
+        [
+          240,
+          275
+        ],
+        [
+          270,
+          285
+        ]
+      ],
+      [
+        [
+          275,
+          280
+        ],
+        [
+          300,
+          200
+        ],
+        [
+          300,
+          275
+        ],
+        [
+          320,
+          285
+        ],
+        [
+          340,
+          200
+        ],
+        [
+          340,
+          275
+        ],
+        [
+          365,
+          285
+        ]
+      ],
+      [
+        [
+          320,
+          140
+        ],
+        [
+          310,
+          155
+        ],
+        [
+          320,
+          170
+        ],
+        [
+          330,
+          155
+        ],
+        [
+          320,
+          140
+        ]
+      ],
+      [
+        [
+          370,
+          265
+        ],
+        [
+          380,
+          200
+        ],
+        [
+          390,
+          280
+        ],
+        [
+          400,
+          205
+        ],
+        [
+          425,
+          200
+        ],
+        [
+          430,
+          280
+        ],
+        [
+          440,
+          205
+        ],
+        [
+          465,
+          200
+        ],
+        [
+          470,
+          275
+        ],
+        [
+          495,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_leto",
+    "stars": 5,
+    "char": "léto",
+    "title": "SLOVO „LÉTO“",
+    "spoken": "slovo léto",
+    "prompt": "Napiš psací slovo LÉTO! Vysoká smyčka L s čárkou, malé E, hůlka T a kulaté O.",
+    "strokes": [
+      [
+        [
+          190,
+          285
+        ],
+        [
+          235,
+          115
+        ],
+        [
+          220,
+          115
+        ],
+        [
+          220,
+          275
+        ],
+        [
+          250,
+          285
+        ]
+      ],
+      [
+        [
+          255,
+          150
+        ],
+        [
+          270,
+          125
+        ]
+      ],
+      [
+        [
+          255,
+          280
+        ],
+        [
+          295,
+          195
+        ],
+        [
+          280,
+          195
+        ],
+        [
+          265,
+          245
+        ],
+        [
+          285,
+          285
+        ],
+        [
+          320,
+          285
+        ]
+      ],
+      [
+        [
+          325,
+          280
+        ],
+        [
+          365,
+          130
+        ],
+        [
+          365,
+          275
+        ],
+        [
+          395,
+          285
+        ]
+      ],
+      [
+        [
+          340,
+          185
+        ],
+        [
+          390,
+          185
+        ]
+      ],
+      [
+        [
+          400,
+          270
+        ],
+        [
+          425,
+          195
+        ],
+        [
+          455,
+          195
+        ],
+        [
+          415,
+          205
+        ],
+        [
+          410,
+          245
+        ],
+        [
+          425,
+          280
+        ],
+        [
+          460,
+          280
+        ],
+        [
+          460,
+          200
+        ],
+        [
+          485,
+          200
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_auto",
+    "stars": 5,
+    "char": "auto",
+    "title": "SLOVO „AUTO“",
+    "spoken": "slovo auto",
+    "prompt": "Napiš psací slovo AUTO! Bříško A, údolíčko U, hůlka T a kulaté O.",
+    "strokes": [
+      [
+        [
+          185,
+          270
+        ],
+        [
+          215,
+          195
+        ],
+        [
+          250,
+          195
+        ],
+        [
+          210,
+          205
+        ],
+        [
+          200,
+          245
+        ],
+        [
+          215,
+          280
+        ],
+        [
+          250,
+          280
+        ],
+        [
+          250,
+          200
+        ],
+        [
+          250,
+          275
+        ],
+        [
+          275,
+          285
+        ]
+      ],
+      [
+        [
+          280,
+          280
+        ],
+        [
+          305,
+          200
+        ],
+        [
+          305,
+          275
+        ],
+        [
+          325,
+          285
+        ],
+        [
+          345,
+          200
+        ],
+        [
+          345,
+          275
+        ],
+        [
+          370,
+          285
+        ]
+      ],
+      [
+        [
+          375,
+          280
+        ],
+        [
+          415,
+          130
+        ],
+        [
+          415,
+          275
+        ],
+        [
+          445,
+          285
+        ]
+      ],
+      [
+        [
+          390,
+          185
+        ],
+        [
+          440,
+          185
+        ]
+      ],
+      [
+        [
+          450,
+          270
+        ],
+        [
+          475,
+          195
+        ],
+        [
+          505,
+          195
+        ],
+        [
+          465,
+          205
+        ],
+        [
+          460,
+          245
+        ],
+        [
+          475,
+          280
+        ],
+        [
+          510,
+          280
+        ],
+        [
+          510,
+          200
+        ],
+        [
+          535,
+          200
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_nos",
+    "stars": 5,
+    "char": "nos",
+    "title": "SLOVO „NOS“",
+    "spoken": "slovo nos",
+    "prompt": "Napiš psací slovo NOS! Dva kopečky N, kulaté O a hadík S.",
+    "strokes": [
+      [
+        [
+          220,
+          265
+        ],
+        [
+          230,
+          200
+        ],
+        [
+          240,
+          280
+        ],
+        [
+          250,
+          205
+        ],
+        [
+          275,
+          200
+        ],
+        [
+          280,
+          275
+        ],
+        [
+          305,
+          285
+        ]
+      ],
+      [
+        [
+          310,
+          270
+        ],
+        [
+          335,
+          195
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          325,
+          205
+        ],
+        [
+          320,
+          245
+        ],
+        [
+          335,
+          280
+        ],
+        [
+          370,
+          280
+        ],
+        [
+          370,
+          200
+        ],
+        [
+          395,
+          200
+        ]
+      ],
+      [
+        [
+          400,
+          280
+        ],
+        [
+          440,
+          195
+        ],
+        [
+          465,
+          240
+        ],
+        [
+          430,
+          285
+        ],
+        [
+          480,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_sova",
+    "stars": 5,
+    "char": "sova",
+    "title": "SLOVO „SOVA“",
+    "spoken": "slovo sova",
+    "prompt": "Napiš psací slovo SOVA! Psací S, kulaté O, údolíčko V a bříško A.",
+    "strokes": [
+      [
+        [
+          190,
+          280
+        ],
+        [
+          230,
+          195
+        ],
+        [
+          255,
+          240
+        ],
+        [
+          220,
+          285
+        ],
+        [
+          270,
+          285
+        ]
+      ],
+      [
+        [
+          275,
+          270
+        ],
+        [
+          300,
+          195
+        ],
+        [
+          330,
+          195
+        ],
+        [
+          290,
+          205
+        ],
+        [
+          285,
+          245
+        ],
+        [
+          300,
+          280
+        ],
+        [
+          335,
+          280
+        ],
+        [
+          335,
+          200
+        ],
+        [
+          360,
+          200
+        ]
+      ],
+      [
+        [
+          365,
+          280
+        ],
+        [
+          385,
+          195
+        ],
+        [
+          395,
+          275
+        ],
+        [
+          425,
+          285
+        ],
+        [
+          440,
+          205
+        ],
+        [
+          460,
+          205
+        ]
+      ],
+      [
+        [
+          495,
+          195
+        ],
+        [
+          460,
+          205
+        ],
+        [
+          450,
+          245
+        ],
+        [
+          465,
+          280
+        ],
+        [
+          495,
+          280
+        ],
+        [
+          500,
+          200
+        ],
+        [
+          500,
+          275
+        ],
+        [
+          525,
+          285
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_oko",
+    "stars": 5,
+    "char": "oko",
+    "title": "SLOVO „OKO“",
+    "spoken": "slovo oko",
+    "prompt": "Napiš psací slovo OKO! Kulaté O, vysoké K a další kulaté O.",
+    "strokes": [
+      [
+        [
+          220,
+          270
+        ],
+        [
+          245,
+          195
+        ],
+        [
+          275,
+          195
+        ],
+        [
+          235,
+          205
+        ],
+        [
+          230,
+          245
+        ],
+        [
+          245,
+          280
+        ],
+        [
+          280,
+          280
+        ],
+        [
+          280,
+          200
+        ],
+        [
+          305,
+          200
+        ]
+      ],
+      [
+        [
+          315,
+          110
+        ],
+        [
+          315,
+          285
+        ]
+      ],
+      [
+        [
+          360,
+          195
+        ],
+        [
+          315,
+          245
+        ],
+        [
+          365,
+          285
+        ],
+        [
+          385,
+          285
+        ]
+      ],
+      [
+        [
+          390,
+          270
+        ],
+        [
+          415,
+          195
+        ],
+        [
+          445,
+          195
+        ],
+        [
+          405,
+          205
+        ],
+        [
+          400,
+          245
+        ],
+        [
+          415,
+          280
+        ],
+        [
+          450,
+          280
+        ],
+        [
+          450,
+          200
+        ],
+        [
+          475,
+          200
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "cw_kocka",
+    "stars": 5,
+    "char": "kočka",
+    "title": "SLOVO „KOČKA“",
+    "spoken": "slovo kočka",
+    "prompt": "Napiš psací slovo KOČKA! Vysoké K, kulaté O, Č s háčkem, K a zakončovací A.",
+    "strokes": [
+      [
+        [
+          155,
+          110
+        ],
+        [
+          155,
+          285
+        ]
+      ],
+      [
+        [
+          200,
+          195
+        ],
+        [
+          155,
+          245
+        ],
+        [
+          205,
+          285
+        ],
+        [
+          225,
+          285
+        ]
+      ],
+      [
+        [
+          230,
+          270
+        ],
+        [
+          255,
+          195
+        ],
+        [
+          285,
+          195
+        ],
+        [
+          245,
+          205
+        ],
+        [
+          240,
+          245
+        ],
+        [
+          255,
+          280
+        ],
+        [
+          290,
+          280
+        ],
+        [
+          290,
+          200
+        ],
+        [
+          315,
+          200
+        ]
+      ],
+      [
+        [
+          320,
+          280
+        ],
+        [
+          365,
+          195
+        ],
+        [
+          340,
+          205
+        ],
+        [
+          330,
+          245
+        ],
+        [
+          345,
+          280
+        ],
+        [
+          380,
+          285
+        ]
+      ],
+      [
+        [
+          345,
+          155
+        ],
+        [
+          355,
+          170
+        ],
+        [
+          365,
+          155
+        ]
+      ],
+      [
+        [
+          395,
+          110
+        ],
+        [
+          395,
+          285
+        ]
+      ],
+      [
+        [
+          440,
+          195
+        ],
+        [
+          395,
+          245
+        ],
+        [
+          445,
+          285
+        ],
+        [
+          465,
+          285
+        ]
+      ],
+      [
+        [
+          495,
+          195
+        ],
+        [
+          465,
+          205
+        ],
+        [
+          455,
+          245
+        ],
+        [
+          470,
+          280
+        ],
+        [
+          495,
+          280
+        ],
+        [
+          500,
+          200
+        ],
+        [
+          500,
+          275
+        ],
+        [
+          525,
+          285
+        ]
+      ]
+    ]
+  }
+];
+
+  class HandwritingActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
       this.hostEl = hostEl;
+      this.activity = activity;
       this.level = level;
       this.mascot = mascot;
       this.store = store;
       this.onComplete = onComplete;
-      this.deck = shuffleArray(STORY_SCENES);
-      this.sceneIdx = 0;
-      this.activeColor = "#E63946";
+
+      const star = Math.max(1, Math.min(5, this.level.stars || 1));
+      const pool = HANDWRITING_CATALOG.filter((item) => item.stars === star);
+      this.allCards = shuffleArray(pool.length ? pool : HANDWRITING_CATALOG);
+      this.cardIdx = 0;
+
+      this.activeColor = "#1D3557"; // školní inkoustová modř
       this.brushSize = 9;
-      this.isZoomed = false;
-      this.loadScene(0);
+      this.zoomScale = 1.0;
+      this.zoomSteps = [1.0, 1.25, 1.5, 1.8, 2.2];
+      this.demoAnimId = null;
+      this.demoPt = null;
+
+      this.loadCard(this.allCards[0]);
     }
 
-    loadScene(idx) {
-      this.sceneIdx = idx % this.deck.length;
-      if (this.sceneIdx === 0 && idx > 0) {
-        this.deck = shuffleArray(this.deck);
-      }
-      this.scene = this.deck[this.sceneIdx];
-      this.checkpoints = this.scene.guidePts.map(([x, y]) => ({ x, y, hit: false }));
+    loadCard(cfg) {
+      this.stopStrokeDemo();
+      this.currentConfig = cfg;
+      this.strokes = (cfg.strokes || []).map((waypoints, sIdx) => {
+        const pts = interpolateStrokePoints(waypoints, 16);
+        return {
+          strokeIdx: sIdx,
+          waypoints,
+          points: pts,
+          checkpoints: pts.map(([x, y]) => ({ x, y, hit: false })),
+          completed: false
+        };
+      });
+      this.currentStrokeIdx = 0;
       this.completed = false;
       this.isDrawing = false;
       this.lastPt = null;
+
       this.render();
-      this.mascot.audio.speakCustom(this.scene.prompt, `☔ ${this.scene.prompt}`);
+      this.redraw();
+
+      const spokenIntro = cfg.prompt || `Pojďme psát ${cfg.spoken || cfg.title}!`;
+      this.mascot.audio.speakCustom(spokenIntro, `✍️ ${cfg.title}: ${cfg.char}`);
     }
 
-    nextScene() {
+    nextCard() {
       this.mascot.audio.playSfx("pop");
-      this.loadScene(this.sceneIdx + 1);
+      this.cardIdx = (this.cardIdx + 1) % this.allCards.length;
+      if (this.cardIdx === 0) {
+        this.allCards = shuffleArray(this.allCards);
+      }
+      this.loadCard(this.allCards[this.cardIdx]);
+    }
+
+    setZoom(scale) {
+      this.zoomScale = scale;
+      const pct = Math.round(scale * 100);
+      const badge = document.getElementById("hw-zoom-badge");
+      if (badge) badge.textContent = `${pct}%`;
+      if (this.canvas) {
+        this.canvas.style.transform = `scale(${scale})`;
+        this.canvas.style.transformOrigin = "center center";
+      }
+    }
+
+    stopStrokeDemo() {
+      if (this.demoAnimId) {
+        cancelAnimationFrame(this.demoAnimId);
+        this.demoAnimId = null;
+      }
+      this.demoPt = null;
+    }
+
+    playStrokeDemo() {
+      this.stopStrokeDemo();
+      const allPoints = [];
+      this.strokes.forEach((st) => {
+        st.points.forEach((pt) => allPoints.push(pt));
+      });
+      if (!allPoints.length) return;
+
+      this.mascot.audio.playSfx("whoosh");
+      let idx = 0;
+      const step = () => {
+        if (idx >= allPoints.length) {
+          this.demoPt = null;
+          this.redraw();
+          this.mascot.audio.speakCustom("Teď jsi na řadě ty! Veď tužku po lince!");
+          return;
+        }
+        this.demoPt = allPoints[idx];
+        this.redraw();
+        idx += 2;
+        this.demoAnimId = requestAnimationFrame(step);
+      };
+      this.demoAnimId = requestAnimationFrame(step);
     }
 
     render() {
+      const cfg = this.currentConfig;
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">☔ ${this.scene.title}</h2>
+          <h2 class="workspace-title">✍️ ${cfg.title}</h2>
           <div class="workspace-actions">
-            <button id="btn-story-zoom" class="btn-touch btn-secondary">🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}</button>
-            <button id="btn-story-speak" class="btn-touch btn-secondary">🔊 ZADÁNÍ</button>
-            <button id="btn-story-clear" class="btn-touch btn-secondary">SMAZAT</button>
-            <button id="btn-story-done" class="btn-touch btn-primary">✅ HOTOVO</button>
+            <div class="zoom-stepper" title="Nastavení vzdálenosti / přiblížení písanky">
+              <button id="btn-hw-zoom-out" class="btn-touch btn-zoom" aria-label="Oddálit">🔍−</button>
+              <span id="hw-zoom-badge" class="zoom-badge">${Math.round(this.zoomScale * 100)}%</span>
+              <button id="btn-hw-zoom-in" class="btn-touch btn-zoom" aria-label="Přiblížit zblízka">🔍+</button>
+            </div>
+            <button id="btn-hw-demo" class="btn-touch btn-secondary" title="Přehrát ukázku správného tahu">✨ UKÁZKA TAHU</button>
+            <button id="btn-hw-speak" class="btn-touch btn-secondary">🔊 ZADÁNÍ</button>
+            <button id="btn-hw-clear" class="btn-touch btn-secondary">🗑️ SMAZAT</button>
+            <button id="btn-hw-done" class="btn-touch btn-primary">✅ HOTOVO</button>
           </div>
         </div>
-        <div id="story-studio-layout" class="studio-layout ${this.isZoomed ? "studio-zoomed" : ""}">
+        <div id="hw-studio-layout" class="studio-layout">
           <div class="canvas-frame">
-            <canvas id="story-canvas" class="draw-canvas" width="720" height="460" draggable="false" style="touch-action:none; user-select:none;"></canvas>
+            <canvas id="hw-canvas" class="draw-canvas" width="720" height="460" draggable="false" style="touch-action:none; user-select:none; transform:scale(${this.zoomScale}); transform-origin:center center;"></canvas>
           </div>
           <aside class="studio-sidebar">
             <div class="tool-box">
@@ -3225,90 +8000,167 @@
               ${renderPenSizeMarkup(this.brushSize)}
             </div>
             <div class="tool-box">
-              <div class="tool-box-title">🌈 RGB KRUH A PASTELKY</div>
+              <div class="tool-box-title">🌈 RGB KRUH A INKOUSTY</div>
               <div class="rgb-wheel-row">
-                <canvas id="story-rgb-wheel" class="rgb-wheel-canvas" width="92" height="92"></canvas>
+                <canvas id="hw-rgb-wheel" class="rgb-wheel-canvas" width="92" height="92"></canvas>
                 <div class="rgb-wheel-info">
-                  <div id="story-rgb-preview" class="rgb-preview-dot" style="background:${this.activeColor};"></div>
-                  <span>Vyber barvu na kruhu!</span>
+                  <div id="hw-rgb-preview" class="rgb-preview-dot" style="background:${this.activeColor};"></div>
+                  <span>Vyber si barvu písma!</span>
                 </div>
               </div>
               <div class="swatch-grid">
                 ${EXTENDED_SWATCH_PALETTE.map(
                   (c, i) =>
-                    `<button class="btn-touch btn-swatch ${i === 1 ? "active" : ""}" data-hex="${c.hex}" data-name="${c.name}" style="background:${c.hex}"></button>`
+                    `<button class="btn-touch btn-swatch ${c.hex.toLowerCase() === this.activeColor.toLowerCase() ? "active" : ""}" data-hex="${c.hex}" data-name="${c.name}" style="background:${c.hex}" aria-label="${c.name}"></button>`
                 ).join("")}
               </div>
             </div>
             <div class="tool-box">
-              <div class="tool-box-title">📖 CO DOKRESLIT</div>
-              <p style="margin:0; font-weight:800; font-size:0.84rem; color:var(--navy);">${this.scene.prompt}</p>
+              <div class="tool-box-title">📝 VZOR PÍSMENKA</div>
+              <div style="text-align:center; padding:4px 0;">
+                <span style="font-size:2.8rem; font-weight:900; color:var(--navy); line-height:1; font-family:'Schoolbell', 'Fredoka', cursive, sans-serif;">${cfg.char}</span>
+                <p style="margin:4px 0 0 0; font-weight:800; font-size:0.82rem; color:var(--navy-soft);">${cfg.prompt}</p>
+              </div>
             </div>
           </aside>
         </div>
       `;
 
-      this.canvas = document.getElementById("story-canvas");
+      this.canvas = document.getElementById("hw-canvas");
       this.ctx = this.canvas.getContext("2d");
       this.paintLayer = document.createElement("canvas");
       this.paintLayer.width = 720;
       this.paintLayer.height = 460;
       this.paintCtx = this.paintLayer.getContext("2d");
 
-      this.redraw();
+      this.bindEvents();
+    }
 
+    bindEvents() {
       const getPos = (e) => {
         const rect = this.canvas.getBoundingClientRect();
+        const scaleX = rect.width > 0 ? this.canvas.width / rect.width : 1;
+        const scaleY = rect.height > 0 ? this.canvas.height / rect.height : 1;
         return {
-          x: ((e.clientX - rect.left) / (rect.width || 1)) * this.canvas.width,
-          y: ((e.clientY - rect.top) / (rect.height || 1)) * this.canvas.height
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY
         };
       };
 
+      const drawStrokeSegment = (fromPt, toPt) => {
+        this.paintCtx.beginPath();
+        this.paintCtx.moveTo(fromPt.x, fromPt.y);
+        this.paintCtx.lineTo(toPt.x, toPt.y);
+        this.paintCtx.strokeStyle = this.activeColor;
+        this.paintCtx.lineWidth = this.brushSize;
+        this.paintCtx.lineCap = "round";
+        this.paintCtx.lineJoin = "round";
+        this.paintCtx.stroke();
+      };
+
+      this.canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+      this.canvas.addEventListener("dragstart", (e) => e.preventDefault());
+
       this.canvas.addEventListener("pointerdown", (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
         e.preventDefault();
         try { this.canvas.setPointerCapture(e.pointerId); } catch (_e) {}
+        this.stopStrokeDemo();
         this.isDrawing = true;
         this.lastPt = getPos(e);
+        this.paintCtx.beginPath();
+        this.paintCtx.arc(this.lastPt.x, this.lastPt.y, this.brushSize / 2, 0, Math.PI * 2);
+        this.paintCtx.fillStyle = this.activeColor;
+        this.paintCtx.fill();
         this.checkHit(this.lastPt);
         this.redraw();
       });
 
       this.canvas.addEventListener("pointermove", (e) => {
-        if (!this.isDrawing && e.buttons !== 1) return;
-        this.isDrawing = true;
+        if (!this.isDrawing) {
+          if (e.buttons === 1) {
+            this.isDrawing = true;
+            this.lastPt = getPos(e);
+          } else {
+            return;
+          }
+        }
+        e.preventDefault();
         const pt = getPos(e);
         if (!this.lastPt) this.lastPt = pt;
-        this.paintCtx.beginPath();
-        this.paintCtx.moveTo(this.lastPt.x, this.lastPt.y);
-        this.paintCtx.lineTo(pt.x, pt.y);
-        this.paintCtx.strokeStyle = this.activeColor;
-        this.paintCtx.lineWidth = this.brushSize;
-        this.paintCtx.lineCap = "round";
-        this.paintCtx.stroke();
+        drawStrokeSegment(this.lastPt, pt);
         this.checkHit(pt);
         this.lastPt = pt;
         this.redraw();
       });
 
-      const stop = () => {
+      const stop = (e) => {
         if (!this.isDrawing) return;
+        if (e && e.pointerId !== undefined) {
+          try {
+            if (this.canvas.hasPointerCapture(e.pointerId)) {
+              this.canvas.releasePointerCapture(e.pointerId);
+            }
+          } catch (_e) {}
+        }
         this.isDrawing = false;
         this.lastPt = null;
-        const hits = this.checkpoints.filter((c) => c.hit).length;
-        if (!this.completed && hits >= Math.ceil(this.checkpoints.length * 0.55)) {
-          this.finishStory();
-        }
+        this.evaluateStrokeProgress();
       };
+
       this.canvas.addEventListener("pointerup", stop);
       this.canvas.addEventListener("pointercancel", stop);
+      this.canvas.addEventListener("lostpointercapture", stop);
 
-      const rgbPreview = document.getElementById("story-rgb-preview");
-      mountRgbColorWheel(document.getElementById("story-rgb-wheel"), rgbPreview, (hex) => {
+      // Zoom Stepper
+      document.getElementById("btn-hw-zoom-in").addEventListener("click", () => {
+        const next = this.zoomSteps.find((s) => s > this.zoomScale) || this.zoomSteps[this.zoomSteps.length - 1];
+        this.setZoom(next);
+        this.mascot.audio.playSfx("pop");
+      });
+      document.getElementById("btn-hw-zoom-out").addEventListener("click", () => {
+        const prev = [...this.zoomSteps].reverse().find((s) => s < this.zoomScale) || this.zoomSteps[0];
+        this.setZoom(prev);
+        this.mascot.audio.playSfx("pop");
+      });
+
+      // Ukázka tahu
+      document.getElementById("btn-hw-demo").addEventListener("click", () => {
+        this.playStrokeDemo();
+      });
+
+      // Zvuk zadání
+      document.getElementById("btn-hw-speak").addEventListener("click", () => {
+        const prompt = this.currentConfig.prompt || `Napiš ${this.currentConfig.spoken || this.currentConfig.char}!`;
+        this.mascot.audio.speakCustom(prompt, prompt);
+      });
+
+      // Smazat plátno
+      document.getElementById("btn-hw-clear").addEventListener("click", () => {
+        this.paintCtx.clearRect(0, 0, 720, 460);
+        this.strokes.forEach((st) => {
+          st.completed = false;
+          st.checkpoints.forEach((c) => (c.hit = false));
+        });
+        this.currentStrokeIdx = 0;
+        this.completed = false;
+        this.redraw();
+        this.mascot.audio.playSfx("pop");
+      });
+
+      // Hotovo
+      document.getElementById("btn-hw-done").addEventListener("click", () => {
+        this.finishCard();
+      });
+
+      // RGB kruh
+      const rgbPreview = document.getElementById("hw-rgb-preview");
+      mountRgbColorWheel(document.getElementById("hw-rgb-wheel"), rgbPreview, (hex) => {
         this.activeColor = hex;
         this.hostEl.querySelectorAll(".btn-swatch").forEach((x) => x.classList.remove("active"));
       });
 
+      // Swatches
       this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => {
         b.addEventListener("click", () => {
           this.hostEl.querySelectorAll(".btn-swatch").forEach((x) => x.classList.remove("active"));
@@ -3320,6 +8172,7 @@
         });
       });
 
+      // Velikost pera (čisté ikony s tečkou)
       this.hostEl.querySelectorAll(".btn-pen-size").forEach((btn) => {
         btn.addEventListener("click", () => {
           this.hostEl.querySelectorAll(".btn-pen-size").forEach((b) => b.classList.remove("active"));
@@ -3329,85 +8182,158 @@
           if (btn.dataset.spoken) this.mascot.audio.speakCustom(btn.dataset.spoken);
         });
       });
-
-      document.getElementById("btn-story-zoom").addEventListener("click", (e) => {
-        this.isZoomed = !this.isZoomed;
-        const layout = document.getElementById("story-studio-layout");
-        if (layout) layout.classList.toggle("studio-zoomed", this.isZoomed);
-        e.currentTarget.textContent = `🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}`;
-        this.mascot.audio.playSfx("pop");
-      });
-
-      document.getElementById("btn-story-speak").addEventListener("click", () => {
-        this.mascot.audio.speakCustom(this.scene.prompt, this.scene.prompt);
-      });
-      document.getElementById("btn-story-clear").addEventListener("click", () => {
-        this.paintCtx.clearRect(0, 0, 720, 460);
-        this.checkpoints.forEach((c) => (c.hit = false));
-        this.completed = false;
-        this.redraw();
-      });
-      document.getElementById("btn-story-done").addEventListener("click", () => this.finishStory());
     }
 
     checkHit(pt) {
-      this.checkpoints.forEach((c) => {
-        if (Math.hypot(c.x - pt.x, c.y - pt.y) < 58) c.hit = true;
+      const active = this.strokes[this.currentStrokeIdx];
+      if (!active || active.completed) return;
+      active.checkpoints.forEach((cp) => {
+        if (!cp.hit && Math.hypot(cp.x - pt.x, cp.y - pt.y) < 38) {
+          cp.hit = true;
+        }
       });
     }
 
-    finishStory() {
+    evaluateStrokeProgress() {
+      const active = this.strokes[this.currentStrokeIdx];
+      if (!active || active.completed) return;
+      const hitCount = active.checkpoints.filter((c) => c.hit).length;
+      const ratio = hitCount / Math.max(1, active.checkpoints.length);
+      if (ratio >= 0.70) {
+        active.completed = true;
+        this.mascot.audio.playSfx("snap");
+        if (this.currentStrokeIdx + 1 < this.strokes.length) {
+          this.currentStrokeIdx++;
+          this.mascot.audio.speakCustom("Výborně! Pokračuj dalším tahem!");
+        } else {
+          this.finishCard();
+        }
+      }
+    }
+
+    finishCard() {
       if (this.completed) return;
       this.completed = true;
-      // Překreslíme bez vodící čáry, aby zůstal jen podklad a uživatelova kresba!
+      this.stopStrokeDemo();
       this.redraw();
-      this.store.addArtwork(this.scene.title, this.canvas.toDataURL("image/png"));
+      this.store.addArtwork(`Psaní: ${this.currentConfig.char}`, this.canvas.toDataURL("image/png"));
       this.mascot.celebrate("celebrate_04");
       this.onComplete();
       showContinueBanner(this.hostEl, {
-        icon: "☔",
-        title: `PŘÍBĚH „${this.scene.title}“ JE DOKRESLENÝ!`,
-        subtitle: "Skvělá pomoc! Pojďme zachránit další pohádkový příběh!",
-        spokenText: `Výborně! Příběh ${this.scene.title} je zachráněn! Pojďme na další příběh!`,
-        nextLabel: "▶️ DALŠÍ PŘÍBĚH ➔",
-        onNext: () => this.nextScene()
+        icon: "✍️",
+        title: `SKVĚLE NAPSÁNO: „${this.currentConfig.char}“!`,
+        subtitle: "Nádherná práce s tužkou v písance! Pojďme na další písmenko!",
+        spokenText: `Výborně! Nádherně jsi napsal ${this.currentConfig.spoken || this.currentConfig.char}! Pojďme na další!`,
+        nextLabel: "▶️ DALŠÍ PÍSMENKO ➔",
+        onNext: () => this.nextCard()
       });
     }
 
     redraw() {
       const ctx = this.ctx;
-      ctx.fillStyle = "#F8FCFF";
-      ctx.fillRect(0, 0, 720, 460);
+      drawHandwritingPaper(ctx, 720, 460);
 
-      // Čistý podklad scény
+      // Vodicí linie písmenka na písance
       ctx.save();
-      ctx.font = "76px sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(this.scene.backdrop || "🐧", 360, 275);
+      this.strokes.forEach((stroke, idx) => {
+        const waypts = stroke.waypoints;
+        if (!waypts || waypts.length < 2) return;
 
-      // Jemný tečkovaný obrys jen dokud dítě kreslí; po dokončení zmizí, aby se s kresbou nepřel!
-      if (!this.completed) {
-        ctx.strokeStyle = "rgba(144, 224, 239, 0.75)";
-        ctx.lineWidth = 5;
-        ctx.setLineDash([12, 10]);
+        // Již dokončené tahy
+        if (stroke.completed) {
+          ctx.strokeStyle = "rgba(46, 204, 113, 0.4)";
+          ctx.lineWidth = 12;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.setLineDash([]);
+          ctx.beginPath();
+          waypts.forEach(([x, y], i) => {
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.stroke();
+          return;
+        }
+
+        // Aktuální nebo následující tah
+        const isCurrent = idx === this.currentStrokeIdx;
+        ctx.strokeStyle = isCurrent ? "rgba(144, 224, 239, 0.9)" : "rgba(203, 213, 225, 0.6)";
+        ctx.lineWidth = 14;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.setLineDash([10, 8]);
         ctx.beginPath();
-        this.scene.guidePts.forEach(([x, y], i) => {
+        waypts.forEach(([x, y], i) => {
           if (i === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         });
         ctx.stroke();
-      }
+
+        // Zelená startovní tečka na začátku tahu s číslem
+        if (isCurrent && !this.completed) {
+          const [sx, sy] = waypts[0];
+          ctx.setLineDash([]);
+          // Zářící vnější prstenec
+          ctx.fillStyle = "rgba(16, 185, 129, 0.35)";
+          ctx.beginPath();
+          ctx.arc(sx, sy, 18, 0, Math.PI * 2);
+          ctx.fill();
+          // Zelená tečka
+          ctx.fillStyle = "#10B981";
+          ctx.beginPath();
+          ctx.arc(sx, sy, 12, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#FFFFFF";
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+          // Číslo tahu
+          ctx.fillStyle = "#FFFFFF";
+          ctx.font = "bold 11px sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(String(stroke.strokeIdx + 1), sx, sy);
+
+          // Směrová šipečka, pokud má tah další body
+          if (waypts.length > 1) {
+            const [nx, ny] = waypts[1];
+            const angle = Math.atan2(ny - sy, nx - sx);
+            const ax = sx + Math.cos(angle) * 25;
+            const ay = sy + Math.sin(angle) * 25;
+            ctx.fillStyle = "#059669";
+            ctx.beginPath();
+            ctx.arc(ax, ay, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      });
       ctx.restore();
 
-      // Vlastní kresba uživatele
+      // Vlastní písmo dítěte
       ctx.drawImage(this.paintLayer, 0, 0);
+
+      // Pokud běží animace ukázky tahu: vykreslíme zářící hrot pera
+      if (this.demoPt) {
+        ctx.save();
+        ctx.fillStyle = "#FFB703";
+        ctx.beginPath();
+        ctx.arc(this.demoPt[0], this.demoPt[1], 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.font = "24px sans-serif";
+        ctx.fillText("✍️", this.demoPt[0] + 8, this.demoPt[1] - 8);
+        ctx.restore();
+      }
     }
 
     destroy() {
+      this.stopStrokeDemo();
       this.mascot.clearInactivityTimer();
     }
   }
+
+  const StoryDrawActivity = HandwritingActivity;
 
   // --- AKTIVITA 5: SPOJOVAČKY S ODHALENÍM (25 ŠABLON + SPOJOVÁNÍ NA PŘESKÁČKU) ---
   function buildDotTemplates() {
@@ -4127,12 +9053,23 @@
     }
 
     speakTargetWord() {
+      if (this.speechTimer) {
+        clearTimeout(this.speechTimer);
+        this.speechTimer = null;
+      }
       const fullWord = this.current.parts.join("").toLowerCase();
-      const spokenSyls = (this.current.spokenParts || this.current.parts.map((p) => p.toLowerCase())).join("... ");
+      const syls = (this.current.spokenParts || this.current.parts.map((p) => p.toLowerCase()));
       this.mascot.audio.speakCustom(
-        `Poskládej ze slabik slovo ${fullWord}! Slabiky jsou: ${spokenSyls}. Přetáhni slabiky do políček!`,
+        `Poskládej ze slabik slovo ${fullWord}!`,
         `📖 POSKLÁDEJ SLOVO: ${this.current.emoji} ${this.current.parts.join("-")}`
       );
+      let delay = 1600;
+      syls.forEach((syl, i) => {
+        this.speechTimer = setTimeout(() => {
+          this.mascot.audio.speakCustom(syl, `SLABIKA ${i + 1}: ${this.current.parts[i]}`);
+        }, delay);
+        delay += 850;
+      });
     }
 
     render() {
@@ -4237,6 +9174,10 @@
     }
 
     destroy() {
+      if (this.speechTimer) {
+        clearTimeout(this.speechTimer);
+        this.speechTimer = null;
+      }
       this.mascot.clearInactivityTimer();
     }
   }
@@ -6219,9 +11160,9 @@
       spoken: "Zrcadlové kreslení! Dokresli druhou polovinu obrázku, aby obě strany vypadaly stejně jako v zrcadle!"
     },
     act_04: {
-      visual: "📖 ➔ 🖍️🌟",
-      goalText: "Poslechni si pohádku a dokresli, co v ní chybí",
-      spoken: "Dokresli příběh! Poslechni si krátkou pohádku a nakresli do obrázku to, co postavě chybí, abys jí pomohl!"
+      visual: "✍️ ➔ 📝",
+      goalText: "Nauč se správně psát písmenka a celá slova do linek",
+      spoken: "Škola psaní! Nauč se správně psát tiskací i psací písmenka a celá slova. Začni na zelené tečce a veď čáru podle šipek!"
     },
     act_05: {
       visual: "1️⃣ • 2️⃣ • 3️⃣ ➔ ⭐",
@@ -6576,7 +11517,8 @@
         color_mix: ColorMixActivity,
         build_color: BuildColorActivity,
         symmetry_draw: SymmetryDrawActivity,
-        story_draw: StoryDrawActivity,
+        story_draw: HandwritingActivity,
+        handwriting: HandwritingActivity,
         connect_dots: ConnectDotsActivity,
         tangram: TangramActivity,
         shadow_match: ShadowMatchActivity,

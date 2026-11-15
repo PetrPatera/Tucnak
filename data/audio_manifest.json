@@ -129,9 +129,9 @@
     {
       "id": "act_04_intro",
       "category": "activity_intro",
-      "text_cs": "V příběhu něco chybí! Podívej se na obrázek a dokresli, co je potřeba.",
-      "karaoke_text": "V PŘÍBĚHU NĚCO CHYBÍ! PODÍVEJ SE NA OBRÁZEK A DOKRESLI, CO JE POTŘEBA.",
-      "intonation_note": "Zvídavě, vyprávěcím tónem.",
+      "text_cs": "Vítej ve škole psaní! Tady se naučíš psát tiskací i krásná psací písmenka a celá slova. Vyber si pero a obtahuj podle linek!",
+      "karaoke_text": "VÍTEJ VE ŠKOLE PSANÍ! TADY SE NAUČÍŠ PSÁT TISKACÍ I KRÁSNÁ PSACÍ PÍSMENKA A CELÁ SLOVA. VYBER SI PERO A OBTAHUJ PODLE LINEK!",
+      "intonation_note": "Jasně, povzbudivě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
       "rate": "+4%",
       "pitch": "+50Hz",
