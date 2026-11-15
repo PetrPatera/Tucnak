@@ -1,0 +1,797 @@
+{
+  "version": "1.0.0",
+  "locale": "cs-CZ",
+  "zones": [
+    {
+      "id": "zone_a",
+      "title": "Umělecký ateliér",
+      "subtitle": "Kreslení, míchání barev a tvoření",
+      "themeColor": "#FFE5EC",
+      "accentColor": "#FF5D8F",
+      "icon": "🎨",
+      "audioIntroId": "zone_a_intro",
+      "position": { "x": 18, "y": 32 }
+    },
+    {
+      "id": "zone_b",
+      "title": "Svět tvarů a prostoru",
+      "subtitle": "Tangramy, stíny a puzzle",
+      "themeColor": "#E3F6F5",
+      "accentColor": "#00A896",
+      "icon": "🔺",
+      "audioIntroId": "zone_b_intro",
+      "position": { "x": 49, "y": 24 }
+    },
+    {
+      "id": "zone_c",
+      "title": "První krůčky ke čtení",
+      "subtitle": "Písmenka, slabiky a rýmy",
+      "themeColor": "#FFF3D6",
+      "accentColor": "#F77F00",
+      "icon": "🔤",
+      "audioIntroId": "zone_c_intro",
+      "position": { "x": 80, "y": 33 }
+    },
+    {
+      "id": "zone_d",
+      "title": "Hravá matematika",
+      "subtitle": "Počítání rybiček a ledové váhy",
+      "themeColor": "#E2F0FF",
+      "accentColor": "#277DA1",
+      "icon": "🐟",
+      "audioIntroId": "zone_d_intro",
+      "position": { "x": 34, "y": 68 }
+    },
+    {
+      "id": "zone_e",
+      "title": "Logika, paměť a postřeh",
+      "subtitle": "Bludiště, pexeso a kódování",
+      "themeColor": "#EFE5FF",
+      "accentColor": "#7209B7",
+      "icon": "🧭",
+      "audioIntroId": "zone_e_intro",
+      "position": { "x": 68, "y": 68 }
+    }
+  ],
+  "activities": [
+    {
+      "id": "act_01_step_draw",
+      "number": 1,
+      "zoneId": "zone_a",
+      "title": "Kreslení krok za krokem",
+      "shortTitle": "Kreslení krok za krokem",
+      "icon": "✏️",
+      "type": "step_draw",
+      "implementedInPrototype": true,
+      "pedagogicalGoal": "Rozvoj jemné motoriky, grafomotoriky, vnímání tvarů a kreativity s oživením kresby.",
+      "audioIntroId": "act_01_intro",
+      "levels": [
+        {
+          "stars": 1,
+          "label": "Veselý tučňák",
+          "config": {
+            "templateId": "penguin",
+            "title": "VESELÝ TUČŇÁK",
+            "canvasWidth": 720,
+            "canvasHeight": 460,
+            "steps": [
+              {
+                "id": "body",
+                "label": "Tělíčko (velký ovál)",
+                "audioId": "draw_step_oval",
+                "type": "ellipse",
+                "cx": 360,
+                "cy": 295,
+                "rx": 105,
+                "ry": 120,
+                "strokeColor": "#1D3557",
+                "fillColor": "#2B2D42"
+              },
+              {
+                "id": "head",
+                "label": "Hlavička",
+                "audioId": "draw_step_head",
+                "type": "circle",
+                "cx": 360,
+                "cy": 145,
+                "r": 72,
+                "strokeColor": "#1D3557",
+                "fillColor": "#2B2D42"
+              },
+              {
+                "id": "wings",
+                "label": "Křidélka po stranách",
+                "audioId": "draw_step_wings",
+                "type": "arcs",
+                "paths": [
+                  [
+                    [262, 235],
+                    [198, 290],
+                    [236, 355],
+                    [268, 320]
+                  ],
+                  [
+                    [458, 235],
+                    [522, 290],
+                    [484, 355],
+                    [452, 320]
+                  ]
+                ],
+                "strokeColor": "#1D3557",
+                "fillColor": "#2B2D42"
+              },
+              {
+                "id": "face",
+                "label": "Očíčka a zobáček",
+                "audioId": "draw_step_face",
+                "type": "details",
+                "paths": [
+                  [
+                    [332, 130],
+                    [338, 130]
+                  ],
+                  [
+                    [388, 130],
+                    [394, 130]
+                  ],
+                  [
+                    [344, 158],
+                    [360, 184],
+                    [376, 158],
+                    [344, 158]
+                  ]
+                ],
+                "strokeColor": "#F77F00",
+                "fillColor": "#FFB703"
+              }
+            ]
+          },
+          "hintAudioIds": ["hint_draw_trace"],
+          "successAudioId": "draw_step_alive"
+        },
+        {
+          "stars": 2,
+          "label": "Roztomilá kočička",
+          "config": {
+            "templateId": "cat",
+            "title": "ROZTOMILÁ KOČIČKA",
+            "canvasWidth": 720,
+            "canvasHeight": 460,
+            "steps": [
+              {
+                "id": "body",
+                "label": "Tělíčko",
+                "audioId": "draw_step_oval",
+                "type": "ellipse",
+                "cx": 360,
+                "cy": 310,
+                "rx": 92,
+                "ry": 102,
+                "strokeColor": "#1D3557",
+                "fillColor": "#FFD166"
+              },
+              {
+                "id": "head",
+                "label": "Hlavička",
+                "audioId": "draw_step_head",
+                "type": "circle",
+                "cx": 360,
+                "cy": 165,
+                "r": 74,
+                "strokeColor": "#1D3557",
+                "fillColor": "#FFD166"
+              },
+              {
+                "id": "ears",
+                "label": "Ouška a fousky",
+                "audioId": "draw_step_ears",
+                "type": "arcs",
+                "paths": [
+                  [
+                    [298, 122],
+                    [295, 58],
+                    [338, 98]
+                  ],
+                  [
+                    [422, 122],
+                    [425, 58],
+                    [382, 98]
+                  ],
+                  [
+                    [448, 355],
+                    [535, 315],
+                    [515, 250]
+                  ]
+                ],
+                "strokeColor": "#1D3557",
+                "fillColor": "#F4A261"
+              },
+              {
+                "id": "face",
+                "label": "Čumáček a oči",
+                "audioId": "draw_step_face",
+                "type": "details",
+                "paths": [
+                  [
+                    [332, 152],
+                    [336, 152]
+                  ],
+                  [
+                    [388, 152],
+                    [392, 152]
+                  ],
+                  [
+                    [348, 175],
+                    [360, 190],
+                    [372, 175],
+                    [348, 175]
+                  ]
+                ],
+                "strokeColor": "#E76F51",
+                "fillColor": "#FF5D8F"
+              }
+            ]
+          },
+          "hintAudioIds": ["hint_draw_trace"],
+          "successAudioId": "draw_step_alive"
+        },
+        {
+          "stars": 3,
+          "label": "Vesmírná raketa",
+          "config": {
+            "templateId": "rocket",
+            "title": "VESMÍRNÁ RAKETA",
+            "canvasWidth": 720,
+            "canvasHeight": 460,
+            "steps": [
+              {
+                "id": "hull",
+                "label": "Trup rakety",
+                "audioId": "draw_step_rocket_body",
+                "type": "ellipse",
+                "cx": 360,
+                "cy": 255,
+                "rx": 78,
+                "ry": 135,
+                "strokeColor": "#1D3557",
+                "fillColor": "#F1FAEE"
+              },
+              {
+                "id": "nose_fins",
+                "label": "Špička a křidélka",
+                "audioId": "draw_step_rocket_nose",
+                "type": "arcs",
+                "paths": [
+                  [
+                    [298, 155],
+                    [360, 58],
+                    [422, 155]
+                  ],
+                  [
+                    [286, 310],
+                    [218, 392],
+                    [304, 372]
+                  ],
+                  [
+                    [434, 310],
+                    [502, 392],
+                    [416, 372]
+                  ]
+                ],
+                "strokeColor": "#1D3557",
+                "fillColor": "#E63946"
+              },
+              {
+                "id": "window",
+                "label": "Kulaté okénko",
+                "audioId": "draw_step_head",
+                "type": "circle",
+                "cx": 360,
+                "cy": 225,
+                "r": 40,
+                "strokeColor": "#1D3557",
+                "fillColor": "#4CC9F0"
+              }
+            ]
+          },
+          "hintAudioIds": ["hint_draw_trace"],
+          "successAudioId": "draw_step_alive"
+        }
+      ]
+    },
+    {
+      "id": "act_02_color_mix",
+      "number": 2,
+      "zoneId": "zone_a",
+      "title": "Kouzelné omalovánky s mícháním barev",
+      "shortTitle": "Míchání barev",
+      "icon": "🖌️",
+      "type": "color_mix",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Experimentování se základními a doplňkovými barvami a rozvoj estetického cítění (integrovaná paleta i v Aktivitě 1).",
+      "audioIntroId": "act_02_intro",
+      "levels": [
+        { "stars": 1, "label": "Základní míchání (žlutá + modrá)", "config": { "pairs": [["yellow", "blue"]] }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 2, "label": "Tři kouzelné směsi", "config": { "pairs": [["yellow", "blue"], ["red", "yellow"], ["red", "blue"]] }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 3, "label": "Velká paleta umělce", "config": { "pairs": [["yellow", "blue"], ["red", "yellow"], ["red", "blue"]] }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" }
+      ]
+    },
+    {
+      "id": "act_03_symmetry",
+      "number": 3,
+      "zoneId": "zone_a",
+      "title": "Zrcadlové kreslení (Symetrie)",
+      "shortTitle": "Zrcadlové kreslení",
+      "icon": "🦋",
+      "type": "symmetry_draw",
+      "implementedInPrototype": true,
+      "pedagogicalGoal": "Pochopení osové souměrnosti, koordinace ruka-oko a tvořivá radost z mandal.",
+      "audioIntroId": "act_03_intro",
+      "levels": [
+        {
+          "stars": 1,
+          "label": "Motýlek",
+          "config": { "motif": "butterfly", "title": "DOKRESLI MOTÝLKA", "autoMirror": true },
+          "hintAudioIds": ["hint_draw_trace"],
+          "successAudioId": "symmetry_done"
+        },
+        {
+          "stars": 2,
+          "label": "Sněhová vločka",
+          "config": { "motif": "snowflake", "title": "LEDOVÁ VLOČKA", "autoMirror": true },
+          "hintAudioIds": ["hint_draw_trace"],
+          "successAudioId": "symmetry_done"
+        },
+        {
+          "stars": 3,
+          "label": "Královská koruna",
+          "config": { "motif": "crown", "title": "ZRCADLOVÁ KORUNA", "autoMirror": false },
+          "hintAudioIds": ["hint_draw_trace"],
+          "successAudioId": "symmetry_done"
+        }
+      ]
+    },
+    {
+      "id": "act_04_story_draw",
+      "number": 4,
+      "zoneId": "zone_a",
+      "title": "Dokresli příběh",
+      "shortTitle": "Dokresli příběh",
+      "icon": "☔",
+      "type": "story_draw",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Rozvoj fantazie, logiky děje a výtvarného vyjadřování.",
+      "audioIntroId": "act_04_intro",
+      "levels": [
+        { "stars": 1, "label": "Deštník pro tučňáka", "config": { "scene": "rain" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 2, "label": "Kola pro autíčko", "config": { "scene": "car" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 3, "label": "Křídla pro draka", "config": { "scene": "dragon" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" }
+      ]
+    },
+    {
+      "id": "act_05_connect_dots",
+      "number": 5,
+      "zoneId": "zone_a",
+      "title": "Spojovačky s odhalením",
+      "shortTitle": "Spojovačky",
+      "icon": "✨",
+      "type": "connect_dots",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Řazení čísel a písmen, přesnost tahu tužkou či prstem.",
+      "audioIntroId": "act_05_intro",
+      "levels": [
+        { "stars": 1, "label": "Čísla 1–8", "config": { "count": 8 }, "hintAudioIds": ["hint_draw_trace"], "successAudioId": "celebrate_01" },
+        { "stars": 2, "label": "Čísla 1–15", "config": { "count": 15 }, "hintAudioIds": ["hint_draw_trace"], "successAudioId": "celebrate_01" },
+        { "stars": 3, "label": "Abeceda A–L", "config": { "letters": 12 }, "hintAudioIds": ["hint_draw_trace"], "successAudioId": "celebrate_01" }
+      ]
+    },
+    {
+      "id": "act_06_tangram",
+      "number": 6,
+      "zoneId": "zone_b",
+      "title": "Stavitel z tvarů (Tangram)",
+      "shortTitle": "Stavitel z tvarů",
+      "icon": "🔷",
+      "type": "tangram",
+      "implementedInPrototype": true,
+      "pedagogicalGoal": "Prostorová představivost, poznávání geometrických útvarů a mentální rotace.",
+      "audioIntroId": "act_06_intro",
+      "levels": [
+        {
+          "stars": 1,
+          "label": "Polární domeček (3 dílky)",
+          "config": {
+            "title": "POSKLÁDEJ DOMEČEK",
+            "snapTolerance": 34,
+            "allowRotation": false,
+            "pieces": [
+              { "id": "roof", "shape": "triangle", "color": "#FF595E", "size": 120, "targetX": 260, "targetY": 110, "targetRot": 0, "startX": 540, "startY": 95, "startRot": 0, "label": "Střecha" },
+              { "id": "wall", "shape": "square", "color": "#FFCA3A", "size": 120, "targetX": 260, "targetY": 230, "targetRot": 0, "startX": 540, "startY": 230, "startRot": 0, "label": "Stěna" },
+              { "id": "sun", "shape": "circle", "color": "#4CC9F0", "size": 68, "targetX": 115, "targetY": 90, "targetRot": 0, "startX": 555, "startY": 355, "startRot": 0, "label": "Sluníčko" }
+            ]
+          },
+          "hintAudioIds": ["hint_shape_corners", "hint_shape_size"],
+          "successAudioId": "celebrate_01"
+        },
+        {
+          "stars": 2,
+          "label": "Rychlá raketa (5 dílků)",
+          "config": {
+            "title": "POSKLÁDEJ RAKETU",
+            "snapTolerance": 32,
+            "allowRotation": true,
+            "pieces": [
+              { "id": "nose", "shape": "triangle", "color": "#FF595E", "size": 100, "targetX": 250, "targetY": 72, "targetRot": 0, "startX": 540, "startY": 65, "startRot": 90, "label": "Špička" },
+              { "id": "body1", "shape": "square", "color": "#4CC9F0", "size": 100, "targetX": 250, "targetY": 172, "targetRot": 0, "startX": 540, "startY": 165, "startRot": 0, "label": "Trup" },
+              { "id": "body2", "shape": "square", "color": "#8AC926", "size": 100, "targetX": 250, "targetY": 272, "targetRot": 0, "startX": 540, "startY": 268, "startRot": 0, "label": "Motor" },
+              { "id": "fin_l", "shape": "right_triangle", "color": "#FFCA3A", "size": 76, "targetX": 174, "targetY": 296, "targetRot": 0, "startX": 468, "startY": 360, "startRot": 0, "label": "Levé křídlo" },
+              { "id": "fin_r", "shape": "right_triangle", "color": "#FFCA3A", "size": 76, "targetX": 350, "targetY": 296, "targetRot": 90, "startX": 585, "startY": 360, "startRot": 0, "label": "Pravé křídlo" }
+            ]
+          },
+          "hintAudioIds": ["hint_shape_rotate", "hint_shape_corners"],
+          "successAudioId": "celebrate_02"
+        },
+        {
+          "stars": 3,
+          "label": "Plachetnice na moři (6 dílků s otáčením)",
+          "config": {
+            "title": "POSKLÁDEJ PLACHETNICI",
+            "snapTolerance": 30,
+            "allowRotation": true,
+            "pieces": [
+              { "id": "sail_big", "shape": "right_triangle", "color": "#FF595E", "size": 115, "targetX": 240, "targetY": 110, "targetRot": 0, "startX": 530, "startY": 55, "startRot": 180, "label": "Hlavní plachta" },
+              { "id": "sail_small", "shape": "right_triangle", "color": "#FFCA3A", "size": 86, "targetX": 150, "targetY": 139, "targetRot": 90, "startX": 545, "startY": 165, "startRot": 0, "label": "Malá plachta" },
+              { "id": "hull_mid", "shape": "square", "color": "#1982C4", "size": 88, "targetX": 215, "targetY": 245, "targetRot": 0, "startX": 465, "startY": 265, "startRot": 0, "label": "Paluba" },
+              { "id": "hull_l", "shape": "right_triangle", "color": "#6A4C93", "size": 88, "targetX": 127, "targetY": 245, "targetRot": 180, "startX": 585, "startY": 265, "startRot": 90, "label": "Příď" },
+              { "id": "hull_r", "shape": "right_triangle", "color": "#6A4C93", "size": 88, "targetX": 303, "targetY": 245, "targetRot": 270, "startX": 465, "startY": 365, "startRot": 0, "label": "Záď" },
+              { "id": "sun", "shape": "circle", "color": "#FFB703", "size": 62, "targetX": 78, "targetY": 62, "targetRot": 0, "startX": 585, "startY": 368, "startRot": 0, "label": "Sluníčko" }
+            ]
+          },
+          "hintAudioIds": ["hint_shape_rotate", "hint_shape_corners"],
+          "successAudioId": "celebrate_01"
+        }
+      ]
+    },
+    {
+      "id": "act_07_shadow_match",
+      "number": 7,
+      "zoneId": "zone_b",
+      "title": "Hledač stínů a siluet",
+      "shortTitle": "Hledač stínů",
+      "icon": "🌗",
+      "type": "shadow_match",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Vizuální diferenciace figura-pozadí a vnímání tvarových detailů.",
+      "audioIntroId": "act_07_intro",
+      "levels": [
+        { "stars": 1, "label": "3 zvířátka", "config": { "pairs": 3 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_02" },
+        { "stars": 2, "label": "5 objektů", "config": { "pairs": 5 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_02" },
+        { "stars": 3, "label": "Pootočené siluety", "config": { "pairs": 6, "rotated": true }, "hintAudioIds": ["hint_shape_rotate"], "successAudioId": "celebrate_02" }
+      ]
+    },
+    {
+      "id": "act_08_visual_detective",
+      "number": 8,
+      "zoneId": "zone_b",
+      "title": "Co do obrázku nepatří?",
+      "shortTitle": "Vizuální detektiv",
+      "icon": "🔍",
+      "type": "visual_detective",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Postřeh, logické vyhodnocení kontextu a slovní zdůvodnění.",
+      "audioIntroId": "act_08_intro",
+      "levels": [
+        { "stars": 1, "label": "3 nesmysly", "config": { "anomalies": 3 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_02" },
+        { "stars": 2, "label": "5 nesmyslů", "config": { "anomalies": 5 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_02" },
+        { "stars": 3, "label": "7 skrytých detailů", "config": { "anomalies": 7 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_02" }
+      ]
+    },
+    {
+      "id": "act_09_puzzle",
+      "number": 9,
+      "zoneId": "zone_b",
+      "title": "Skládání rozstříhaných obrázků",
+      "shortTitle": "Ledové puzzle",
+      "icon": "🧩",
+      "type": "puzzle",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Analýza a syntéza celku z částí, trpělivost.",
+      "audioIntroId": "act_09_intro",
+      "levels": [
+        { "stars": 1, "label": "6 dílků", "config": { "pieces": 6 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_01" },
+        { "stars": 2, "label": "12 dílků", "config": { "pieces": 12 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_01" },
+        { "stars": 3, "label": "20 dílků", "config": { "pieces": 20 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_01" }
+      ]
+    },
+    {
+      "id": "act_10_first_letter",
+      "number": 10,
+      "zoneId": "zone_c",
+      "title": "Na jaké písmeno to začíná?",
+      "shortTitle": "První písmeno",
+      "icon": "🦊",
+      "type": "first_letter",
+      "implementedInPrototype": true,
+      "pedagogicalGoal": "Fonematický sluch, izolace první hlásky a propojení se znakem velkého tiskacího písmena.",
+      "audioIntroId": "act_10_intro",
+      "levels": [
+        {
+          "stars": 1,
+          "label": "Lehká slovíčka (3 volby)",
+          "config": {
+            "rounds": [
+              { "word": "LIŠKA", "audioId": "word_liska", "spoken": "L-L-LIŠKA! Na jaké písmeno začíná slovo LIŠKA?", "emoji": "🦊", "answer": "L", "choices": ["L", "M", "S"] },
+              { "word": "RYBA", "audioId": "word_ryba", "spoken": "R-R-RYBA! Na jaké písmeno začíná slovo RYBA?", "emoji": "🐟", "answer": "R", "choices": ["K", "R", "T"] },
+              { "word": "AUTO", "audioId": "word_auto", "spoken": "A-A-AUTO! Na jaké písmeno začíná slovo AUTO?", "emoji": "🚗", "answer": "A", "choices": ["O", "E", "A"] }
+            ]
+          },
+          "hintAudioIds": ["hint_letter_listen"],
+          "successAudioId": "celebrate_05"
+        },
+        {
+          "stars": 2,
+          "label": "Zvířátka a příroda (4 volby)",
+          "config": {
+            "rounds": [
+              { "word": "KOČKA", "audioId": "word_kocka", "spoken": "K-K-KOČKA! Na jaké písmeno začíná slovo KOČKA?", "emoji": "🐱", "answer": "K", "choices": ["K", "P", "B", "T"] },
+              { "word": "SLUNCE", "audioId": "word_slunce", "spoken": "S-S-SLUNCE! Na jaké písmeno začíná slovo SLUNCE?", "emoji": "☀️", "answer": "S", "choices": ["Z", "S", "C", "L"] },
+              { "word": "MOTÝL", "audioId": "word_motyl", "spoken": "M-M-MOTÝL! Na jaké písmeno začíná slovo MOTÝL?", "emoji": "🦋", "answer": "M", "choices": ["N", "V", "M", "H"] }
+            ]
+          },
+          "hintAudioIds": ["hint_letter_listen"],
+          "successAudioId": "celebrate_05"
+        },
+        {
+          "stars": 3,
+          "label": "Výzva s diakritikou (4 volby)",
+          "config": {
+            "rounds": [
+              { "word": "TUČŇÁK", "audioId": "word_tucnak", "spoken": "T-T-TUČŇÁK! Na jaké písmeno začíná slovo TUČŇÁK?", "emoji": "🐧", "answer": "T", "choices": ["D", "T", "P", "K"] },
+              { "word": "ŽÁBA", "audioId": "word_zaba", "spoken": "Ž-Ž-ŽÁBA! Na jaké písmeno začíná slovo ŽÁBA?", "emoji": "🐸", "answer": "Ž", "choices": ["Z", "Š", "Ž", "Č"] },
+              { "word": "ŠNEK", "audioId": "word_snek", "spoken": "Š-Š-ŠNEK! Na jaké písmeno začíná slovo ŠNEK?", "emoji": "🐌", "answer": "Š", "choices": ["S", "Š", "Ž", "C"] }
+            ]
+          },
+          "hintAudioIds": ["hint_letter_listen"],
+          "successAudioId": "celebrate_05"
+        }
+      ]
+    },
+    {
+      "id": "act_11_syllables",
+      "number": 11,
+      "zoneId": "zone_c",
+      "title": "Skládání prvních slov ze slabik",
+      "shortTitle": "Slova ze slabik",
+      "icon": "📖",
+      "type": "syllables",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Analýza a syntéza slabik (MA-MA, AU-TO, RY-BA) pro plynulé počáteční čtení.",
+      "audioIntroId": "act_11_intro",
+      "levels": [
+        { "stars": 1, "label": "Dvouslabičná otevřená slova", "config": { "words": ["MA-MA", "TA-TA", "RY-BA"] }, "hintAudioIds": ["hint_letter_listen"], "successAudioId": "celebrate_05" },
+        { "stars": 2, "label": "Dvouslabičná pestrá", "config": { "words": ["AU-TO", "KO-LO", "SO-VA"] }, "hintAudioIds": ["hint_letter_listen"], "successAudioId": "celebrate_05" },
+        { "stars": 3, "label": "Tříslabičná slova", "config": { "words": ["BA-NÁN", "JA-HO-DA", "KO-ČIČ-KA"] }, "hintAudioIds": ["hint_letter_listen"], "successAudioId": "celebrate_05" }
+      ]
+    },
+    {
+      "id": "act_12_letter_track",
+      "number": 12,
+      "zoneId": "zone_c",
+      "title": "Písmenková dráha (Grafomotorika)",
+      "shortTitle": "Písmenková dráha",
+      "icon": "🛷",
+      "type": "letter_track",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Osvojení správného směru tahu velkých tiskacích písmen a číslic.",
+      "audioIntroId": "act_12_intro",
+      "levels": [
+        { "stars": 1, "label": "Jednoduchá písmena (I, L, O, A)", "config": { "glyphs": ["I", "L", "O", "A"] }, "hintAudioIds": ["hint_draw_trace"], "successAudioId": "celebrate_01" },
+        { "stars": 2, "label": "Kulatá a šikmá (B, D, K, M)", "config": { "glyphs": ["B", "D", "K", "M"] }, "hintAudioIds": ["hint_draw_trace"], "successAudioId": "celebrate_01" },
+        { "stars": 3, "label": "Číslice 1–9 a S, Ž", "config": { "glyphs": ["S", "Ž", "3", "8"] }, "hintAudioIds": ["hint_draw_trace"], "successAudioId": "celebrate_01" }
+      ]
+    },
+    {
+      "id": "act_13_rhyme_memory",
+      "number": 13,
+      "zoneId": "zone_c",
+      "title": "Rýmovací pexeso",
+      "shortTitle": "Rýmovací pexeso",
+      "icon": "🎵",
+      "type": "rhyme_memory",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Cit pro rytmus jazyka, rozlišování koncových rýmů a paměť.",
+      "audioIntroId": "act_13_intro",
+      "levels": [
+        { "stars": 1, "label": "3 rýmové páry", "config": { "pairs": [["kočka", "vločka"], ["myš", "skrýš"], ["pes", "les"]] }, "hintAudioIds": ["hint_letter_listen"], "successAudioId": "celebrate_05" },
+        { "stars": 2, "label": "4 rýmové páry", "config": { "pairs": 4 }, "hintAudioIds": ["hint_letter_listen"], "successAudioId": "celebrate_05" },
+        { "stars": 3, "label": "6 rýmových párů", "config": { "pairs": 6 }, "hintAudioIds": ["hint_letter_listen"], "successAudioId": "celebrate_05" }
+      ]
+    },
+    {
+      "id": "act_14_feed_penguin",
+      "number": 14,
+      "zoneId": "zone_d",
+      "title": "Krmení tučňáka (Počítání rybiček)",
+      "shortTitle": "Krmení tučňáka",
+      "icon": "🐟",
+      "type": "feed_penguin",
+      "implementedInPrototype": true,
+      "pedagogicalGoal": "Kardinální chápání počtu do 10 a 20, přiřazení 1:1 a hlasité počítání po jedné.",
+      "audioIntroId": "act_14_intro",
+      "levels": [
+        {
+          "stars": 1,
+          "label": "Počítání do 5",
+          "config": {
+            "minTarget": 2,
+            "maxTarget": 5,
+            "pondCount": 8,
+            "rounds": [3, 5, 4]
+          },
+          "hintAudioIds": ["hint_count_more", "hint_count_too_many"],
+          "successAudioId": "celebrate_03"
+        },
+        {
+          "stars": 2,
+          "label": "Počítání do 10",
+          "config": {
+            "minTarget": 6,
+            "maxTarget": 10,
+            "pondCount": 12,
+            "rounds": [6, 8, 9]
+          },
+          "hintAudioIds": ["hint_count_more", "hint_count_too_many"],
+          "successAudioId": "celebrate_03"
+        },
+        {
+          "stars": 3,
+          "label": "Počítání do 15 (až 20)",
+          "config": {
+            "minTarget": 11,
+            "maxTarget": 15,
+            "pondCount": 18,
+            "rounds": [12, 14, 15]
+          },
+          "hintAudioIds": ["hint_count_more", "hint_count_too_many"],
+          "successAudioId": "celebrate_03"
+        }
+      ]
+    },
+    {
+      "id": "act_15_ice_scales",
+      "number": 15,
+      "zoneId": "zone_d",
+      "title": "Ledové váhy (Porovnávání množství)",
+      "shortTitle": "Ledové váhy",
+      "icon": "⚖️",
+      "type": "ice_scales",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Porozumění pojmům více, méně a stejně na principu rovnováhy.",
+      "audioIntroId": "act_15_intro",
+      "levels": [
+        { "stars": 1, "label": "Do 5 položek", "config": { "max": 5 }, "hintAudioIds": ["hint_count_more"], "successAudioId": "celebrate_01" },
+        { "stars": 2, "label": "Do 10 položek", "config": { "max": 10 }, "hintAudioIds": ["hint_count_more"], "successAudioId": "celebrate_01" },
+        { "stars": 3, "label": "Různé váhy plodů", "config": { "max": 12 }, "hintAudioIds": ["hint_count_more"], "successAudioId": "celebrate_01" }
+      ]
+    },
+    {
+      "id": "act_16_story_math",
+      "number": 16,
+      "zoneId": "zone_d",
+      "title": "První sčítání a odčítání s příběhem",
+      "shortTitle": "Sčítání s příběhem",
+      "icon": "➕",
+      "type": "story_math",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Názorné pochopení operací přidávání a ubírání v kontextu příběhu.",
+      "audioIntroId": "act_16_intro",
+      "levels": [
+        { "stars": 1, "label": "Sčítání do 5", "config": { "max": 5 }, "hintAudioIds": ["hint_count_more"], "successAudioId": "celebrate_02" },
+        { "stars": 2, "label": "Sčítání a odčítání do 10", "config": { "max": 10 }, "hintAudioIds": ["hint_count_more"], "successAudioId": "celebrate_02" },
+        { "stars": 3, "label": "Slovní úlohy do 15", "config": { "max": 15 }, "hintAudioIds": ["hint_count_more"], "successAudioId": "celebrate_02" }
+      ]
+    },
+    {
+      "id": "act_17_size_sort",
+      "number": 17,
+      "zoneId": "zone_d",
+      "title": "Seřaď podle velikosti a délky",
+      "shortTitle": "Řazení velikostí",
+      "icon": "📏",
+      "type": "size_sort",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Seriace (uspořádání podle měřitelné veličiny od nejmenšího po největší).",
+      "audioIntroId": "act_17_intro",
+      "levels": [
+        { "stars": 1, "label": "3 objekty", "config": { "items": 3 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_01" },
+        { "stars": 2, "label": "5 objektů", "config": { "items": 5 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_01" },
+        { "stars": 3, "label": "6 objektů s drobným rozdílem", "config": { "items": 6 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_01" }
+      ]
+    },
+    {
+      "id": "act_18_pattern_complete",
+      "number": 18,
+      "zoneId": "zone_e",
+      "title": "Dokonči vzor (Logické řady)",
+      "shortTitle": "Dokonči vzor",
+      "icon": "❄️",
+      "type": "pattern_complete",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Rozpoznávání pravidelností a logických sekvencí ABAB, AABB a ABC.",
+      "audioIntroId": "act_18_intro",
+      "levels": [
+        { "stars": 1, "label": "Střídání ABAB", "config": { "pattern": "ABAB" }, "hintAudioIds": ["hint_pattern_repeat"], "successAudioId": "celebrate_02" },
+        { "stars": 2, "label": "Trojice ABCABC", "config": { "pattern": "ABC" }, "hintAudioIds": ["hint_pattern_repeat"], "successAudioId": "celebrate_02" },
+        { "stars": 3, "label": "Dvojitá pravidla AABB", "config": { "pattern": "AABB" }, "hintAudioIds": ["hint_pattern_repeat"], "successAudioId": "celebrate_02" }
+      ]
+    },
+    {
+      "id": "act_19_ice_maze",
+      "number": 19,
+      "zoneId": "zone_e",
+      "title": "Ledové bludiště",
+      "shortTitle": "Ledové bludiště",
+      "icon": "🧊",
+      "type": "ice_maze",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Plánování cesty, předvídání slepých uliček a koordinace prstu.",
+      "audioIntroId": "act_19_intro",
+      "levels": [
+        { "stars": 1, "label": "Jednoduchá cestička", "config": { "grid": 5 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_06" },
+        { "stars": 2, "label": "Bludiště s klíčem", "config": { "grid": 7, "keys": 1 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_06" },
+        { "stars": 3, "label": "Velké ledové bludiště", "config": { "grid": 9, "keys": 2 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_06" }
+      ]
+    },
+    {
+      "id": "act_20_sound_memory",
+      "number": 20,
+      "zoneId": "zone_e",
+      "title": "Zvukové a vizuální pexeso",
+      "shortTitle": "Zvukové pexeso",
+      "icon": "🥁",
+      "type": "sound_memory",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Trénink pracovní paměti a sluchového rozlišování zvířat a nástrojů.",
+      "audioIntroId": "act_20_intro",
+      "levels": [
+        { "stars": 1, "label": "3×2 karty", "config": { "cols": 3, "rows": 2 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_02" },
+        { "stars": 2, "label": "4×3 karty", "config": { "cols": 4, "rows": 3 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_02" },
+        { "stars": 3, "label": "4×4 karty (zvukové)", "config": { "cols": 4, "rows": 4 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_02" }
+      ]
+    },
+    {
+      "id": "act_21_coding_path",
+      "number": 21,
+      "zoneId": "zone_e",
+      "title": "Kódování cesty (První programování)",
+      "shortTitle": "Kódování cesty",
+      "icon": "🧭",
+      "type": "coding_path",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Algoritmické myšlení, skládání sekvence kroků a ladění trasy.",
+      "audioIntroId": "act_21_intro",
+      "levels": [
+        { "stars": 1, "label": "3–4 kroky bez zatáček", "config": { "steps": 4 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_06" },
+        { "stars": 2, "label": "Zatáčky vlevo a vpravo", "config": { "steps": 7 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_06" },
+        { "stars": 3, "label": "Trasa s překážkami a pokladem", "config": { "steps": 10 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_06" }
+      ]
+    },
+    {
+      "id": "act_22_matrix_sort",
+      "number": 22,
+      "zoneId": "zone_e",
+      "title": "Třídění podle více vlastností (Matice)",
+      "shortTitle": "Třídící matice",
+      "icon": "🗂️",
+      "type": "matrix_sort",
+      "implementedInPrototype": false,
+      "pedagogicalGoal": "Klasifikace objektů podle dvou současných kritérií (barva × tvar / roční období).",
+      "audioIntroId": "act_22_intro",
+      "levels": [
+        { "stars": 1, "label": "Tabulka 2×2", "config": { "rows": 2, "cols": 2 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_02" },
+        { "stars": 2, "label": "Tabulka 3×3", "config": { "rows": 3, "cols": 3 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_02" },
+        { "stars": 3, "label": "Roční období a oblečení", "config": { "rows": 3, "cols": 4 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_02" }
+      ]
+    }
+  ]
+}

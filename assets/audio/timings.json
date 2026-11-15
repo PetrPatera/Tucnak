@@ -1,0 +1,4931 @@
+{
+  "zone_a_intro": {
+    "id": "zone_a_intro",
+    "file": "assets/audio/zone_a_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "VÍTEJ V UMĚLECKÉM ATELIÉRU! TADY BUDEME KRESLIT A MÍCHAT KOUZELNÉ BARVY.",
+    "words": [
+      {
+        "word": "VÍTEJ",
+        "startMs": 103,
+        "endMs": 633
+      },
+      {
+        "word": "V",
+        "startMs": 647,
+        "endMs": 729
+      },
+      {
+        "word": "UMĚLECKÉM",
+        "startMs": 783,
+        "endMs": 1517
+      },
+      {
+        "word": "ATELIÉRU",
+        "startMs": 1530,
+        "endMs": 2386
+      },
+      {
+        "word": "TADY",
+        "startMs": 3465,
+        "endMs": 3777
+      },
+      {
+        "word": "BUDEME",
+        "startMs": 3777,
+        "endMs": 4157
+      },
+      {
+        "word": "KRESLIT",
+        "startMs": 4158,
+        "endMs": 4742
+      },
+      {
+        "word": "A",
+        "startMs": 4796,
+        "endMs": 4932
+      },
+      {
+        "word": "MÍCHAT",
+        "startMs": 4946,
+        "endMs": 5354
+      },
+      {
+        "word": "KOUZELNÉ",
+        "startMs": 5380,
+        "endMs": 6141
+      },
+      {
+        "word": "BARVY",
+        "startMs": 6155,
+        "endMs": 6617
+      }
+    ]
+  },
+  "intro_map_select": {
+    "id": "intro_map_select",
+    "file": "assets/audio/intro_map_select.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ŤUKNI NA NĚKTERÝ OSTROV NEBO SI VYBER HRU NAHOŘE!",
+    "words": [
+      {
+        "word": "ŤUKNI",
+        "startMs": 104,
+        "endMs": 512
+      },
+      {
+        "word": "NA",
+        "startMs": 512,
+        "endMs": 648
+      },
+      {
+        "word": "NĚKTERÝ",
+        "startMs": 648,
+        "endMs": 1178
+      },
+      {
+        "word": "OSTROV",
+        "startMs": 1205,
+        "endMs": 1708
+      },
+      {
+        "word": "NEBO",
+        "startMs": 1708,
+        "endMs": 1953
+      },
+      {
+        "word": "SI",
+        "startMs": 1952,
+        "endMs": 2169
+      },
+      {
+        "word": "VYBER",
+        "startMs": 2170,
+        "endMs": 2510
+      },
+      {
+        "word": "HRU",
+        "startMs": 2523,
+        "endMs": 2781
+      },
+      {
+        "word": "NAHOŘE",
+        "startMs": 2781,
+        "endMs": 3297
+      }
+    ]
+  },
+  "zone_b_intro": {
+    "id": "zone_b_intro",
+    "file": "assets/audio/zone_b_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "TOHLE JE SVĚT TVARŮ A PROSTORU! POJĎ SKLÁDAT OBRÁZKY A HLEDAT STÍNY.",
+    "words": [
+      {
+        "word": "TOHLE",
+        "startMs": 104,
+        "endMs": 457
+      },
+      {
+        "word": "JE",
+        "startMs": 458,
+        "endMs": 594
+      },
+      {
+        "word": "SVĚT",
+        "startMs": 593,
+        "endMs": 946
+      },
+      {
+        "word": "TVARŮ",
+        "startMs": 974,
+        "endMs": 1422
+      },
+      {
+        "word": "A",
+        "startMs": 1436,
+        "endMs": 1531
+      },
+      {
+        "word": "PROSTORU",
+        "startMs": 1545,
+        "endMs": 2211
+      },
+      {
+        "word": "POJĎ",
+        "startMs": 3261,
+        "endMs": 3546
+      },
+      {
+        "word": "SKLÁDAT",
+        "startMs": 3560,
+        "endMs": 4185
+      },
+      {
+        "word": "OBRÁZKY",
+        "startMs": 4253,
+        "endMs": 4960
+      },
+      {
+        "word": "A",
+        "startMs": 4959,
+        "endMs": 5081
+      },
+      {
+        "word": "HLEDAT",
+        "startMs": 5095,
+        "endMs": 5503
+      },
+      {
+        "word": "STÍNY",
+        "startMs": 5516,
+        "endMs": 6087
+      }
+    ]
+  },
+  "zone_c_intro": {
+    "id": "zone_c_intro",
+    "file": "assets/audio/zone_c_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "JSME U PRVNÍCH KRŮČKŮ KE ČTENÍ! SPOLU PROZKOUMÁME PÍSMENKA A SLABIKY.",
+    "words": [
+      {
+        "word": "JSME",
+        "startMs": 104,
+        "endMs": 410
+      },
+      {
+        "word": "U",
+        "startMs": 493,
+        "endMs": 535
+      },
+      {
+        "word": "PRVNÍCH",
+        "startMs": 549,
+        "endMs": 1021
+      },
+      {
+        "word": "KRŮČKŮ",
+        "startMs": 1021,
+        "endMs": 1632
+      },
+      {
+        "word": "KE",
+        "startMs": 1632,
+        "endMs": 1813
+      },
+      {
+        "word": "ČTENÍ",
+        "startMs": 1826,
+        "endMs": 2423
+      },
+      {
+        "word": "SPOLU",
+        "startMs": 3485,
+        "endMs": 3860
+      },
+      {
+        "word": "PROZKOUMÁME",
+        "startMs": 3860,
+        "endMs": 4721
+      },
+      {
+        "word": "PÍSMENKA",
+        "startMs": 4721,
+        "endMs": 5527
+      },
+      {
+        "word": "A",
+        "startMs": 5554,
+        "endMs": 5651
+      },
+      {
+        "word": "SLABIKY",
+        "startMs": 5665,
+        "endMs": 6359
+      }
+    ]
+  },
+  "zone_e_intro": {
+    "id": "zone_e_intro",
+    "file": "assets/audio/zone_e_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "VÍTEJ NA OSTROVĚ LOGIKY A PAMĚTI! ČEKÁ NÁS BLUDIŠTĚ I PEXESO.",
+    "words": [
+      {
+        "word": "VÍTEJ",
+        "startMs": 103,
+        "endMs": 633
+      },
+      {
+        "word": "NA",
+        "startMs": 633,
+        "endMs": 755
+      },
+      {
+        "word": "OSTROVĚ",
+        "startMs": 823,
+        "endMs": 1353
+      },
+      {
+        "word": "LOGIKY",
+        "startMs": 1353,
+        "endMs": 1842
+      },
+      {
+        "word": "A",
+        "startMs": 1842,
+        "endMs": 1964
+      },
+      {
+        "word": "PAMĚTI",
+        "startMs": 1978,
+        "endMs": 2671
+      },
+      {
+        "word": "ČEKÁ",
+        "startMs": 3723,
+        "endMs": 4171
+      },
+      {
+        "word": "NÁS",
+        "startMs": 4171,
+        "endMs": 4497
+      },
+      {
+        "word": "BLUDIŠTĚ",
+        "startMs": 4497,
+        "endMs": 5095
+      },
+      {
+        "word": "I",
+        "startMs": 5149,
+        "endMs": 5231
+      },
+      {
+        "word": "PEXESO",
+        "startMs": 5245,
+        "endMs": 5924
+      }
+    ]
+  },
+  "act_01_intro": {
+    "id": "act_01_intro",
+    "file": "assets/audio/act_01_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "POJĎ KRESLIT KROK ZA KROKEM! NEJPRVE PRSTEM OBTÁHNI PŘERUŠOVANÝ TVAR.",
+    "words": [
+      {
+        "word": "POJĎ",
+        "startMs": 106,
+        "endMs": 370
+      },
+      {
+        "word": "KRESLIT",
+        "startMs": 411,
+        "endMs": 939
+      },
+      {
+        "word": "KROK",
+        "startMs": 967,
+        "endMs": 1259
+      },
+      {
+        "word": "ZA",
+        "startMs": 1258,
+        "endMs": 1425
+      },
+      {
+        "word": "KROKEM",
+        "startMs": 1425,
+        "endMs": 2050
+      },
+      {
+        "word": "NEJPRVE",
+        "startMs": 3167,
+        "endMs": 3709
+      },
+      {
+        "word": "PRSTEM",
+        "startMs": 3708,
+        "endMs": 4166
+      },
+      {
+        "word": "OBTÁHNI",
+        "startMs": 4208,
+        "endMs": 4861
+      },
+      {
+        "word": "PŘERUŠOVANÝ",
+        "startMs": 4861,
+        "endMs": 5722
+      },
+      {
+        "word": "TVAR",
+        "startMs": 5736,
+        "endMs": 6125
+      }
+    ]
+  },
+  "act_05_intro": {
+    "id": "act_05_intro",
+    "file": "assets/audio/act_05_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "SPOJUJ TEČKY PĚKNĚ PO JEDNÉ PODLE ČÍSEL A ODHAL TAJNÝ OBRÁZEK!",
+    "words": [
+      {
+        "word": "SPOJUJ",
+        "startMs": 103,
+        "endMs": 606
+      },
+      {
+        "word": "TEČKY",
+        "startMs": 620,
+        "endMs": 1028
+      },
+      {
+        "word": "PĚKNĚ",
+        "startMs": 1027,
+        "endMs": 1462
+      },
+      {
+        "word": "PO",
+        "startMs": 1462,
+        "endMs": 1625
+      },
+      {
+        "word": "JEDNÉ",
+        "startMs": 1625,
+        "endMs": 2005
+      },
+      {
+        "word": "PODLE",
+        "startMs": 2019,
+        "endMs": 2345
+      },
+      {
+        "word": "ČÍSEL",
+        "startMs": 2345,
+        "endMs": 2984
+      },
+      {
+        "word": "A",
+        "startMs": 3011,
+        "endMs": 3106
+      },
+      {
+        "word": "ODHAL",
+        "startMs": 3242,
+        "endMs": 3595
+      },
+      {
+        "word": "TAJNÝ",
+        "startMs": 3595,
+        "endMs": 4057
+      },
+      {
+        "word": "OBRÁZEK",
+        "startMs": 4098,
+        "endMs": 4845
+      }
+    ]
+  },
+  "zone_d_intro": {
+    "id": "zone_d_intro",
+    "file": "assets/audio/zone_d_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "HURÁ DO HRAVÉ MATEMATIKY! SPOČÍTÁME RYBIČKY A ZVÁŽÍME LEDOVÉ KRY.",
+    "words": [
+      {
+        "word": "HURÁ",
+        "startMs": 103,
+        "endMs": 551
+      },
+      {
+        "word": "DO",
+        "startMs": 565,
+        "endMs": 701
+      },
+      {
+        "word": "HRAVÉ",
+        "startMs": 701,
+        "endMs": 1163
+      },
+      {
+        "word": "MATEMATIKY",
+        "startMs": 1177,
+        "endMs": 2006
+      },
+      {
+        "word": "SPOČÍTÁME",
+        "startMs": 3029,
+        "endMs": 3926
+      },
+      {
+        "word": "RYBIČKY",
+        "startMs": 3926,
+        "endMs": 4442
+      },
+      {
+        "word": "A",
+        "startMs": 4442,
+        "endMs": 4564
+      },
+      {
+        "word": "ZVÁŽÍME",
+        "startMs": 4578,
+        "endMs": 5312
+      },
+      {
+        "word": "LEDOVÉ",
+        "startMs": 5311,
+        "endMs": 5814
+      },
+      {
+        "word": "KRY",
+        "startMs": 5828,
+        "endMs": 6154
+      }
+    ]
+  },
+  "intro_welcome": {
+    "id": "intro_welcome",
+    "file": "assets/audio/intro_welcome.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "AHOJ KAMARÁDE! JÁ JSEM TUČŇÁK PIKO. VYBER SI OSTROV A POJĎ SI HRÁT!",
+    "words": [
+      {
+        "word": "AHOJ",
+        "startMs": 103,
+        "endMs": 415
+      },
+      {
+        "word": "KAMARÁDE",
+        "startMs": 429,
+        "endMs": 1190
+      },
+      {
+        "word": "JÁ",
+        "startMs": 2255,
+        "endMs": 2391
+      },
+      {
+        "word": "JSEM",
+        "startMs": 2486,
+        "endMs": 2758
+      },
+      {
+        "word": "TUČŇÁK",
+        "startMs": 2758,
+        "endMs": 3261
+      },
+      {
+        "word": "PIKO",
+        "startMs": 3288,
+        "endMs": 3696
+      },
+      {
+        "word": "VYBER",
+        "startMs": 4783,
+        "endMs": 5163
+      },
+      {
+        "word": "SI",
+        "startMs": 5177,
+        "endMs": 5381
+      },
+      {
+        "word": "OSTROV",
+        "startMs": 5448,
+        "endMs": 5937
+      },
+      {
+        "word": "A",
+        "startMs": 5965,
+        "endMs": 6060
+      },
+      {
+        "word": "POJĎ",
+        "startMs": 6101,
+        "endMs": 6373
+      },
+      {
+        "word": "SI",
+        "startMs": 6399,
+        "endMs": 6603
+      },
+      {
+        "word": "HRÁT",
+        "startMs": 6603,
+        "endMs": 7106
+      }
+    ]
+  },
+  "intro_repeat": {
+    "id": "intro_repeat",
+    "file": "assets/audio/intro_repeat.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "POSLOUCHEJ POZORNĚ, ZOPAKUJI TI ÚKOL JEŠTĚ JEDNOU.",
+    "words": [
+      {
+        "word": "POSLOUCHEJ",
+        "startMs": 106,
+        "endMs": 814
+      },
+      {
+        "word": "POZORNĚ",
+        "startMs": 828,
+        "endMs": 1481
+      },
+      {
+        "word": "ZOPAKUJI",
+        "startMs": 1758,
+        "endMs": 2397
+      },
+      {
+        "word": "TI",
+        "startMs": 2397,
+        "endMs": 2550
+      },
+      {
+        "word": "ÚKOL",
+        "startMs": 2633,
+        "endMs": 3036
+      },
+      {
+        "word": "JEŠTĚ",
+        "startMs": 3036,
+        "endMs": 3425
+      },
+      {
+        "word": "JEDNOU",
+        "startMs": 3425,
+        "endMs": 3911
+      }
+    ]
+  },
+  "act_07_intro": {
+    "id": "act_07_intro",
+    "file": "assets/audio/act_07_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "NAJDI KE KAŽDÉMU OBRÁZKU JEHO SPRÁVNÝ TMAVÝ STÍN!",
+    "words": [
+      {
+        "word": "NAJDI",
+        "startMs": 104,
+        "endMs": 539
+      },
+      {
+        "word": "KE",
+        "startMs": 539,
+        "endMs": 716
+      },
+      {
+        "word": "KAŽDÉMU",
+        "startMs": 716,
+        "endMs": 1382
+      },
+      {
+        "word": "OBRÁZKU",
+        "startMs": 1436,
+        "endMs": 2047
+      },
+      {
+        "word": "JEHO",
+        "startMs": 2047,
+        "endMs": 2278
+      },
+      {
+        "word": "SPRÁVNÝ",
+        "startMs": 2278,
+        "endMs": 2985
+      },
+      {
+        "word": "TMAVÝ",
+        "startMs": 2998,
+        "endMs": 3406
+      },
+      {
+        "word": "STÍN",
+        "startMs": 3433,
+        "endMs": 3949
+      }
+    ]
+  },
+  "act_06_intro": {
+    "id": "act_06_intro",
+    "file": "assets/audio/act_06_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "POSKLÁDEJ OBRÁZEK Z BAREVNÝCH TVARŮ! PŘETÁHNI KAŽDÝ DÍLEK NA JEHO MÍSTO.",
+    "words": [
+      {
+        "word": "POSKLÁDEJ",
+        "startMs": 106,
+        "endMs": 912
+      },
+      {
+        "word": "OBRÁZEK",
+        "startMs": 939,
+        "endMs": 1606
+      },
+      {
+        "word": "Z",
+        "startMs": 1619,
+        "endMs": 1772
+      },
+      {
+        "word": "BAREVNÝCH",
+        "startMs": 1772,
+        "endMs": 2369
+      },
+      {
+        "word": "TVARŮ",
+        "startMs": 2369,
+        "endMs": 2897
+      },
+      {
+        "word": "PŘETÁHNI",
+        "startMs": 4014,
+        "endMs": 4750
+      },
+      {
+        "word": "KAŽDÝ",
+        "startMs": 4750,
+        "endMs": 5278
+      },
+      {
+        "word": "DÍLEK",
+        "startMs": 5278,
+        "endMs": 5778
+      },
+      {
+        "word": "NA",
+        "startMs": 5819,
+        "endMs": 5972
+      },
+      {
+        "word": "JEHO",
+        "startMs": 5972,
+        "endMs": 6264
+      },
+      {
+        "word": "MÍSTO",
+        "startMs": 6264,
+        "endMs": 6764
+      }
+    ]
+  },
+  "act_09_intro": {
+    "id": "act_09_intro",
+    "file": "assets/audio/act_09_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "OBRÁZEK SE NÁM ROZSYPAL! SLOŽ VŠECHNY DÍLKY PUZZLE ZASE K SOBĚ.",
+    "words": [
+      {
+        "word": "OBRÁZEK",
+        "startMs": 104,
+        "endMs": 702
+      },
+      {
+        "word": "SE",
+        "startMs": 702,
+        "endMs": 906
+      },
+      {
+        "word": "NÁM",
+        "startMs": 906,
+        "endMs": 1205
+      },
+      {
+        "word": "ROZSYPAL",
+        "startMs": 1205,
+        "endMs": 1871
+      },
+      {
+        "word": "SLOŽ",
+        "startMs": 2907,
+        "endMs": 3260
+      },
+      {
+        "word": "VŠECHNY",
+        "startMs": 3260,
+        "endMs": 3736
+      },
+      {
+        "word": "DÍLKY",
+        "startMs": 3735,
+        "endMs": 4211
+      },
+      {
+        "word": "PUZZLE",
+        "startMs": 4211,
+        "endMs": 4564
+      },
+      {
+        "word": "ZASE",
+        "startMs": 4564,
+        "endMs": 4904
+      },
+      {
+        "word": "K",
+        "startMs": 4904,
+        "endMs": 4972
+      },
+      {
+        "word": "SOBĚ",
+        "startMs": 4972,
+        "endMs": 5461
+      }
+    ]
+  },
+  "act_10_intro": {
+    "id": "act_10_intro",
+    "file": "assets/audio/act_10_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "POSLOUCHEJ DOBŘE PRVNÍ HLÁSKU SLOVA A VYBER SPRÁVNÉ PÍSMENKO!",
+    "words": [
+      {
+        "word": "POSLOUCHEJ",
+        "startMs": 106,
+        "endMs": 828
+      },
+      {
+        "word": "DOBŘE",
+        "startMs": 828,
+        "endMs": 1175
+      },
+      {
+        "word": "PRVNÍ",
+        "startMs": 1175,
+        "endMs": 1578
+      },
+      {
+        "word": "HLÁSKU",
+        "startMs": 1578,
+        "endMs": 2092
+      },
+      {
+        "word": "SLOVA",
+        "startMs": 2092,
+        "endMs": 2592
+      },
+      {
+        "word": "A",
+        "startMs": 2647,
+        "endMs": 2744
+      },
+      {
+        "word": "VYBER",
+        "startMs": 2786,
+        "endMs": 3147
+      },
+      {
+        "word": "SPRÁVNÉ",
+        "startMs": 3161,
+        "endMs": 3842
+      },
+      {
+        "word": "PÍSMENKO",
+        "startMs": 3869,
+        "endMs": 4675
+      }
+    ]
+  },
+  "act_02_intro": {
+    "id": "act_02_intro",
+    "file": "assets/audio/act_02_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "VYBARVI OBRÁZEK A ZKUS V PALETĚ SMÍCHAT DVĚ BARVY DOHROMADY!",
+    "words": [
+      {
+        "word": "VYBARVI",
+        "startMs": 104,
+        "endMs": 647
+      },
+      {
+        "word": "OBRÁZEK",
+        "startMs": 689,
+        "endMs": 1341
+      },
+      {
+        "word": "A",
+        "startMs": 1341,
+        "endMs": 1477
+      },
+      {
+        "word": "ZKUS",
+        "startMs": 1490,
+        "endMs": 1830
+      },
+      {
+        "word": "V",
+        "startMs": 1830,
+        "endMs": 1939
+      },
+      {
+        "word": "PALETĚ",
+        "startMs": 1939,
+        "endMs": 2306
+      },
+      {
+        "word": "SMÍCHAT",
+        "startMs": 2305,
+        "endMs": 2862
+      },
+      {
+        "word": "DVĚ",
+        "startMs": 2890,
+        "endMs": 3148
+      },
+      {
+        "word": "BARVY",
+        "startMs": 3148,
+        "endMs": 3528
+      },
+      {
+        "word": "DOHROMADY",
+        "startMs": 3528,
+        "endMs": 4248
+      }
+    ]
+  },
+  "act_13_intro": {
+    "id": "act_13_intro",
+    "file": "assets/audio/act_13_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "OTÁČEJ KARTIČKY A NAJDI DVOJICE SLOV, KTERÁ SE SPOLU RÝMUJÍ!",
+    "words": [
+      {
+        "word": "OTÁČEJ",
+        "startMs": 104,
+        "endMs": 702
+      },
+      {
+        "word": "KARTIČKY",
+        "startMs": 702,
+        "endMs": 1381
+      },
+      {
+        "word": "A",
+        "startMs": 1382,
+        "endMs": 1531
+      },
+      {
+        "word": "NAJDI",
+        "startMs": 1531,
+        "endMs": 1884
+      },
+      {
+        "word": "DVOJICE",
+        "startMs": 1884,
+        "endMs": 2373
+      },
+      {
+        "word": "SLOV",
+        "startMs": 2373,
+        "endMs": 2794
+      },
+      {
+        "word": "KTERÁ",
+        "startMs": 2903,
+        "endMs": 3365
+      },
+      {
+        "word": "SE",
+        "startMs": 3365,
+        "endMs": 3528
+      },
+      {
+        "word": "SPOLU",
+        "startMs": 3528,
+        "endMs": 3922
+      },
+      {
+        "word": "RÝMUJÍ",
+        "startMs": 3922,
+        "endMs": 4547
+      }
+    ]
+  },
+  "act_03_intro": {
+    "id": "act_03_intro",
+    "file": "assets/audio/act_03_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "KRESLI NA PRAVOU STRANU PLÁTNA A SLEDUJ KOUZELNÉ ZRCADLENÍ!",
+    "words": [
+      {
+        "word": "KRESLI",
+        "startMs": 104,
+        "endMs": 539
+      },
+      {
+        "word": "NA",
+        "startMs": 539,
+        "endMs": 661
+      },
+      {
+        "word": "PRAVOU",
+        "startMs": 661,
+        "endMs": 1001
+      },
+      {
+        "word": "STRANU",
+        "startMs": 1028,
+        "endMs": 1449
+      },
+      {
+        "word": "PLÁTNA",
+        "startMs": 1449,
+        "endMs": 2060
+      },
+      {
+        "word": "A",
+        "startMs": 2074,
+        "endMs": 2156
+      },
+      {
+        "word": "SLEDUJ",
+        "startMs": 2170,
+        "endMs": 2591
+      },
+      {
+        "word": "KOUZELNÉ",
+        "startMs": 2604,
+        "endMs": 3338
+      },
+      {
+        "word": "ZRCADLENÍ",
+        "startMs": 3338,
+        "endMs": 4221
+      }
+    ]
+  },
+  "act_08_intro": {
+    "id": "act_08_intro",
+    "file": "assets/audio/act_08_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PODÍVEJ SE POZORNĚ NA CELÝ OBRÁZEK A NAJDI VĚCI, KTERÉ SEM NEPATŘÍ!",
+    "words": [
+      {
+        "word": "PODÍVEJ",
+        "startMs": 104,
+        "endMs": 702
+      },
+      {
+        "word": "SE",
+        "startMs": 702,
+        "endMs": 865
+      },
+      {
+        "word": "POZORNĚ",
+        "startMs": 865,
+        "endMs": 1395
+      },
+      {
+        "word": "NA",
+        "startMs": 1395,
+        "endMs": 1544
+      },
+      {
+        "word": "CELÝ",
+        "startMs": 1545,
+        "endMs": 1898
+      },
+      {
+        "word": "OBRÁZEK",
+        "startMs": 1911,
+        "endMs": 2631
+      },
+      {
+        "word": "A",
+        "startMs": 2645,
+        "endMs": 2794
+      },
+      {
+        "word": "NAJDI",
+        "startMs": 2808,
+        "endMs": 3161
+      },
+      {
+        "word": "VĚCI",
+        "startMs": 3161,
+        "endMs": 3596
+      },
+      {
+        "word": "KTERÉ",
+        "startMs": 3718,
+        "endMs": 4098
+      },
+      {
+        "word": "SEM",
+        "startMs": 4099,
+        "endMs": 4371
+      },
+      {
+        "word": "NEPATŘÍ",
+        "startMs": 4371,
+        "endMs": 5037
+      }
+    ]
+  },
+  "act_12_intro": {
+    "id": "act_12_intro",
+    "file": "assets/audio/act_12_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PROJEĎ PRSTEM PO LEDOVÉ DRÁZE PODLE ŠIPEK A NAPIŠ PÍSMENKO!",
+    "words": [
+      {
+        "word": "PROJEĎ",
+        "startMs": 106,
+        "endMs": 537
+      },
+      {
+        "word": "PRSTEM",
+        "startMs": 564,
+        "endMs": 1050
+      },
+      {
+        "word": "PO",
+        "startMs": 1050,
+        "endMs": 1217
+      },
+      {
+        "word": "LEDOVÉ",
+        "startMs": 1217,
+        "endMs": 1648
+      },
+      {
+        "word": "DRÁZE",
+        "startMs": 1661,
+        "endMs": 2161
+      },
+      {
+        "word": "PODLE",
+        "startMs": 2161,
+        "endMs": 2494
+      },
+      {
+        "word": "ŠIPEK",
+        "startMs": 2494,
+        "endMs": 2980
+      },
+      {
+        "word": "A",
+        "startMs": 3036,
+        "endMs": 3133
+      },
+      {
+        "word": "NAPIŠ",
+        "startMs": 3175,
+        "endMs": 3592
+      },
+      {
+        "word": "PÍSMENKO",
+        "startMs": 3606,
+        "endMs": 4412
+      }
+    ]
+  },
+  "act_04_intro": {
+    "id": "act_04_intro",
+    "file": "assets/audio/act_04_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "V PŘÍBĚHU NĚCO CHYBÍ! PODÍVEJ SE NA OBRÁZEK A DOKRESLI, CO JE POTŘEBA.",
+    "words": [
+      {
+        "word": "V",
+        "startMs": 103,
+        "endMs": 198
+      },
+      {
+        "word": "PŘÍBĚHU",
+        "startMs": 198,
+        "endMs": 837
+      },
+      {
+        "word": "NĚCO",
+        "startMs": 851,
+        "endMs": 1150
+      },
+      {
+        "word": "CHYBÍ",
+        "startMs": 1149,
+        "endMs": 1665
+      },
+      {
+        "word": "PODÍVEJ",
+        "startMs": 2704,
+        "endMs": 3302
+      },
+      {
+        "word": "SE",
+        "startMs": 3302,
+        "endMs": 3492
+      },
+      {
+        "word": "NA",
+        "startMs": 3492,
+        "endMs": 3614
+      },
+      {
+        "word": "OBRÁZEK",
+        "startMs": 3668,
+        "endMs": 4320
+      },
+      {
+        "word": "A",
+        "startMs": 4334,
+        "endMs": 4470
+      },
+      {
+        "word": "DOKRESLI",
+        "startMs": 4497,
+        "endMs": 5217
+      },
+      {
+        "word": "CO",
+        "startMs": 5462,
+        "endMs": 5679
+      },
+      {
+        "word": "JE",
+        "startMs": 5679,
+        "endMs": 5815
+      },
+      {
+        "word": "POTŘEBA",
+        "startMs": 5815,
+        "endMs": 6413
+      }
+    ]
+  },
+  "act_14_intro": {
+    "id": "act_14_intro",
+    "file": "assets/audio/act_14_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ TOLIK RYBIČEK, KOLIK SI PŘEJI.",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 106,
+        "endMs": 412
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 425,
+        "endMs": 911
+      },
+      {
+        "word": "HLAD",
+        "startMs": 911,
+        "endMs": 1328
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2431,
+        "endMs": 2667
+      },
+      {
+        "word": "MI",
+        "startMs": 2694,
+        "endMs": 2819
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2819,
+        "endMs": 3347
+      },
+      {
+        "word": "DO",
+        "startMs": 3347,
+        "endMs": 3500
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3500,
+        "endMs": 3875
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3875,
+        "endMs": 4361
+      },
+      {
+        "word": "TOLIK",
+        "startMs": 4361,
+        "endMs": 4708
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4722,
+        "endMs": 5319
+      },
+      {
+        "word": "KOLIK",
+        "startMs": 5597,
+        "endMs": 5986
+      },
+      {
+        "word": "SI",
+        "startMs": 6000,
+        "endMs": 6181
+      },
+      {
+        "word": "PŘEJI",
+        "startMs": 6181,
+        "endMs": 6639
+      }
+    ]
+  },
+  "act_15_intro": {
+    "id": "act_15_intro",
+    "file": "assets/audio/act_15_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "VYROVNEJ LEDOVÉ VÁHY TAK, ABY NA OBOU MISKÁCH BYLO ÚPLNĚ STEJNĚ!",
+    "words": [
+      {
+        "word": "VYROVNEJ",
+        "startMs": 103,
+        "endMs": 674
+      },
+      {
+        "word": "LEDOVÉ",
+        "startMs": 674,
+        "endMs": 1109
+      },
+      {
+        "word": "VÁHY",
+        "startMs": 1122,
+        "endMs": 1502
+      },
+      {
+        "word": "TAK",
+        "startMs": 1503,
+        "endMs": 1829
+      },
+      {
+        "word": "ABY",
+        "startMs": 2060,
+        "endMs": 2372
+      },
+      {
+        "word": "NA",
+        "startMs": 2372,
+        "endMs": 2508
+      },
+      {
+        "word": "OBOU",
+        "startMs": 2576,
+        "endMs": 2848
+      },
+      {
+        "word": "MISKÁCH",
+        "startMs": 2875,
+        "endMs": 3459
+      },
+      {
+        "word": "BYLO",
+        "startMs": 3459,
+        "endMs": 3704
+      },
+      {
+        "word": "ÚPLNĚ",
+        "startMs": 3785,
+        "endMs": 4206
+      },
+      {
+        "word": "STEJNĚ",
+        "startMs": 4207,
+        "endMs": 4750
+      }
+    ]
+  },
+  "act_11_intro": {
+    "id": "act_11_intro",
+    "file": "assets/audio/act_11_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ŤUKNI NA SLABIKY A POSKLÁDEJ Z NICH CELÉ SLOVO!",
+    "words": [
+      {
+        "word": "ŤUKNI",
+        "startMs": 106,
+        "endMs": 509
+      },
+      {
+        "word": "NA",
+        "startMs": 508,
+        "endMs": 661
+      },
+      {
+        "word": "SLABIKY",
+        "startMs": 661,
+        "endMs": 1258
+      },
+      {
+        "word": "A",
+        "startMs": 1258,
+        "endMs": 1369
+      },
+      {
+        "word": "POSKLÁDEJ",
+        "startMs": 1397,
+        "endMs": 2203
+      },
+      {
+        "word": "Z",
+        "startMs": 2203,
+        "endMs": 2328
+      },
+      {
+        "word": "NICH",
+        "startMs": 2328,
+        "endMs": 2550
+      },
+      {
+        "word": "CELÉ",
+        "startMs": 2550,
+        "endMs": 2911
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 2911,
+        "endMs": 3397
+      }
+    ]
+  },
+  "act_17_intro": {
+    "id": "act_17_intro",
+    "file": "assets/audio/act_17_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "SEŘAĎ VŠECHNY OBRÁZKY PĚKNĚ ZA SEBOU OD NEJMENŠÍHO PO NEJVĚTŠÍ!",
+    "words": [
+      {
+        "word": "SEŘAĎ",
+        "startMs": 103,
+        "endMs": 511
+      },
+      {
+        "word": "VŠECHNY",
+        "startMs": 538,
+        "endMs": 1027
+      },
+      {
+        "word": "OBRÁZKY",
+        "startMs": 1041,
+        "endMs": 1666
+      },
+      {
+        "word": "PĚKNĚ",
+        "startMs": 1666,
+        "endMs": 2114
+      },
+      {
+        "word": "ZA",
+        "startMs": 2114,
+        "endMs": 2250
+      },
+      {
+        "word": "SEBOU",
+        "startMs": 2250,
+        "endMs": 2617
+      },
+      {
+        "word": "OD",
+        "startMs": 2685,
+        "endMs": 2821
+      },
+      {
+        "word": "NEJMENŠÍHO",
+        "startMs": 2848,
+        "endMs": 3595
+      },
+      {
+        "word": "PO",
+        "startMs": 3595,
+        "endMs": 3785
+      },
+      {
+        "word": "NEJVĚTŠÍ",
+        "startMs": 3785,
+        "endMs": 4492
+      }
+    ]
+  },
+  "act_20_intro": {
+    "id": "act_20_intro",
+    "file": "assets/audio/act_20_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PROCVIČ SI OUŠKA I OČIČKA! NAJDI DVĚ KARTIČKY SE STEJNÝM OBRÁZKEM NEBO ZVUKEM.",
+    "words": [
+      {
+        "word": "PROCVIČ",
+        "startMs": 104,
+        "endMs": 607
+      },
+      {
+        "word": "SI",
+        "startMs": 621,
+        "endMs": 784
+      },
+      {
+        "word": "OUŠKA",
+        "startMs": 824,
+        "endMs": 1272
+      },
+      {
+        "word": "I",
+        "startMs": 1314,
+        "endMs": 1396
+      },
+      {
+        "word": "OČIČKA",
+        "startMs": 1449,
+        "endMs": 2047
+      },
+      {
+        "word": "NAJDI",
+        "startMs": 3111,
+        "endMs": 3532
+      },
+      {
+        "word": "DVĚ",
+        "startMs": 3533,
+        "endMs": 3778
+      },
+      {
+        "word": "KARTIČKY",
+        "startMs": 3777,
+        "endMs": 4429
+      },
+      {
+        "word": "SE",
+        "startMs": 4429,
+        "endMs": 4551
+      },
+      {
+        "word": "STEJNÝM",
+        "startMs": 4552,
+        "endMs": 5109
+      },
+      {
+        "word": "OBRÁZKEM",
+        "startMs": 5122,
+        "endMs": 5883
+      },
+      {
+        "word": "NEBO",
+        "startMs": 5883,
+        "endMs": 6155
+      },
+      {
+        "word": "ZVUKEM",
+        "startMs": 6155,
+        "endMs": 6821
+      }
+    ]
+  },
+  "act_18_intro": {
+    "id": "act_18_intro",
+    "file": "assets/audio/act_18_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PODÍVEJ SE NA ŘADU OBRÁZKŮ A DOPLŇ TEN, KTERÝ V NÍ CHYBÍ!",
+    "words": [
+      {
+        "word": "PODÍVEJ",
+        "startMs": 104,
+        "endMs": 702
+      },
+      {
+        "word": "SE",
+        "startMs": 702,
+        "endMs": 906
+      },
+      {
+        "word": "NA",
+        "startMs": 906,
+        "endMs": 1055
+      },
+      {
+        "word": "ŘADU",
+        "startMs": 1055,
+        "endMs": 1340
+      },
+      {
+        "word": "OBRÁZKŮ",
+        "startMs": 1382,
+        "endMs": 2129
+      },
+      {
+        "word": "A",
+        "startMs": 2156,
+        "endMs": 2251
+      },
+      {
+        "word": "DOPLŇ",
+        "startMs": 2292,
+        "endMs": 2645
+      },
+      {
+        "word": "TEN",
+        "startMs": 2659,
+        "endMs": 3012
+      },
+      {
+        "word": "KTERÝ",
+        "startMs": 3229,
+        "endMs": 3677
+      },
+      {
+        "word": "V",
+        "startMs": 3691,
+        "endMs": 3773
+      },
+      {
+        "word": "NÍ",
+        "startMs": 3773,
+        "endMs": 3963
+      },
+      {
+        "word": "CHYBÍ",
+        "startMs": 3977,
+        "endMs": 4520
+      }
+    ]
+  },
+  "act_19_intro": {
+    "id": "act_19_intro",
+    "file": "assets/audio/act_19_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "POMOZ TUČŇÁKOVI NAJÍT BEZPEČNOU CESTU LEDOVÝM BLUDIŠTĚM AŽ K POKLADU!",
+    "words": [
+      {
+        "word": "POMOZ",
+        "startMs": 104,
+        "endMs": 498
+      },
+      {
+        "word": "TUČŇÁKOVI",
+        "startMs": 498,
+        "endMs": 1259
+      },
+      {
+        "word": "NAJÍT",
+        "startMs": 1259,
+        "endMs": 1599
+      },
+      {
+        "word": "BEZPEČNOU",
+        "startMs": 1626,
+        "endMs": 2210
+      },
+      {
+        "word": "CESTU",
+        "startMs": 2251,
+        "endMs": 2713
+      },
+      {
+        "word": "LEDOVÝM",
+        "startMs": 2713,
+        "endMs": 3175
+      },
+      {
+        "word": "BLUDIŠTĚM",
+        "startMs": 3175,
+        "endMs": 3854
+      },
+      {
+        "word": "AŽ",
+        "startMs": 3882,
+        "endMs": 4086
+      },
+      {
+        "word": "K",
+        "startMs": 4085,
+        "endMs": 4153
+      },
+      {
+        "word": "POKLADU",
+        "startMs": 4180,
+        "endMs": 4764
+      }
+    ]
+  },
+  "act_22_intro": {
+    "id": "act_22_intro",
+    "file": "assets/audio/act_22_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ZAŘAĎ OBRÁZKY DO TABULKY PODLE JEJICH BARVY I TVARU ZÁROVEŇ!",
+    "words": [
+      {
+        "word": "ZAŘAĎ",
+        "startMs": 104,
+        "endMs": 465
+      },
+      {
+        "word": "OBRÁZKY",
+        "startMs": 507,
+        "endMs": 1132
+      },
+      {
+        "word": "DO",
+        "startMs": 1132,
+        "endMs": 1257
+      },
+      {
+        "word": "TABULKY",
+        "startMs": 1257,
+        "endMs": 1799
+      },
+      {
+        "word": "PODLE",
+        "startMs": 1799,
+        "endMs": 2160
+      },
+      {
+        "word": "JEJICH",
+        "startMs": 2160,
+        "endMs": 2493
+      },
+      {
+        "word": "BARVY",
+        "startMs": 2493,
+        "endMs": 2937
+      },
+      {
+        "word": "I",
+        "startMs": 2993,
+        "endMs": 3049
+      },
+      {
+        "word": "TVARU",
+        "startMs": 3076,
+        "endMs": 3437
+      },
+      {
+        "word": "ZÁROVEŇ",
+        "startMs": 3438,
+        "endMs": 4188
+      }
+    ]
+  },
+  "draw_step_head": {
+    "id": "draw_step_head",
+    "file": "assets/audio/draw_step_head.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "VÝBORNĚ! TEĎ NAHOŘE PŘIKRESLI KULATOU HLAVIČKU.",
+    "words": [
+      {
+        "word": "VÝBORNĚ",
+        "startMs": 104,
+        "endMs": 838
+      },
+      {
+        "word": "TEĎ",
+        "startMs": 1889,
+        "endMs": 2079
+      },
+      {
+        "word": "NAHOŘE",
+        "startMs": 2120,
+        "endMs": 2568
+      },
+      {
+        "word": "PŘIKRESLI",
+        "startMs": 2568,
+        "endMs": 3220
+      },
+      {
+        "word": "KULATOU",
+        "startMs": 3220,
+        "endMs": 3696
+      },
+      {
+        "word": "HLAVIČKU",
+        "startMs": 3736,
+        "endMs": 4429
+      }
+    ]
+  },
+  "act_21_intro": {
+    "id": "act_21_intro",
+    "file": "assets/audio/act_21_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "SLOŽ CESTU ZE ŠIPEK A PAK ZMÁČKNI ZELENÉ TLAČÍTKO, AŤ VYRAZÍM ZA POKLADEM!",
+    "words": [
+      {
+        "word": "SLOŽ",
+        "startMs": 103,
+        "endMs": 415
+      },
+      {
+        "word": "CESTU",
+        "startMs": 416,
+        "endMs": 837
+      },
+      {
+        "word": "ZE",
+        "startMs": 837,
+        "endMs": 1000
+      },
+      {
+        "word": "ŠIPEK",
+        "startMs": 1000,
+        "endMs": 1435
+      },
+      {
+        "word": "A",
+        "startMs": 1448,
+        "endMs": 1584
+      },
+      {
+        "word": "PAK",
+        "startMs": 1598,
+        "endMs": 1815
+      },
+      {
+        "word": "ZMÁČKNI",
+        "startMs": 1815,
+        "endMs": 2413
+      },
+      {
+        "word": "ZELENÉ",
+        "startMs": 2413,
+        "endMs": 2861
+      },
+      {
+        "word": "TLAČÍTKO",
+        "startMs": 2875,
+        "endMs": 3663
+      },
+      {
+        "word": "AŤ",
+        "startMs": 3976,
+        "endMs": 4153
+      },
+      {
+        "word": "VYRAZÍM",
+        "startMs": 4193,
+        "endMs": 4736
+      },
+      {
+        "word": "ZA",
+        "startMs": 4736,
+        "endMs": 4899
+      },
+      {
+        "word": "POKLADEM",
+        "startMs": 4899,
+        "endMs": 5606
+      }
+    ]
+  },
+  "draw_step_wings": {
+    "id": "draw_step_wings",
+    "file": "assets/audio/draw_step_wings.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PARÁDA! PŘIDEJ PO STRANÁCH DVĚ MÁVAJÍCÍ KŘIDÉLKA.",
+    "words": [
+      {
+        "word": "PARÁDA",
+        "startMs": 104,
+        "endMs": 743
+      },
+      {
+        "word": "PŘIDEJ",
+        "startMs": 1807,
+        "endMs": 2296
+      },
+      {
+        "word": "PO",
+        "startMs": 2310,
+        "endMs": 2459
+      },
+      {
+        "word": "STRANÁCH",
+        "startMs": 2459,
+        "endMs": 3098
+      },
+      {
+        "word": "DVĚ",
+        "startMs": 3098,
+        "endMs": 3343
+      },
+      {
+        "word": "MÁVAJÍCÍ",
+        "startMs": 3342,
+        "endMs": 4103
+      },
+      {
+        "word": "KŘIDÉLKA",
+        "startMs": 4130,
+        "endMs": 4918
+      }
+    ]
+  },
+  "draw_step_face": {
+    "id": "draw_step_face",
+    "file": "assets/audio/draw_step_face.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "A NAKONEC OČÍČKA A ŠPIČATÝ ZOBÁČEK, AŤ NA TEBE KOUKÁ!",
+    "words": [
+      {
+        "word": "A",
+        "startMs": 103,
+        "endMs": 171
+      },
+      {
+        "word": "NAKONEC",
+        "startMs": 198,
+        "endMs": 687
+      },
+      {
+        "word": "OČÍČKA",
+        "startMs": 783,
+        "endMs": 1394
+      },
+      {
+        "word": "A",
+        "startMs": 1394,
+        "endMs": 1489
+      },
+      {
+        "word": "ŠPIČATÝ",
+        "startMs": 1489,
+        "endMs": 2073
+      },
+      {
+        "word": "ZOBÁČEK",
+        "startMs": 2087,
+        "endMs": 2861
+      },
+      {
+        "word": "AŤ",
+        "startMs": 3174,
+        "endMs": 3351
+      },
+      {
+        "word": "NA",
+        "startMs": 3405,
+        "endMs": 3541
+      },
+      {
+        "word": "TEBE",
+        "startMs": 3541,
+        "endMs": 3826
+      },
+      {
+        "word": "KOUKÁ",
+        "startMs": 3826,
+        "endMs": 4505
+      }
+    ]
+  },
+  "act_16_intro": {
+    "id": "act_16_intro",
+    "file": "assets/audio/act_16_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "POSLOUCHEJ KRÁTKÝ PŘÍBĚH A SPOČÍTEJ, KOLIK TUČŇÁKŮ JE NA KŘE DOHROMADY!",
+    "words": [
+      {
+        "word": "POSLOUCHEJ",
+        "startMs": 106,
+        "endMs": 814
+      },
+      {
+        "word": "KRÁTKÝ",
+        "startMs": 814,
+        "endMs": 1383
+      },
+      {
+        "word": "PŘÍBĚH",
+        "startMs": 1411,
+        "endMs": 1953
+      },
+      {
+        "word": "A",
+        "startMs": 1953,
+        "endMs": 2064
+      },
+      {
+        "word": "SPOČÍTEJ",
+        "startMs": 2078,
+        "endMs": 2870
+      },
+      {
+        "word": "KOLIK",
+        "startMs": 3036,
+        "endMs": 3411
+      },
+      {
+        "word": "TUČŇÁKŮ",
+        "startMs": 3439,
+        "endMs": 4300
+      },
+      {
+        "word": "JE",
+        "startMs": 4314,
+        "endMs": 4481
+      },
+      {
+        "word": "NA",
+        "startMs": 4481,
+        "endMs": 4606
+      },
+      {
+        "word": "KŘE",
+        "startMs": 4606,
+        "endMs": 4870
+      },
+      {
+        "word": "DOHROMADY",
+        "startMs": 4869,
+        "endMs": 5591
+      }
+    ]
+  },
+  "draw_step_alive": {
+    "id": "draw_step_alive",
+    "file": "assets/audio/draw_step_alive.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "JÉ, TVŮJ OBRÁZEK OŽIL! TEĎ SI HO MŮŽEŠ VYBARVIT A NAMÍCHAT KOUZELNÉ BARVY!",
+    "words": [
+      {
+        "word": "JÉ",
+        "startMs": 103,
+        "endMs": 369
+      },
+      {
+        "word": "TVŮJ",
+        "startMs": 635,
+        "endMs": 981
+      },
+      {
+        "word": "OBRÁZEK",
+        "startMs": 1034,
+        "endMs": 1672
+      },
+      {
+        "word": "OŽIL",
+        "startMs": 1726,
+        "endMs": 2245
+      },
+      {
+        "word": "TEĎ",
+        "startMs": 3298,
+        "endMs": 3458
+      },
+      {
+        "word": "SI",
+        "startMs": 3471,
+        "endMs": 3670
+      },
+      {
+        "word": "HO",
+        "startMs": 3670,
+        "endMs": 3803
+      },
+      {
+        "word": "MŮŽEŠ",
+        "startMs": 3803,
+        "endMs": 4242
+      },
+      {
+        "word": "VYBARVIT",
+        "startMs": 4242,
+        "endMs": 4787
+      },
+      {
+        "word": "A",
+        "startMs": 4827,
+        "endMs": 4973
+      },
+      {
+        "word": "NAMÍCHAT",
+        "startMs": 4987,
+        "endMs": 5519
+      },
+      {
+        "word": "KOUZELNÉ",
+        "startMs": 5545,
+        "endMs": 6276
+      },
+      {
+        "word": "BARVY",
+        "startMs": 6290,
+        "endMs": 6742
+      }
+    ]
+  },
+  "color_mix_yellow_blue": {
+    "id": "color_mix_yellow_blue",
+    "file": "assets/audio/color_mix_yellow_blue.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "KOUZLO! SMÍCHÁNÍM ŽLUTÉ A MODRÉ BARVY VZNIKLA KRÁSNÁ ZELENÁ!",
+    "words": [
+      {
+        "word": "KOUZLO",
+        "startMs": 104,
+        "endMs": 647
+      },
+      {
+        "word": "SMÍCHÁNÍM",
+        "startMs": 1657,
+        "endMs": 2499
+      },
+      {
+        "word": "ŽLUTÉ",
+        "startMs": 2499,
+        "endMs": 3070
+      },
+      {
+        "word": "A",
+        "startMs": 3083,
+        "endMs": 3219
+      },
+      {
+        "word": "MODRÉ",
+        "startMs": 3246,
+        "endMs": 3654
+      },
+      {
+        "word": "BARVY",
+        "startMs": 3667,
+        "endMs": 4047
+      },
+      {
+        "word": "VZNIKLA",
+        "startMs": 4048,
+        "endMs": 4551
+      },
+      {
+        "word": "KRÁSNÁ",
+        "startMs": 4551,
+        "endMs": 5244
+      },
+      {
+        "word": "ZELENÁ",
+        "startMs": 5243,
+        "endMs": 5882
+      }
+    ]
+  },
+  "draw_step_rocket_body": {
+    "id": "draw_step_rocket_body",
+    "file": "assets/audio/draw_step_rocket_body.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "NAKRESLI VYSOKÝ TRUP VESMÍRNÉ RAKETY A KULATÉ OKÉNKO!",
+    "words": [
+      {
+        "word": "NAKRESLI",
+        "startMs": 104,
+        "endMs": 688
+      },
+      {
+        "word": "VYSOKÝ",
+        "startMs": 689,
+        "endMs": 1178
+      },
+      {
+        "word": "TRUP",
+        "startMs": 1191,
+        "endMs": 1476
+      },
+      {
+        "word": "VESMÍRNÉ",
+        "startMs": 1490,
+        "endMs": 2237
+      },
+      {
+        "word": "RAKETY",
+        "startMs": 2238,
+        "endMs": 2727
+      },
+      {
+        "word": "A",
+        "startMs": 2740,
+        "endMs": 2822
+      },
+      {
+        "word": "KULATÉ",
+        "startMs": 2890,
+        "endMs": 3447
+      },
+      {
+        "word": "OKÉNKO",
+        "startMs": 3515,
+        "endMs": 4194
+      }
+    ]
+  },
+  "draw_step_oval": {
+    "id": "draw_step_oval",
+    "file": "assets/audio/draw_step_oval.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PRVNÍ KROK: NAKRESLI VELKÝ KULATÝ OVÁL PRO TĚLÍČKO.",
+    "words": [
+      {
+        "word": "PRVNÍ",
+        "startMs": 106,
+        "endMs": 578
+      },
+      {
+        "word": "KROK",
+        "startMs": 578,
+        "endMs": 953
+      },
+      {
+        "word": "NAKRESLI",
+        "startMs": 1300,
+        "endMs": 1939
+      },
+      {
+        "word": "VELKÝ",
+        "startMs": 1939,
+        "endMs": 2370
+      },
+      {
+        "word": "KULATÝ",
+        "startMs": 2383,
+        "endMs": 2925
+      },
+      {
+        "word": "OVÁL",
+        "startMs": 2939,
+        "endMs": 3411
+      },
+      {
+        "word": "PRO",
+        "startMs": 3411,
+        "endMs": 3619
+      },
+      {
+        "word": "TĚLÍČKO",
+        "startMs": 3633,
+        "endMs": 4369
+      }
+    ]
+  },
+  "draw_step_ears": {
+    "id": "draw_step_ears",
+    "file": "assets/audio/draw_step_ears.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PŘIKRESLI DVĚ ŠPIČATÁ KOČIČÍ OUŠKA A DLOUHÉ FOUSKY!",
+    "words": [
+      {
+        "word": "PŘIKRESLI",
+        "startMs": 104,
+        "endMs": 770
+      },
+      {
+        "word": "DVĚ",
+        "startMs": 770,
+        "endMs": 1001
+      },
+      {
+        "word": "ŠPIČATÁ",
+        "startMs": 1001,
+        "endMs": 1599
+      },
+      {
+        "word": "KOČIČÍ",
+        "startMs": 1599,
+        "endMs": 2170
+      },
+      {
+        "word": "OUŠKA",
+        "startMs": 2210,
+        "endMs": 2726
+      },
+      {
+        "word": "A",
+        "startMs": 2781,
+        "endMs": 2849
+      },
+      {
+        "word": "DLOUHÉ",
+        "startMs": 2890,
+        "endMs": 3352
+      },
+      {
+        "word": "FOUSKY",
+        "startMs": 3365,
+        "endMs": 4017
+      }
+    ]
+  },
+  "color_mix_red_yellow": {
+    "id": "color_mix_red_yellow",
+    "file": "assets/audio/color_mix_red_yellow.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PODÍVEJ! ČERVENÁ A ŽLUTÁ SE SPOJILY V ZÁŘIVĚ ORANŽOVOU!",
+    "words": [
+      {
+        "word": "PODÍVEJ",
+        "startMs": 104,
+        "endMs": 824
+      },
+      {
+        "word": "ČERVENÁ",
+        "startMs": 1848,
+        "endMs": 2514
+      },
+      {
+        "word": "A",
+        "startMs": 2541,
+        "endMs": 2623
+      },
+      {
+        "word": "ŽLUTÁ",
+        "startMs": 2649,
+        "endMs": 3111
+      },
+      {
+        "word": "SE",
+        "startMs": 3111,
+        "endMs": 3260
+      },
+      {
+        "word": "SPOJILY",
+        "startMs": 3261,
+        "endMs": 3764
+      },
+      {
+        "word": "V",
+        "startMs": 3764,
+        "endMs": 3832
+      },
+      {
+        "word": "ZÁŘIVĚ",
+        "startMs": 3832,
+        "endMs": 4457
+      },
+      {
+        "word": "ORANŽOVOU",
+        "startMs": 4552,
+        "endMs": 5245
+      }
+    ]
+  },
+  "color_mix_red_blue": {
+    "id": "color_mix_red_blue",
+    "file": "assets/audio/color_mix_red_blue.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PARÁDA! Z ČERVENÉ A MODRÉ JSI VYKOUZLIL KOUZELNOU FIALOVOU!",
+    "words": [
+      {
+        "word": "PARÁDA",
+        "startMs": 104,
+        "endMs": 743
+      },
+      {
+        "word": "Z",
+        "startMs": 1806,
+        "endMs": 1888
+      },
+      {
+        "word": "ČERVENÉ",
+        "startMs": 1888,
+        "endMs": 2581
+      },
+      {
+        "word": "A",
+        "startMs": 2594,
+        "endMs": 2716
+      },
+      {
+        "word": "MODRÉ",
+        "startMs": 2730,
+        "endMs": 3124
+      },
+      {
+        "word": "JSI",
+        "startMs": 3124,
+        "endMs": 3314
+      },
+      {
+        "word": "VYKOUZLIL",
+        "startMs": 3314,
+        "endMs": 3953
+      },
+      {
+        "word": "KOUZELNOU",
+        "startMs": 3953,
+        "endMs": 4673
+      },
+      {
+        "word": "FIALOVOU",
+        "startMs": 4700,
+        "endMs": 5461
+      }
+    ]
+  },
+  "symmetry_done": {
+    "id": "symmetry_done",
+    "file": "assets/audio/symmetry_done.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "NÁDHERNÁ SOUMĚRNÁ KRESBA! OBĚ STRANY JSOU KRÁSNĚ VYVÁŽENÉ.",
+    "words": [
+      {
+        "word": "NÁDHERNÁ",
+        "startMs": 104,
+        "endMs": 851
+      },
+      {
+        "word": "SOUMĚRNÁ",
+        "startMs": 852,
+        "endMs": 1599
+      },
+      {
+        "word": "KRESBA",
+        "startMs": 1599,
+        "endMs": 2170
+      },
+      {
+        "word": "OBĚ",
+        "startMs": 3220,
+        "endMs": 3478
+      },
+      {
+        "word": "STRANY",
+        "startMs": 3478,
+        "endMs": 3926
+      },
+      {
+        "word": "JSOU",
+        "startMs": 3927,
+        "endMs": 4158
+      },
+      {
+        "word": "KRÁSNĚ",
+        "startMs": 4185,
+        "endMs": 4742
+      },
+      {
+        "word": "VYVÁŽENÉ",
+        "startMs": 4742,
+        "endMs": 5571
+      }
+    ]
+  },
+  "hint_shape_corners": {
+    "id": "hint_shape_corners",
+    "file": "assets/audio/hint_shape_corners.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ZKUS SE PODÍVAT, KOLIK MÁ TEN TVAR ROHŮ, A NAJDI STEJNÝ OBRYS.",
+    "words": [
+      {
+        "word": "ZKUS",
+        "startMs": 104,
+        "endMs": 423
+      },
+      {
+        "word": "SE",
+        "startMs": 424,
+        "endMs": 618
+      },
+      {
+        "word": "PODÍVAT",
+        "startMs": 618,
+        "endMs": 1243
+      },
+      {
+        "word": "KOLIK",
+        "startMs": 1410,
+        "endMs": 1827
+      },
+      {
+        "word": "MÁ",
+        "startMs": 1840,
+        "endMs": 2062
+      },
+      {
+        "word": "TEN",
+        "startMs": 2062,
+        "endMs": 2284
+      },
+      {
+        "word": "TVAR",
+        "startMs": 2299,
+        "endMs": 2591
+      },
+      {
+        "word": "ROHŮ",
+        "startMs": 2604,
+        "endMs": 3076
+      },
+      {
+        "word": "A",
+        "startMs": 3438,
+        "endMs": 3507
+      },
+      {
+        "word": "NAJDI",
+        "startMs": 3576,
+        "endMs": 3937
+      },
+      {
+        "word": "STEJNÝ",
+        "startMs": 3938,
+        "endMs": 4466
+      },
+      {
+        "word": "OBRYS",
+        "startMs": 4535,
+        "endMs": 5063
+      }
+    ]
+  },
+  "draw_step_rocket_nose": {
+    "id": "draw_step_rocket_nose",
+    "file": "assets/audio/draw_step_rocket_nose.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "NA VRŠEK RAKETY NAKRESLI ŠPIČATOU STŘECHU A DOLŮ DVĚ KŘIDÉLKA!",
+    "words": [
+      {
+        "word": "NA",
+        "startMs": 104,
+        "endMs": 240
+      },
+      {
+        "word": "VRŠEK",
+        "startMs": 281,
+        "endMs": 675
+      },
+      {
+        "word": "RAKETY",
+        "startMs": 689,
+        "endMs": 1110
+      },
+      {
+        "word": "NAKRESLI",
+        "startMs": 1110,
+        "endMs": 1653
+      },
+      {
+        "word": "ŠPIČATOU",
+        "startMs": 1653,
+        "endMs": 2210
+      },
+      {
+        "word": "STŘECHU",
+        "startMs": 2251,
+        "endMs": 2822
+      },
+      {
+        "word": "A",
+        "startMs": 2862,
+        "endMs": 2903
+      },
+      {
+        "word": "DOLŮ",
+        "startMs": 2998,
+        "endMs": 3351
+      },
+      {
+        "word": "DVĚ",
+        "startMs": 3352,
+        "endMs": 3610
+      },
+      {
+        "word": "KŘIDÉLKA",
+        "startMs": 3610,
+        "endMs": 4384
+      }
+    ]
+  },
+  "hint_shape_size": {
+    "id": "hint_shape_size",
+    "file": "assets/audio/hint_shape_size.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PODÍVEJ SE NA VELIKOST A BARVU MÍSTA, KTERÉ TI TADY SVÍTÍ.",
+    "words": [
+      {
+        "word": "PODÍVEJ",
+        "startMs": 106,
+        "endMs": 717
+      },
+      {
+        "word": "SE",
+        "startMs": 717,
+        "endMs": 925
+      },
+      {
+        "word": "NA",
+        "startMs": 925,
+        "endMs": 1078
+      },
+      {
+        "word": "VELIKOST",
+        "startMs": 1078,
+        "endMs": 1703
+      },
+      {
+        "word": "A",
+        "startMs": 1731,
+        "endMs": 1898
+      },
+      {
+        "word": "BARVU",
+        "startMs": 1897,
+        "endMs": 2258
+      },
+      {
+        "word": "MÍSTA",
+        "startMs": 2258,
+        "endMs": 2772
+      },
+      {
+        "word": "KTERÉ",
+        "startMs": 2883,
+        "endMs": 3383
+      },
+      {
+        "word": "TI",
+        "startMs": 3383,
+        "endMs": 3522
+      },
+      {
+        "word": "TADY",
+        "startMs": 3522,
+        "endMs": 3814
+      },
+      {
+        "word": "SVÍTÍ",
+        "startMs": 3814,
+        "endMs": 4481
+      }
+    ]
+  },
+  "hint_count_more": {
+    "id": "hint_count_more",
+    "file": "assets/audio/hint_count_more.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM JEŠTĚ TROCHU HLAD! ZKUS DO MISKY PŘIDAT JEŠTĚ PÁR RYBIČEK.",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 106,
+        "endMs": 412
+      },
+      {
+        "word": "JEŠTĚ",
+        "startMs": 425,
+        "endMs": 786
+      },
+      {
+        "word": "TROCHU",
+        "startMs": 786,
+        "endMs": 1203
+      },
+      {
+        "word": "HLAD",
+        "startMs": 1203,
+        "endMs": 1606
+      },
+      {
+        "word": "ZKUS",
+        "startMs": 2707,
+        "endMs": 3068
+      },
+      {
+        "word": "DO",
+        "startMs": 3068,
+        "endMs": 3221
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3221,
+        "endMs": 3596
+      },
+      {
+        "word": "PŘIDAT",
+        "startMs": 3596,
+        "endMs": 4027
+      },
+      {
+        "word": "JEŠTĚ",
+        "startMs": 4040,
+        "endMs": 4415
+      },
+      {
+        "word": "PÁR",
+        "startMs": 4415,
+        "endMs": 4734
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4735,
+        "endMs": 5346
+      }
+    ]
+  },
+  "hint_pattern_repeat": {
+    "id": "hint_pattern_repeat",
+    "file": "assets/audio/hint_pattern_repeat.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ŘEKNI SI OBRÁZKY V ŘADĚ NAHLAS ZA SEBOU A HNED POZNÁŠ, KTERÝ BUDE DALŠÍ.",
+    "words": [
+      {
+        "word": "ŘEKNI",
+        "startMs": 104,
+        "endMs": 521
+      },
+      {
+        "word": "SI",
+        "startMs": 521,
+        "endMs": 702
+      },
+      {
+        "word": "OBRÁZKY",
+        "startMs": 743,
+        "endMs": 1326
+      },
+      {
+        "word": "V",
+        "startMs": 1326,
+        "endMs": 1409
+      },
+      {
+        "word": "ŘADĚ",
+        "startMs": 1410,
+        "endMs": 1702
+      },
+      {
+        "word": "NAHLAS",
+        "startMs": 1701,
+        "endMs": 2145
+      },
+      {
+        "word": "ZA",
+        "startMs": 2146,
+        "endMs": 2299
+      },
+      {
+        "word": "SEBOU",
+        "startMs": 2299,
+        "endMs": 2757
+      },
+      {
+        "word": "A",
+        "startMs": 2812,
+        "endMs": 2881
+      },
+      {
+        "word": "HNED",
+        "startMs": 2910,
+        "endMs": 3188
+      },
+      {
+        "word": "POZNÁŠ",
+        "startMs": 3215,
+        "endMs": 3896
+      },
+      {
+        "word": "KTERÝ",
+        "startMs": 4090,
+        "endMs": 4493
+      },
+      {
+        "word": "BUDE",
+        "startMs": 4507,
+        "endMs": 4757
+      },
+      {
+        "word": "DALŠÍ",
+        "startMs": 4757,
+        "endMs": 5326
+      }
+    ]
+  },
+  "hint_letter_listen": {
+    "id": "hint_letter_listen",
+    "file": "assets/audio/hint_letter_listen.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ZKUS SI TO SLOVO ŘÍCT NAHLAS A POSLOUCHEJ ÚPLNĚ PRVNÍ HLÁSKU!",
+    "words": [
+      {
+        "word": "ZKUS",
+        "startMs": 105,
+        "endMs": 417
+      },
+      {
+        "word": "SI",
+        "startMs": 418,
+        "endMs": 603
+      },
+      {
+        "word": "TO",
+        "startMs": 602,
+        "endMs": 730
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 730,
+        "endMs": 1128
+      },
+      {
+        "word": "ŘÍCT",
+        "startMs": 1128,
+        "endMs": 1540
+      },
+      {
+        "word": "NAHLAS",
+        "startMs": 1568,
+        "endMs": 2065
+      },
+      {
+        "word": "A",
+        "startMs": 2122,
+        "endMs": 2236
+      },
+      {
+        "word": "POSLOUCHEJ",
+        "startMs": 2264,
+        "endMs": 2988
+      },
+      {
+        "word": "ÚPLNĚ",
+        "startMs": 3074,
+        "endMs": 3557
+      },
+      {
+        "word": "PRVNÍ",
+        "startMs": 3557,
+        "endMs": 3969
+      },
+      {
+        "word": "HLÁSKU",
+        "startMs": 3969,
+        "endMs": 4679
+      }
+    ]
+  },
+  "num_02": {
+    "id": "num_02",
+    "file": "assets/audio/num_02.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "DVĚ!",
+    "words": [
+      {
+        "word": "DVĚ",
+        "startMs": 103,
+        "endMs": 445
+      }
+    ]
+  },
+  "num_03": {
+    "id": "num_03",
+    "file": "assets/audio/num_03.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "TŘI!",
+    "words": [
+      {
+        "word": "TŘI",
+        "startMs": 103,
+        "endMs": 392
+      }
+    ]
+  },
+  "num_04": {
+    "id": "num_04",
+    "file": "assets/audio/num_04.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ČTYŘI!",
+    "words": [
+      {
+        "word": "ČTYŘI",
+        "startMs": 103,
+        "endMs": 564
+      }
+    ]
+  },
+  "hint_shape_rotate": {
+    "id": "hint_shape_rotate",
+    "file": "assets/audio/hint_shape_rotate.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "TEN DÍLEK TAM SKORO PASUJE! ZKUS HO TROCHU POOTOČIT TLAČÍTKEM OTOČIT.",
+    "words": [
+      {
+        "word": "TEN",
+        "startMs": 106,
+        "endMs": 314
+      },
+      {
+        "word": "DÍLEK",
+        "startMs": 328,
+        "endMs": 786
+      },
+      {
+        "word": "TAM",
+        "startMs": 800,
+        "endMs": 1036
+      },
+      {
+        "word": "SKORO",
+        "startMs": 1036,
+        "endMs": 1453
+      },
+      {
+        "word": "PASUJE",
+        "startMs": 1453,
+        "endMs": 2022
+      },
+      {
+        "word": "ZKUS",
+        "startMs": 3096,
+        "endMs": 3443
+      },
+      {
+        "word": "HO",
+        "startMs": 3443,
+        "endMs": 3568
+      },
+      {
+        "word": "TROCHU",
+        "startMs": 3568,
+        "endMs": 3957
+      },
+      {
+        "word": "POOTOČIT",
+        "startMs": 3957,
+        "endMs": 4582
+      },
+      {
+        "word": "TLAČÍTKEM",
+        "startMs": 4610,
+        "endMs": 5360
+      },
+      {
+        "word": "OTOČIT",
+        "startMs": 5388,
+        "endMs": 6055
+      }
+    ]
+  },
+  "num_01": {
+    "id": "num_01",
+    "file": "assets/audio/num_01.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "JEDNA!",
+    "words": [
+      {
+        "word": "JEDNA",
+        "startMs": 103,
+        "endMs": 550
+      }
+    ]
+  },
+  "num_05": {
+    "id": "num_05",
+    "file": "assets/audio/num_05.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PĚT!",
+    "words": [
+      {
+        "word": "PĚT",
+        "startMs": 103,
+        "endMs": 485
+      }
+    ]
+  },
+  "num_06": {
+    "id": "num_06",
+    "file": "assets/audio/num_06.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ŠEST!",
+    "words": [
+      {
+        "word": "ŠEST",
+        "startMs": 102,
+        "endMs": 602
+      }
+    ]
+  },
+  "num_10": {
+    "id": "num_10",
+    "file": "assets/audio/num_10.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "DESET!",
+    "words": [
+      {
+        "word": "DESET",
+        "startMs": 103,
+        "endMs": 616
+      }
+    ]
+  },
+  "num_08": {
+    "id": "num_08",
+    "file": "assets/audio/num_08.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "OSM!",
+    "words": [
+      {
+        "word": "OSM",
+        "startMs": 103,
+        "endMs": 511
+      }
+    ]
+  },
+  "hint_idle_encourage": {
+    "id": "hint_idle_encourage",
+    "file": "assets/audio/hint_idle_encourage.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "JSEM TADY S TEBOU! JESTLI CHCEŠ, ŤUKNI NA TO, CO TI ZROVNA BLIKÁ.",
+    "words": [
+      {
+        "word": "JSEM",
+        "startMs": 106,
+        "endMs": 412
+      },
+      {
+        "word": "TADY",
+        "startMs": 411,
+        "endMs": 689
+      },
+      {
+        "word": "S",
+        "startMs": 689,
+        "endMs": 814
+      },
+      {
+        "word": "TEBOU",
+        "startMs": 814,
+        "endMs": 1231
+      },
+      {
+        "word": "JESTLI",
+        "startMs": 2333,
+        "endMs": 2736
+      },
+      {
+        "word": "CHCEŠ",
+        "startMs": 2736,
+        "endMs": 3222
+      },
+      {
+        "word": "ŤUKNI",
+        "startMs": 3444,
+        "endMs": 3875
+      },
+      {
+        "word": "NA",
+        "startMs": 3875,
+        "endMs": 4042
+      },
+      {
+        "word": "TO",
+        "startMs": 4042,
+        "endMs": 4292
+      },
+      {
+        "word": "CO",
+        "startMs": 4514,
+        "endMs": 4708
+      },
+      {
+        "word": "TI",
+        "startMs": 4708,
+        "endMs": 4861
+      },
+      {
+        "word": "ZROVNA",
+        "startMs": 4861,
+        "endMs": 5292
+      },
+      {
+        "word": "BLIKÁ",
+        "startMs": 5292,
+        "endMs": 5889
+      }
+    ]
+  },
+  "num_11": {
+    "id": "num_11",
+    "file": "assets/audio/num_11.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "JEDENÁCT!",
+    "words": [
+      {
+        "word": "JEDENÁCT",
+        "startMs": 103,
+        "endMs": 892
+      }
+    ]
+  },
+  "num_09": {
+    "id": "num_09",
+    "file": "assets/audio/num_09.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "DEVĚT!",
+    "words": [
+      {
+        "word": "DEVĚT",
+        "startMs": 103,
+        "endMs": 629
+      }
+    ]
+  },
+  "hint_count_too_many": {
+    "id": "hint_count_too_many",
+    "file": "assets/audio/hint_count_too_many.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "JÉ, TO JE TROCHU MOC! ŤUKNI NA RYBIČKU V MISCE A JEDNU VRAŤ DO JEZÍRKA.",
+    "words": [
+      {
+        "word": "JÉ",
+        "startMs": 106,
+        "endMs": 384
+      },
+      {
+        "word": "TO",
+        "startMs": 633,
+        "endMs": 800
+      },
+      {
+        "word": "JE",
+        "startMs": 800,
+        "endMs": 925
+      },
+      {
+        "word": "TROCHU",
+        "startMs": 925,
+        "endMs": 1328
+      },
+      {
+        "word": "MOC",
+        "startMs": 1328,
+        "endMs": 1675
+      },
+      {
+        "word": "ŤUKNI",
+        "startMs": 2806,
+        "endMs": 3209
+      },
+      {
+        "word": "NA",
+        "startMs": 3208,
+        "endMs": 3361
+      },
+      {
+        "word": "RYBIČKU",
+        "startMs": 3361,
+        "endMs": 3847
+      },
+      {
+        "word": "V",
+        "startMs": 3847,
+        "endMs": 3944
+      },
+      {
+        "word": "MISCE",
+        "startMs": 3944,
+        "endMs": 4458
+      },
+      {
+        "word": "A",
+        "startMs": 4472,
+        "endMs": 4569
+      },
+      {
+        "word": "JEDNU",
+        "startMs": 4611,
+        "endMs": 4986
+      },
+      {
+        "word": "VRAŤ",
+        "startMs": 4986,
+        "endMs": 5292
+      },
+      {
+        "word": "DO",
+        "startMs": 5333,
+        "endMs": 5486
+      },
+      {
+        "word": "JEZÍRKA",
+        "startMs": 5486,
+        "endMs": 6236
+      }
+    ]
+  },
+  "num_15": {
+    "id": "num_15",
+    "file": "assets/audio/num_15.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PATNÁCT!",
+    "words": [
+      {
+        "word": "PATNÁCT",
+        "startMs": 103,
+        "endMs": 866
+      }
+    ]
+  },
+  "num_07": {
+    "id": "num_07",
+    "file": "assets/audio/num_07.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "SEDM!",
+    "words": [
+      {
+        "word": "SEDM",
+        "startMs": 102,
+        "endMs": 576
+      }
+    ]
+  },
+  "num_12": {
+    "id": "num_12",
+    "file": "assets/audio/num_12.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "DVANÁCT!",
+    "words": [
+      {
+        "word": "DVANÁCT",
+        "startMs": 103,
+        "endMs": 853
+      }
+    ]
+  },
+  "num_14": {
+    "id": "num_14",
+    "file": "assets/audio/num_14.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ČTRNÁCT!",
+    "words": [
+      {
+        "word": "ČTRNÁCT",
+        "startMs": 103,
+        "endMs": 814
+      }
+    ]
+  },
+  "hint_draw_trace": {
+    "id": "hint_draw_trace",
+    "file": "assets/audio/hint_draw_trace.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "KRESLI PRSTEM POMALU PO PŘERUŠOVANÉ ČÁŘE, VEDEŠ SI SKVĚLE!",
+    "words": [
+      {
+        "word": "KRESLI",
+        "startMs": 106,
+        "endMs": 523
+      },
+      {
+        "word": "PRSTEM",
+        "startMs": 522,
+        "endMs": 980
+      },
+      {
+        "word": "POMALU",
+        "startMs": 981,
+        "endMs": 1398
+      },
+      {
+        "word": "PO",
+        "startMs": 1397,
+        "endMs": 1550
+      },
+      {
+        "word": "PŘERUŠOVANÉ",
+        "startMs": 1550,
+        "endMs": 2356
+      },
+      {
+        "word": "ČÁŘE",
+        "startMs": 2369,
+        "endMs": 2952
+      },
+      {
+        "word": "VEDEŠ",
+        "startMs": 3300,
+        "endMs": 3689
+      },
+      {
+        "word": "SI",
+        "startMs": 3689,
+        "endMs": 3842
+      },
+      {
+        "word": "SKVĚLE",
+        "startMs": 3842,
+        "endMs": 4411
+      }
+    ]
+  },
+  "num_13": {
+    "id": "num_13",
+    "file": "assets/audio/num_13.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "TŘINÁCT!",
+    "words": [
+      {
+        "word": "TŘINÁCT",
+        "startMs": 103,
+        "endMs": 827
+      }
+    ]
+  },
+  "num_19": {
+    "id": "num_19",
+    "file": "assets/audio/num_19.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "DEVATENÁCT!",
+    "words": [
+      {
+        "word": "DEVATENÁCT",
+        "startMs": 103,
+        "endMs": 971
+      }
+    ]
+  },
+  "celebrate_01": {
+    "id": "celebrate_01",
+    "file": "assets/audio/celebrate_01.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "SKVĚLÁ PRÁCE, KRÁSNĚ JSI TO SLADIL A NEVZDAL SES!",
+    "words": [
+      {
+        "word": "SKVĚLÁ",
+        "startMs": 102,
+        "endMs": 660
+      },
+      {
+        "word": "PRÁCE",
+        "startMs": 661,
+        "endMs": 1233
+      },
+      {
+        "word": "KRÁSNĚ",
+        "startMs": 1379,
+        "endMs": 1964
+      },
+      {
+        "word": "JSI",
+        "startMs": 1964,
+        "endMs": 2124
+      },
+      {
+        "word": "TO",
+        "startMs": 2124,
+        "endMs": 2257
+      },
+      {
+        "word": "SLADIL",
+        "startMs": 2257,
+        "endMs": 2815
+      },
+      {
+        "word": "A",
+        "startMs": 2855,
+        "endMs": 2961
+      },
+      {
+        "word": "NEVZDAL",
+        "startMs": 2988,
+        "endMs": 3480
+      },
+      {
+        "word": "SES",
+        "startMs": 3480,
+        "endMs": 3919
+      }
+    ]
+  },
+  "num_16": {
+    "id": "num_16",
+    "file": "assets/audio/num_16.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ŠESTNÁCT!",
+    "words": [
+      {
+        "word": "ŠESTNÁCT",
+        "startMs": 102,
+        "endMs": 944
+      }
+    ]
+  },
+  "num_18": {
+    "id": "num_18",
+    "file": "assets/audio/num_18.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "OSMNÁCT!",
+    "words": [
+      {
+        "word": "OSMNÁCT",
+        "startMs": 103,
+        "endMs": 906
+      }
+    ]
+  },
+  "num_17": {
+    "id": "num_17",
+    "file": "assets/audio/num_17.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "SEDMNÁCT!",
+    "words": [
+      {
+        "word": "SEDMNÁCT",
+        "startMs": 102,
+        "endMs": 970
+      }
+    ]
+  },
+  "num_20": {
+    "id": "num_20",
+    "file": "assets/audio/num_20.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "DVACET!",
+    "words": [
+      {
+        "word": "DVACET",
+        "startMs": 103,
+        "endMs": 682
+      }
+    ]
+  },
+  "celebrate_05": {
+    "id": "celebrate_05",
+    "file": "assets/audio/celebrate_05.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "VÝBORNĚ, POZNAL JSI PRVNÍ HLÁSKU ÚPLNĚ PŘESNĚ! MÁŠ UŠI JAKO RYS!",
+    "words": [
+      {
+        "word": "VÝBORNĚ",
+        "startMs": 103,
+        "endMs": 821
+      },
+      {
+        "word": "POZNAL",
+        "startMs": 1140,
+        "endMs": 1659
+      },
+      {
+        "word": "JSI",
+        "startMs": 1659,
+        "endMs": 1832
+      },
+      {
+        "word": "PRVNÍ",
+        "startMs": 1832,
+        "endMs": 2204
+      },
+      {
+        "word": "HLÁSKU",
+        "startMs": 2204,
+        "endMs": 2736
+      },
+      {
+        "word": "ÚPLNĚ",
+        "startMs": 2803,
+        "endMs": 3229
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3228,
+        "endMs": 3813
+      },
+      {
+        "word": "MÁŠ",
+        "startMs": 4840,
+        "endMs": 5212
+      },
+      {
+        "word": "UŠI",
+        "startMs": 5306,
+        "endMs": 5599
+      },
+      {
+        "word": "JAKO",
+        "startMs": 5598,
+        "endMs": 5917
+      },
+      {
+        "word": "RYS",
+        "startMs": 5918,
+        "endMs": 6264
+      }
+    ]
+  },
+  "celebrate_02": {
+    "id": "celebrate_02",
+    "file": "assets/audio/celebrate_02.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "HURÁ! MÁŠ SKVĚLÉ OKO A MOC PĚKNĚ JSI PŘEMÝŠLEL!",
+    "words": [
+      {
+        "word": "HURÁ",
+        "startMs": 102,
+        "endMs": 554
+      },
+      {
+        "word": "MÁŠ",
+        "startMs": 1609,
+        "endMs": 1915
+      },
+      {
+        "word": "SKVĚLÉ",
+        "startMs": 1915,
+        "endMs": 2473
+      },
+      {
+        "word": "OKO",
+        "startMs": 2540,
+        "endMs": 2833
+      },
+      {
+        "word": "A",
+        "startMs": 2859,
+        "endMs": 2979
+      },
+      {
+        "word": "MOC",
+        "startMs": 2992,
+        "endMs": 3231
+      },
+      {
+        "word": "PĚKNĚ",
+        "startMs": 3258,
+        "endMs": 3657
+      },
+      {
+        "word": "JSI",
+        "startMs": 3657,
+        "endMs": 3843
+      },
+      {
+        "word": "PŘEMÝŠLEL",
+        "startMs": 3843,
+        "endMs": 4707
+      }
+    ]
+  },
+  "celebrate_04": {
+    "id": "celebrate_04",
+    "file": "assets/audio/celebrate_04.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "BRAVO, MLADÝ UMĚLČE! TOHLE DÍLO JE JAK Z POHÁDKOVÉ KNÍŽKY!",
+    "words": [
+      {
+        "word": "BRAVO",
+        "startMs": 103,
+        "endMs": 582
+      },
+      {
+        "word": "MLADÝ",
+        "startMs": 874,
+        "endMs": 1339
+      },
+      {
+        "word": "UMĚLČE",
+        "startMs": 1393,
+        "endMs": 2058
+      },
+      {
+        "word": "TOHLE",
+        "startMs": 3098,
+        "endMs": 3430
+      },
+      {
+        "word": "DÍLO",
+        "startMs": 3431,
+        "endMs": 3870
+      },
+      {
+        "word": "JE",
+        "startMs": 3870,
+        "endMs": 3990
+      },
+      {
+        "word": "JAK",
+        "startMs": 3989,
+        "endMs": 4162
+      },
+      {
+        "word": "Z",
+        "startMs": 4162,
+        "endMs": 4282
+      },
+      {
+        "word": "POHÁDKOVÉ",
+        "startMs": 4282,
+        "endMs": 5053
+      },
+      {
+        "word": "KNÍŽKY",
+        "startMs": 5066,
+        "endMs": 5691
+      }
+    ]
+  },
+  "bedtime_yawn": {
+    "id": "bedtime_yawn",
+    "file": "assets/audio/bedtime_yawn.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "ÁÁCH JO, DNES JSME SI BÁJEČNĚ POHRÁLI, ALE MNĚ UŽ PADAJÍ VÍČKA.",
+    "words": [
+      {
+        "word": "ÁÁÁCH",
+        "startMs": 107,
+        "endMs": 1000
+      },
+      {
+        "word": "JO",
+        "startMs": 1000,
+        "endMs": 1223
+      },
+      {
+        "word": "DNES",
+        "startMs": 1491,
+        "endMs": 1818
+      },
+      {
+        "word": "JSME",
+        "startMs": 1818,
+        "endMs": 2071
+      },
+      {
+        "word": "SI",
+        "startMs": 2071,
+        "endMs": 2279
+      },
+      {
+        "word": "BÁJEČNĚ",
+        "startMs": 2280,
+        "endMs": 2920
+      },
+      {
+        "word": "POHRÁLI",
+        "startMs": 2920,
+        "endMs": 3709
+      },
+      {
+        "word": "ALE",
+        "startMs": 4036,
+        "endMs": 4334
+      },
+      {
+        "word": "MNĚ",
+        "startMs": 4333,
+        "endMs": 4541
+      },
+      {
+        "word": "UŽ",
+        "startMs": 4616,
+        "endMs": 4795
+      },
+      {
+        "word": "PADAJÍ",
+        "startMs": 4795,
+        "endMs": 5286
+      },
+      {
+        "word": "VÍČKA",
+        "startMs": 5301,
+        "endMs": 5896
+      }
+    ]
+  },
+  "bedtime_goodnight": {
+    "id": "bedtime_goodnight",
+    "file": "assets/audio/bedtime_goodnight.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "OBLÉKÁM SI TEPLÉ PYŽAMKO A JDU SE VYSPAT DO IGLÚ. MOC SE NA TEBE TĚŠÍM ZASE ZÍTRA, AHOJ!",
+    "words": [
+      {
+        "word": "OBLÉKÁM",
+        "startMs": 111,
+        "endMs": 827
+      },
+      {
+        "word": "SI",
+        "startMs": 827,
+        "endMs": 1010
+      },
+      {
+        "word": "TEPLÉ",
+        "startMs": 1010,
+        "endMs": 1467
+      },
+      {
+        "word": "PYŽAMKO",
+        "startMs": 1483,
+        "endMs": 2199
+      },
+      {
+        "word": "A",
+        "startMs": 2215,
+        "endMs": 2306
+      },
+      {
+        "word": "JDU",
+        "startMs": 2352,
+        "endMs": 2581
+      },
+      {
+        "word": "SE",
+        "startMs": 2580,
+        "endMs": 2824
+      },
+      {
+        "word": "VYSPAT",
+        "startMs": 2824,
+        "endMs": 3281
+      },
+      {
+        "word": "DO",
+        "startMs": 3312,
+        "endMs": 3449
+      },
+      {
+        "word": "IGLÚ",
+        "startMs": 3526,
+        "endMs": 4380
+      },
+      {
+        "word": "MOC",
+        "startMs": 5640,
+        "endMs": 5899
+      },
+      {
+        "word": "SE",
+        "startMs": 5915,
+        "endMs": 6189
+      },
+      {
+        "word": "NA",
+        "startMs": 6189,
+        "endMs": 6311
+      },
+      {
+        "word": "TEBE",
+        "startMs": 6311,
+        "endMs": 6601
+      },
+      {
+        "word": "TĚŠÍM",
+        "startMs": 6601,
+        "endMs": 7104
+      },
+      {
+        "word": "ZASE",
+        "startMs": 7104,
+        "endMs": 7455
+      },
+      {
+        "word": "ZÍTRA",
+        "startMs": 7454,
+        "endMs": 8079
+      },
+      {
+        "word": "AHOJ",
+        "startMs": 8460,
+        "endMs": 8978
+      }
+    ]
+  },
+  "celebrate_06": {
+    "id": "celebrate_06",
+    "file": "assets/audio/celebrate_06.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "TLESKÁM TI KŘÍDLY! ZÍSKÁVÁŠ ZLATOU HVĚZDIČKU ZA SKVĚLOU SNAHU!",
+    "words": [
+      {
+        "word": "TLESKÁM",
+        "startMs": 103,
+        "endMs": 675
+      },
+      {
+        "word": "TI",
+        "startMs": 675,
+        "endMs": 821
+      },
+      {
+        "word": "KŘÍDLY",
+        "startMs": 821,
+        "endMs": 1393
+      },
+      {
+        "word": "ZÍSKÁVÁŠ",
+        "startMs": 2406,
+        "endMs": 3257
+      },
+      {
+        "word": "ZLATOU",
+        "startMs": 3257,
+        "endMs": 3709
+      },
+      {
+        "word": "HVĚZDIČKU",
+        "startMs": 3736,
+        "endMs": 4441
+      },
+      {
+        "word": "ZA",
+        "startMs": 4441,
+        "endMs": 4587
+      },
+      {
+        "word": "SKVĚLOU",
+        "startMs": 4587,
+        "endMs": 5106
+      },
+      {
+        "word": "SNAHU",
+        "startMs": 5145,
+        "endMs": 5610
+      }
+    ]
+  },
+  "celebrate_03": {
+    "id": "celebrate_03",
+    "file": "assets/audio/celebrate_03.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MŇAM, TO BYLA DOBROTA! PŘESNĚ TOLIK RYBIČEK JSEM SI PŘÁL, DĚKUJI!",
+    "words": [
+      {
+        "word": "MŇAM",
+        "startMs": 103,
+        "endMs": 529
+      },
+      {
+        "word": "TO",
+        "startMs": 808,
+        "endMs": 968
+      },
+      {
+        "word": "BYLA",
+        "startMs": 981,
+        "endMs": 1247
+      },
+      {
+        "word": "DOBROTA",
+        "startMs": 1247,
+        "endMs": 1792
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 2806,
+        "endMs": 3338
+      },
+      {
+        "word": "TOLIK",
+        "startMs": 3338,
+        "endMs": 3684
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 3697,
+        "endMs": 4149
+      },
+      {
+        "word": "JSEM",
+        "startMs": 4149,
+        "endMs": 4388
+      },
+      {
+        "word": "SI",
+        "startMs": 4388,
+        "endMs": 4561
+      },
+      {
+        "word": "PŘÁL",
+        "startMs": 4561,
+        "endMs": 5053
+      },
+      {
+        "word": "DĚKUJI",
+        "startMs": 5372,
+        "endMs": 5970
+      }
+    ]
+  },
+  "word_liska": {
+    "id": "word_liska",
+    "file": "assets/audio/word_liska.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "L-L-LIŠKA! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO LIŠKA?",
+    "words": [
+      {
+        "word": "L",
+        "startMs": 103,
+        "endMs": 375
+      },
+      {
+        "word": "L",
+        "startMs": 688,
+        "endMs": 960
+      },
+      {
+        "word": "LIŠKA",
+        "startMs": 1258,
+        "endMs": 1801
+      },
+      {
+        "word": "NA",
+        "startMs": 2880,
+        "endMs": 3029
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 3043,
+        "endMs": 3410
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 3438,
+        "endMs": 3995
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 3995,
+        "endMs": 4579
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 4592,
+        "endMs": 4986
+      },
+      {
+        "word": "LIŠKA",
+        "startMs": 4986,
+        "endMs": 5448
+      }
+    ]
+  },
+  "word_ryba": {
+    "id": "word_ryba",
+    "file": "assets/audio/word_ryba.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "R-R-RYBA! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO RYBA?",
+    "words": [
+      {
+        "word": "R",
+        "startMs": 103,
+        "endMs": 293
+      },
+      {
+        "word": "R",
+        "startMs": 565,
+        "endMs": 769
+      },
+      {
+        "word": "RYBA",
+        "startMs": 1095,
+        "endMs": 1503
+      },
+      {
+        "word": "NA",
+        "startMs": 2541,
+        "endMs": 2690
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 2717,
+        "endMs": 3084
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 3111,
+        "endMs": 3668
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 3668,
+        "endMs": 4266
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 4280,
+        "endMs": 4674
+      },
+      {
+        "word": "RYBA",
+        "startMs": 4674,
+        "endMs": 5000
+      }
+    ]
+  },
+  "word_zaba": {
+    "id": "word_zaba",
+    "file": "assets/audio/word_zaba.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "Ž-Ž-ŽÁBA! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO ŽÁBA?",
+    "words": [
+      {
+        "word": "Ž",
+        "startMs": 103,
+        "endMs": 429
+      },
+      {
+        "word": "Ž",
+        "startMs": 674,
+        "endMs": 1041
+      },
+      {
+        "word": "ŽÁBA",
+        "startMs": 1285,
+        "endMs": 1856
+      },
+      {
+        "word": "NA",
+        "startMs": 2894,
+        "endMs": 3043
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 3057,
+        "endMs": 3410
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 3438,
+        "endMs": 3995
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 3995,
+        "endMs": 4579
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 4592,
+        "endMs": 4959
+      },
+      {
+        "word": "ŽÁBA",
+        "startMs": 4959,
+        "endMs": 5462
+      }
+    ]
+  },
+  "word_kocka": {
+    "id": "word_kocka",
+    "file": "assets/audio/word_kocka.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "K-K-KOČKA! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO KOČKA?",
+    "words": [
+      {
+        "word": "K",
+        "startMs": 104,
+        "endMs": 145
+      },
+      {
+        "word": "K",
+        "startMs": 295,
+        "endMs": 390
+      },
+      {
+        "word": "KOČKA",
+        "startMs": 539,
+        "endMs": 1110
+      },
+      {
+        "word": "NA",
+        "startMs": 2147,
+        "endMs": 2296
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 2310,
+        "endMs": 2677
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 2704,
+        "endMs": 3261
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 3261,
+        "endMs": 3859
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 3872,
+        "endMs": 4239
+      },
+      {
+        "word": "KOČKA",
+        "startMs": 4239,
+        "endMs": 4769
+      }
+    ]
+  },
+  "word_slunce": {
+    "id": "word_slunce",
+    "file": "assets/audio/word_slunce.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "S-S-SLUNCE! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO SLUNCE?",
+    "words": [
+      {
+        "word": "S",
+        "startMs": 103,
+        "endMs": 266
+      },
+      {
+        "word": "S",
+        "startMs": 511,
+        "endMs": 688
+      },
+      {
+        "word": "SLUNCE",
+        "startMs": 905,
+        "endMs": 1544
+      },
+      {
+        "word": "NA",
+        "startMs": 2595,
+        "endMs": 2744
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 2758,
+        "endMs": 3138
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 3166,
+        "endMs": 3723
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 3723,
+        "endMs": 4307
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 4307,
+        "endMs": 4660
+      },
+      {
+        "word": "SLUNCE",
+        "startMs": 4660,
+        "endMs": 5258
+      }
+    ]
+  },
+  "word_tucnak": {
+    "id": "word_tucnak",
+    "file": "assets/audio/word_tucnak.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "T-T-TUČŇÁK! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO TUČŇÁK?",
+    "words": [
+      {
+        "word": "T",
+        "startMs": 104,
+        "endMs": 376
+      },
+      {
+        "word": "T",
+        "startMs": 539,
+        "endMs": 838
+      },
+      {
+        "word": "TUČŇÁK",
+        "startMs": 1137,
+        "endMs": 1871
+      },
+      {
+        "word": "NA",
+        "startMs": 2921,
+        "endMs": 3070
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 3084,
+        "endMs": 3451
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 3478,
+        "endMs": 4035
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 4035,
+        "endMs": 4619
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 4620,
+        "endMs": 4987
+      },
+      {
+        "word": "TUČŇÁK",
+        "startMs": 4986,
+        "endMs": 5706
+      }
+    ]
+  },
+  "feed_ask_03": {
+    "id": "feed_ask_03",
+    "file": "assets/audio/feed_ask_03.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 3 RYBIČKY!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4280
+      },
+      {
+        "word": "TŘI",
+        "startMs": 4280,
+        "endMs": 4579
+      },
+      {
+        "word": "RYBIČKY",
+        "startMs": 4579,
+        "endMs": 5163
+      }
+    ]
+  },
+  "feed_ask_04": {
+    "id": "feed_ask_04",
+    "file": "assets/audio/feed_ask_04.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 4 RYBIČKY!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4267
+      },
+      {
+        "word": "ČTYŘI",
+        "startMs": 4280,
+        "endMs": 4742
+      },
+      {
+        "word": "RYBIČKY",
+        "startMs": 4742,
+        "endMs": 5326
+      }
+    ]
+  },
+  "word_snek": {
+    "id": "word_snek",
+    "file": "assets/audio/word_snek.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "Š-Š-ŠNEK! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO ŠNEK?",
+    "words": [
+      {
+        "word": "Š",
+        "startMs": 103,
+        "endMs": 375
+      },
+      {
+        "word": "Š",
+        "startMs": 592,
+        "endMs": 891
+      },
+      {
+        "word": "ŠNEK",
+        "startMs": 1014,
+        "endMs": 1462
+      },
+      {
+        "word": "NA",
+        "startMs": 2568,
+        "endMs": 2717
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 2731,
+        "endMs": 3111
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 3139,
+        "endMs": 3696
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 3696,
+        "endMs": 4294
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 4293,
+        "endMs": 4660
+      },
+      {
+        "word": "ŠNEK",
+        "startMs": 4660,
+        "endMs": 5108
+      }
+    ]
+  },
+  "feed_ask_08": {
+    "id": "feed_ask_08",
+    "file": "assets/audio/feed_ask_08.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 8 RYBIČEK!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4267
+      },
+      {
+        "word": "OSM",
+        "startMs": 4348,
+        "endMs": 4688
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4688,
+        "endMs": 5286
+      }
+    ]
+  },
+  "feed_ask_06": {
+    "id": "feed_ask_06",
+    "file": "assets/audio/feed_ask_06.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 6 RYBIČEK!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4280
+      },
+      {
+        "word": "ŠEST",
+        "startMs": 4280,
+        "endMs": 4647
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4660,
+        "endMs": 5271
+      }
+    ]
+  },
+  "word_auto": {
+    "id": "word_auto",
+    "file": "assets/audio/word_auto.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "A-A-AUTO! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO AUTO?",
+    "words": [
+      {
+        "word": "A",
+        "startMs": 103,
+        "endMs": 185
+      },
+      {
+        "word": "A",
+        "startMs": 497,
+        "endMs": 619
+      },
+      {
+        "word": "AUTO",
+        "startMs": 946,
+        "endMs": 1394
+      },
+      {
+        "word": "NA",
+        "startMs": 2459,
+        "endMs": 2608
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 2636,
+        "endMs": 3030
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 3057,
+        "endMs": 3614
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 3614,
+        "endMs": 4212
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 4212,
+        "endMs": 4579
+      },
+      {
+        "word": "AUTO",
+        "startMs": 4620,
+        "endMs": 5068
+      }
+    ]
+  },
+  "feed_next_round": {
+    "id": "feed_next_round",
+    "file": "assets/audio/feed_next_round.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MŇAM, VÝBORNĚ! POJĎME NA DALŠÍ PORCI RYBIČEK!",
+    "words": [
+      {
+        "word": "MŇAM",
+        "startMs": 104,
+        "endMs": 552
+      },
+      {
+        "word": "VÝBORNĚ",
+        "startMs": 865,
+        "endMs": 1639
+      },
+      {
+        "word": "POJĎME",
+        "startMs": 2717,
+        "endMs": 3206
+      },
+      {
+        "word": "NA",
+        "startMs": 3207,
+        "endMs": 3343
+      },
+      {
+        "word": "DALŠÍ",
+        "startMs": 3342,
+        "endMs": 3790
+      },
+      {
+        "word": "PORCI",
+        "startMs": 3818,
+        "endMs": 4307
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4307,
+        "endMs": 4932
+      }
+    ]
+  },
+  "word_motyl": {
+    "id": "word_motyl",
+    "file": "assets/audio/word_motyl.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "M-M-MOTÝL! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO MOTÝL?",
+    "words": [
+      {
+        "word": "M",
+        "startMs": 103,
+        "endMs": 361
+      },
+      {
+        "word": "M",
+        "startMs": 715,
+        "endMs": 973
+      },
+      {
+        "word": "MOTÝL",
+        "startMs": 1285,
+        "endMs": 1910
+      },
+      {
+        "word": "NA",
+        "startMs": 2976,
+        "endMs": 3125
+      },
+      {
+        "word": "JAKÉ",
+        "startMs": 3139,
+        "endMs": 3519
+      },
+      {
+        "word": "PÍSMENO",
+        "startMs": 3546,
+        "endMs": 4103
+      },
+      {
+        "word": "ZAČÍNÁ",
+        "startMs": 4103,
+        "endMs": 4687
+      },
+      {
+        "word": "SLOVO",
+        "startMs": 4701,
+        "endMs": 5068
+      },
+      {
+        "word": "MOTÝL",
+        "startMs": 5068,
+        "endMs": 5639
+      }
+    ]
+  },
+  "feed_ask_12": {
+    "id": "feed_ask_12",
+    "file": "assets/audio/feed_ask_12.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 12 RYBIČEK!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4294
+      },
+      {
+        "word": "DVANÁCT",
+        "startMs": 4293,
+        "endMs": 4918
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4932,
+        "endMs": 5530
+      }
+    ]
+  },
+  "feed_ask_05": {
+    "id": "feed_ask_05",
+    "file": "assets/audio/feed_ask_05.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 5 RYBIČEK!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4294
+      },
+      {
+        "word": "PĚT",
+        "startMs": 4293,
+        "endMs": 4592
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4620,
+        "endMs": 5231
+      }
+    ]
+  },
+  "feed_ask_14": {
+    "id": "feed_ask_14",
+    "file": "assets/audio/feed_ask_14.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 14 RYBIČEK!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4280
+      },
+      {
+        "word": "ČTRNÁCT",
+        "startMs": 4280,
+        "endMs": 4987
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 5000,
+        "endMs": 5598
+      }
+    ]
+  },
+  "feed_ask_15": {
+    "id": "feed_ask_15",
+    "file": "assets/audio/feed_ask_15.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 15 RYBIČEK!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4280
+      },
+      {
+        "word": "PATNÁCT",
+        "startMs": 4280,
+        "endMs": 4973
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4986,
+        "endMs": 5584
+      }
+    ]
+  },
+  "feed_ask_09": {
+    "id": "feed_ask_09",
+    "file": "assets/audio/feed_ask_09.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 9 RYBIČEK!",
+    "words": [
+      {
+        "word": "MÁM",
+        "startMs": 104,
+        "endMs": 403
+      },
+      {
+        "word": "VELIKÝ",
+        "startMs": 417,
+        "endMs": 893
+      },
+      {
+        "word": "HLAD",
+        "startMs": 892,
+        "endMs": 1300
+      },
+      {
+        "word": "DEJ",
+        "startMs": 2378,
+        "endMs": 2609
+      },
+      {
+        "word": "MI",
+        "startMs": 2649,
+        "endMs": 2771
+      },
+      {
+        "word": "PROSÍM",
+        "startMs": 2772,
+        "endMs": 3275
+      },
+      {
+        "word": "DO",
+        "startMs": 3274,
+        "endMs": 3423
+      },
+      {
+        "word": "MISKY",
+        "startMs": 3424,
+        "endMs": 3791
+      },
+      {
+        "word": "PŘESNĚ",
+        "startMs": 3791,
+        "endMs": 4294
+      },
+      {
+        "word": "DEVĚT",
+        "startMs": 4293,
+        "endMs": 4687
+      },
+      {
+        "word": "RYBIČEK",
+        "startMs": 4715,
+        "endMs": 5326
+      }
+    ]
+  }
+}

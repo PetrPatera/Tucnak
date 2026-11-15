@@ -1,0 +1,19 @@
+{
+  "name": "Tučňákův svět",
+  "short_name": "Tučňákův svět",
+  "description": "Vzdělávací a kreativní aplikace pro předškoláky a začínající prvňáčky (5–7 let).",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#EAF4F8",
+  "theme_color": "#277DA1",
+  "lang": "cs",
+  "icons": [
+    {
+      "src": "./assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
