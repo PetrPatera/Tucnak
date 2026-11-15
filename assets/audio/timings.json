@@ -1130,72 +1130,122 @@
     "id": "act_04_intro",
     "file": "assets/audio/act_04_intro.mp3",
     "voice": "cs-CZ-VlastaNeural",
-    "karaokeText": "V PŘÍBĚHU NĚCO CHYBÍ! PODÍVEJ SE NA OBRÁZEK A DOKRESLI, CO JE POTŘEBA.",
+    "karaokeText": "VÍTEJ VE ŠKOLE PSANÍ! TADY SE NAUČÍŠ PSÁT TISKACÍ I KRÁSNÁ PSACÍ PÍSMENKA A CELÁ SLOVA. VYBER SI PERO A OBTAHUJ PODLE LINEK!",
     "words": [
       {
-        "word": "V",
+        "word": "VÍTEJ",
         "startMs": 99,
-        "endMs": 183
+        "endMs": 580
       },
       {
-        "word": "PŘÍBĚHU",
-        "startMs": 183,
-        "endMs": 748
+        "word": "VE",
+        "startMs": 591,
+        "endMs": 699
       },
       {
-        "word": "NĚCO",
-        "startMs": 760,
-        "endMs": 1024
+        "word": "ŠKOLE",
+        "startMs": 700,
+        "endMs": 1037
       },
       {
-        "word": "CHYBÍ",
-        "startMs": 1024,
-        "endMs": 1481
+        "word": "PSANÍ",
+        "startMs": 1036,
+        "endMs": 1577
       },
       {
-        "word": "PODÍVEJ",
-        "startMs": 2392,
-        "endMs": 2921
+        "word": "TADY",
+        "startMs": 2500,
+        "endMs": 2728
       },
       {
         "word": "SE",
-        "startMs": 2921,
-        "endMs": 3089
+        "startMs": 2728,
+        "endMs": 2908
       },
       {
-        "word": "NA",
-        "startMs": 3089,
-        "endMs": 3197
+        "word": "NAUČÍŠ",
+        "startMs": 2909,
+        "endMs": 3354
       },
       {
-        "word": "OBRÁZEK",
-        "startMs": 3245,
-        "endMs": 3822
+        "word": "PSÁT",
+        "startMs": 3353,
+        "endMs": 3690
+      },
+      {
+        "word": "TISKACÍ",
+        "startMs": 3702,
+        "endMs": 4279
+      },
+      {
+        "word": "I",
+        "startMs": 4291,
+        "endMs": 4387
+      },
+      {
+        "word": "KRÁSNÁ",
+        "startMs": 4387,
+        "endMs": 4952
+      },
+      {
+        "word": "PSACÍ",
+        "startMs": 4964,
+        "endMs": 5337
+      },
+      {
+        "word": "PÍSMENKA",
+        "startMs": 5373,
+        "endMs": 6034
       },
       {
         "word": "A",
-        "startMs": 3834,
-        "endMs": 3954
+        "startMs": 6082,
+        "endMs": 6106
       },
       {
-        "word": "DOKRESLI",
-        "startMs": 3978,
-        "endMs": 4615
+        "word": "CELÁ",
+        "startMs": 6154,
+        "endMs": 6491
       },
       {
-        "word": "CO",
-        "startMs": 4832,
-        "endMs": 5024
+        "word": "SLOVA",
+        "startMs": 6490,
+        "endMs": 6923
       },
       {
-        "word": "JE",
-        "startMs": 5024,
-        "endMs": 5144
+        "word": "VYBER",
+        "startMs": 7849,
+        "endMs": 8173
       },
       {
-        "word": "POTŘEBA",
-        "startMs": 5144,
-        "endMs": 5673
+        "word": "SI",
+        "startMs": 8173,
+        "endMs": 8377
+      },
+      {
+        "word": "PERO",
+        "startMs": 8377,
+        "endMs": 8701
+      },
+      {
+        "word": "A",
+        "startMs": 8714,
+        "endMs": 8762
+      },
+      {
+        "word": "OBTAHUJ",
+        "startMs": 8882,
+        "endMs": 9339
+      },
+      {
+        "word": "PODLE",
+        "startMs": 9363,
+        "endMs": 9687
+      },
+      {
+        "word": "LINEK",
+        "startMs": 9688,
+        "endMs": 10109
       }
     ]
   },

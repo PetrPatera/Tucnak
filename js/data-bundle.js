@@ -583,19 +583,19 @@ window.PENGUIN_WORLD_DATA = {
         "id": "act_04_story_draw",
         "number": 4,
         "zoneId": "zone_a",
-        "title": "Dokresli příběh",
-        "shortTitle": "Dokresli příběh",
-        "icon": "☔",
-        "type": "story_draw",
+        "title": "Škola psaní písmen a slov",
+        "shortTitle": "Psaní písmen a slov",
+        "icon": "✍️",
+        "type": "handwriting",
         "implementedInPrototype": true,
-        "pedagogicalGoal": "Rozvoj fantazie, logiky děje a výtvarného vyjadřování.",
+        "pedagogicalGoal": "Nácvik psaní tvarů písmen a slov na pomocných linkách: velká a malá tiskací i psací písmena a celá psací slova.",
         "audioIntroId": "act_04_intro",
         "levels": [
           {
             "stars": 1,
-            "label": "Deštník pro tučňáka",
+            "label": "Velká tiskací písmena",
             "config": {
-              "scene": "rain"
+              "category": "upper_print"
             },
             "hintAudioIds": [
               "hint_idle_encourage"
@@ -604,9 +604,9 @@ window.PENGUIN_WORLD_DATA = {
           },
           {
             "stars": 2,
-            "label": "Kola pro autíčko",
+            "label": "Malá tiskací písmena",
             "config": {
-              "scene": "car"
+              "category": "lower_print"
             },
             "hintAudioIds": [
               "hint_idle_encourage"
@@ -615,9 +615,31 @@ window.PENGUIN_WORLD_DATA = {
           },
           {
             "stars": 3,
-            "label": "Křídla pro draka",
+            "label": "Velká psací písmena",
             "config": {
-              "scene": "dragon"
+              "category": "upper_cursive"
+            },
+            "hintAudioIds": [
+              "hint_idle_encourage"
+            ],
+            "successAudioId": "celebrate_04"
+          },
+          {
+            "stars": 4,
+            "label": "Malá psací písmena",
+            "config": {
+              "category": "lower_cursive"
+            },
+            "hintAudioIds": [
+              "hint_idle_encourage"
+            ],
+            "successAudioId": "celebrate_04"
+          },
+          {
+            "stars": 5,
+            "label": "Celá psací slova",
+            "config": {
+              "category": "cursive_words"
             },
             "hintAudioIds": [
               "hint_idle_encourage"
@@ -2039,9 +2061,9 @@ window.PENGUIN_WORLD_DATA = {
       {
         "id": "act_04_intro",
         "category": "activity_intro",
-        "text_cs": "V příběhu něco chybí! Podívej se na obrázek a dokresli, co je potřeba.",
-        "karaoke_text": "V PŘÍBĚHU NĚCO CHYBÍ! PODÍVEJ SE NA OBRÁZEK A DOKRESLI, CO JE POTŘEBA.",
-        "intonation_note": "Zvídavě, vyprávěcím tónem.",
+        "text_cs": "Vítej ve škole psaní! Tady se naučíš psát tiskací i krásná psací písmenka a celá slova. Vyber si pero a obtahuj podle linek!",
+        "karaoke_text": "VÍTEJ VE ŠKOLE PSANÍ! TADY SE NAUČÍŠ PSÁT TISKACÍ I KRÁSNÁ PSACÍ PÍSMENKA A CELÁ SLOVA. VYBER SI PERO A OBTAHUJ PODLE LINEK!",
+        "intonation_note": "Jasně, povzbudivě a přátelsky.",
         "voice": "cs-CZ-VlastaNeural",
         "rate": "+4%",
         "pitch": "+50Hz",

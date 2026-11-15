@@ -1544,29 +1544,35 @@ body {
 .pen-size-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-pen-size {
-  flex: 1;
-  min-width: 38px;
-  min-height: 38px;
-  height: 38px;
-  border-radius: 12px;
-  border: 2px solid #cbd5e1;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 14px;
+  border: 2.5px solid #cbd5e1;
   background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-pen-size:active {
+  transform: scale(0.92);
 }
 
 .btn-pen-size.active {
-  border-color: var(--navy);
+  border-color: #f77f00;
   background: #fff3d6;
-  box-shadow: 0 2px 6px rgba(255, 183, 3, 0.35);
+  transform: scale(1.12);
+  box-shadow: 0 3px 8px rgba(247, 127, 0, 0.35);
 }
 
 .pen-size-dot {
@@ -1575,14 +1581,87 @@ body {
   display: block;
 }
 
+/* Ovladač vzdálenosti / přiblížení plátna (Zoom Stepper) */
+.zoom-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f1f8fc;
+  border: 2px solid #bce0f5;
+  border-radius: 999px;
+  padding: 2px 6px;
+}
+
+.btn-zoom {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 0.95rem;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 2px solid #8ecae6;
+  color: var(--navy);
+}
+
+.btn-zoom:active {
+  transform: scale(0.92);
+}
+
+.zoom-badge {
+  font-weight: 900;
+  font-size: 0.82rem;
+  color: var(--navy);
+  min-width: 48px;
+  text-align: center;
+  user-select: none;
+}
+
+.tool-mode-row {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-tool-mode {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  border-radius: 14px;
+  border: 2px solid #cbd5e1;
+  background: #ffffff;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-tool-mode.active {
+  background: #ffb703;
+  border-color: #f77f00;
+  color: var(--navy);
+  box-shadow: 0 3px 8px rgba(247, 127, 0, 0.3);
+}
+
 /* Režim zvětšeného plátna (Zoom) pro pohodlné kreslení */
 .studio-layout.studio-zoomed {
   grid-template-columns: minmax(0, 1fr) clamp(150px, 18vw, 195px);
 }
 
-.studio-layout.studio-zoomed .draw-canvas {
-  transform: scale(1.22);
-  transform-origin: center center;
+.canvas-frame {
+  overflow: auto;
+}
+
+.draw-canvas {
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
 .preview-guide-modal {

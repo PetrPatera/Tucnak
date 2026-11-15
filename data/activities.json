@@ -355,17 +355,19 @@
       "id": "act_04_story_draw",
       "number": 4,
       "zoneId": "zone_a",
-      "title": "Dokresli příběh",
-      "shortTitle": "Dokresli příběh",
-      "icon": "☔",
-      "type": "story_draw",
+      "title": "Škola psaní písmen a slov",
+      "shortTitle": "Psaní písmen a slov",
+      "icon": "✍️",
+      "type": "handwriting",
       "implementedInPrototype": true,
-      "pedagogicalGoal": "Rozvoj fantazie, logiky děje a výtvarného vyjadřování.",
+      "pedagogicalGoal": "Nácvik psaní tvarů písmen a slov na pomocných linkách: velká a malá tiskací i psací písmena a celá psací slova.",
       "audioIntroId": "act_04_intro",
       "levels": [
-        { "stars": 1, "label": "Deštník pro tučňáka", "config": { "scene": "rain" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
-        { "stars": 2, "label": "Kola pro autíčko", "config": { "scene": "car" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
-        { "stars": 3, "label": "Křídla pro draka", "config": { "scene": "dragon" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" }
+        { "stars": 1, "label": "Velká tiskací písmena", "config": { "category": "upper_print" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 2, "label": "Malá tiskací písmena", "config": { "category": "lower_print" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 3, "label": "Velká psací písmena", "config": { "category": "upper_cursive" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 4, "label": "Malá psací písmena", "config": { "category": "lower_cursive" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 5, "label": "Celá psací slova", "config": { "category": "cursive_words" }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" }
       ]
     },
     {
