@@ -124,7 +124,7 @@
 
     async loadTimings() {
       try {
-        const res = await fetch("./assets/audio/timings.json");
+        const res = await fetch("./assets/audio/timings.json?v=2");
         if (res.ok) {
           this.timingsMap = await res.json();
         }
@@ -166,8 +166,33 @@
       osc.stop(start + duration + 0.02);
     }
 
+    playChirp() {
+      const vol = this.store.state.settings.sfxVol;
+      if (vol <= 0.01) return;
+      const ctx = this.ensureAudioCtx();
+      if (!ctx) return;
+      [0, 0.065].forEach((offset, idx) => {
+        const start = ctx.currentTime + offset;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(idx === 0 ? 740 : 880, start);
+        osc.frequency.exponentialRampToValueAtTime(idx === 0 ? 1080 : 1320, start + 0.055);
+        gain.gain.setValueAtTime(0.001, start);
+        gain.gain.exponentialRampToValueAtTime(0.09 * vol, start + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.06);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.065);
+      });
+    }
+
     playSfx(kind) {
       switch (kind) {
+        case "chirp":
+          this.playChirp();
+          break;
         case "pop":
           this.playTone(520, 0.1, "triangle", 0.2);
           break;
@@ -263,6 +288,9 @@
       const voiceVol = this.store.state.settings.voiceVol;
 
       if (this.onSpeakStart) this.onSpeakStart(options.stateDuringSpeech || "SPEAKING");
+      if (!entry || entry.category !== "number") {
+        this.playChirp();
+      }
 
       const finish = () => {
         if (gen !== this.speechGen) return;
@@ -276,7 +304,7 @@
 
       // Pokus o přehrání předgenerovaného MP3 souboru, pokud aplikace běží přes HTTP(S)
       if (!overrideText && entry && this.canLoadMp3 && voiceVol > 0.01) {
-        const audio = new Audio("./" + entry.file);
+        const audio = new Audio("./" + entry.file + "?v=2");
         audio.volume = voiceVol;
         let fellBack = false;
 
@@ -318,8 +346,8 @@
 
       const utter = new SpeechSynthesisUtterance(spokenText);
       utter.lang = "cs-CZ";
-      utter.rate = 0.94;
-      utter.pitch = 1.08;
+      utter.rate = 1.05;
+      utter.pitch = 1.45;
       utter.volume = voiceVol;
 
       const voices = window.speechSynthesis.getVoices();

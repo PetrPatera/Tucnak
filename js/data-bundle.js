@@ -1865,8 +1865,8 @@ window.PENGUIN_WORLD_DATA = {
   "version": "1.0.0",
   "defaultVoice": "cs-CZ-VlastaNeural",
   "fallbackVoice": "cs-CZ-AntoninNeural",
-  "defaultRate": "-8%",
-  "defaultPitch": "+5Hz",
+  "defaultRate": "+5%",
+  "defaultPitch": "+52Hz",
   "entries": [
     {
       "id": "intro_welcome",
@@ -1875,8 +1875,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "AHOJ KAMARÁDE! JÁ JSEM TUČŇÁK PIKO. VYBER SI OSTROV A POJĎ SI HRÁT!",
       "intonation_note": "Vřele, vesele a povzbudivě, s krátkou pauzou po oslovení.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+52Hz",
       "file": "assets/audio/intro_welcome.mp3"
     },
     {
@@ -1886,8 +1886,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ŤUKNI NA NĚKTERÝ OSTROV NEBO SI VYBER HRU NAHOŘE!",
       "intonation_note": "Přátelské vyzvání k akci, zřetelná artikulace.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+6%",
+      "pitch": "+52Hz",
       "file": "assets/audio/intro_map_select.mp3"
     },
     {
@@ -1897,8 +1897,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "POSLOUCHEJ POZORNĚ, ZOPAKUJI TI ÚKOL JEŠTĚ JEDNOU.",
       "intonation_note": "Klidně a trpělivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+4Hz",
+      "rate": "+6%",
+      "pitch": "+52Hz",
       "file": "assets/audio/intro_repeat.mp3"
     },
     {
@@ -1908,8 +1908,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "VÍTEJ V UMĚLECKÉM ATELIÉRU! TADY BUDEME KRESLIT A MÍCHAT KOUZELNÉ BARVY.",
       "intonation_note": "Nadšeně, tvořivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/zone_a_intro.mp3"
     },
     {
@@ -1919,8 +1919,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "TOHLE JE SVĚT TVARŮ A PROSTORU! POJĎ SKLÁDAT OBRÁZKY A HLEDAT STÍNY.",
       "intonation_note": "Zvídavě a hravě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/zone_b_intro.mp3"
     },
     {
@@ -1930,8 +1930,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "JSME U PRVNÍCH KRŮČKŮ KE ČTENÍ! SPOLU PROZKOUMÁME PÍSMENKA A SLABIKY.",
       "intonation_note": "Zřetelně a povzbudivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/zone_c_intro.mp3"
     },
     {
@@ -1941,8 +1941,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "HURÁ DO HRAVÉ MATEMATIKY! SPOČÍTÁME RYBIČKY A ZVÁŽÍME LEDOVÉ KRY.",
       "intonation_note": "Radostně s energií.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/zone_d_intro.mp3"
     },
     {
@@ -1952,8 +1952,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "VÍTEJ NA OSTROVĚ LOGIKY A PAMĚTI! ČEKÁ NÁS BLUDIŠTĚ I PEXESO.",
       "intonation_note": "Dobrodružně a tajemně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/zone_e_intro.mp3"
     },
     {
@@ -1963,8 +1963,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "POJĎ KRESLIT KROK ZA KROKEM! NEJPRVE PRSTEM OBTÁHNI PŘERUŠOVANÝ TVAR.",
       "intonation_note": "Pomaleji, jasná instrukce.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_01_intro.mp3"
     },
     {
@@ -1974,8 +1974,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "VYBARVI OBRÁZEK A ZKUS V PALETĚ SMÍCHAT DVĚ BARVY DOHROMADY!",
       "intonation_note": "Kouzelnický, nadšený tón.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_02_intro.mp3"
     },
     {
@@ -1985,8 +1985,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "KRESLI NA PRAVOU STRANU PLÁTNA A SLEDUJ KOUZELNÉ ZRCADLENÍ!",
       "intonation_note": "Hravě a s úžasem.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_03_intro.mp3"
     },
     {
@@ -1996,8 +1996,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "V PŘÍBĚHU NĚCO CHYBÍ! PODÍVEJ SE NA OBRÁZEK A DOKRESLI, CO JE POTŘEBA.",
       "intonation_note": "Zvídavě, vyprávěcím tónem.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_04_intro.mp3"
     },
     {
@@ -2007,8 +2007,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "SPOJUJ TEČKY PĚKNĚ PO JEDNÉ PODLE ČÍSEL A ODHAL TAJNÝ OBRÁZEK!",
       "intonation_note": "Povzbudivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_05_intro.mp3"
     },
     {
@@ -2018,8 +2018,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "POSKLÁDEJ OBRÁZEK Z BAREVNÝCH TVARŮ! PŘETÁHNI KAŽDÝ DÍLEK NA JEHO MÍSTO.",
       "intonation_note": "Jasně a s nadšením.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_06_intro.mp3"
     },
     {
@@ -2029,8 +2029,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "NAJDI KE KAŽDÉMU OBRÁZKU JEHO SPRÁVNÝ TMAVÝ STÍN!",
       "intonation_note": "Pozorně, detektivně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+4Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_07_intro.mp3"
     },
     {
@@ -2040,8 +2040,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PODÍVEJ SE POZORNĚ NA CELÝ OBRÁZEK A NAJDI VĚCI, KTERÉ SEM NEPATŘÍ!",
       "intonation_note": "Pobaveně a zvídavě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_08_intro.mp3"
     },
     {
@@ -2051,8 +2051,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "OBRÁZEK SE NÁM ROZSYPAL! SLOŽ VŠECHNY DÍLKY PUZZLE ZASE K SOBĚ.",
       "intonation_note": "Hravě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_09_intro.mp3"
     },
     {
@@ -2062,8 +2062,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "POSLOUCHEJ DOBŘE PRVNÍ HLÁSKU SLOVA A VYBER SPRÁVNÉ PÍSMENKO!",
       "intonation_note": "Zřetelná výslovnost.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_10_intro.mp3"
     },
     {
@@ -2073,8 +2073,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ŤUKNI NA SLABIKY A POSKLÁDEJ Z NICH CELÉ SLOVO!",
       "intonation_note": "Rytmicky po slabikách.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_11_intro.mp3"
     },
     {
@@ -2084,8 +2084,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PROJEĎ PRSTEM PO LEDOVÉ DRÁZE PODLE ŠIPEK A NAPIŠ PÍSMENKO!",
       "intonation_note": "Klidně a pečlivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_12_intro.mp3"
     },
     {
@@ -2095,8 +2095,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "OTÁČEJ KARTIČKY A NAJDI DVOJICE SLOV, KTERÁ SE SPOLU RÝMUJÍ!",
       "intonation_note": "Básnicky a vesele.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_13_intro.mp3"
     },
     {
@@ -2106,8 +2106,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ TOLIK RYBIČEK, KOLIK SI PŘEJI.",
       "intonation_note": "Roztomile a s nadšením na jídlo.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_14_intro.mp3"
     },
     {
@@ -2117,8 +2117,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "VYROVNEJ LEDOVÉ VÁHY TAK, ABY NA OBOU MISKÁCH BYLO ÚPLNĚ STEJNĚ!",
       "intonation_note": "Jasně a vyváženě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+4Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_15_intro.mp3"
     },
     {
@@ -2128,8 +2128,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "POSLOUCHEJ KRÁTKÝ PŘÍBĚH A SPOČÍTEJ, KOLIK TUČŇÁKŮ JE NA KŘE DOHROMADY!",
       "intonation_note": "Vyprávěcím tónem.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_16_intro.mp3"
     },
     {
@@ -2139,8 +2139,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "SEŘAĎ VŠECHNY OBRÁZKY PĚKNĚ ZA SEBOU OD NEJMENŠÍHO PO NEJVĚTŠÍ!",
       "intonation_note": "S důrazem na kontrast nejmenší – největší.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_17_intro.mp3"
     },
     {
@@ -2150,8 +2150,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PODÍVEJ SE NA ŘADU OBRÁZKŮ A DOPLŇ TEN, KTERÝ V NÍ CHYBÍ!",
       "intonation_note": "Rytmicky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_18_intro.mp3"
     },
     {
@@ -2161,8 +2161,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "POMOZ TUČŇÁKOVI NAJÍT BEZPEČNOU CESTU LEDOVÝM BLUDIŠTĚM AŽ K POKLADU!",
       "intonation_note": "Dobrodružně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_19_intro.mp3"
     },
     {
@@ -2172,8 +2172,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PROCVIČ SI OUŠKA I OČIČKA! NAJDI DVĚ KARTIČKY SE STEJNÝM OBRÁZKEM NEBO ZVUKEM.",
       "intonation_note": "Hravě a jemně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_20_intro.mp3"
     },
     {
@@ -2183,8 +2183,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "SLOŽ CESTU ZE ŠIPEK A PAK ZMÁČKNI ZELENÉ TLAČÍTKO, AŤ VYRAZÍM ZA POKLADEM!",
       "intonation_note": "Povzbudivě a s nadšením.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_21_intro.mp3"
     },
     {
@@ -2194,8 +2194,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ZAŘAĎ OBRÁZKY DO TABULKY PODLE JEJICH BARVY I TVARU ZÁROVEŇ!",
       "intonation_note": "Klidně a srozumitelně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+4Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/act_22_intro.mp3"
     },
     {
@@ -2205,8 +2205,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PRVNÍ KROK: NAKRESLI VELKÝ KULATÝ OVÁL PRO TĚLÍČKO.",
       "intonation_note": "Klidně a povzbudivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/draw_step_oval.mp3"
     },
     {
@@ -2216,8 +2216,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "VÝBORNĚ! TEĎ NAHOŘE PŘIKRESLI KULATOU HLAVIČKU.",
       "intonation_note": "Pochvala a plynulé navázání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/draw_step_head.mp3"
     },
     {
@@ -2227,8 +2227,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PARÁDA! PŘIDEJ PO STRANÁCH DVĚ MÁVAJÍCÍ KŘIDÉLKA.",
       "intonation_note": "Vesele.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/draw_step_wings.mp3"
     },
     {
@@ -2238,8 +2238,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "A NAKONEC OČÍČKA A ŠPIČATÝ ZOBÁČEK, AŤ NA TEBE KOUKÁ!",
       "intonation_note": "Milým hlasem.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/draw_step_face.mp3"
     },
     {
@@ -2249,8 +2249,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PŘIKRESLI DVĚ ŠPIČATÁ KOČIČÍ OUŠKA A DLOUHÉ FOUSKY!",
       "intonation_note": "Hravě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/draw_step_ears.mp3"
     },
     {
@@ -2260,8 +2260,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "NAKRESLI VYSOKÝ TRUP VESMÍRNÉ RAKETY A KULATÉ OKÉNKO!",
       "intonation_note": "Dobrodružně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+5Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/draw_step_rocket_body.mp3"
     },
     {
@@ -2271,8 +2271,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "NA VRŠEK RAKETY NAKRESLI ŠPIČATOU STŘECHU A DOLŮ DVĚ KŘIDÉLKA!",
       "intonation_note": "Nadšeně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/draw_step_rocket_nose.mp3"
     },
     {
@@ -2282,8 +2282,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "JÉ, TVŮJ OBRÁZEK OŽIL! TEĎ SI HO MŮŽEŠ VYBARVIT A NAMÍCHAT KOUZELNÉ BARVY!",
       "intonation_note": "S velikým úžasem a radostí.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-6%",
-      "pitch": "+8Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/draw_step_alive.mp3"
     },
     {
@@ -2293,8 +2293,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "KOUZLO! SMÍCHÁNÍM ŽLUTÉ A MODRÉ BARVY VZNIKLA KRÁSNÁ ZELENÁ!",
       "intonation_note": "Udiveně a kouzelnicky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+7Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/color_mix_yellow_blue.mp3"
     },
     {
@@ -2304,8 +2304,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PODÍVEJ! ČERVENÁ A ŽLUTÁ SE SPOJILY V ZÁŘIVĚ ORANŽOVOU!",
       "intonation_note": "Vesele a objevně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+7Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/color_mix_red_yellow.mp3"
     },
     {
@@ -2315,8 +2315,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PARÁDA! Z ČERVENÉ A MODRÉ JSI VYKOUZLIL KOUZELNOU FIALOVOU!",
       "intonation_note": "Obdivně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+7Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/color_mix_red_blue.mp3"
     },
     {
@@ -2326,8 +2326,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "NÁDHERNÁ SOUMĚRNÁ KRESBA! OBĚ STRANY JSOU KRÁSNĚ VYVÁŽENÉ.",
       "intonation_note": "Ocenění kreativity.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+5%",
+      "pitch": "+52Hz",
       "file": "assets/audio/symmetry_done.mp3"
     },
     {
@@ -2337,8 +2337,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ZKUS SE PODÍVAT, KOLIK MÁ TEN TVAR ROHŮ, A NAJDI STEJNÝ OBRYS.",
       "intonation_note": "Jemné, trpělivé navedení bez kritiky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+4Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_shape_corners.mp3"
     },
     {
@@ -2348,8 +2348,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "TEN DÍLEK TAM SKORO PASUJE! ZKUS HO TROCHU POOTOČIT TLAČÍTKEM OTOČIT.",
       "intonation_note": "Povzbudivě, podpůrně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_shape_rotate.mp3"
     },
     {
@@ -2359,8 +2359,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PODÍVEJ SE NA VELIKOST A BARVU MÍSTA, KTERÉ TI TADY SVÍTÍ.",
       "intonation_note": "Něžná nápověda.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+4Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_shape_size.mp3"
     },
     {
@@ -2370,8 +2370,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM JEŠTĚ TROCHU HLAD! ZKUS DO MISKY PŘIDAT JEŠTĚ PÁR RYBIČEK.",
       "intonation_note": "Kamarádsky a vlídně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_count_more.mp3"
     },
     {
@@ -2381,8 +2381,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "JÉ, TO JE TROCHU MOC! ŤUKNI NA RYBIČKU V MISCE A JEDNU VRAŤ DO JEZÍRKA.",
       "intonation_note": "Klidně a s úsměvem, žádná výčitka.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_count_too_many.mp3"
     },
     {
@@ -2392,8 +2392,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ZKUS SI TO SLOVO ŘÍCT NAHLAS A POSLOUCHEJ ÚPLNĚ PRVNÍ HLÁSKU!",
       "intonation_note": "Zřetelně, nápomocně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-12%",
-      "pitch": "+5Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_letter_listen.mp3"
     },
     {
@@ -2403,8 +2403,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ŘEKNI SI OBRÁZKY V ŘADĚ NAHLAS ZA SEBOU A HNED POZNÁŠ, KTERÝ BUDE DALŠÍ.",
       "intonation_note": "Rytmicky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+4Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_pattern_repeat.mp3"
     },
     {
@@ -2414,8 +2414,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "JSEM TADY S TEBOU! JESTLI CHCEŠ, ŤUKNI NA TO, CO TI ZROVNA BLIKÁ.",
       "intonation_note": "Velmi něžně a trpělivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_idle_encourage.mp3"
     },
     {
@@ -2425,8 +2425,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "KRESLI PRSTEM POMALU PO PŘERUŠOVANÉ ČÁŘE, VEDEŠ SI SKVĚLE!",
       "intonation_note": "Povzbudivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-10%",
-      "pitch": "+5Hz",
+      "rate": "+0%",
+      "pitch": "+46Hz",
       "file": "assets/audio/hint_draw_trace.mp3"
     },
     {
@@ -2436,8 +2436,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "JEDNA!",
       "intonation_note": "Jasné a veselé počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_01.mp3"
     },
     {
@@ -2447,8 +2447,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "DVĚ!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_02.mp3"
     },
     {
@@ -2458,8 +2458,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "TŘI!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_03.mp3"
     },
     {
@@ -2469,8 +2469,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ČTYŘI!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_04.mp3"
     },
     {
@@ -2480,8 +2480,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PĚT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_05.mp3"
     },
     {
@@ -2491,8 +2491,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ŠEST!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_06.mp3"
     },
     {
@@ -2502,8 +2502,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "SEDM!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_07.mp3"
     },
     {
@@ -2513,8 +2513,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "OSM!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_08.mp3"
     },
     {
@@ -2524,8 +2524,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "DEVĚT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_09.mp3"
     },
     {
@@ -2535,8 +2535,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "DESET!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_10.mp3"
     },
     {
@@ -2546,8 +2546,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "JEDENÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_11.mp3"
     },
     {
@@ -2557,8 +2557,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "DVANÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_12.mp3"
     },
     {
@@ -2568,8 +2568,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "TŘINÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_13.mp3"
     },
     {
@@ -2579,8 +2579,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ČTRNÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_14.mp3"
     },
     {
@@ -2590,8 +2590,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "PATNÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_15.mp3"
     },
     {
@@ -2601,8 +2601,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ŠESTNÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_16.mp3"
     },
     {
@@ -2612,8 +2612,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "SEDMNÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_17.mp3"
     },
     {
@@ -2623,8 +2623,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "OSMNÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_18.mp3"
     },
     {
@@ -2634,8 +2634,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "DEVATENÁCT!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_19.mp3"
     },
     {
@@ -2645,8 +2645,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "DVACET!",
       "intonation_note": "Jasné počítání.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-5%",
-      "pitch": "+6Hz",
+      "rate": "+6%",
+      "pitch": "+54Hz",
       "file": "assets/audio/num_20.mp3"
     },
     {
@@ -2656,8 +2656,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "SKVĚLÁ PRÁCE, KRÁSNĚ JSI TO SLADIL A NEVZDAL SES!",
       "intonation_note": "Upřímná radost a ocenění úsilí.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-6%",
-      "pitch": "+8Hz",
+      "rate": "+8%",
+      "pitch": "+58Hz",
       "file": "assets/audio/celebrate_01.mp3"
     },
     {
@@ -2667,8 +2667,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "HURÁ! MÁŠ SKVĚLÉ OKO A MOC PĚKNĚ JSI PŘEMÝŠLEL!",
       "intonation_note": "Jásavě, pochvala za soustředění.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-6%",
-      "pitch": "+8Hz",
+      "rate": "+8%",
+      "pitch": "+58Hz",
       "file": "assets/audio/celebrate_02.mp3"
     },
     {
@@ -2678,8 +2678,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MŇAM, TO BYLA DOBROTA! PŘESNĚ TOLIK RYBIČEK JSEM SI PŘÁL, DĚKUJI!",
       "intonation_note": "Spokojeně a nadšeně.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-6%",
-      "pitch": "+8Hz",
+      "rate": "+8%",
+      "pitch": "+58Hz",
       "file": "assets/audio/celebrate_03.mp3"
     },
     {
@@ -2689,8 +2689,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "BRAVO, MLADÝ UMĚLČE! TOHLE DÍLO JE JAK Z POHÁDKOVÉ KNÍŽKY!",
       "intonation_note": "Obdivně a povzbudivě.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-6%",
-      "pitch": "+8Hz",
+      "rate": "+8%",
+      "pitch": "+58Hz",
       "file": "assets/audio/celebrate_04.mp3"
     },
     {
@@ -2700,8 +2700,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "VÝBORNĚ, POZNAL JSI PRVNÍ HLÁSKU ÚPLNĚ PŘESNĚ! MÁŠ UŠI JAKO RYS!",
       "intonation_note": "Nadšená pochvala.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-6%",
-      "pitch": "+8Hz",
+      "rate": "+8%",
+      "pitch": "+58Hz",
       "file": "assets/audio/celebrate_05.mp3"
     },
     {
@@ -2711,8 +2711,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "TLESKÁM TI KŘÍDLY! ZÍSKÁVÁŠ ZLATOU HVĚZDIČKU ZA SKVĚLOU SNAHU!",
       "intonation_note": "Radostná oslava.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-6%",
-      "pitch": "+8Hz",
+      "rate": "+8%",
+      "pitch": "+58Hz",
       "file": "assets/audio/celebrate_06.mp3"
     },
     {
@@ -2722,8 +2722,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "ÁÁCH JO, DNES JSME SI BÁJEČNĚ POHRÁLI, ALE MNĚ UŽ PADAJÍ VÍČKA.",
       "intonation_note": "Rozespale, zívnutí na začátku, velmi klidný tón.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-16%",
-      "pitch": "-2Hz",
+      "rate": "-8%",
+      "pitch": "+38Hz",
       "file": "assets/audio/bedtime_yawn.mp3"
     },
     {
@@ -2733,8 +2733,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "OBLÉKÁM SI TEPLÉ PYŽAMKO A JDU SE VYSPAT DO IGLÚ. MOC SE NA TEBE TĚŠÍM ZASE ZÍTRA, AHOJ!",
       "intonation_note": "Láskyplně, pomalu, uklidňující ukolébavkový tón.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-18%",
-      "pitch": "-3Hz",
+      "rate": "-8%",
+      "pitch": "+38Hz",
       "file": "assets/audio/bedtime_goodnight.mp3"
     },
     {
@@ -2744,8 +2744,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "L-L-LIŠKA! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO LIŠKA?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_liska.mp3"
     },
     {
@@ -2755,8 +2755,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "R-R-RYBA! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO RYBA?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_ryba.mp3"
     },
     {
@@ -2766,8 +2766,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "A-A-AUTO! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO AUTO?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_auto.mp3"
     },
     {
@@ -2777,8 +2777,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "K-K-KOČKA! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO KOČKA?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_kocka.mp3"
     },
     {
@@ -2788,8 +2788,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "S-S-SLUNCE! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO SLUNCE?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_slunce.mp3"
     },
     {
@@ -2799,8 +2799,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "M-M-MOTÝL! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO MOTÝL?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_motyl.mp3"
     },
     {
@@ -2810,8 +2810,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "T-T-TUČŇÁK! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO TUČŇÁK?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_tucnak.mp3"
     },
     {
@@ -2821,8 +2821,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "Ž-Ž-ŽÁBA! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO ŽÁBA?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_zaba.mp3"
     },
     {
@@ -2832,8 +2832,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "Š-Š-ŠNEK! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO ŠNEK?",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/word_snek.mp3"
     },
     {
@@ -2843,8 +2843,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 3 RYBIČKY!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_03.mp3"
     },
     {
@@ -2854,8 +2854,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 4 RYBIČKY!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_04.mp3"
     },
     {
@@ -2865,8 +2865,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 5 RYBIČEK!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_05.mp3"
     },
     {
@@ -2876,8 +2876,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 6 RYBIČEK!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_06.mp3"
     },
     {
@@ -2887,8 +2887,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 8 RYBIČEK!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_08.mp3"
     },
     {
@@ -2898,8 +2898,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 9 RYBIČEK!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_09.mp3"
     },
     {
@@ -2909,8 +2909,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 12 RYBIČEK!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_12.mp3"
     },
     {
@@ -2920,8 +2920,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 14 RYBIČEK!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_14.mp3"
     },
     {
@@ -2931,8 +2931,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MÁM VELIKÝ HLAD! DEJ MI PROSÍM DO MISKY PŘESNĚ 15 RYBIČEK!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+4%",
+      "pitch": "+50Hz",
       "file": "assets/audio/feed_ask_15.mp3"
     },
     {
@@ -2942,8 +2942,8 @@ window.PENGUIN_WORLD_DATA = {
       "karaoke_text": "MŇAM, VÝBORNĚ! POJĎME NA DALŠÍ PORCI RYBIČEK!",
       "intonation_note": "Zřetelně, hravě a přátelsky.",
       "voice": "cs-CZ-VlastaNeural",
-      "rate": "-8%",
-      "pitch": "+6Hz",
+      "rate": "+8%",
+      "pitch": "+58Hz",
       "file": "assets/audio/feed_next_round.mp3"
     }
   ]
