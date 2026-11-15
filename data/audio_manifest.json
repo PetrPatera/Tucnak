@@ -336,6 +336,17 @@
       "file": "assets/audio/act_22_intro.mp3"
     },
     {
+      "id": "act_23_intro",
+      "category": "activity_intro",
+      "text_cs": "Podívej se na zadanou barvu a vyber dvě barvičky, kterými ji dohromady namícháš!",
+      "karaoke_text": "PODÍVEJ SE NA ZADANOU BARVU A VYBER DVĚ BARVIČKY, KTERÝMI JI DOHROMADY NAMÍCHÁŠ!",
+      "intonation_note": "Kouzelnicky a radostně.",
+      "voice": "cs-CZ-VlastaNeural",
+      "rate": "+4%",
+      "pitch": "+50Hz",
+      "file": "assets/audio/act_23_intro.mp3"
+    },
+    {
       "id": "draw_step_oval",
       "category": "drawing",
       "text_cs": "První krok: nakresli velký kulatý ovál pro tělíčko.",

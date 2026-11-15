@@ -792,6 +792,23 @@
         { "stars": 2, "label": "Tabulka 3×3", "config": { "rows": 3, "cols": 3 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_02" },
         { "stars": 3, "label": "Roční období a oblečení", "config": { "rows": 3, "cols": 4 }, "hintAudioIds": ["hint_shape_size"], "successAudioId": "celebrate_02" }
       ]
+    },
+    {
+      "id": "act_23_build_color",
+      "number": 23,
+      "zoneId": "zone_a",
+      "title": "Slož si barvu",
+      "shortTitle": "Slož si barvu",
+      "icon": "🎨",
+      "type": "build_color",
+      "implementedInPrototype": true,
+      "pedagogicalGoal": "Pochopení míchání barev a skládání cílového odstínu ze dvou základních barev.",
+      "audioIntroId": "act_23_intro",
+      "levels": [
+        { "stars": 1, "label": "Základní míchání barev", "config": { "tier": 1 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 2, "label": "Světlé a tmavé odstíny", "config": { "tier": 2 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" },
+        { "stars": 3, "label": "Kouzelná alchymie barev", "config": { "tier": 3 }, "hintAudioIds": ["hint_idle_encourage"], "successAudioId": "celebrate_04" }
+      ]
     }
   ]
 }

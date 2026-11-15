@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="cs">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#277DA1" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -12,9 +14,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
-  <style>.hidden { display: none !important; }</style>
-  <link rel="stylesheet" href="./css/styles.css?v=7" />
+  <style>
+    .hidden {
+      display: none !important;
+    }
+  </style>
+  <link rel="stylesheet" href="./css/styles.css?v=8" />
 </head>
+
 <body>
   <div id="app-shell" class="app-shell">
     <!-- Horní lišta -->
@@ -29,11 +36,16 @@
           <span class="brand-title">TUČŇÁKŮV SVĚT</span>
         </div>
         <div id="level-stars-bar" class="level-stars-bar hidden" aria-label="Výběr obtížnosti">
-          <button class="btn-touch btn-star-level" data-stars="1" title="1 hvězdička – Nejlehčí" aria-label="Úroveň 1 hvězdička">★</button>
-          <button class="btn-touch btn-star-level" data-stars="2" title="2 hvězdičky – Lehká" aria-label="Úroveň 2 hvězdičky">★★</button>
-          <button class="btn-touch btn-star-level" data-stars="3" title="3 hvězdičky – Střední" aria-label="Úroveň 3 hvězdičky">★★★</button>
-          <button class="btn-touch btn-star-level" data-stars="4" title="4 hvězdičky – Těžší" aria-label="Úroveň 4 hvězdičky">★★★★</button>
-          <button class="btn-touch btn-star-level" data-stars="5" title="5 hvězdiček – Mistr" aria-label="Úroveň 5 hvězdiček">★★★★★</button>
+          <button class="btn-touch btn-star-level" data-stars="1" title="1 hvězdička – Nejlehčí"
+            aria-label="Úroveň 1 hvězdička">★</button>
+          <button class="btn-touch btn-star-level" data-stars="2" title="2 hvězdičky – Lehká"
+            aria-label="Úroveň 2 hvězdičky">★★</button>
+          <button class="btn-touch btn-star-level" data-stars="3" title="3 hvězdičky – Střední"
+            aria-label="Úroveň 3 hvězdičky">★★★</button>
+          <button class="btn-touch btn-star-level" data-stars="4" title="4 hvězdičky – Těžší"
+            aria-label="Úroveň 4 hvězdičky">★★★★</button>
+          <button class="btn-touch btn-star-level" data-stars="5" title="5 hvězdiček – Mistr"
+            aria-label="Úroveň 5 hvězdiček">★★★★★</button>
         </div>
       </div>
 
@@ -42,8 +54,8 @@
         <button class="btn-touch btn-quick" data-act="act_01_step_draw">
           <span>✏️</span><span>KRESLENÍ</span>
         </button>
-        <button class="btn-touch btn-quick" data-act="act_03_symmetry">
-          <span>🦋</span><span>SYMETRIE</span>
+        <button class="btn-touch btn-quick" data-act="act_23_build_color">
+          <span>🎨</span><span>SLOŽ BARVU</span>
         </button>
         <button class="btn-touch btn-quick" data-act="act_06_tangram">
           <span>🔷</span><span>TANGRAM</span>
@@ -58,7 +70,8 @@
 
       <!-- Celá obrazovka, rodičovský zámek a časovač -->
       <div class="top-right">
-        <button id="btn-fullscreen" class="btn-touch btn-fullscreen" title="Přepnout na celou obrazovku" aria-label="Celá obrazovka">
+        <button id="btn-fullscreen" class="btn-touch btn-fullscreen" title="Přepnout na celou obrazovku"
+          aria-label="Celá obrazovka">
           <span id="fullscreen-icon">⛶</span>
           <span id="fullscreen-label" class="fullscreen-label">CELÁ OBRAZOVKA</span>
         </button>
@@ -102,15 +115,18 @@
             <ellipse cx="1050" cy="95" rx="80" ry="28" />
           </g>
           <!-- Vzdálené zasněžené hory -->
-          <path d="M0,250 L140,145 L270,235 L430,130 L590,240 L760,150 L930,240 L1110,135 L1280,235 L1280,620 L0,620 Z" fill="#E8F6FF" />
+          <path d="M0,250 L140,145 L270,235 L430,130 L590,240 L760,150 L930,240 L1110,135 L1280,235 L1280,620 L0,620 Z"
+            fill="#E8F6FF" />
           <path d="M0,260 Q320,230 640,260 T1280,255 L1280,620 L0,620 Z" fill="url(#seaGrad)" />
           <!-- Plovoucí ledové kry -->
           <ellipse cx="160" cy="495" rx="85" ry="22" fill="#F0FAFF" opacity="0.7" />
           <ellipse cx="640" cy="390" rx="95" ry="24" fill="#F0FAFF" opacity="0.65" />
           <ellipse cx="1110" cy="495" rx="90" ry="22" fill="#F0FAFF" opacity="0.7" />
           <!-- Propojovací plavební trasy mezi ostrovy -->
-          <path d="M235,205 Q430,120 625,155 T1015,210" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="14 12" stroke-linecap="round" opacity="0.85" />
-          <path d="M235,215 Q320,340 435,415 T865,415 Q965,330 1015,210" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="14 12" stroke-linecap="round" opacity="0.85" />
+          <path d="M235,205 Q430,120 625,155 T1015,210" fill="none" stroke="#FFFFFF" stroke-width="6"
+            stroke-dasharray="14 12" stroke-linecap="round" opacity="0.85" />
+          <path d="M235,215 Q320,340 435,415 T865,415 Q965,330 1015,210" fill="none" stroke="#FFFFFF" stroke-width="6"
+            stroke-dasharray="14 12" stroke-linecap="round" opacity="0.85" />
         </svg>
 
         <div id="islands-layer" class="islands-layer">
@@ -127,7 +143,8 @@
                 <p id="drawer-zone-subtitle">Kreslení, míchání barev a tvoření</p>
               </div>
             </div>
-            <button id="btn-close-drawer" class="btn-touch btn-close-drawer" aria-label="Zavřít nabídku ostrova">✕</button>
+            <button id="btn-close-drawer" class="btn-touch btn-close-drawer"
+              aria-label="Zavřít nabídku ostrova">✕</button>
           </div>
           <div id="drawer-activities-list" class="drawer-activities-list">
             <!-- Kartičky aktivit dané zóny -->
@@ -161,7 +178,8 @@
             <!-- Levé křídlo -->
             <path class="penguin-wing-left" d="M36,92 C12,112 18,144 38,148 C48,148 52,126 48,100 Z" fill="#1D3557" />
             <!-- Pravé křídlo -->
-            <path class="penguin-wing-right" d="M144,92 C168,112 162,144 142,148 C132,148 128,126 132,100 Z" fill="#1D3557" />
+            <path class="penguin-wing-right" d="M144,92 C168,112 162,144 142,148 C132,148 128,126 132,100 Z"
+              fill="#1D3557" />
             <!-- Ovál těla -->
             <ellipse cx="90" cy="118" rx="50" ry="54" fill="#1D3557" />
             <ellipse cx="90" cy="124" rx="34" ry="42" fill="#FFFFFF" />
@@ -172,7 +190,8 @@
             <g class="penguin-head">
               <circle cx="90" cy="64" r="38" fill="#1D3557" />
               <!-- Bílý obličejový srdcový vzor -->
-              <path d="M62,60 C62,40 85,42 90,55 C95,42 118,40 118,60 C118,82 104,90 90,90 C76,90 62,82 62,60 Z" fill="#FFFFFF" />
+              <path d="M62,60 C62,40 85,42 90,55 C95,42 118,40 118,60 C118,82 104,90 90,90 C76,90 62,82 62,60 Z"
+                fill="#FFFFFF" />
               <!-- Růžové tvářičky -->
               <ellipse cx="66" cy="72" rx="7" ry="4" fill="#FFAFCC" opacity="0.8" />
               <ellipse cx="114" cy="72" rx="7" ry="4" fill="#FFAFCC" opacity="0.8" />
@@ -183,8 +202,10 @@
                 <circle class="eye-ball" cx="104" cy="60" r="6.5" fill="#1D3557" />
                 <circle class="eye-glint" cx="106" cy="58" r="2.2" fill="#FFFFFF" />
                 <!-- Zavřená spící víčka pro režim SLEEPY -->
-                <path class="eye-sleep" d="M69,60 Q76,66 83,60" fill="none" stroke="#1D3557" stroke-width="3" stroke-linecap="round" />
-                <path class="eye-sleep" d="M97,60 Q104,66 111,60" fill="none" stroke="#1D3557" stroke-width="3" stroke-linecap="round" />
+                <path class="eye-sleep" d="M69,60 Q76,66 83,60" fill="none" stroke="#1D3557" stroke-width="3"
+                  stroke-linecap="round" />
+                <path class="eye-sleep" d="M97,60 Q104,66 111,60" fill="none" stroke="#1D3557" stroke-width="3"
+                  stroke-linecap="round" />
               </g>
               <!-- Zobáček (horní a dolní část pro animaci mluvení) -->
               <polygon class="beak-top" points="80,68 100,68 90,79" fill="#FFB703" />
@@ -219,7 +240,8 @@
     <div id="celebration-layer" class="celebration-layer" aria-hidden="true"></div>
 
     <!-- MODÁLNÍ OKNO: Rodičovská brána (Matematický zámek) -->
-    <div id="modal-parent-gate" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <div id="modal-parent-gate" class="modal-backdrop hidden" role="dialog" aria-modal="true"
+      aria-labelledby="gate-title">
       <div class="modal-card gate-card">
         <h2 id="gate-title">🔒 Vstup pro rodiče</h2>
         <p class="gate-subtitle">Pro odemčení rodičovské zóny spočítejte příklad:</p>
@@ -245,7 +267,8 @@
     </div>
 
     <!-- MODÁLNÍ OKNO: Rodičovská zóna -->
-    <div id="modal-parent-zone" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="pz-title">
+    <div id="modal-parent-zone" class="modal-backdrop hidden" role="dialog" aria-modal="true"
+      aria-labelledby="pz-title">
       <div class="modal-card parent-zone-card">
         <div class="pz-header">
           <h2 id="pz-title">👨‍👩‍👧 Rodičovská zóna — Tučňákův svět</h2>
@@ -261,22 +284,31 @@
         <div class="pz-body">
           <!-- Tab 1: Přehled pokroku -->
           <div id="pz-tab-progress" class="pz-tab-panel active">
-            <p class="pz-lead">Dítě postupuje vlastním tempem bez známek a stresu. Zde vidíte oblasti, které ho nejvíce baví:</p>
+            <p class="pz-lead">Dítě postupuje vlastním tempem bez známek a stresu. Zde vidíte oblasti, které ho nejvíce
+              baví:</p>
             <div id="pz-progress-list" class="pz-progress-list"></div>
           </div>
 
           <!-- Tab 2: Časový limit -->
           <div id="pz-tab-screentime" class="pz-tab-panel">
-            <p class="pz-lead">Nastavte délku herního sezení. Po vypršení času si Piko oblékne pyžamko a jemně hru ukončí.</p>
+            <p class="pz-lead">Nastavte délku herního sezení. Po vypršení času si Piko oblékne pyžamko a jemně hru
+              ukončí.</p>
             <div class="limit-options">
               <button class="btn-touch btn-limit" data-minutes="15">15 minut</button>
               <button class="btn-touch btn-limit active" data-minutes="30">30 minut</button>
               <button class="btn-touch btn-limit" data-minutes="45">45 minut</button>
               <button class="btn-touch btn-limit" data-minutes="0">Bez limitu</button>
             </div>
+            <div class="bedtime-demo-box" style="margin-bottom: 12px; background: #e6fcf5; border-color: #06d6a0;">
+              <p style="margin:0; font-weight:800; color:#1d3557;">Chcete okamžitě restartovat časovač a spustit nové
+                herní sezení?</p>
+              <button id="btn-pz-restart-timer" class="btn-touch btn-primary"
+                style="background:linear-gradient(135deg,#06d6a0,#10b981);">🔄 Restartovat čas (nové sezení)</button>
+            </div>
             <div class="bedtime-demo-box">
               <p>Chcete si prohlédnout jemné večerní ukončení hry bez pláče?</p>
-              <button id="btn-trigger-bedtime" class="btn-touch btn-primary">🌙 Ukázka večerního ukončení (Pyžamko)</button>
+              <button id="btn-trigger-bedtime" class="btn-touch btn-primary">🌙 Ukázka večerního ukončení
+                (Pyžamko)</button>
             </div>
           </div>
 
@@ -320,12 +352,14 @@
         </div>
         <h2>DOBROU NOC, KAMARÁDE!</h2>
         <p id="bedtime-subtitle">OBLÉKÁM SI TEPLÉ PYŽAMKO A JDU SE VYSPAT DO IGLÚ. TĚŠÍM SE ZASE ZÍTRA!</p>
-        <button id="btn-bedtime-parent-unlock" class="btn-touch btn-secondary">🔓 Rodičovské odemčení (nové sezení)</button>
+        <button id="btn-bedtime-parent-unlock" class="btn-touch btn-secondary">🔒 Rodičovský přístup (odemknout /
+          restartovat čas)</button>
       </div>
     </div>
   </div>
 
-  <script src="./js/data-bundle.js?v=7"></script>
-  <script src="./js/app.js?v=7"></script>
+  <script src="./js/data-bundle.js?v=8"></script>
+  <script src="./js/app.js?v=8"></script>
 </body>
+
 </html>
