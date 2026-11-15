@@ -10,7 +10,7 @@ function copyStaticAssetsPlugin() {
       const rootDir = process.cwd();
       const outDir = path.resolve(rootDir, 'dist');
       const dirsToCopy = ['css', 'js', 'data', 'assets'];
-      const filesToCopy = ['manifest.webmanifest', 'sw.js'];
+      const filesToCopy = ['index.html', 'manifest.webmanifest', 'sw.js'];
 
       for (const dir of dirsToCopy) {
         const src = path.resolve(rootDir, dir);
