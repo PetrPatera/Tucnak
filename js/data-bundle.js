@@ -456,7 +456,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Míchání barev",
       "icon": "🖌️",
       "type": "color_mix",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Experimentování se základními a doplňkovými barvami a rozvoj estetického cítění (integrovaná paleta i v Aktivitě 1).",
       "audioIntroId": "act_02_intro",
       "levels": [
@@ -587,7 +587,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Dokresli příběh",
       "icon": "☔",
       "type": "story_draw",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Rozvoj fantazie, logiky děje a výtvarného vyjadřování.",
       "audioIntroId": "act_04_intro",
       "levels": [
@@ -634,7 +634,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Spojovačky",
       "icon": "✨",
       "type": "connect_dots",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Řazení čísel a písmen, přesnost tahu tužkou či prstem.",
       "audioIntroId": "act_05_intro",
       "levels": [
@@ -925,7 +925,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Hledač stínů",
       "icon": "🌗",
       "type": "shadow_match",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Vizuální diferenciace figura-pozadí a vnímání tvarových detailů.",
       "audioIntroId": "act_07_intro",
       "levels": [
@@ -973,7 +973,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Vizuální detektiv",
       "icon": "🔍",
       "type": "visual_detective",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Postřeh, logické vyhodnocení kontextu a slovní zdůvodnění.",
       "audioIntroId": "act_08_intro",
       "levels": [
@@ -1020,7 +1020,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Ledové puzzle",
       "icon": "🧩",
       "type": "puzzle",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Analýza a syntéza celku z částí, trpělivost.",
       "audioIntroId": "act_09_intro",
       "levels": [
@@ -1231,7 +1231,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Slova ze slabik",
       "icon": "📖",
       "type": "syllables",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Analýza a syntéza slabik (MA-MA, AU-TO, RY-BA) pro plynulé počáteční čtení.",
       "audioIntroId": "act_11_intro",
       "levels": [
@@ -1290,7 +1290,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Písmenková dráha",
       "icon": "🛷",
       "type": "letter_track",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Osvojení správného směru tahu velkých tiskacích písmen a číslic.",
       "audioIntroId": "act_12_intro",
       "levels": [
@@ -1352,7 +1352,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Rýmovací pexeso",
       "icon": "🎵",
       "type": "rhyme_memory",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Cit pro rytmus jazyka, rozlišování koncových rýmů a paměť.",
       "audioIntroId": "act_13_intro",
       "levels": [
@@ -1483,7 +1483,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Ledové váhy",
       "icon": "⚖️",
       "type": "ice_scales",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Porozumění pojmům více, méně a stejně na principu rovnováhy.",
       "audioIntroId": "act_15_intro",
       "levels": [
@@ -1530,7 +1530,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Sčítání s příběhem",
       "icon": "➕",
       "type": "story_math",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Názorné pochopení operací přidávání a ubírání v kontextu příběhu.",
       "audioIntroId": "act_16_intro",
       "levels": [
@@ -1577,7 +1577,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Řazení velikostí",
       "icon": "📏",
       "type": "size_sort",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Seriace (uspořádání podle měřitelné veličiny od nejmenšího po největší).",
       "audioIntroId": "act_17_intro",
       "levels": [
@@ -1624,7 +1624,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Dokonči vzor",
       "icon": "❄️",
       "type": "pattern_complete",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Rozpoznávání pravidelností a logických sekvencí ABAB, AABB a ABC.",
       "audioIntroId": "act_18_intro",
       "levels": [
@@ -1671,7 +1671,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Ledové bludiště",
       "icon": "🧊",
       "type": "ice_maze",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Plánování cesty, předvídání slepých uliček a koordinace prstu.",
       "audioIntroId": "act_19_intro",
       "levels": [
@@ -1720,7 +1720,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Zvukové pexeso",
       "icon": "🥁",
       "type": "sound_memory",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Trénink pracovní paměti a sluchového rozlišování zvířat a nástrojů.",
       "audioIntroId": "act_20_intro",
       "levels": [
@@ -1770,7 +1770,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Kódování cesty",
       "icon": "🧭",
       "type": "coding_path",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Algoritmické myšlení, skládání sekvence kroků a ladění trasy.",
       "audioIntroId": "act_21_intro",
       "levels": [
@@ -1817,7 +1817,7 @@ window.PENGUIN_WORLD_DATA = {
       "shortTitle": "Třídící matice",
       "icon": "🗂️",
       "type": "matrix_sort",
-      "implementedInPrototype": false,
+      "implementedInPrototype": true,
       "pedagogicalGoal": "Klasifikace objektů podle dvou současných kritérií (barva × tvar / roční období).",
       "audioIntroId": "act_22_intro",
       "levels": [
