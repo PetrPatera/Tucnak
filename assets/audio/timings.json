@@ -4927,5 +4927,78 @@
         "endMs": 4712
       }
     ]
+  },
+  "act_23_intro": {
+    "id": "act_23_intro",
+    "file": "assets/audio/act_23_intro.mp3",
+    "voice": "cs-CZ-VlastaNeural",
+    "karaokeText": "PODÍVEJ SE NA ZADANOU BARVU A VYBER DVĚ BARVIČKY, KTERÝMI JI DOHROMADY NAMÍCHÁŠ!",
+    "words": [
+      {
+        "word": "PODÍVEJ",
+        "startMs": 98,
+        "endMs": 615
+      },
+      {
+        "word": "SE",
+        "startMs": 615,
+        "endMs": 771
+      },
+      {
+        "word": "NA",
+        "startMs": 771,
+        "endMs": 891
+      },
+      {
+        "word": "ZADANOU",
+        "startMs": 891,
+        "endMs": 1288
+      },
+      {
+        "word": "BARVU",
+        "startMs": 1300,
+        "endMs": 1733
+      },
+      {
+        "word": "A",
+        "startMs": 1757,
+        "endMs": 1841
+      },
+      {
+        "word": "VYBER",
+        "startMs": 1865,
+        "endMs": 2165
+      },
+      {
+        "word": "DVĚ",
+        "startMs": 2177,
+        "endMs": 2405
+      },
+      {
+        "word": "BARVIČKY",
+        "startMs": 2406,
+        "endMs": 3007
+      },
+      {
+        "word": "KTERÝMI",
+        "startMs": 3163,
+        "endMs": 3680
+      },
+      {
+        "word": "JI",
+        "startMs": 3680,
+        "endMs": 3776
+      },
+      {
+        "word": "DOHROMADY",
+        "startMs": 3776,
+        "endMs": 4281
+      },
+      {
+        "word": "NAMÍCHÁŠ",
+        "startMs": 4281,
+        "endMs": 5026
+      }
+    ]
   }
 }

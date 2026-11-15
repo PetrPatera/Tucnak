@@ -1,4 +1,4 @@
-const CACHE_NAME = "tucnakuv-svet-v7";
+const CACHE_NAME = "tucnakuv-svet-v8";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -8,7 +8,8 @@ const CORE_ASSETS = [
   "./data/activities.json",
   "./data/audio_manifest.json",
   "./manifest.webmanifest",
-  "./assets/icons/icon.svg"
+  "./assets/icons/icon.svg",
+  "./assets/audio/act_23_intro.mp3"
 ];
 
 self.addEventListener("install", (event) => {

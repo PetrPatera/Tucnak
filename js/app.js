@@ -345,12 +345,15 @@
       this.speakViaWebSpeech(spokenText, wordSpans, voiceVol, finish);
     }
 
-    speakViaWebSpeech(spokenText, wordSpans, voiceVol, onFinish) {
+    speakViaWebSpeech(spokenText, wordSpans, voiceVol, onFinish, customRate = null) {
+      // DŮLEŽITÉ: Převedeme text na malá písmena, aby český syntetizátor NIKDY nečetl
+      // krátká slova nebo slabiky (např. RY, BA, KO, LO, PES, LES) po jednotlivých písmenech jako zkratky!
       const cleanSpeech = String(spokenText || "")
+        .toLowerCase()
         .replace(/[^\p{L}\p{N}\s.,?!:;+-]/gu, " ")
         .replace(/\s+/g, " ")
         .trim();
-      const estimatedMs = Math.max(1100, cleanSpeech.length * 68);
+      const estimatedMs = Math.max(950, cleanSpeech.length * 68);
       if (!("speechSynthesis" in window) || voiceVol <= 0.01 || !cleanSpeech) {
         this.runHeuristicKaraoke(wordSpans, estimatedMs, onFinish);
         return;
@@ -358,8 +361,8 @@
 
       const utter = new SpeechSynthesisUtterance(cleanSpeech);
       utter.lang = "cs-CZ";
-      utter.rate = 1.04;
-      utter.pitch = 1.42;
+      utter.rate = customRate || 1.0;
+      utter.pitch = 1.38;
       utter.volume = voiceVol;
 
       const voices = window.speechSynthesis.getVoices();
@@ -390,13 +393,14 @@
 
       this.runHeuristicKaraoke(wordSpans, estimatedMs, null, () => boundaryFired);
 
-      setTimeout(() => {
-        try {
-          window.speechSynthesis.speak(utter);
-        } catch (_err) {
-          this.runHeuristicKaraoke(wordSpans, estimatedMs, safeFinish);
+      try {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
         }
-      }, 35);
+        window.speechSynthesis.speak(utter);
+      } catch (_err) {
+        this.runHeuristicKaraoke(wordSpans, estimatedMs, safeFinish);
+      }
     }
 
     runHeuristicKaraoke(wordSpans, totalMs, onDone = null, shouldYield = null) {
@@ -588,6 +592,318 @@
     }
   }
 
+  /* =========================================================================
+   * 3B. UNIVERZÁLNÍ DRAG & DROP HELPER + RGB KRUH + PALETA BAREV A PERA
+   * ========================================================================= */
+  /**
+   * Připojí pointer drag-and-drop na zdrojové prvky.
+   * Samotné kliknutí (single tap bez tažení) NIC NEUMÍSTÍ — volitelně jen zavolá onTap (např. přečtení slova).
+   * Přetažením lze skládat položky libovolně i na přeskáčku do jakéhokoliv cílového slotu.
+   */
+  function bindPointerDragDrop({
+    containerEl,
+    sourceSelector,
+    targetSelector,
+    canDrag = () => true,
+    onTap = null,
+    onDrop
+  }) {
+    const sources = containerEl.querySelectorAll(sourceSelector);
+    sources.forEach((srcEl) => {
+      srcEl.style.touchAction = "none";
+      srcEl.style.userSelect = "none";
+      srcEl.addEventListener("contextmenu", (ev) => ev.preventDefault());
+      srcEl.addEventListener("dragstart", (ev) => ev.preventDefault());
+
+      srcEl.addEventListener("pointerdown", (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        if (!canDrag(srcEl)) return;
+        e.preventDefault();
+
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const rect = srcEl.getBoundingClientRect();
+        const offsetX = startX - rect.left;
+        const offsetY = startY - rect.top;
+        let moved = false;
+        let floatingEl = null;
+        let lastHoverTarget = null;
+
+        const clearHover = () => {
+          if (lastHoverTarget) {
+            lastHoverTarget.classList.remove("drop-target-hover");
+            lastHoverTarget = null;
+          }
+        };
+
+        const findTargetAt = (x, y) => {
+          const targets = Array.from(containerEl.querySelectorAll(targetSelector));
+          let best = null;
+          let bestDist = Infinity;
+          for (const t of targets) {
+            const tr = t.getBoundingClientRect();
+            const pad = 16;
+            if (
+              x >= tr.left - pad &&
+              x <= tr.right + pad &&
+              y >= tr.top - pad &&
+              y <= tr.bottom + pad
+            ) {
+              const cx = (tr.left + tr.right) / 2;
+              const cy = (tr.top + tr.bottom) / 2;
+              const d = Math.hypot(x - cx, y - cy);
+              if (d < bestDist) {
+                bestDist = d;
+                best = t;
+              }
+            }
+          }
+          return best;
+        };
+
+        const onMove = (me) => {
+          const dx = me.clientX - startX;
+          const dy = me.clientY - startY;
+          if (!moved && Math.hypot(dx, dy) > 8) {
+            moved = true;
+            srcEl.classList.add("dragging-source");
+            floatingEl = srcEl.cloneNode(true);
+            floatingEl.classList.add("drag-floating-clone");
+            floatingEl.style.width = `${Math.max(64, rect.width)}px`;
+            floatingEl.style.height = `${Math.max(54, rect.height)}px`;
+            document.body.appendChild(floatingEl);
+          }
+          if (moved && floatingEl) {
+            floatingEl.style.left = `${me.clientX - offsetX}px`;
+            floatingEl.style.top = `${me.clientY - offsetY}px`;
+            const target = findTargetAt(me.clientX, me.clientY);
+            if (target !== lastHoverTarget) {
+              clearHover();
+              if (target) {
+                target.classList.add("drop-target-hover");
+                lastHoverTarget = target;
+              }
+            }
+          }
+        };
+
+        const onEnd = (ue) => {
+          window.removeEventListener("pointermove", onMove);
+          window.removeEventListener("pointerup", onEnd);
+          window.removeEventListener("pointercancel", onEnd);
+          clearHover();
+          srcEl.classList.remove("dragging-source");
+          if (floatingEl) {
+            floatingEl.remove();
+            floatingEl = null;
+          }
+          if (!moved) {
+            if (typeof onTap === "function") {
+              onTap(srcEl, ue);
+            }
+            return;
+          }
+          const dropTarget = findTargetAt(ue.clientX, ue.clientY);
+          if (dropTarget && typeof onDrop === "function") {
+            onDrop(srcEl, dropTarget, ue);
+          }
+        };
+
+        window.addEventListener("pointermove", onMove, { passive: false });
+        window.addEventListener("pointerup", onEnd);
+        window.addEventListener("pointercancel", onEnd);
+      });
+    });
+  }
+
+  const EXTENDED_SWATCH_PALETTE = [
+    { hex: "#1D3557", name: "tmavě modrá" },
+    { hex: "#E63946", name: "červená" },
+    { hex: "#FFD166", name: "žlutá" },
+    { hex: "#118AB2", name: "modrá" },
+    { hex: "#F77F00", name: "oranžová" },
+    { hex: "#06D6A0", name: "zelená" },
+    { hex: "#7209B7", name: "fialová" },
+    { hex: "#FF5D8F", name: "růžová" },
+    { hex: "#4CC9F0", name: "azurová" },
+    { hex: "#8D6E63", name: "hnědá" },
+    { hex: "#64748B", name: "šedá" },
+    { hex: "#111827", name: "černá" }
+  ];
+
+  const MIX_BASE_COLORS = [
+    { id: "yellow", name: "žlutá", label: "ŽLUTÁ", hex: "#FFD166", textColor: "#1D3557" },
+    { id: "red", name: "červená", label: "ČERVENÁ", hex: "#E63946", textColor: "#FFFFFF" },
+    { id: "blue", name: "modrá", label: "MODRÁ", hex: "#118AB2", textColor: "#FFFFFF" },
+    { id: "white", name: "bílá", label: "BÍLÁ", hex: "#F8FAFC", textColor: "#1D3557" },
+    { id: "green", name: "zelená", label: "ZELENÁ", hex: "#06D6A0", textColor: "#1D3557" },
+    { id: "black", name: "černá", label: "ČERNÁ", hex: "#1E293B", textColor: "#FFFFFF" }
+  ];
+
+  const PEN_SIZES = [
+    { size: 4, dot: 5, label: "JEMNÉ", spoken: "jemné pero" },
+    { size: 9, dot: 9, label: "STŘEDNÍ", spoken: "střední pero" },
+    { size: 15, dot: 13, label: "SILNÉ", spoken: "silné pero" },
+    { size: 22, dot: 18, label: "ŠTĚTEC", spoken: "velký štětec" }
+  ];
+
+  function hexToRgbObj(hex) {
+    const clean = (hex || "#000000").replace("#", "");
+    const num = parseInt(clean, 16);
+    return {
+      r: (num >> 16) & 255,
+      g: (num >> 8) & 255,
+      b: num & 255
+    };
+  }
+
+  function rgbObjToHex({ r, g, b }) {
+    const clamp = (v) => Math.max(0, Math.min(255, Math.round(v)));
+    return (
+      "#" +
+      [clamp(r), clamp(g), clamp(b)]
+        .map((x) => x.toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase()
+    );
+  }
+
+  function hslToHex(h, s, l) {
+    const sNorm = s / 100;
+    const lNorm = l / 100;
+    const c = (1 - Math.abs(2 * lNorm - 1)) * sNorm;
+    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m = lNorm - c / 2;
+    let r = 0, g = 0, b = 0;
+    if (h < 60) { r = c; g = x; b = 0; }
+    else if (h < 120) { r = x; g = c; b = 0; }
+    else if (h < 180) { r = 0; g = c; b = x; }
+    else if (h < 240) { r = 0; g = x; b = c; }
+    else if (h < 300) { r = x; g = 0; b = c; }
+    else { r = c; g = 0; b = x; }
+    return rgbObjToHex({
+      r: (r + m) * 255,
+      g: (g + m) * 255,
+      b: (b + m) * 255
+    });
+  }
+
+  function mixTwoColors(c1, c2) {
+    const pair = [c1.id, c2.id].sort().join("+");
+    const recipes = {
+      "blue+yellow": { hex: "#2A9D8F", name: "zelená", audioId: "color_mix_yellow_blue" },
+      "red+yellow": { hex: "#F77F00", name: "oranžová", audioId: "color_mix_red_yellow" },
+      "blue+red": { hex: "#7209B7", name: "fialová", audioId: "color_mix_red_blue" },
+      "red+white": { hex: "#FF758F", name: "růžová", audioId: null },
+      "blue+white": { hex: "#4CC9F0", name: "světle modrá", audioId: null },
+      "green+white": { hex: "#80ED99", name: "světle zelená", audioId: null },
+      "white+yellow": { hex: "#FFF3B0", name: "krémově žlutá", audioId: null },
+      "black+white": { hex: "#94A3B8", name: "šedá", audioId: null },
+      "green+red": { hex: "#8D5B4C", name: "hnědá", audioId: null },
+      "blue+green": { hex: "#00B4D8", name: "tyrkysová", audioId: null },
+      "green+yellow": { hex: "#AACC00", name: "limetková", audioId: null },
+      "black+red": { hex: "#800F2F", name: "vínová", audioId: null },
+      "black+blue": { hex: "#1D3557", name: "námořnická modrá", audioId: null },
+      "black+yellow": { hex: "#606C38", name: "olivová", audioId: null },
+      "black+green": { hex: "#1B4332", name: "lesní zelená", audioId: null }
+    };
+    if (recipes[pair]) {
+      return recipes[pair];
+    }
+    if (c1.id === c2.id) {
+      return { hex: c1.hex, name: c1.name, audioId: null };
+    }
+    const rgb1 = hexToRgbObj(c1.hex);
+    const rgb2 = hexToRgbObj(c2.hex);
+    const blended = rgbObjToHex({
+      r: (rgb1.r + rgb2.r) / 2,
+      g: (rgb1.g + rgb2.g) / 2,
+      b: (rgb1.b + rgb2.b) / 2
+    });
+    return { hex: blended, name: "namíchaná barva", audioId: null };
+  }
+
+  function mountRgbColorWheel(canvasEl, previewEl, onPickColor) {
+    if (!canvasEl) return;
+    const ctx = canvasEl.getContext("2d");
+    const size = canvasEl.width;
+    const cx = size / 2;
+    const cy = size / 2;
+    const radius = size / 2 - 2;
+
+    for (let angle = 0; angle < 360; angle += 1) {
+      const startAngle = ((angle - 1) * Math.PI) / 180;
+      const endAngle = ((angle + 1) * Math.PI) / 180;
+      const grad = ctx.createRadialGradient(cx, cy, 2, cx, cy, radius);
+      grad.addColorStop(0, "#FFFFFF");
+      grad.addColorStop(0.65, `hsl(${angle}, 100%, 50%)`);
+      grad.addColorStop(1, `hsl(${angle}, 100%, 32%)`);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, radius, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    const pickFromEvent = (e) => {
+      const rect = canvasEl.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / Math.max(1, rect.width)) * size;
+      const y = ((e.clientY - rect.top) / Math.max(1, rect.height)) * size;
+      const dx = x - cx;
+      const dy = y - cy;
+      const dist = Math.min(radius, Math.hypot(dx, dy));
+      const angle = ((Math.atan2(dy, dx) * 180) / Math.PI + 360) % 360;
+      const ratio = dist / radius;
+      const sat = Math.min(100, Math.round(ratio * 115));
+      const light = ratio < 0.65
+        ? Math.round(100 - (ratio / 0.65) * 50)
+        : Math.round(50 - ((ratio - 0.65) / 0.35) * 18);
+      const hex = hslToHex(angle, sat, light);
+      if (previewEl) {
+        previewEl.style.background = hex;
+      }
+      if (typeof onPickColor === "function") {
+        onPickColor(hex);
+      }
+    };
+
+    let dragging = false;
+    canvasEl.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      dragging = true;
+      try {
+        canvasEl.setPointerCapture(e.pointerId);
+      } catch (_err) {}
+      pickFromEvent(e);
+    });
+    canvasEl.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      e.preventDefault();
+      pickFromEvent(e);
+    });
+    const endWheel = () => {
+      dragging = false;
+    };
+    canvasEl.addEventListener("pointerup", endWheel);
+    canvasEl.addEventListener("pointercancel", endWheel);
+  }
+
+  function renderPenSizeMarkup(activeSize = 9) {
+    return `
+      <div class="pen-size-row">
+        ${PEN_SIZES.map(
+          (p) => `
+          <button class="btn-touch btn-pen-size ${p.size === activeSize ? "active" : ""}" data-pen-size="${p.size}" data-spoken="${p.spoken}" title="${p.label}">
+            <span class="pen-size-dot" style="width:${p.dot}px; height:${p.dot}px;"></span>
+            <span>${p.label}</span>
+          </button>
+        `
+        ).join("")}
+      </div>
+    `;
+  }
+
   function buildProceduralStepTemplates() {
     const defs = [
       { title: "ZLATÁ RYBIČKA", main: { type: "ellipse", cx: 330, cy: 235, rx: 135, ry: 85, label: "Tělíčko rybičky" }, detail1: { type: "arcs", paths: [[[465, 235], [565, 155], [545, 315], [465, 235]], [[310, 150], [350, 95], [390, 155]]], label: "Ocásek a ploutvička" }, detail2: { type: "circle", cx: 245, cy: 215, r: 18, label: "Očičko" } },
@@ -597,7 +913,7 @@
       { title: "SNĚHULÁK KULÍŠEK", main: { type: "circle", cx: 360, cy: 310, r: 95, label: "Spodní koule" }, detail1: { type: "circle", cx: 360, cy: 170, r: 65, label: "Hlava sněhuláka" }, detail2: { type: "arcs", paths: [[[360, 170], [425, 180], [360, 190]]], label: "Mrkvička" } },
       { title: "VESMÍRNÁ RAKETA", main: { type: "ellipse", cx: 360, cy: 235, rx: 75, ry: 145, label: "Trup rakety" }, detail1: { type: "arcs", paths: [[[285, 310], [220, 380], [305, 360]], [[435, 310], [500, 380], [415, 360]]], label: "Křidélka" }, detail2: { type: "circle", cx: 360, cy: 195, r: 32, label: "Okénko" } },
       { title: "ROZKVETLÁ KYTIČKA", main: { type: "circle", cx: 360, cy: 190, r: 48, label: "Střed kytičky" }, detail1: { type: "ellipse", cx: 360, cy: 190, rx: 115, ry: 115, label: "Okvětní lístky" }, detail2: { type: "arcs", paths: [[[360, 305], [360, 420]], [[360, 365], [430, 330]]], label: "Stonek a lístek" } },
-      { title: "ZELENÁ Želvička", main: { type: "ellipse", cx: 360, cy: 240, rx: 140, ry: 95, label: "Krunýř želvičky" }, detail1: { type: "circle", cx: 525, cy: 220, r: 38, label: "Hlavička" }, detail2: { type: "arcs", paths: [[[260, 325], [240, 385]], [[450, 325], [470, 385]]], label: "Nožičky" } },
+      { title: "ZELENÁ ŽELVIČKA", main: { type: "ellipse", cx: 360, cy: 240, rx: 140, ry: 95, label: "Krunýř želvičky" }, detail1: { type: "circle", cx: 525, cy: 220, r: 38, label: "Hlavička" }, detail2: { type: "arcs", paths: [[[260, 325], [240, 385]], [[450, 325], [470, 385]]], label: "Nožičky" } },
       { title: "MODRÁ VELRYBA", main: { type: "ellipse", cx: 330, cy: 260, rx: 155, ry: 90, label: "Tělo velryby" }, detail1: { type: "arcs", paths: [[[485, 260], [575, 190], [555, 320], [485, 260]]], label: "Ocasní ploutev" }, detail2: { type: "arcs", paths: [[[310, 170], [280, 90]], [[310, 170], [345, 90]]], label: "Vodotrysk" } },
       { title: "ČERVENÁ BERUŠKA", main: { type: "circle", cx: 360, cy: 250, r: 115, label: "Krovky berušky" }, detail1: { type: "arcs", paths: [[[360, 135], [360, 365]], [[320, 135], [290, 80]], [[400, 135], [430, 80]]], label: "Čára a tykadla" }, detail2: { type: "circle", cx: 310, cy: 230, r: 22, label: "Puntíky" } },
       { title: "HŘÍBEK V LESE", main: { type: "ellipse", cx: 360, cy: 170, rx: 145, ry: 75, label: "Klobouček hříbku" }, detail1: { type: "ellipse", cx: 360, cy: 310, rx: 55, ry: 90, label: "Nožička hříbku" }, detail2: { type: "circle", cx: 310, cy: 155, r: 20, label: "Tečky na kloboučku" } },
@@ -608,7 +924,7 @@
       { title: "BAREVNÝ BALÓNEK", main: { type: "ellipse", cx: 360, cy: 185, rx: 95, ry: 115, label: "Kulatý balónek" }, detail1: { type: "arcs", paths: [[[345, 300], [375, 300], [360, 320], [345, 300]]], label: "Uzlík" }, detail2: { type: "arcs", paths: [[[360, 320], [335, 370], [380, 420]]], label: "Provázek" } },
       { title: "ZELENÝ STROMEČEK", main: { type: "arcs", paths: [[[360, 75], [220, 235], [500, 235], [360, 75]]], label: "Horní větve" }, detail1: { type: "arcs", paths: [[[360, 185], [195, 345], [525, 345], [360, 185]]], label: "Spodní větve" }, detail2: { type: "arcs", paths: [[[330, 345], [330, 415], [390, 415], [390, 345]]], label: "Kmen stromu" } },
       { title: "UŠATÝ KRÁLÍČEK", main: { type: "circle", cx: 360, cy: 275, r: 90, label: "Hlavička králíčka" }, detail1: { type: "ellipse", cx: 320, cy: 125, rx: 26, ry: 75, label: "Levý ušák" }, detail2: { type: "ellipse", cx: 400, cy: 125, rx: 26, ry: 75, label: "Pravý ušák" } },
-      { title: "Mlsný MEDVÍDEK", main: { type: "circle", cx: 360, cy: 245, r: 105, label: "Hlava medvídka" }, detail1: { type: "circle", cx: 270, cy: 155, r: 38, label: "Levé ouško" }, detail2: { type: "circle", cx: 450, cy: 155, r: 38, label: "Pravé ouško" } },
+      { title: "MLSNÝ MEDVÍDEK", main: { type: "circle", cx: 360, cy: 245, r: 105, label: "Hlava medvídka" }, detail1: { type: "circle", cx: 270, cy: 155, r: 38, label: "Levé ouško" }, detail2: { type: "circle", cx: 450, cy: 155, r: 38, label: "Pravé ouško" } },
       { title: "ZMRZLINOVÝ KORNOUTEK", main: { type: "arcs", paths: [[[275, 225], [445, 225], [360, 410], [275, 225]]], label: "Křupavý kornoutek" }, detail1: { type: "circle", cx: 360, cy: 170, r: 78, label: "Kopeček zmrzliny" }, detail2: { type: "circle", cx: 360, cy: 85, r: 22, label: "Třešnička na vrchu" } },
       { title: "LÉTAJÍCÍ DRÁČEK", main: { type: "arcs", paths: [[[360, 75], [485, 210], [360, 345], [235, 210], [360, 75]]], label: "Tělo draka" }, detail1: { type: "arcs", paths: [[[360, 75], [360, 345]], [[235, 210], [485, 210]]], label: "Zkřížené špejle" }, detail2: { type: "arcs", paths: [[[360, 345], [410, 395], [350, 435]]], label: "Mašličkový ocas" } },
       { title: "ŠŤAVNATÉ JABLÍČKO", main: { type: "circle", cx: 360, cy: 255, r: 108, label: "Červené jablíčko" }, detail1: { type: "arcs", paths: [[[360, 148], [365, 95]]], label: "Stopka" }, detail2: { type: "ellipse", cx: 405, cy: 118, rx: 35, ry: 18, label: "Zelený lístek" } },
@@ -650,7 +966,8 @@
       this.templateIdx = 0;
 
       this.activeColor = "#1D3557";
-      this.brushSize = 11;
+      this.brushSize = 9;
+      this.isZoomed = false;
       this.mixSlots = [null, null];
       this.loadTemplate(this.allTemplates[0]);
     }
@@ -666,6 +983,7 @@
       this.lastPt = null;
 
       this.render();
+      this.showFullPatternPreview(true);
       this.prepareStep(0);
     }
 
@@ -685,31 +1003,36 @@
           <h2 class="workspace-title">✏️ ${cfg.title}</h2>
           <div id="draw-step-pills" class="step-pills"></div>
           <div class="workspace-actions">
+            <button id="btn-draw-preview" class="btn-touch btn-secondary" title="Zvětšit předlohu">🖼️ VZOR</button>
+            <button id="btn-draw-zoom" class="btn-touch btn-secondary" title="Zvětšit kreslící plátno">🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}</button>
             <button id="btn-draw-skip-step" class="btn-touch btn-secondary">✨ DALŠÍ KROK</button>
             <button id="btn-draw-finish" class="btn-touch btn-primary hidden">✅ HOTOVO</button>
           </div>
         </div>
-        <div class="studio-layout">
+        <div id="step-studio-layout" class="studio-layout ${this.isZoomed ? "studio-zoomed" : ""}">
           <div class="canvas-frame">
             <canvas id="step-draw-canvas" class="draw-canvas" width="${cfg.canvasWidth}" height="${cfg.canvasHeight}" draggable="false" style="touch-action:none; user-select:none;"></canvas>
           </div>
           <aside class="studio-sidebar">
             <div class="tool-box">
-              <div class="tool-box-title">🖍️ BARVY PRO KRESLENÍ</div>
+              <div class="tool-box-title">✒️ VELIKOST PERA</div>
+              ${renderPenSizeMarkup(this.brushSize)}
+            </div>
+
+            <div class="tool-box">
+              <div class="tool-box-title">🌈 BAREVNÝ RGB KRUH A PALETA</div>
+              <div class="rgb-wheel-row">
+                <canvas id="step-rgb-wheel" class="rgb-wheel-canvas" width="92" height="92"></canvas>
+                <div class="rgb-wheel-info">
+                  <div id="step-rgb-preview" class="rgb-preview-dot" style="background:${this.activeColor};"></div>
+                  <span>Dotkni se kruhu pro libovolný odstín!</span>
+                </div>
+              </div>
               <div id="draw-swatches" class="swatch-grid">
-                ${[
-                  { hex: "#1D3557", name: "TMAVĚ MODRÁ" },
-                  { hex: "#E63946", name: "ČERVENÁ" },
-                  { hex: "#FFD166", name: "ŽLUTÁ" },
-                  { hex: "#118AB2", name: "MODRÁ" },
-                  { hex: "#F77F00", name: "ORANŽOVÁ" },
-                  { hex: "#06D6A0", name: "MÁTOVÁ" }
-                ]
-                  .map(
-                    (c, i) =>
-                      `<button class="btn-touch btn-swatch ${i === 0 ? "active" : ""}" data-color="${c.hex}" data-name="${c.name}" style="background:${c.hex}" aria-label="${c.name}"></button>`
-                  )
-                  .join("")}
+                ${EXTENDED_SWATCH_PALETTE.map(
+                  (c, i) =>
+                    `<button class="btn-touch btn-swatch ${i === 0 ? "active" : ""}" data-color="${c.hex}" data-name="${c.name}" style="background:${c.hex}" aria-label="${c.name}"></button>`
+                ).join("")}
               </div>
             </div>
 
@@ -722,19 +1045,18 @@
                 <span class="mix-plus">=</span>
                 <button id="mix-result-btn" class="btn-touch btn-swatch" style="background:#ffffff; border-color:#cbd5e1;" aria-label="Namíchaná barva">✨</button>
               </div>
-              <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button class="btn-touch btn-secondary mix-pick" data-mix="yellow" data-hex="#FFD166" style="background:#FFD166;">ŽLUTÁ</button>
-                <button class="btn-touch btn-secondary mix-pick" data-mix="blue" data-hex="#118AB2" style="background:#118AB2; color:#fff;">MODRÁ</button>
-                <button class="btn-touch btn-secondary mix-pick" data-mix="red" data-hex="#E63946" style="background:#E63946; color:#fff;">ČERVENÁ</button>
+              <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                ${MIX_BASE_COLORS.map(
+                  (mc) =>
+                    `<button class="btn-touch btn-secondary mix-pick" data-mix="${mc.id}" data-name="${mc.name}" data-hex="${mc.hex}" style="background:${mc.hex}; color:${mc.textColor}; padding:5px 8px; font-size:0.75rem;">${mc.label}</button>`
+                ).join("")}
               </div>
             </div>
 
             <div class="tool-box">
               <div class="tool-box-title">🧹 POMŮCKY</div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button id="btn-brush-thin" class="btn-touch btn-secondary">TENKÝ</button>
-                <button id="btn-brush-thick" class="btn-touch btn-secondary">TLUSTÝ</button>
-                <button id="btn-canvas-clear" class="btn-touch btn-secondary">SMAZAT</button>
+                <button id="btn-canvas-clear" class="btn-touch btn-secondary">🗑️ SMAZAT PLÁTNO</button>
               </div>
             </div>
           </aside>
@@ -751,6 +1073,50 @@
       this.paintCtx = this.paintLayer.getContext("2d");
 
       this.bindEvents();
+    }
+
+    showFullPatternPreview(autoStart = false) {
+      const existing = this.hostEl.querySelector(".preview-guide-modal");
+      if (existing) existing.remove();
+
+      const cfg = this.currentConfig;
+      const modal = document.createElement("div");
+      modal.className = "preview-guide-modal";
+      modal.innerHTML = `
+        <div class="preview-guide-card">
+          <h3 style="margin:0; font-size:1.35rem; color:var(--navy);">🖼️ VZOR: ${cfg.title}</h3>
+          <p style="margin:0; font-weight:700; color:var(--navy-soft); font-size:0.95rem;">
+            Prohlédni si zvětšený obrázek a pak ho nakresli krok za krokem!
+          </p>
+          <canvas id="preview-guide-canvas" width="${cfg.canvasWidth}" height="${cfg.canvasHeight}" style="width:min(74vw, 560px); height:auto; border-radius:16px; border:3px solid #bae6fd; background:#fff;"></canvas>
+          <button class="btn-touch btn-primary btn-close-preview" style="font-size:1.1rem; padding:10px 26px;">✏️ JDEME KRESLIT!</button>
+        </div>
+      `;
+      this.hostEl.appendChild(modal);
+
+      const pCanvas = modal.querySelector("#preview-guide-canvas");
+      const pCtx = pCanvas.getContext("2d");
+      pCtx.fillStyle = "#FFFFFF";
+      pCtx.fillRect(0, 0, pCanvas.width, pCanvas.height);
+      (this.steps || []).forEach((st) => {
+        this.drawStepShape(pCtx, st, st.strokeColor || "#1D3557", false);
+      });
+
+      const closeModal = () => {
+        if (modal.parentNode) {
+          modal.remove();
+        }
+      };
+      modal.querySelector(".btn-close-preview").addEventListener("click", () => {
+        this.mascot.audio.playSfx("pop");
+        closeModal();
+      });
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+      if (autoStart) {
+        setTimeout(closeModal, 3600);
+      }
     }
 
     bindEvents() {
@@ -833,12 +1199,20 @@
       this.canvas.addEventListener("pointercancel", endStroke);
       this.canvas.addEventListener("lostpointercapture", endStroke);
 
+      // RGB Kruh
+      const rgbPreview = document.getElementById("step-rgb-preview");
+      mountRgbColorWheel(document.getElementById("step-rgb-wheel"), rgbPreview, (hex) => {
+        this.activeColor = hex;
+        this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => b.classList.remove("active"));
+      });
+
       // Barvy s hlasovým přečtením
       this.hostEl.querySelectorAll("#draw-swatches .btn-swatch").forEach((btn) => {
         btn.addEventListener("click", () => {
           this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
           this.activeColor = btn.dataset.color;
+          if (rgbPreview) rgbPreview.style.background = this.activeColor;
           this.mascot.audio.playSfx("pop");
           if (btn.dataset.name) {
             this.mascot.audio.speakCustom(btn.dataset.name);
@@ -846,23 +1220,43 @@
         });
       });
 
-      // Kouzelné míchání barev
-      this.hostEl.querySelectorAll(".mix-pick").forEach((btn) => {
+      // Velikost pera (4 velikosti)
+      this.hostEl.querySelectorAll(".btn-pen-size").forEach((btn) => {
         btn.addEventListener("click", () => {
-          this.handleColorMixPick(btn.dataset.mix, btn.dataset.hex);
+          this.hostEl.querySelectorAll(".btn-pen-size").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          this.brushSize = Number(btn.dataset.penSize) || 9;
+          this.mascot.audio.playSfx("pop");
+          if (btn.dataset.spoken) {
+            this.mascot.audio.speakCustom(btn.dataset.spoken);
+          }
         });
       });
 
-      document.getElementById("btn-brush-thin").addEventListener("click", () => {
-        this.brushSize = 8;
-        this.mascot.audio.playSfx("pop");
-        this.mascot.audio.speakCustom("Tenký štětec");
+      // Kouzelné míchání barev
+      this.hostEl.querySelectorAll(".mix-pick").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          this.handleColorMixPick({
+            id: btn.dataset.mix,
+            name: btn.dataset.name,
+            hex: btn.dataset.hex
+          });
+        });
       });
-      document.getElementById("btn-brush-thick").addEventListener("click", () => {
-        this.brushSize = 20;
+
+      document.getElementById("btn-draw-preview").addEventListener("click", () => {
         this.mascot.audio.playSfx("pop");
-        this.mascot.audio.speakCustom("Tlustý štětec");
+        this.showFullPatternPreview(false);
       });
+
+      document.getElementById("btn-draw-zoom").addEventListener("click", (e) => {
+        this.isZoomed = !this.isZoomed;
+        const layout = document.getElementById("step-studio-layout");
+        if (layout) layout.classList.toggle("studio-zoomed", this.isZoomed);
+        e.currentTarget.textContent = `🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}`;
+        this.mascot.audio.playSfx("pop");
+      });
+
       document.getElementById("btn-canvas-clear").addEventListener("click", () => {
         this.paintCtx.clearRect(0, 0, this.paintLayer.width, this.paintLayer.height);
         this.canvas.classList.remove("alive-bounce");
@@ -896,54 +1290,43 @@
       });
     }
 
-    handleColorMixPick(colorName, hex) {
+    handleColorMixPick(colorObj) {
       this.mascot.audio.playSfx("pop");
       const slot1 = document.getElementById("mix-slot-1");
       const slot2 = document.getElementById("mix-slot-2");
       const resBtn = document.getElementById("mix-result-btn");
+      const rgbPreview = document.getElementById("step-rgb-preview");
 
       if (!this.mixSlots[0] || (this.mixSlots[0] && this.mixSlots[1])) {
-        this.mixSlots = [{ name: colorName, hex }, null];
-        slot1.style.background = hex;
+        this.mixSlots = [colorObj, null];
+        slot1.style.background = colorObj.hex;
         slot1.textContent = "";
         slot2.style.background = "#ffffff";
         slot2.textContent = "2";
         return;
       }
 
-      this.mixSlots[1] = { name: colorName, hex };
-      slot2.style.background = hex;
+      this.mixSlots[1] = colorObj;
+      slot2.style.background = colorObj.hex;
       slot2.textContent = "";
 
-      const pair = [this.mixSlots[0].name, this.mixSlots[1].name].sort().join("+");
-      let mixedHex = hex;
-      let audioId = null;
-
-      if (pair === "blue+yellow") {
-        mixedHex = "#2A9D8F";
-        audioId = "color_mix_yellow_blue";
-      } else if (pair === "red+yellow") {
-        mixedHex = "#F77F00";
-        audioId = "color_mix_red_yellow";
-      } else if (pair === "blue+red") {
-        mixedHex = "#7209B7";
-        audioId = "color_mix_red_blue";
-      }
-
-      resBtn.style.background = mixedHex;
+      const mixed = mixTwoColors(this.mixSlots[0], this.mixSlots[1]);
+      resBtn.style.background = mixed.hex;
       resBtn.textContent = "🎨";
-      this.activeColor = mixedHex;
-      this.brushSize = 18;
+      this.activeColor = mixed.hex;
+      if (rgbPreview) rgbPreview.style.background = mixed.hex;
       this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => b.classList.remove("active"));
       resBtn.classList.add("active");
       this.mascot.audio.playSfx("mix");
+      this.mascot.emitParticles(["🎨", "✨", "🌈"]);
 
-      if (audioId) {
-        this.mascot.emitParticles(["🎨", "✨", "🌈"]);
-        this.mascot.audio.speak(audioId, null, {
+      if (mixed.audioId) {
+        this.mascot.audio.speak(mixed.audioId, null, {
           stateDuringSpeech: "HAPPY",
           stateAfterSpeech: "IDLE"
         });
+      } else {
+        this.mascot.audio.speakCustom(`Vznikla ${mixed.name}!`);
       }
     }
 
@@ -976,7 +1359,7 @@
     checkPointHit(pt) {
       if (this.coloringMode) return;
       for (const cp of this.checkpoints) {
-        if (!cp.hit && Math.hypot(cp.x - pt.x, cp.y - pt.y) < 48) {
+        if (!cp.hit && Math.hypot(cp.x - pt.x, cp.y - pt.y) < 58) {
           cp.hit = true;
           this.hitCount += 1;
         }
@@ -999,7 +1382,7 @@
     evaluateStepProgress() {
       if (this.coloringMode || !this.checkpoints.length) return;
       const ratio = this.hitCount / this.checkpoints.length;
-      if (ratio >= 0.68) {
+      if (ratio >= 0.56) {
         this.completeCurrentStep();
       }
     }
@@ -1052,11 +1435,13 @@
       this.mascot.gentleNudge("hint_draw_trace", null, true);
     }
 
-    drawStepShape(ctx, step) {
+    drawStepShape(ctx, step, colorOverride = null, dashed = true) {
       ctx.save();
-      ctx.strokeStyle = "rgba(76, 201, 240, 0.75)";
-      ctx.lineWidth = 5;
-      ctx.setLineDash([14, 12]);
+      ctx.strokeStyle = colorOverride || "rgba(76, 201, 240, 0.78)";
+      ctx.lineWidth = dashed ? 5 : 6;
+      if (dashed) {
+        ctx.setLineDash([14, 12]);
+      }
 
       if (step.type === "ellipse") {
         ctx.beginPath();
@@ -1071,7 +1456,7 @@
           if (pts.length === 2 && Math.hypot(pts[0][0] - pts[1][0], pts[0][1] - pts[1][1]) < 12) {
             ctx.beginPath();
             ctx.arc(pts[0][0], pts[0][1], 7, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(76, 201, 240, 0.75)";
+            ctx.fillStyle = colorOverride || "rgba(76, 201, 240, 0.78)";
             ctx.fill();
             return;
           }
@@ -1151,6 +1536,8 @@
       this.motifIdx = 0;
       this.autoMirror = level.stars <= 3;
       this.activeColor = "#FF5D8F";
+      this.brushSize = 9;
+      this.isZoomed = false;
       this.isDrawing = false;
       this.lastPt = null;
       this.showGuide = true;
@@ -1188,32 +1575,36 @@
         <div class="workspace-header">
           <h2 class="workspace-title">${m.emoji} ${m.title}</h2>
           <div class="workspace-actions">
+            <button id="btn-sym-zoom" class="btn-touch btn-secondary">🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}</button>
             <button id="btn-sym-toggle" class="btn-touch btn-secondary">🪞 ZRCADLO: ${this.autoMirror ? "ZAP" : "VYP"}</button>
             <button id="btn-sym-clear" class="btn-touch btn-secondary">SMAZAT</button>
             <button id="btn-sym-done" class="btn-touch btn-primary">✅ HOTOVO</button>
           </div>
         </div>
-        <div class="studio-layout">
+        <div id="sym-studio-layout" class="studio-layout ${this.isZoomed ? "studio-zoomed" : ""}">
           <div class="canvas-frame">
             <canvas id="sym-canvas" class="draw-canvas" width="760" height="460" draggable="false" style="touch-action:none; user-select:none;"></canvas>
           </div>
           <aside class="studio-sidebar">
             <div class="tool-box">
-              <div class="tool-box-title">🎨 KOUZELNÉ BARVY</div>
-              <div class="swatch-grid">
-                ${["#FF5D8F", "#4CC9F0", "#FFB703", "#06D6A0", "#7209B7", "#1D3557"]
-                  .map(
-                    (hex, idx) =>
-                      `<button class="btn-touch btn-swatch ${idx === 0 ? "active" : ""}" data-hex="${hex}" style="background:${hex}"></button>`
-                  )
-                  .join("")}
-              </div>
+              <div class="tool-box-title">✒️ VELIKOST PERA</div>
+              ${renderPenSizeMarkup(this.brushSize)}
             </div>
             <div class="tool-box">
-              <div class="tool-box-title">💡 CÍL ÚKOLU</div>
-              <p style="margin:0; font-weight:700; font-size:0.86rem; color:var(--navy-soft);">
-                Kresli po pravé straně osy a vytvoř souměrný obrázek! Po dokončení zůstane jen tvoje vlastní kresba.
-              </p>
+              <div class="tool-box-title">🌈 RGB KRUH A PALETA BAREV</div>
+              <div class="rgb-wheel-row">
+                <canvas id="sym-rgb-wheel" class="rgb-wheel-canvas" width="92" height="92"></canvas>
+                <div class="rgb-wheel-info">
+                  <div id="sym-rgb-preview" class="rgb-preview-dot" style="background:${this.activeColor};"></div>
+                  <span>Vyber libovolnou barvu na kruhu!</span>
+                </div>
+              </div>
+              <div class="swatch-grid">
+                ${EXTENDED_SWATCH_PALETTE.map(
+                  (c, idx) =>
+                    `<button class="btn-touch btn-swatch ${idx === 7 ? "active" : ""}" data-hex="${c.hex}" data-name="${c.name}" style="background:${c.hex}"></button>`
+                ).join("")}
+              </div>
             </div>
           </aside>
         </div>
@@ -1242,7 +1633,7 @@
         this.paintCtx.moveTo(p1.x, p1.y);
         this.paintCtx.lineTo(p2.x, p2.y);
         this.paintCtx.strokeStyle = this.activeColor;
-        this.paintCtx.lineWidth = 10;
+        this.paintCtx.lineWidth = this.brushSize;
         this.paintCtx.lineCap = "round";
         this.paintCtx.lineJoin = "round";
         this.paintCtx.stroke();
@@ -1253,7 +1644,7 @@
           this.paintCtx.moveTo(w - p1.x, p1.y);
           this.paintCtx.lineTo(w - p2.x, p2.y);
           this.paintCtx.strokeStyle = this.activeColor;
-          this.paintCtx.lineWidth = 10;
+          this.paintCtx.lineWidth = this.brushSize;
           this.paintCtx.lineCap = "round";
           this.paintCtx.lineJoin = "round";
           this.paintCtx.stroke();
@@ -1308,13 +1699,39 @@
       this.canvas.addEventListener("pointercancel", stopSymDraw);
       this.canvas.addEventListener("lostpointercapture", stopSymDraw);
 
+      const rgbPreview = document.getElementById("sym-rgb-preview");
+      mountRgbColorWheel(document.getElementById("sym-rgb-wheel"), rgbPreview, (hex) => {
+        this.activeColor = hex;
+        this.hostEl.querySelectorAll(".btn-swatch").forEach((x) => x.classList.remove("active"));
+      });
+
       this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => {
         b.addEventListener("click", () => {
           this.hostEl.querySelectorAll(".btn-swatch").forEach((x) => x.classList.remove("active"));
           b.classList.add("active");
           this.activeColor = b.dataset.hex;
+          if (rgbPreview) rgbPreview.style.background = this.activeColor;
           this.mascot.audio.playSfx("pop");
+          if (b.dataset.name) this.mascot.audio.speakCustom(b.dataset.name);
         });
+      });
+
+      this.hostEl.querySelectorAll(".btn-pen-size").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          this.hostEl.querySelectorAll(".btn-pen-size").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          this.brushSize = Number(btn.dataset.penSize) || 9;
+          this.mascot.audio.playSfx("pop");
+          if (btn.dataset.spoken) this.mascot.audio.speakCustom(btn.dataset.spoken);
+        });
+      });
+
+      document.getElementById("btn-sym-zoom").addEventListener("click", (e) => {
+        this.isZoomed = !this.isZoomed;
+        const layout = document.getElementById("sym-studio-layout");
+        if (layout) layout.classList.toggle("studio-zoomed", this.isZoomed);
+        e.currentTarget.textContent = `🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}`;
+        this.mascot.audio.playSfx("pop");
       });
 
       document.getElementById("btn-sym-toggle").addEventListener("click", (e) => {
@@ -2326,6 +2743,7 @@
       this.deck = shuffleArray(COLORING_PICTURES);
       this.picIdx = 0;
       this.activeColor = "#2A9D8F";
+      this.isZoomed = false;
       this.mixSlots = [null, null];
       this.loadPicture(0);
     }
@@ -2339,7 +2757,7 @@
       this.render();
       const pic = this.deck[this.picIdx];
       this.mascot.audio.speakCustom(
-        `Omalovánka ${pic.title}! Namíchej barvičky a vybarvi všechny části obrázku v libovolném pořadí!`,
+        `Omalovánka ${pic.title}! Namíchej barvičky nebo vyber odstín na kruhu a vybarvi obrázek!`,
         `🖌️ VYBARVI: ${pic.title}`
       );
     }
@@ -2355,10 +2773,11 @@
         <div class="workspace-header">
           <h2 class="workspace-title">🖌️ MÍCHÁNÍ BAREV: ${pic.title}</h2>
           <div class="workspace-actions">
+            <button id="btn-cmix-zoom" class="btn-touch btn-secondary">🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}</button>
             <span class="step-pill current" id="color-mix-prog">VYBARVENO: 0 / ${pic.parts.length}</span>
           </div>
         </div>
-        <div class="studio-layout">
+        <div id="cmix-studio-layout" class="studio-layout ${this.isZoomed ? "studio-zoomed" : ""}">
           <div class="canvas-frame">
             <svg id="cmix-svg" viewBox="0 0 720 440" style="width:100%; height:100%; max-height:100%;">
               ${pic.parts
@@ -2379,74 +2798,89 @@
                 <span class="mix-plus">=</span>
                 <button id="cm-result" class="btn-touch btn-swatch active" style="background:${this.activeColor};" aria-label="Namíchaná barva">🎨</button>
               </div>
-              <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button class="btn-touch btn-secondary cm-pick" data-mix="yellow" data-hex="#FFD166" style="background:#FFD166;">ŽLUTÁ</button>
-                <button class="btn-touch btn-secondary cm-pick" data-mix="blue" data-hex="#118AB2" style="background:#118AB2; color:#fff;">MODRÁ</button>
-                <button class="btn-touch btn-secondary cm-pick" data-mix="red" data-hex="#E63946" style="background:#E63946; color:#fff;">ČERVENÁ</button>
+              <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                ${MIX_BASE_COLORS.map(
+                  (mc) =>
+                    `<button class="btn-touch btn-secondary cm-pick" data-mix="${mc.id}" data-name="${mc.name}" data-hex="${mc.hex}" style="background:${mc.hex}; color:${mc.textColor}; padding:5px 8px; font-size:0.75rem;">${mc.label}</button>`
+                ).join("")}
               </div>
             </div>
             <div class="tool-box">
-              <div class="tool-box-title">🎨 PALETA BAREV</div>
+              <div class="tool-box-title">🌈 RGB KRUH A PALETA BAREV</div>
+              <div class="rgb-wheel-row">
+                <canvas id="cmix-rgb-wheel" class="rgb-wheel-canvas" width="92" height="92"></canvas>
+                <div class="rgb-wheel-info">
+                  <div id="cmix-rgb-preview" class="rgb-preview-dot" style="background:${this.activeColor};"></div>
+                  <span>Vyber si libovolnou barvu na kruhu!</span>
+                </div>
+              </div>
               <div class="swatch-grid">
-                ${["#2A9D8F", "#F77F00", "#7209B7", "#FFD166", "#118AB2", "#E63946", "#FF5D8F", "#06D6A0"]
-                  .map(
-                    (hex) =>
-                      `<button class="btn-touch btn-swatch ${hex === this.activeColor ? "active" : ""}" data-hex="${hex}" style="background:${hex}"></button>`
-                  )
-                  .join("")}
+                ${EXTENDED_SWATCH_PALETTE.map(
+                  (c) =>
+                    `<button class="btn-touch btn-swatch ${c.hex === this.activeColor ? "active" : ""}" data-hex="${c.hex}" data-name="${c.name}" style="background:${c.hex}"></button>`
+                ).join("")}
               </div>
             </div>
           </aside>
         </div>
       `;
 
+      const rgbPreview = document.getElementById("cmix-rgb-preview");
+      mountRgbColorWheel(document.getElementById("cmix-rgb-wheel"), rgbPreview, (hex) => {
+        this.activeColor = hex;
+        this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => b.classList.remove("active"));
+      });
+
+      document.getElementById("btn-cmix-zoom").addEventListener("click", (e) => {
+        this.isZoomed = !this.isZoomed;
+        const layout = document.getElementById("cmix-studio-layout");
+        if (layout) layout.classList.toggle("studio-zoomed", this.isZoomed);
+        e.currentTarget.textContent = `🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}`;
+        this.mascot.audio.playSfx("pop");
+      });
+
       this.hostEl.querySelectorAll(".btn-swatch[data-hex]").forEach((btn) => {
         btn.addEventListener("click", () => {
           this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
           this.activeColor = btn.dataset.hex;
+          if (rgbPreview) rgbPreview.style.background = this.activeColor;
           this.mascot.audio.playSfx("pop");
+          if (btn.dataset.name) this.mascot.audio.speakCustom(btn.dataset.name);
         });
       });
 
       this.hostEl.querySelectorAll(".cm-pick").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const name = btn.dataset.mix;
-          const hex = btn.dataset.hex;
+          const colorObj = {
+            id: btn.dataset.mix,
+            name: btn.dataset.name,
+            hex: btn.dataset.hex
+          };
           this.mascot.audio.playSfx("pop");
           const s1 = document.getElementById("cm-slot-1");
           const s2 = document.getElementById("cm-slot-2");
           const res = document.getElementById("cm-result");
           if (!this.mixSlots[0] || (this.mixSlots[0] && this.mixSlots[1])) {
-            this.mixSlots = [{ name, hex }, null];
-            s1.style.background = hex;
+            this.mixSlots = [colorObj, null];
+            s1.style.background = colorObj.hex;
             s1.textContent = "";
             s2.style.background = "#ffffff";
             s2.textContent = "2";
             return;
           }
-          this.mixSlots[1] = { name, hex };
-          s2.style.background = hex;
+          this.mixSlots[1] = colorObj;
+          s2.style.background = colorObj.hex;
           s2.textContent = "";
-          const pair = [this.mixSlots[0].name, this.mixSlots[1].name].sort().join("+");
-          let mixedHex = hex;
-          let audioId = null;
-          if (pair === "blue+yellow") {
-            mixedHex = "#2A9D8F";
-            audioId = "color_mix_yellow_blue";
-          } else if (pair === "red+yellow") {
-            mixedHex = "#F77F00";
-            audioId = "color_mix_red_yellow";
-          } else if (pair === "blue+red") {
-            mixedHex = "#7209B7";
-            audioId = "color_mix_red_blue";
-          }
-          this.activeColor = mixedHex;
-          res.style.background = mixedHex;
+          const mixed = mixTwoColors(this.mixSlots[0], this.mixSlots[1]);
+          this.activeColor = mixed.hex;
+          res.style.background = mixed.hex;
+          if (rgbPreview) rgbPreview.style.background = mixed.hex;
           this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => b.classList.remove("active"));
           res.classList.add("active");
           this.mascot.audio.playSfx("mix");
-          if (audioId) this.mascot.audio.speak(audioId);
+          if (mixed.audioId) this.mascot.audio.speak(mixed.audioId);
+          else this.mascot.audio.speakCustom(`Vznikla ${mixed.name}!`);
         });
       });
 
@@ -2483,6 +2917,230 @@
     }
   }
 
+  // --- AKTIVITA 23: SLOŽ SI BARVU (VYBER KOMBINACI DVOU BAREV, ABYS SLOŽIL CÍLOVOU BARVU) ---
+  const BUILD_COLOR_RECIPES = [
+    { targetName: "ZELENÁ", spoken: "zelenou barvu", targetHex: "#2A9D8F", emoji: "🐸", pair: ["blue", "yellow"], minStars: 1 },
+    { targetName: "ORANŽOVÁ", spoken: "oranžovou barvu", targetHex: "#F77F00", emoji: "🥕", pair: ["red", "yellow"], minStars: 1 },
+    { targetName: "FIALOVÁ", spoken: "fialovou barvu", targetHex: "#7209B7", emoji: "🍇", pair: ["blue", "red"], minStars: 1 },
+    { targetName: "RŮŽOVÁ", spoken: "růžovou barvu", targetHex: "#FF758F", emoji: "🦩", pair: ["red", "white"], minStars: 2 },
+    { targetName: "SVĚTLE MODRÁ", spoken: "světle modrou barvu", targetHex: "#4CC9F0", emoji: "❄️", pair: ["blue", "white"], minStars: 2 },
+    { targetName: "SVĚTLE ZELENÁ", spoken: "světle zelenou barvu", targetHex: "#80ED99", emoji: "🌱", pair: ["green", "white"], minStars: 2 },
+    { targetName: "KRÉMOVĚ ŽLUTÁ", spoken: "krémově žlutou barvu", targetHex: "#FFF3B0", emoji: "🧈", pair: ["white", "yellow"], minStars: 2 },
+    { targetName: "ŠEDÁ", spoken: "šedou barvu", targetHex: "#94A3B8", emoji: "🐘", pair: ["black", "white"], minStars: 3 },
+    { targetName: "HNĚDÁ", spoken: "hnědou barvu", targetHex: "#8D5B4C", emoji: "🐻", pair: ["green", "red"], minStars: 3 },
+    { targetName: "TYRKYSOVÁ", spoken: "tyrkysovou barvu", targetHex: "#00B4D8", emoji: "🐬", pair: ["blue", "green"], minStars: 3 },
+    { targetName: "LIMETKOVÁ", spoken: "limetkovou barvu", targetHex: "#AACC00", emoji: "🍐", pair: ["green", "yellow"], minStars: 3 },
+    { targetName: "VÍNOVÁ", spoken: "vínovou barvu", targetHex: "#800F2F", emoji: "🍒", pair: ["black", "red"], minStars: 4 },
+    { targetName: "NÁMOŘNICKÁ MODRÁ", spoken: "námořnickou modrou barvu", targetHex: "#1D3557", emoji: "⚓", pair: ["black", "blue"], minStars: 4 },
+    { targetName: "OLIVOVÁ", spoken: "olivovou barvu", targetHex: "#606C38", emoji: "🫒", pair: ["black", "yellow"], minStars: 5 },
+    { targetName: "LESNÍ ZELENÁ", spoken: "lesní zelenou barvu", targetHex: "#1B4332", emoji: "🌲", pair: ["black", "green"], minStars: 5 },
+    { targetName: "ŽABÍ ZELENÁ", spoken: "žabí zelenou barvu", targetHex: "#2A9D8F", emoji: "🐢", pair: ["blue", "yellow"], minStars: 1 },
+    { targetName: "MANDARINKOVÁ", spoken: "mandarinkovou oranžovou barvu", targetHex: "#F77F00", emoji: "🍊", pair: ["red", "yellow"], minStars: 1 },
+    { targetName: "ŠVESTKOVÁ FIALOVÁ", spoken: "švestkovou fialovou barvu", targetHex: "#7209B7", emoji: "🍆", pair: ["blue", "red"], minStars: 1 },
+    { targetName: "CUKROVÁ RŮŽOVÁ", spoken: "cukrovou růžovou barvu", targetHex: "#FF758F", emoji: "🧁", pair: ["red", "white"], minStars: 2 },
+    { targetName: "OBLAČNÁ MODRÁ", spoken: "oblačnou světle modrou barvu", targetHex: "#4CC9F0", emoji: "☁️", pair: ["blue", "white"], minStars: 2 },
+    { targetName: "MYŠÍ ŠEDÁ", spoken: "myší šedou barvu", targetHex: "#94A3B8", emoji: "🐭", pair: ["black", "white"], minStars: 3 },
+    { targetName: "ČOKOLÁDOVÁ HNĚDÁ", spoken: "čokoládovou hnědou barvu", targetHex: "#8D5B4C", emoji: "🍫", pair: ["green", "red"], minStars: 3 },
+    { targetName: "MOŘSKÁ TYRKYSOVÁ", spoken: "mořskou tyrkysovou barvu", targetHex: "#00B4D8", emoji: "🌊", pair: ["blue", "green"], minStars: 4 },
+    { targetName: "NOČNÍ MODRÁ", spoken: "noční tmavě modrou barvu", targetHex: "#1D3557", emoji: "🌌", pair: ["black", "blue"], minStars: 4 },
+    { targetName: "SMRKOVÁ ZELENÁ", spoken: "smrkovou tmavě zelenou barvu", targetHex: "#1B4332", emoji: "🎄", pair: ["black", "green"], minStars: 5 }
+  ];
+
+  class BuildColorActivity {
+    constructor(hostEl, activity, level, mascot, store, onComplete) {
+      this.hostEl = hostEl;
+      this.activity = activity;
+      this.level = level;
+      this.mascot = mascot;
+      this.store = store;
+      this.onComplete = onComplete;
+
+      const stars = level.stars || 1;
+      const eligible = BUILD_COLOR_RECIPES.filter((r) => r.minStars <= Math.max(2, stars));
+      this.deck = shuffleArray(eligible.length >= 6 ? eligible : BUILD_COLOR_RECIPES);
+      this.roundIdx = 0;
+      this.loadRound();
+    }
+
+    loadRound() {
+      this.recipe = this.deck[this.roundIdx % this.deck.length];
+      this.slots = [null, null];
+      this.solved = false;
+
+      const stars = this.level.stars || 1;
+      const requiredIds = new Set(this.recipe.pair);
+      const otherColors = shuffleArray(MIX_BASE_COLORS.filter((c) => !requiredIds.has(c.id)));
+      const optionCount = Math.min(MIX_BASE_COLORS.length, 3 + stars);
+      const chosen = [
+        ...MIX_BASE_COLORS.filter((c) => requiredIds.has(c.id)),
+        ...otherColors.slice(0, Math.max(1, optionCount - 2))
+      ];
+      this.options = shuffleArray(chosen);
+
+      this.render();
+      this.mascot.audio.speakCustom(
+        `Slož si barvu! Které dvě barvy musíme smíchat, abychom získali ${this.recipe.spoken}? Přetáhni je do kelímků!`,
+        `🎨 SLOŽ BARVU: ${this.recipe.targetName}`
+      );
+    }
+
+    nextRound() {
+      this.mascot.audio.playSfx("pop");
+      this.roundIdx += 1;
+      if (this.roundIdx % this.deck.length === 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      this.loadRound();
+    }
+
+    render() {
+      const r = this.recipe;
+      const s0 = this.slots[0];
+      const s1 = this.slots[1];
+      const previewMix = s0 && s1 ? mixTwoColors(s0, s1) : null;
+
+      this.hostEl.innerHTML = `
+        <div class="workspace-header">
+          <h2 class="workspace-title">🎨 SLOŽ SI BARVU: ${r.emoji} ${r.targetName}</h2>
+          <div class="workspace-actions">
+            <button id="btn-bcolor-speak" class="btn-touch btn-secondary">🔊 ZADÁNÍ</button>
+            <button id="btn-bcolor-reset" class="btn-touch btn-secondary">🔄 VYLÍT KELÍMKY</button>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:space-around; flex:1; gap:12px; padding:8px;">
+          <div style="display:flex; align-items:center; gap:18px; background:#F0F9FF; border:3px solid #BAE6FD; border-radius:24px; padding:12px 24px; box-shadow:var(--shadow-soft);">
+            <div style="width:76px; height:76px; border-radius:20px; background:${r.targetHex}; border:4px solid #1D3557; display:flex; align-items:center; justify-content:center; font-size:2.3rem; box-shadow:0 6px 14px rgba(0,0,0,0.15);">
+              ${r.emoji}
+            </div>
+            <div>
+              <div style="font-size:0.85rem; font-weight:900; color:var(--navy-soft);">CÍLOVÁ BARVA K NAMÍCHÁNÍ:</div>
+              <div style="font-size:1.55rem; font-weight:900; color:var(--navy);">${r.targetName}</div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:center;">
+            <div class="bcolor-slot" data-slot="0" style="width:118px; height:118px; border-radius:24px; border:4px dashed #1D3557; background:${s0 ? s0.hex : "#FFFFFF"}; color:${s0 ? s0.textColor : "#64748B"}; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:900; font-size:1rem; cursor:pointer; box-shadow:var(--shadow-soft);">
+              ${s0 ? `<span style="font-size:1.6rem;">🪣</span><span>${s0.label}</span>` : `<span style="font-size:1.8rem;">1️⃣</span><span>1. BARVA</span>`}
+            </div>
+            <span style="font-size:2.4rem; font-weight:900; color:var(--navy);">+</span>
+            <div class="bcolor-slot" data-slot="1" style="width:118px; height:118px; border-radius:24px; border:4px dashed #1D3557; background:${s1 ? s1.hex : "#FFFFFF"}; color:${s1 ? s1.textColor : "#64748B"}; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:900; font-size:1rem; cursor:pointer; box-shadow:var(--shadow-soft);">
+              ${s1 ? `<span style="font-size:1.6rem;">🪣</span><span>${s1.label}</span>` : `<span style="font-size:1.8rem;">2️⃣</span><span>2. BARVA</span>`}
+            </div>
+            <span style="font-size:2.4rem; font-weight:900; color:var(--navy);">=</span>
+            <div style="width:124px; height:118px; border-radius:24px; border:4px solid #1D3557; background:${previewMix ? previewMix.hex : "#F8FAFC"}; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:900; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,0.65); box-shadow:var(--shadow-card);">
+              <span style="font-size:1.8rem;">${previewMix ? "✨" : "❓"}</span>
+              <span style="font-size:0.86rem;">${previewMix ? previewMix.name.toUpperCase() : "TVŮJ MIX"}</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+            ${this.options
+              .map(
+                (c) => `
+              <div class="bcolor-pot" data-id="${c.id}" style="width:112px; height:88px; border-radius:20px; border:4px solid #1D3557; background:${c.hex}; color:${c.textColor}; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:900; font-size:0.95rem; cursor:grab; box-shadow:0 6px 0 rgba(29,53,87,0.2);">
+                <span style="font-size:1.5rem;">🎨</span>
+                <span>${c.label}</span>
+              </div>
+            `
+              )
+              .join("")}
+          </div>
+        </div>
+      `;
+
+      document.getElementById("btn-bcolor-speak").addEventListener("click", () => {
+        this.mascot.audio.speakCustom(`Slož ${this.recipe.spoken}! Přetáhni dvě barvy do kelímků.`);
+      });
+
+      document.getElementById("btn-bcolor-reset").addEventListener("click", () => {
+        this.mascot.audio.playSfx("pop");
+        this.slots = [null, null];
+        this.render();
+      });
+
+      // Kliknutí na kelímek ho vyprázdní
+      this.hostEl.querySelectorAll(".bcolor-slot").forEach((slotEl) => {
+        slotEl.addEventListener("click", () => {
+          if (this.solved) return;
+          const idx = Number(slotEl.dataset.slot);
+          if (this.slots[idx]) {
+            this.slots[idx] = null;
+            this.mascot.audio.playSfx("pop");
+            this.render();
+          }
+        });
+      });
+
+      // Drag and drop (i na přeskáčku do 1. nebo 2. kelímku); single tap jen přečte název barvy
+      bindPointerDragDrop({
+        containerEl: this.hostEl,
+        sourceSelector: ".bcolor-pot",
+        targetSelector: ".bcolor-slot",
+        canDrag: () => !this.solved,
+        onTap: (srcEl) => {
+          const cObj = MIX_BASE_COLORS.find((x) => x.id === srcEl.dataset.id);
+          if (cObj) {
+            this.mascot.audio.playSfx("pop");
+            this.mascot.audio.speakCustom(cObj.name);
+          }
+        },
+        onDrop: (srcEl, targetEl) => {
+          const cObj = MIX_BASE_COLORS.find((x) => x.id === srcEl.dataset.id);
+          const slotIdx = Number(targetEl.dataset.slot);
+          if (!cObj || isNaN(slotIdx)) return;
+          // Zabráníme vložení stejné barvy do obou slotů
+          const otherIdx = slotIdx === 0 ? 1 : 0;
+          if (this.slots[otherIdx] && this.slots[otherIdx].id === cObj.id) {
+            this.mascot.audio.speakCustom("Vyber dvě různé barvičky!");
+            return;
+          }
+          this.slots[slotIdx] = cObj;
+          this.mascot.audio.playSfx("snap");
+          this.render();
+          this.checkCombination();
+        }
+      });
+    }
+
+    checkCombination() {
+      if (!this.slots[0] || !this.slots[1] || this.solved) return;
+      const chosenPair = [this.slots[0].id, this.slots[1].id].sort().join("+");
+      const targetPair = [...this.recipe.pair].sort().join("+");
+
+      if (chosenPair === targetPair) {
+        this.solved = true;
+        this.mascot.audio.playSfx("mix");
+        this.mascot.celebrate("celebrate_04");
+        this.onComplete();
+        showContinueBanner(this.hostEl, {
+          icon: this.recipe.emoji,
+          title: `VÝBORNĚ! VZNIKLA ${this.recipe.targetName}!`,
+          subtitle: `${this.slots[0].label} + ${this.slots[1].label} = ${this.recipe.targetName}`,
+          spokenText: `Paráda! Smícháním vznikla ${this.recipe.spoken}! Pojďme složit další barvu!`,
+          nextLabel: "▶️ DALŠÍ BARVA ➔",
+          onNext: () => this.nextRound()
+        });
+      } else {
+        const wrongMix = mixTwoColors(this.slots[0], this.slots[1]);
+        this.mascot.audio.playSfx("pop");
+        this.mascot.audio.speakCustom(
+          `Tímto vznikla ${wrongMix.name}, ale my hledáme ${this.recipe.spoken}. Zkus jinou dvojici!`,
+          `🤔 TO JE ${wrongMix.name.toUpperCase()} — ZKUS JINOU KOMBINACI!`
+        );
+        setTimeout(() => {
+          if (!this.solved) {
+            this.slots = [null, null];
+            this.render();
+          }
+        }, 1600);
+      }
+    }
+
+    destroy() {
+      this.mascot.clearInactivityTimer();
+    }
+  }
+
   // --- AKTIVITA 4: DOKRESLI PŘÍBĚH (25 SCÉN) ---
   const STORY_SCENES = [
     { id: "rain", title: "DEŠTNÍK PRO TUČŇÁKA", backdrop: "🌧️   🐧   🌧️", prompt: "PRŠÍ! DOKRESLI PIKOVI NAD HLAVOU VELKÝ DEŠTNÍK!", guidePts: [[230, 190], [290, 120], [360, 100], [430, 120], [490, 190], [360, 190], [360, 290]] },
@@ -2508,7 +3166,7 @@
     { id: "dog_bone", title: "KOSTIČKA PRO PEJSKA", backdrop: "🐶", prompt: "PEJSEK MÁ HLAD! DOKRESLI MU DO MISKY DOBROU KOSTIČKU!", guidePts: [[290, 350], [330, 350], [390, 350], [430, 350]] },
     { id: "bee_stripes", title: "PRUHY PRO VČELIČKU", backdrop: "🐝", prompt: "DOKRESLI VČELIČCE DRÁHU LETU KE KYTIČCE!", guidePts: [[220, 240], [300, 180], [390, 260], [490, 200]] },
     { id: "rocket_flame", title: "PLAMEN PRO RAKETU", backdrop: "🚀", prompt: "RAKETA STARTUJE! DOKRESLI POD NI OHNIVÝ PLAMEN!", guidePts: [[330, 310], [360, 410], [390, 310], [360, 375]] },
-    { id: "icecream_scoop", title: "KOPEČEK NAZMRZLINU", backdrop: "🍦", prompt: "DOKRESLI NA ZMRZLINU DALŠÍ VELKÝ BAREVNÝ KOPEČEK!", guidePts: [[310, 150], [360, 95], [410, 150], [360, 165]] },
+    { id: "icecream_scoop", title: "KOPEČEK NA ZMRZLINU", backdrop: "🍦", prompt: "DOKRESLI NA ZMRZLINU DALŠÍ VELKÝ BAREVNÝ KOPEČEK!", guidePts: [[310, 150], [360, 95], [410, 150], [360, 165]] },
     { id: "rainbow_sky", title: "DUHA PO DEŠTI", backdrop: "🌦️   ☀️", prompt: "VYSVITLO SLUNÍČKO! NAKRESLI NA OBLOHU VELKOU BAREVNOU DUHU!", guidePts: [[180, 320], [250, 180], [360, 130], [470, 180], [540, 320]] }
   ];
 
@@ -2522,6 +3180,8 @@
       this.deck = shuffleArray(STORY_SCENES);
       this.sceneIdx = 0;
       this.activeColor = "#E63946";
+      this.brushSize = 9;
+      this.isZoomed = false;
       this.loadScene(0);
     }
 
@@ -2549,30 +3209,40 @@
         <div class="workspace-header">
           <h2 class="workspace-title">☔ ${this.scene.title}</h2>
           <div class="workspace-actions">
+            <button id="btn-story-zoom" class="btn-touch btn-secondary">🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}</button>
             <button id="btn-story-speak" class="btn-touch btn-secondary">🔊 ZADÁNÍ</button>
             <button id="btn-story-clear" class="btn-touch btn-secondary">SMAZAT</button>
             <button id="btn-story-done" class="btn-touch btn-primary">✅ HOTOVO</button>
           </div>
         </div>
-        <div class="studio-layout">
+        <div id="story-studio-layout" class="studio-layout ${this.isZoomed ? "studio-zoomed" : ""}">
           <div class="canvas-frame">
             <canvas id="story-canvas" class="draw-canvas" width="720" height="460" draggable="false" style="touch-action:none; user-select:none;"></canvas>
           </div>
           <aside class="studio-sidebar">
             <div class="tool-box">
-              <div class="tool-box-title">🖍️ PASTELKY</div>
+              <div class="tool-box-title">✒️ VELIKOST PERA</div>
+              ${renderPenSizeMarkup(this.brushSize)}
+            </div>
+            <div class="tool-box">
+              <div class="tool-box-title">🌈 RGB KRUH A PASTELKY</div>
+              <div class="rgb-wheel-row">
+                <canvas id="story-rgb-wheel" class="rgb-wheel-canvas" width="92" height="92"></canvas>
+                <div class="rgb-wheel-info">
+                  <div id="story-rgb-preview" class="rgb-preview-dot" style="background:${this.activeColor};"></div>
+                  <span>Vyber barvu na kruhu!</span>
+                </div>
+              </div>
               <div class="swatch-grid">
-                ${["#E63946", "#FFB703", "#118AB2", "#06D6A0", "#7209B7", "#1D3557"]
-                  .map(
-                    (hex, i) =>
-                      `<button class="btn-touch btn-swatch ${i === 0 ? "active" : ""}" data-hex="${hex}" style="background:${hex}"></button>`
-                  )
-                  .join("")}
+                ${EXTENDED_SWATCH_PALETTE.map(
+                  (c, i) =>
+                    `<button class="btn-touch btn-swatch ${i === 1 ? "active" : ""}" data-hex="${c.hex}" data-name="${c.name}" style="background:${c.hex}"></button>`
+                ).join("")}
               </div>
             </div>
             <div class="tool-box">
               <div class="tool-box-title">📖 CO DOKRESLIT</div>
-              <p style="margin:0; font-weight:800; font-size:0.86rem; color:var(--navy);">${this.scene.prompt}</p>
+              <p style="margin:0; font-weight:800; font-size:0.84rem; color:var(--navy);">${this.scene.prompt}</p>
             </div>
           </aside>
         </div>
@@ -2613,7 +3283,7 @@
         this.paintCtx.moveTo(this.lastPt.x, this.lastPt.y);
         this.paintCtx.lineTo(pt.x, pt.y);
         this.paintCtx.strokeStyle = this.activeColor;
-        this.paintCtx.lineWidth = 12;
+        this.paintCtx.lineWidth = this.brushSize;
         this.paintCtx.lineCap = "round";
         this.paintCtx.stroke();
         this.checkHit(pt);
@@ -2626,20 +3296,46 @@
         this.isDrawing = false;
         this.lastPt = null;
         const hits = this.checkpoints.filter((c) => c.hit).length;
-        if (!this.completed && hits >= Math.ceil(this.checkpoints.length * 0.65)) {
+        if (!this.completed && hits >= Math.ceil(this.checkpoints.length * 0.55)) {
           this.finishStory();
         }
       };
       this.canvas.addEventListener("pointerup", stop);
       this.canvas.addEventListener("pointercancel", stop);
 
+      const rgbPreview = document.getElementById("story-rgb-preview");
+      mountRgbColorWheel(document.getElementById("story-rgb-wheel"), rgbPreview, (hex) => {
+        this.activeColor = hex;
+        this.hostEl.querySelectorAll(".btn-swatch").forEach((x) => x.classList.remove("active"));
+      });
+
       this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => {
         b.addEventListener("click", () => {
           this.hostEl.querySelectorAll(".btn-swatch").forEach((x) => x.classList.remove("active"));
           b.classList.add("active");
           this.activeColor = b.dataset.hex;
+          if (rgbPreview) rgbPreview.style.background = this.activeColor;
           this.mascot.audio.playSfx("pop");
+          if (b.dataset.name) this.mascot.audio.speakCustom(b.dataset.name);
         });
+      });
+
+      this.hostEl.querySelectorAll(".btn-pen-size").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          this.hostEl.querySelectorAll(".btn-pen-size").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          this.brushSize = Number(btn.dataset.penSize) || 9;
+          this.mascot.audio.playSfx("pop");
+          if (btn.dataset.spoken) this.mascot.audio.speakCustom(btn.dataset.spoken);
+        });
+      });
+
+      document.getElementById("btn-story-zoom").addEventListener("click", (e) => {
+        this.isZoomed = !this.isZoomed;
+        const layout = document.getElementById("story-studio-layout");
+        if (layout) layout.classList.toggle("studio-zoomed", this.isZoomed);
+        e.currentTarget.textContent = `🔍 ${this.isZoomed ? "ZMENŠIT" : "ZVĚTŠIT"}`;
+        this.mascot.audio.playSfx("pop");
       });
 
       document.getElementById("btn-story-speak").addEventListener("click", () => {
@@ -2656,7 +3352,7 @@
 
     checkHit(pt) {
       this.checkpoints.forEach((c) => {
-        if (Math.hypot(c.x - pt.x, c.y - pt.y) < 52) c.hit = true;
+        if (Math.hypot(c.x - pt.x, c.y - pt.y) < 58) c.hit = true;
       });
     }
 
@@ -2972,13 +3668,11 @@
       this.items = this.pool.slice(this.cursor, this.cursor + count);
       this.cursor += count;
       this.shadows = shuffleArray(this.items);
-      this.selectedPick = null;
-      this.selectedShadow = null;
       this.matched = new Set();
       this.render();
       this.mascot.audio.speakCustom(
-        "Najdi správný stín! Můžeš ťuknout nejdřív na barevný obrázek nebo na stín v libovolném pořadí!",
-        "🌗 SPOJ BAREVNÝ OBRÁZEK A JEHO STÍN!"
+        "Najdi správný stín! Přetáhni barevný obrázek na jeho stín v libovolném pořadí!",
+        "🌗 PŘETÁHNI OBRÁZEK NA JEHO STÍN (LZE I NA PŘESKÁČKU)!"
       );
     }
 
@@ -2986,8 +3680,6 @@
       if (pickEmoji === shadowEmoji) {
         this.matched.add(pickEmoji);
         const item = this.items.find((i) => i.emoji === pickEmoji);
-        this.selectedPick = null;
-        this.selectedShadow = null;
         this.mascot.audio.playSfx("snap");
         this.mascot.emitParticles(["⭐", "✨"]);
         if (item) {
@@ -3017,25 +3709,24 @@
       const rotated = stars >= 3 || Boolean(this.level.config.rotated);
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">🌗 NAJDI SPRÁVNÝ STÍN!</h2>
+          <h2 class="workspace-title">🌗 PŘETÁHNI OBRÁZEK NA SPRÁVNÝ STÍN!</h2>
           <div class="workspace-actions">
             <span class="step-pill current">NALEZENO: ${this.matched.size} / ${this.items.length}</span>
           </div>
         </div>
         <div class="interactive-stage">
-          <div style="font-weight:900; color:var(--navy-soft);">ŤUKNI NA STÍN NEBO NA OBRÁZEK V LIBOVOLNÉM POŘADÍ:</div>
+          <div style="font-weight:900; color:var(--navy-soft);">PŘETÁHNI PRSTEM BAREVNÝ OBRÁZEK DOLE NA JEHO STÍN NAHOŘE (I NA PŘESKÁČKU):</div>
           <div class="cards-grid">
             ${this.shadows
               .map((it, idx) => {
                 const isDone = this.matched.has(it.emoji);
-                const isSel = this.selectedShadow === it.emoji && !isDone;
                 const rotAngle = stars >= 4 ? (idx % 2 === 0 ? 35 : -35) : 18;
                 const rot = rotated && !isDone ? `rotate(${rotAngle}deg)` : "none";
                 return `
-                  <button class="game-card ${isDone ? "matched" : isSel ? "selected" : ""}" data-shadow="${it.emoji}" ${isDone ? "disabled" : ""}>
+                  <div class="game-card ${isDone ? "matched" : ""}" data-shadow="${it.emoji}">
                     <span class="game-card-emoji ${isDone ? "" : "silhouette-emoji"}" style="transform:${rot}">${it.emoji}</span>
                     <span class="game-card-label">${isDone ? it.name : "❓ STÍN"}</span>
-                  </button>
+                  </div>
                 `;
               })
               .join("")}
@@ -3044,12 +3735,11 @@
             ${this.items
               .map((it) => {
                 const isDone = this.matched.has(it.emoji);
-                const isSel = this.selectedPick === it.emoji && !isDone;
                 return `
-                  <button class="game-card ${isDone ? "matched" : isSel ? "selected" : ""}" data-pick="${it.emoji}" ${isDone ? "disabled" : ""}>
+                  <div class="game-card ${isDone ? "matched" : ""}" data-pick="${it.emoji}" style="${isDone ? "pointer-events:none;" : "cursor:grab;"}">
                     <span class="game-card-emoji">${it.emoji}</span>
                     <span class="game-card-label">${it.name}</span>
-                  </button>
+                  </div>
                 `;
               })
               .join("")}
@@ -3057,36 +3747,25 @@
         </div>
       `;
 
-      this.hostEl.querySelectorAll("[data-pick]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const pick = btn.dataset.pick;
-          if (this.matched.has(pick)) return;
-          const item = this.items.find((i) => i.emoji === pick);
-          this.mascot.audio.playSfx("pop");
-          if (item) this.mascot.audio.speakCustom(item.name);
-
-          if (this.selectedShadow) {
-            this.tryMatch(pick, this.selectedShadow, btn);
-          } else {
-            this.selectedPick = pick;
-            this.render();
+      // Drag and drop: samotné ťuknutí jen přečte název obrázku, přetažení na stín spojí dvojici
+      bindPointerDragDrop({
+        containerEl: this.hostEl,
+        sourceSelector: "[data-pick]",
+        targetSelector: "[data-shadow]",
+        canDrag: (srcEl) => !this.matched.has(srcEl.dataset.pick),
+        onTap: (srcEl) => {
+          const item = this.items.find((i) => i.emoji === srcEl.dataset.pick);
+          if (item) {
+            this.mascot.audio.playSfx("pop");
+            this.mascot.audio.speakCustom(item.name);
           }
-        });
-      });
-
-      this.hostEl.querySelectorAll("[data-shadow]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const target = btn.dataset.shadow;
-          if (this.matched.has(target)) return;
-          this.mascot.audio.playSfx("pop");
-
-          if (this.selectedPick) {
-            this.tryMatch(this.selectedPick, target, btn);
-          } else {
-            this.selectedShadow = target;
-            this.render();
-          }
-        });
+        },
+        onDrop: (srcEl, targetEl) => {
+          const pick = srcEl.dataset.pick;
+          const shadow = targetEl.dataset.shadow;
+          if (!pick || !shadow || this.matched.has(shadow)) return;
+          this.tryMatch(pick, shadow, targetEl);
+        }
       });
     }
 
@@ -3219,7 +3898,7 @@
     }
   }
 
-  // --- AKTIVITA 9: SKLÁDÁNÍ ROZSTŘÍHANÝCH OBRÁZKŮ (LEDOVÉ PUZZLE - 25 TÉMAT + NA PŘESKÁČKU) ---
+  // --- AKTIVITA 9: SKLÁDÁNÍ ROZSTŘÍHANÝCH OBRÁZKŮ (LEDOVÉ PUZZLE - 25 TÉMAT + DRAG & DROP NA PŘESKÁČKU) ---
   const PUZZLE_THEMES = [
     { title: "POLÁRNÍ DRUŽINA", grid: ["☀️", "☁️", "❄️", "🏔️", "🐧", "🐻‍❄️", "🌊", "🐟", "🐳", "🦭", "⛄", "🧊"] },
     { title: "VESMÍRNÁ VÝPRAVA", grid: ["🌟", "🪐", "🌙", "☄️", "🚀", "🛸", "🌍", "👨‍🚀", "⭐", "🌌", "🛰️", "🔭"] },
@@ -3271,20 +3950,16 @@
       this.targetTiles = this.theme.grid.slice(0, this.count).map((em, i) => ({ pos: i + 1, emoji: em }));
       this.placed = new Array(this.count).fill(null);
       this.tray = shuffleArray(this.targetTiles);
-      this.selectedTile = null;
-      this.selectedSlot = null;
       this.render();
       this.mascot.audio.speakCustom(
-        `Slož puzzle ${this.theme.title}! Můžeš skládat dílky v libovolném pořadí na přeskáčku!`,
-        `🧩 PUZZLE: ${this.theme.title}`
+        `Slož puzzle ${this.theme.title}! Přetáhni prstem libovolný dílek na jeho správné místo v rámečku!`,
+        `🧩 PŘETÁHNI DÍLKY DO RÁMEČKU: ${this.theme.title}`
       );
     }
 
     tryPlace(tile, slotIdx, slotEl) {
       if (tile.pos === slotIdx + 1) {
         this.placed[slotIdx] = tile;
-        this.selectedTile = null;
-        this.selectedSlot = null;
         this.mascot.audio.playSfx("snap");
         this.mascot.emitParticles(["🧩", "⭐"]);
         this.render();
@@ -3317,34 +3992,32 @@
         </div>
         <div class="feed-layout">
           <section class="pond-panel" style="align-items:center; justify-content:center;">
-            <div class="panel-heading" style="width:100%;"><span>🖼️ RÁMEČEK OBRÁZKU (LZE SKLÁDAT NA PŘESKÁČKU)</span></div>
+            <div class="panel-heading" style="width:100%;"><span>🖼️ RÁMEČEK OBRÁZKU (PŘETÁHNI DÍLKY V LIBOVOLNÉM POŘADÍ)</span></div>
             <div style="display:grid; grid-template-columns:repeat(${cols}, 1fr); gap:8px; width:100%; max-width:420px; flex:1; align-items:center;">
               ${this.targetTiles
                 .map((t, i) => {
                   const filled = this.placed[i];
-                  const isSlotSel = this.selectedSlot === i && !filled;
                   return `
-                    <button class="target-slot ${filled ? "filled" : ""}" data-slot="${i}" style="width:100%; height:100%; ${isSlotSel ? "border-color:#ffb703; background:#fff9db;" : ""}">
+                    <div class="target-slot ${filled ? "filled" : ""}" data-slot="${i}" style="width:100%; height:100%;">
                       <span style="font-size:clamp(1.4rem, 3.6dvh, 2.3rem); opacity:${filled ? "1" : "0.28"};">${t.emoji}</span>
                       <span style="font-size:0.72rem;">DÍLEK ${t.pos}</span>
-                    </button>
+                    </div>
                   `;
                 })
                 .join("")}
             </div>
           </section>
           <section class="bowl-panel" style="justify-content:flex-start;">
-            <div class="panel-heading" style="width:100%;"><span>🧩 DÍLKY K PŘIŘAZENÍ</span></div>
+            <div class="panel-heading" style="width:100%;"><span>🧩 DÍLKY (PŘETÁHNI DO RÁMEČKU)</span></div>
             <div class="cards-grid">
               ${this.tray
                 .map((t) => {
                   const isPlaced = this.placed.some((p) => p && p.pos === t.pos);
-                  const isSel = this.selectedTile && this.selectedTile.pos === t.pos && !isPlaced;
                   return `
-                    <button class="game-card ${isPlaced ? "matched" : isSel ? "selected" : ""}" data-piece="${t.pos}" ${isPlaced ? "disabled" : ""}>
+                    <div class="game-card ${isPlaced ? "matched" : ""}" data-piece="${t.pos}" style="${isPlaced ? "pointer-events:none;" : "cursor:grab;"}">
                       <span class="game-card-emoji">${t.emoji}</span>
                       <span class="game-card-label">DÍLEK ${t.pos}</span>
-                    </button>
+                    </div>
                   `;
                 })
                 .join("")}
@@ -3353,36 +4026,26 @@
         </div>
       `;
 
-      this.hostEl.querySelectorAll("[data-piece]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const pos = Number(btn.dataset.piece);
-          const tile = this.tray.find((x) => x.pos === pos) || null;
-          if (!tile) return;
+      bindPointerDragDrop({
+        containerEl: this.hostEl,
+        sourceSelector: "[data-piece]",
+        targetSelector: "[data-slot]",
+        canDrag: (srcEl) => {
+          const pos = Number(srcEl.dataset.piece);
+          return !this.placed.some((p) => p && p.pos === pos);
+        },
+        onTap: (srcEl) => {
+          const pos = Number(srcEl.dataset.piece);
           this.mascot.audio.playSfx("pop");
-          this.mascot.audio.speakCustom(`Dílek ${pos}`);
-
-          if (this.selectedSlot !== null && !this.placed[this.selectedSlot]) {
-            this.tryPlace(tile, this.selectedSlot, btn);
-          } else {
-            this.selectedTile = tile;
-            this.render();
-          }
-        });
-      });
-
-      this.hostEl.querySelectorAll("[data-slot]").forEach((slotBtn) => {
-        slotBtn.addEventListener("click", () => {
-          const idx = Number(slotBtn.dataset.slot);
-          if (this.placed[idx]) return;
-          this.mascot.audio.playSfx("pop");
-
-          if (this.selectedTile) {
-            this.tryPlace(this.selectedTile, idx, slotBtn);
-          } else {
-            this.selectedSlot = idx;
-            this.render();
-          }
-        });
+          this.mascot.audio.speakCustom(`dílek ${pos}`);
+        },
+        onDrop: (srcEl, targetEl) => {
+          const pos = Number(srcEl.dataset.piece);
+          const slotIdx = Number(targetEl.dataset.slot);
+          const tile = this.tray.find((x) => x.pos === pos);
+          if (!tile || isNaN(slotIdx) || this.placed[slotIdx]) return;
+          this.tryPlace(tile, slotIdx, targetEl);
+        }
       });
     }
 
@@ -3391,42 +4054,42 @@
     }
   }
 
-  // --- AKTIVITA 11: SKLÁDÁNÍ PRVNÍCH SLOV ZE SLABIK (34 SLOV + SKLÁDÁNÍ NA PŘESKÁČKU) ---
+  // --- AKTIVITA 11: SKLÁDÁNÍ PRVNÍCH SLOV ZE SLABIK (34 SLOV + PŘIROZENÁ VÝSLOVNOST SLABIK + DRAG & DROP NA PŘESKÁČKU) ---
   const SYLLABLE_WORDS_BANK = [
-    { parts: ["MÁ", "MA"], emoji: "👩" },
-    { parts: ["TÁ", "TA"], emoji: "👨" },
-    { parts: ["RY", "BA"], emoji: "🐟" },
-    { parts: ["AU", "TO"], emoji: "🚗" },
-    { parts: ["KO", "LO"], emoji: "🚲" },
-    { parts: ["SO", "VA"], emoji: "🦉" },
-    { parts: ["ŽÁ", "BA"], emoji: "🐸" },
-    { parts: ["LIŠ", "KA"], emoji: "🦊" },
-    { parts: ["BA", "NÁN"], emoji: "🍌" },
-    { parts: ["KO", "ČKA"], emoji: "🐱" },
-    { parts: ["PE", "JSEK"], emoji: "🐶" },
-    { parts: ["SLU", "NCE"], emoji: "☀️" },
-    { parts: ["MĚ", "SÍC"], emoji: "🌙" },
-    { parts: ["HVĚ", "ZDA"], emoji: "⭐" },
-    { parts: ["MO", "TÝL"], emoji: "🦋" },
-    { parts: ["VČE", "LA"], emoji: "🐝" },
-    { parts: ["KRÁ", "VA"], emoji: "🐄" },
-    { parts: ["O", "VCE"], emoji: "🐑" },
-    { parts: ["ZA", "JÍC"], emoji: "🐰" },
-    { parts: ["MED", "VĚD"], emoji: "🐻" },
-    { parts: ["TUČ", "ŇÁK"], emoji: "🐧" },
-    { parts: ["LO", "ĎKA"], emoji: "⛵" },
-    { parts: ["JA", "HO", "DA"], emoji: "🍓" },
-    { parts: ["KO", "ČIČ", "KA"], emoji: "🐱" },
-    { parts: ["KO", "RU", "NA"], emoji: "👑" },
-    { parts: ["RA", "KE", "TA"], emoji: "🚀" },
-    { parts: ["SNĚ", "HU", "LÁK"], emoji: "⛄" },
-    { parts: ["BE", "RUŠ", "KA"], emoji: "🐞" },
-    { parts: ["ŽI", "RA", "FA"], emoji: "🦒" },
-    { parts: ["VE", "VER", "KA"], emoji: "🐿️" },
-    { parts: ["PA", "POU", "ŠEK"], emoji: "🦜" },
-    { parts: ["LE", "TA", "DLO"], emoji: "✈️" },
-    { parts: ["CHOB", "OT", "NI", "CE"], emoji: "🐙" },
-    { parts: ["DI", "NO", "SAU", "RUS"], emoji: "🦕" }
+    { parts: ["MÁ", "MA"], spokenParts: ["má", "ma"], emoji: "👩" },
+    { parts: ["TÁ", "TA"], spokenParts: ["tá", "ta"], emoji: "👨" },
+    { parts: ["RY", "BA"], spokenParts: ["ry", "ba"], emoji: "🐟" },
+    { parts: ["AU", "TO"], spokenParts: ["au", "to"], emoji: "🚗" },
+    { parts: ["KO", "LO"], spokenParts: ["ko", "lo"], emoji: "🚲" },
+    { parts: ["SO", "VA"], spokenParts: ["so", "va"], emoji: "🦉" },
+    { parts: ["ŽÁ", "BA"], spokenParts: ["žá", "ba"], emoji: "🐸" },
+    { parts: ["LIŠ", "KA"], spokenParts: ["liš", "ka"], emoji: "🦊" },
+    { parts: ["BA", "NÁN"], spokenParts: ["ba", "nán"], emoji: "🍌" },
+    { parts: ["KOČ", "KA"], spokenParts: ["koč", "ka"], emoji: "🐱" },
+    { parts: ["PEJ", "SEK"], spokenParts: ["pej", "sek"], emoji: "🐶" },
+    { parts: ["SLUN", "CE"], spokenParts: ["slun", "ce"], emoji: "☀️" },
+    { parts: ["MĚ", "SÍC"], spokenParts: ["mě", "síc"], emoji: "🌙" },
+    { parts: ["HVĚZ", "DA"], spokenParts: ["hvěz", "da"], emoji: "⭐" },
+    { parts: ["MO", "TÝL"], spokenParts: ["mo", "týl"], emoji: "🦋" },
+    { parts: ["VČE", "LA"], spokenParts: ["vče", "la"], emoji: "🐝" },
+    { parts: ["KRÁ", "VA"], spokenParts: ["krá", "va"], emoji: "🐄" },
+    { parts: ["OV", "CE"], spokenParts: ["ov", "ce"], emoji: "🐑" },
+    { parts: ["ZA", "JÍC"], spokenParts: ["za", "jíc"], emoji: "🐰" },
+    { parts: ["MED", "VĚD"], spokenParts: ["med", "věd"], emoji: "🐻" },
+    { parts: ["TUČ", "ŇÁK"], spokenParts: ["tuč", "ňák"], emoji: "🐧" },
+    { parts: ["LOĎ", "KA"], spokenParts: ["loď", "ka"], emoji: "⛵" },
+    { parts: ["JA", "HO", "DA"], spokenParts: ["ja", "ho", "da"], emoji: "🍓" },
+    { parts: ["KO", "ČIČ", "KA"], spokenParts: ["ko", "čič", "ka"], emoji: "🐱" },
+    { parts: ["KO", "RU", "NA"], spokenParts: ["ko", "ru", "na"], emoji: "👑" },
+    { parts: ["RA", "KE", "TA"], spokenParts: ["ra", "ke", "ta"], emoji: "🚀" },
+    { parts: ["SNĚ", "HU", "LÁK"], spokenParts: ["sně", "hu", "lák"], emoji: "⛄" },
+    { parts: ["BE", "RUŠ", "KA"], spokenParts: ["be", "ruš", "ka"], emoji: "🐞" },
+    { parts: ["ŽI", "RA", "FA"], spokenParts: ["ži", "ra", "fa"], emoji: "🦒" },
+    { parts: ["VE", "VER", "KA"], spokenParts: ["ve", "ver", "ka"], emoji: "🐿️" },
+    { parts: ["PA", "POU", "ŠEK"], spokenParts: ["pa", "pou", "šek"], emoji: "🦜" },
+    { parts: ["LE", "TA", "DLO"], spokenParts: ["le", "ta", "dlo"], emoji: "✈️" },
+    { parts: ["CHO", "BOT", "NI", "CE"], spokenParts: ["cho", "bot", "ni", "ce"], emoji: "🐙" },
+    { parts: ["DI", "NO", "SAU", "RUS"], spokenParts: ["di", "no", "sau", "rus"], emoji: "🦕" }
   ];
 
   class SyllablesActivity {
@@ -3451,18 +4114,23 @@
       }
       this.current = this.deck[this.wordIdx];
       this.placedSlots = new Array(this.current.parts.length).fill(null);
-      this.selectedSlot = null;
       this.choices = shuffleArray(
-        this.current.parts.map((syl, i) => ({ syl, origIdx: i, used: false }))
+        this.current.parts.map((syl, i) => ({
+          syl,
+          spoken: (this.current.spokenParts && this.current.spokenParts[i]) || syl.toLowerCase(),
+          origIdx: i,
+          used: false
+        }))
       );
       this.render();
       this.speakTargetWord();
     }
 
     speakTargetWord() {
-      const fullWord = this.current.parts.join("");
+      const fullWord = this.current.parts.join("").toLowerCase();
+      const spokenSyls = (this.current.spokenParts || this.current.parts.map((p) => p.toLowerCase())).join("... ");
       this.mascot.audio.speakCustom(
-        `Poskládej ze slabik slovo ${fullWord}! ${this.current.parts.join(", ")}! Můžeš skládat i na přeskáčku!`,
+        `Poskládej ze slabik slovo ${fullWord}! Slabiky jsou: ${spokenSyls}. Přetáhni slabiky do políček!`,
         `📖 POSKLÁDEJ SLOVO: ${this.current.emoji} ${this.current.parts.join("-")}`
       );
     }
@@ -3471,30 +4139,30 @@
       const fullWord = this.current.parts.join("");
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">📖 POSKLÁDEJ SLOVO ZE SLABIK (LZE I NA PŘESKÁČKU)</h2>
+          <h2 class="workspace-title">📖 PŘETÁHNI SLABIKY DO POLÍČEK (LZE I NA PŘESKÁČKU)</h2>
           <div class="workspace-actions">
             <span class="step-pill current">SLOVO: ${this.placedSlots.filter(Boolean).length} / ${this.current.parts.length}</span>
           </div>
         </div>
         <div class="interactive-stage">
-          <div class="word-picture-card" id="syl-word-card" style="cursor:pointer;">
+          <div class="word-picture-card" id="syl-word-card">
             <span class="word-emoji">${this.current.emoji}</span>
             <div class="slot-row">
               ${this.current.parts
                 .map((_, i) => {
                   const val = this.placedSlots[i] || `${i + 1}. ___`;
-                  const isSel = this.selectedSlot === i && !this.placedSlots[i];
-                  return `<button type="button" class="target-slot ${this.placedSlots[i] ? "filled" : ""}" data-slot="${i}" style="${isSel ? "border-color:#ffb703; background:#fff9db;" : ""}">${val}</button>`;
+                  return `<div class="target-slot ${this.placedSlots[i] ? "filled" : ""}" data-slot="${i}">${val}</div>`;
                 })
                 .join("")}
             </div>
             <button id="btn-syl-speak" class="btn-touch btn-primary">🔊 PŘEČÍST SLOVO</button>
           </div>
+          <div style="font-weight:900; font-size:0.86rem; color:var(--navy-soft);">ŤUKNUTÍ SLABIKU PŘEČTE • PŘETAŽENÍM JI VLOŽÍŠ DO LIBOVOLNÉHO POLÍČKA:</div>
           <div class="letter-choices">
             ${this.choices
               .map(
                 (c, idx) =>
-                  `<button class="btn-touch btn-letter-choice ${c.used ? "correct" : ""}" data-cidx="${idx}" ${c.used ? "disabled" : ""}>${c.syl}</button>`
+                  `<div class="btn-touch btn-letter-choice ${c.used ? "correct" : ""}" data-cidx="${idx}" style="${c.used ? "pointer-events:none; opacity:0.45;" : "cursor:grab;"}">${c.syl}</div>`
               )
               .join("")}
           </div>
@@ -3507,47 +4175,42 @@
         this.speakTargetWord();
       });
 
-      this.hostEl.querySelectorAll("[data-slot]").forEach((slotBtn) => {
-        slotBtn.addEventListener("click", () => {
-          const sIdx = Number(slotBtn.dataset.slot);
-          if (this.placedSlots[sIdx]) {
-            this.mascot.audio.speakCustom(this.placedSlots[sIdx]);
-            return;
-          }
-          this.selectedSlot = sIdx;
+      this.hostEl.querySelectorAll("[data-slot]").forEach((slotEl) => {
+        slotEl.addEventListener("click", () => {
+          const sIdx = Number(slotEl.dataset.slot);
+          const spoken =
+            (this.current.spokenParts && this.current.spokenParts[sIdx]) ||
+            this.current.parts[sIdx].toLowerCase();
           this.mascot.audio.playSfx("pop");
-          this.mascot.audio.speakCustom(`${sIdx + 1}. slabika: ${this.current.parts[sIdx]}`);
-          this.render();
+          this.mascot.audio.speakCustom(spoken, `SLABIKA: ${this.current.parts[sIdx]}`);
         });
       });
 
-      this.hostEl.querySelectorAll("[data-cidx]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const item = this.choices[Number(btn.dataset.cidx)];
-          if (!item || item.used) return;
+      // Drag and drop: samotné ťuknutí pouze přečte slabiku, přetažení na libovolný slot ji umístí (i na přeskáčku!)
+      bindPointerDragDrop({
+        containerEl: this.hostEl,
+        sourceSelector: "[data-cidx]",
+        targetSelector: "[data-slot]",
+        canDrag: (srcEl) => {
+          const item = this.choices[Number(srcEl.dataset.cidx)];
+          return Boolean(item && !item.used);
+        },
+        onTap: (srcEl) => {
+          const item = this.choices[Number(srcEl.dataset.cidx)];
+          if (!item) return;
+          this.mascot.audio.playSfx("pop");
+          this.mascot.audio.speakCustom(item.spoken, `SLABIKA: ${item.syl}`);
+        },
+        onDrop: (srcEl, targetEl) => {
+          const item = this.choices[Number(srcEl.dataset.cidx)];
+          const slotIdx = Number(targetEl.dataset.slot);
+          if (!item || item.used || isNaN(slotIdx) || this.placedSlots[slotIdx]) return;
 
-          // Přečteme slabiku nahlas
-          this.mascot.audio.speakCustom(item.syl, `SLABIKA: ${item.syl}`);
-
-          // Umožníme umístění na přeskáčku do vybraného slotu nebo do jakéhokoli volného slotu, kam tato slabika patří!
-          let targetIdx = -1;
-          if (
-            this.selectedSlot !== null &&
-            !this.placedSlots[this.selectedSlot] &&
-            this.current.parts[this.selectedSlot] === item.syl
-          ) {
-            targetIdx = this.selectedSlot;
-          } else if (this.selectedSlot === null) {
-            targetIdx = this.current.parts.findIndex(
-              (part, idx) => !this.placedSlots[idx] && part === item.syl
-            );
-          }
-
-          if (targetIdx !== -1) {
+          if (this.current.parts[slotIdx] === item.syl) {
             item.used = true;
-            this.placedSlots[targetIdx] = item.syl;
-            this.selectedSlot = null;
+            this.placedSlots[slotIdx] = item.syl;
             this.mascot.audio.playSfx("snap");
+            this.mascot.audio.speakCustom(item.spoken, `✅ ${item.syl}`);
             this.render();
 
             if (this.placedSlots.every(Boolean)) {
@@ -3557,16 +4220,19 @@
                 icon: this.current.emoji,
                 title: `VÝBORNĚ! POSKLÁDALI JSME SLOVO „${fullWord}“!`,
                 subtitle: "Všechny slabiky jsou na svém místě. Zkusíme další slovo!",
-                spokenText: `Výborně! Přečetli jsme slovo ${fullWord}! Pojďme na další slovo!`,
+                spokenText: `Výborně! Přečetli jsme slovo ${fullWord.toLowerCase()}! Pojďme na další slovo!`,
                 nextLabel: "▶️ DALŠÍ SLOVO ➔",
                 onNext: () => this.loadWord(this.wordIdx + 1)
               });
             }
           } else {
-            btn.classList.add("gentle-nudge-anim");
-            this.mascot.gentleNudge("hint_letter_listen");
+            targetEl.classList.add("gentle-nudge-anim");
+            this.mascot.audio.speakCustom(
+              `Tato slabika je ${item.spoken}. Zkus ji dát na jiné místo!`,
+              `🤔 ZKUS JINÉ POLÍČKO`
+            );
           }
-        });
+        }
       });
     }
 
@@ -3621,6 +4287,7 @@
       this.onComplete = onComplete;
       this.deck = shuffleArray(GLYPH_TRACKS);
       this.idx = 0;
+      this.brushSize = 22;
       this.loadGlyph(0);
     }
 
@@ -3646,6 +4313,7 @@
         <div class="workspace-header">
           <h2 class="workspace-title">🛷 PÍSMENKOVÁ DRÁHA: ZNAK „${this.track.glyph}“</h2>
           <div class="workspace-actions">
+            ${renderPenSizeMarkup(this.brushSize)}
             <button id="btn-lt-speak" class="btn-touch btn-secondary">🔊 PŘEČÍST ZNAK</button>
             <button id="btn-lt-clear" class="btn-touch btn-secondary">SMAZAT</button>
           </div>
@@ -3662,8 +4330,18 @@
       this.paint.height = 440;
       this.pCtx = this.paint.getContext("2d");
 
+      this.hostEl.querySelectorAll(".btn-pen-size").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          this.hostEl.querySelectorAll(".btn-pen-size").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          this.brushSize = Number(btn.dataset.penSize) || 22;
+          this.mascot.audio.playSfx("pop");
+          if (btn.dataset.spoken) this.mascot.audio.speakCustom(btn.dataset.spoken);
+        });
+      });
+
       document.getElementById("btn-lt-speak").addEventListener("click", () => {
-        this.mascot.audio.speakCustom(`Znak ${this.track.glyph}`);
+        this.mascot.audio.speakCustom(`znak ${this.track.glyph}`);
       });
       document.getElementById("btn-lt-clear").addEventListener("click", () => this.loadGlyph(this.idx));
 
@@ -3681,7 +4359,7 @@
         this.isDrawing = true;
         this.lastPt = getPos(e);
         this.pCtx.beginPath();
-        this.pCtx.arc(this.lastPt.x, this.lastPt.y, 11, 0, Math.PI * 2);
+        this.pCtx.arc(this.lastPt.x, this.lastPt.y, this.brushSize / 2, 0, Math.PI * 2);
         this.pCtx.fillStyle = "#06D6A0";
         this.pCtx.fill();
         this.markHit(this.lastPt);
@@ -3698,7 +4376,7 @@
         this.pCtx.moveTo(this.lastPt.x, this.lastPt.y);
         this.pCtx.lineTo(pt.x, pt.y);
         this.pCtx.strokeStyle = "#06D6A0";
-        this.pCtx.lineWidth = 22;
+        this.pCtx.lineWidth = this.brushSize;
         this.pCtx.lineCap = "round";
         this.pCtx.stroke();
         this.markHit(pt);
@@ -3738,7 +4416,7 @@
     markHit(pt) {
       // Body lze projet nebo ťuknout v libovolném pořadí (na přeskáčku)
       this.checkpoints.forEach((c) => {
-        if (!c.hit && Math.hypot(c.x - pt.x, c.y - pt.y) < 50) {
+        if (!c.hit && Math.hypot(c.x - pt.x, c.y - pt.y) < 56) {
           c.hit = true;
           this.mascot.audio.playSfx("count");
         }
@@ -4741,39 +5419,67 @@
     }
   }
 
-  // --- AKTIVITA 21: KÓDOVÁNÍ CESTY (25 TRAS + 1★–5★) ---
-  function buildCodingLevels() {
-    const base = [
-      { start: [0, 2], goal: [3, 2], holes: [[1, 1], [2, 3]] },
-      { start: [0, 0], goal: [3, 2], holes: [[1, 0], [2, 1]] },
-      { start: [0, 3], goal: [3, 0], holes: [[1, 2], [2, 2]] },
-      { start: [0, 1], goal: [3, 3], holes: [[2, 1], [1, 3]] },
-      { start: [0, 0], goal: [3, 3], holes: [[1, 1], [2, 2]] },
-      { start: [0, 3], goal: [3, 1], holes: [[1, 3], [2, 0]] },
-      { start: [0, 2], goal: [3, 0], holes: [[1, 2], [2, 1]] },
-      { start: [0, 1], goal: [3, 2], holes: [[1, 1], [2, 3]] },
-      { start: [3, 0], goal: [0, 3], holes: [[2, 0], [1, 2]] },
-      { start: [3, 3], goal: [0, 0], holes: [[2, 3], [1, 1]] },
-      { start: [3, 1], goal: [0, 2], holes: [[2, 1], [1, 3]] },
-      { start: [3, 2], goal: [0, 1], holes: [[2, 2], [1, 0]] },
-      { start: [1, 0], goal: [2, 3], holes: [[1, 2], [2, 1]] },
-      { start: [2, 0], goal: [1, 3], holes: [[2, 2], [0, 1]] },
-      { start: [0, 0], goal: [2, 3], holes: [[0, 2], [2, 1]] },
-      { start: [0, 3], goal: [2, 0], holes: [[0, 1], [2, 2]] },
-      { start: [1, 3], goal: [3, 0], holes: [[1, 1], [3, 2]] },
-      { start: [2, 3], goal: [0, 0], holes: [[2, 1], [0, 2]] },
-      { start: [0, 2], goal: [2, 0], holes: [[1, 2], [0, 0]] },
-      { start: [0, 1], goal: [2, 3], holes: [[1, 1], [0, 3]] },
-      { start: [3, 0], goal: [1, 3], holes: [[2, 0], [3, 2]] },
-      { start: [3, 3], goal: [1, 0], holes: [[2, 3], [3, 1]] },
-      { start: [0, 0], goal: [3, 1], holes: [[1, 0], [2, 2]] },
-      { start: [0, 3], goal: [3, 2], holes: [[1, 3], [2, 1]] },
-      { start: [1, 0], goal: [3, 3], holes: [[2, 0], [1, 2]] }
-    ];
-    return base;
+  // --- AKTIVITA 21: KÓDOVÁNÍ CESTY (DYNAMICKÁ MŘÍŽKA DLE HVĚZDIČEK 3x3 AŽ 7x7 + TRACING + BFS) ---
+  function checkBfsPath(size, start, goal, holes) {
+    const holeSet = new Set(holes.map(([x, y]) => `${x},${y}`));
+    if (holeSet.has(`${start[0]},${start[1]}`) || holeSet.has(`${goal[0]},${goal[1]}`)) return false;
+    const q = [[start[0], start[1], 0]];
+    const visited = new Set([`${start[0]},${start[1]}`]);
+    const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+    while (q.length) {
+      const [cx, cy, dist] = q.shift();
+      if (cx === goal[0] && cy === goal[1]) return dist;
+      for (const [dx, dy] of dirs) {
+        const nx = cx + dx, ny = cy + dy;
+        const key = `${nx},${ny}`;
+        if (nx >= 0 && nx < size && ny >= 0 && ny < size && !holeSet.has(key) && !visited.has(key)) {
+          visited.add(key);
+          q.push([nx, ny, dist + 1]);
+        }
+      }
+    }
+    return false;
   }
 
-  const CODING_LEVELS = buildCodingLevels();
+  function generateCodingLevels(gridSize, holeCount, count = 25) {
+    const levels = [];
+    const corners = [
+      [0, 0], [0, gridSize - 1], [gridSize - 1, 0], [gridSize - 1, gridSize - 1],
+      [0, Math.floor(gridSize / 2)], [gridSize - 1, Math.floor(gridSize / 2)],
+      [Math.floor(gridSize / 2), 0], [Math.floor(gridSize / 2), gridSize - 1]
+    ];
+    let attempts = 0;
+    while (levels.length < count && attempts < 1500) {
+      attempts++;
+      const s = corners[Math.floor(Math.random() * corners.length)];
+      let g = corners[Math.floor(Math.random() * corners.length)];
+      if (s[0] === g[0] && s[1] === g[1]) continue;
+      const manhattan = Math.abs(s[0] - g[0]) + Math.abs(s[1] - g[1]);
+      if (manhattan < gridSize - 1) continue;
+
+      const holes = [];
+      const used = new Set([`${s[0]},${s[1]}`, `${g[0]},${g[1]}`]);
+      for (let h = 0; h < holeCount; h++) {
+        let hx = Math.floor(Math.random() * gridSize);
+        let hy = Math.floor(Math.random() * gridSize);
+        if (!used.has(`${hx},${hy}`)) {
+          holes.push([hx, hy]);
+          used.add(`${hx},${hy}`);
+        }
+      }
+      const dist = checkBfsPath(gridSize, s, g, holes);
+      if (dist && dist >= manhattan) {
+        const key = `${s.join()}_${g.join()}_${holes.map(h => h.join()).sort().join(';')}`;
+        if (!levels.some(l => l.key === key)) {
+          levels.push({ start: s, goal: g, holes, gridSize, key });
+        }
+      }
+    }
+    if (levels.length === 0) {
+      levels.push({ start: [0, 0], goal: [gridSize - 1, gridSize - 1], holes: [], gridSize });
+    }
+    return levels;
+  }
 
   class CodingPathActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -4781,7 +5487,10 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
-      this.deck = shuffleArray(CODING_LEVELS);
+      const stars = Math.max(1, Math.min(5, this.level.stars || 1));
+      this.gridSize = Math.max(3, Math.min(7, stars + 2)); // 1★=3, 2★=4, 3★=5, 4★=6, 5★=7
+      const holeCount = Math.max(1, stars * 2 - 2); // 1, 2, 4, 6, 8
+      this.deck = shuffleArray(generateCodingLevels(this.gridSize, holeCount, 25));
       this.mapIdx = 0;
       this.loadMap(0);
     }
@@ -4797,9 +5506,12 @@
       this.py = m.start[1];
       this.gx = m.goal[0];
       this.gy = m.goal[1];
-      const stars = this.level.stars || 1;
-      this.holes = stars === 1 ? m.holes.slice(0, 1) : m.holes;
+      this.holes = m.holes;
       this.commands = [];
+      this.activeStepIdx = -1;
+      this.failedStepIdx = -1;
+      this.trace = [];
+      this.isRunning = false;
       this.render();
       this.mascot.audio.speakCustom(
         "Kódování cesty! Poskládej šipky pro Pika tak, aby se vyhnul dírám v ledu a došel až k diamantu!",
@@ -4808,24 +5520,67 @@
     }
 
     runProgram() {
-      if (!this.commands.length) return;
+      if (this.isRunning || !this.commands.length) return;
+      this.isRunning = true;
       this.px = this.startPos[0];
       this.py = this.startPos[1];
+      this.activeStepIdx = -1;
+      this.failedStepIdx = -1;
+      this.trace = [{ x: this.px, y: this.py, stepNum: 0, icon: "🏁" }];
+      this.render();
+
       let i = 0;
       const step = () => {
-        if (i >= this.commands.length) return;
-        const cmd = this.commands[i++];
-        const nx = Math.max(0, Math.min(3, this.px + cmd.dx));
-        const ny = Math.max(0, Math.min(3, this.py + cmd.dy));
-        if (this.holes.some(([hx, hy]) => hx === nx && hy === ny)) {
-          this.mascot.audio.speakCustom("Pozor, tam je díra v ledu! Zkus upravit kroky.");
+        if (i >= this.commands.length) {
+          this.isRunning = false;
+          if (this.px === this.gx && this.py === this.gy) {
+            // Hotovo
+          } else {
+            this.mascot.audio.speakCustom("Piko zatím nedošel k diamantu. Přidej další šipky!");
+          }
+          this.render();
           return;
         }
+
+        this.activeStepIdx = i;
+        const cmd = this.commands[i];
+        const nx = this.px + cmd.dx;
+        const ny = this.py + cmd.dy;
+
+        // Kontrola okraje
+        if (nx < 0 || nx >= this.gridSize || ny < 0 || ny >= this.gridSize) {
+          this.failedStepIdx = i;
+          this.isRunning = false;
+          this.mascot.audio.playSfx("gentle_nudge");
+          this.mascot.audio.speakCustom("Pozor, tam je okraj ledu! Zkus upravit šipky.");
+          this.render();
+          return;
+        }
+
+        // Kontrola díry
+        if (this.holes.some(([hx, hy]) => hx === nx && hy === ny)) {
+          this.failedStepIdx = i;
+          this.isRunning = false;
+          this.px = nx;
+          this.py = ny;
+          this.trace.push({ x: nx, y: ny, stepNum: i + 1, icon: "🕳️", crash: true });
+          this.mascot.audio.playSfx("gentle_nudge");
+          this.mascot.audio.speakCustom("Jejda, díra v ledu! Uprav kroky a zkus to znovu.");
+          this.render();
+          return;
+        }
+
+        // Bezpečný krok
         this.px = nx;
         this.py = ny;
+        this.trace.push({ x: nx, y: ny, stepNum: i + 1, icon: cmd.icon });
         this.mascot.audio.playSfx("count");
+        i++;
         this.render();
+
         if (this.px === this.gx && this.py === this.gy) {
+          this.isRunning = false;
+          this.activeStepIdx = -1;
           this.mascot.celebrate("celebrate_06");
           this.onComplete();
           showContinueBanner(this.hostEl, {
@@ -4838,65 +5593,127 @@
           });
           return;
         }
-        setTimeout(step, 380);
+
+        setTimeout(step, 400);
       };
-      step();
+
+      setTimeout(step, 250);
     }
 
     render() {
+      const isRunning = this.isRunning;
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">🧭 KÓDOVÁNÍ CESTY: SESTAV KROKY K POKLADU 💎</h2>
+          <h2 class="workspace-title">🧭 KÓDOVÁNÍ CESTY: SESTAV KROKY K POKLADU 💎 (${this.gridSize}×${this.gridSize})</h2>
           <div class="workspace-actions">
-            <button id="btn-code-clear" class="btn-touch btn-secondary">🧹 VYMAZAT KROKY</button>
+            <button id="btn-code-undo" class="btn-touch btn-secondary" ${isRunning || !this.commands.length ? "disabled" : ""}>⌫ KROK ZPĚT</button>
+            <button id="btn-code-clear" class="btn-touch btn-secondary" ${isRunning ? "disabled" : ""}>🧹 VYMAZAT VŠE</button>
           </div>
         </div>
         <div class="feed-layout">
-          <div style="display:flex; align-items:center; justify-content:center; min-height:0;">
-            <div class="grid-board" style="grid-template-columns:repeat(4, 1fr);">
-              ${Array.from({ length: 16 })
+          <div style="display:flex; align-items:center; justify-content:center; min-height:0; width:100%; flex:1;">
+            <div class="grid-board" style="grid-template-columns:repeat(${this.gridSize}, 1fr); max-width:min(68dvh, 480px); width:100%;">
+              ${Array.from({ length: this.gridSize * this.gridSize })
                 .map((_, idx) => {
-                  const x = idx % 4;
-                  const y = Math.floor(idx / 4);
+                  const x = idx % this.gridSize;
+                  const y = Math.floor(idx / this.gridSize);
                   const isPiko = x === this.px && y === this.py;
                   const isGoal = x === this.gx && y === this.gy;
                   const isHole = this.holes.some(([hx, hy]) => hx === x && hy === y);
-                  return `<div class="grid-cell ${isGoal ? "goal" : isHole ? "wall" : ""}">${isPiko ? "🐧" : isGoal ? "💎" : isHole ? "🕳️" : ""}</div>`;
+                  const tr = this.trace.filter((t) => t.x === x && t.y === y);
+                  const hasTrace = tr.length > 0;
+                  const lastTr = hasTrace ? tr[tr.length - 1] : null;
+                  const isCrash = lastTr && lastTr.crash;
+                  return `
+                    <div class="grid-cell ${isGoal ? "goal" : isHole ? "wall" : ""} ${hasTrace ? "trace-visited" : ""} ${isCrash ? "trace-crash" : ""}">
+                      ${hasTrace && lastTr.stepNum > 0 ? `<span class="trace-step-badge">${lastTr.stepNum}${lastTr.icon}</span>` : ""}
+                      ${isPiko ? "🐧" : isGoal ? "💎" : isHole ? "🕳️" : ""}
+                    </div>
+                  `;
                 })
                 .join("")}
             </div>
           </div>
-          <div class="bowl-panel" style="justify-content:space-between;">
-            <div class="panel-heading">1. PŘIDEJ ŠIPKY DO PROGRAMU:</div>
+          <div class="bowl-panel" style="justify-content:space-between; flex:1;">
+            <div class="panel-heading">1. VYBER ŠIPKY DO PROGRAMU:</div>
             <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
-              <button class="btn-touch btn-secondary" data-cmd="0,-1,⬆️,Nahoru">⬆️ NAHORU</button>
-              <button class="btn-touch btn-secondary" data-cmd="0,1,⬇️,Dolů">⬇️ DOLŮ</button>
-              <button class="btn-touch btn-secondary" data-cmd="-1,0,⬅️,Vlevo">⬅️ VLEVO</button>
-              <button class="btn-touch btn-secondary" data-cmd="1,0,➡️,Vpravo">➡️ VPRAVO</button>
+              <button class="btn-touch btn-secondary" data-cmd="0,-1,⬆️,Nahoru" ${isRunning ? "disabled" : ""}>⬆️ NAHORU</button>
+              <button class="btn-touch btn-secondary" data-cmd="0,1,⬇️,Dolů" ${isRunning ? "disabled" : ""}>⬇️ DOLŮ</button>
+              <button class="btn-touch btn-secondary" data-cmd="-1,0,⬅️,Vlevo" ${isRunning ? "disabled" : ""}>⬅️ VLEVO</button>
+              <button class="btn-touch btn-secondary" data-cmd="1,0,➡️,Vpravo" ${isRunning ? "disabled" : ""}>➡️ VPRAVO</button>
             </div>
-            <div class="bowl-dropzone" style="min-height:54px;">
-              ${this.commands.length ? this.commands.map((c) => `<span style="font-size:1.6rem;">${c.icon}</span>`).join(" ") : "ZATÍM ŽÁDNÉ KROKY"}
+            <div class="panel-heading" style="margin-top:6px;">2. KROKY PROGRAMU (${this.commands.length}):</div>
+            <div class="bowl-dropzone code-steps-list" style="min-height:58px; max-height:120px; overflow-y:auto;">
+              ${
+                this.commands.length
+                  ? this.commands
+                      .map((c, i) => {
+                        const statusClass =
+                          i === this.activeStepIdx ? "active" : i === this.failedStepIdx ? "error" : i < this.activeStepIdx ? "done" : "";
+                        return `<button class="code-step-chip ${statusClass}" data-remove-step="${i}" title="Klikni pro smazání kroku" ${isRunning ? "disabled" : ""}>#${i + 1} ${c.icon}</button>`;
+                      })
+                      .join("")
+                  : '<span style="color:var(--navy-soft); font-weight:700;">ZATÍM ŽÁDNÉ KROKY. PŘIDEJ ŠIPKY VÝŠE.</span>'
+              }
             </div>
-            <button id="btn-code-run" class="btn-touch btn-feed-submit">▶ SPUSTIT KÓD</button>
+            <button id="btn-code-run" class="btn-touch btn-feed-submit" ${isRunning || !this.commands.length ? "disabled" : ""}>
+              ${isRunning ? "⏳ PROGRAM BĚŽÍ..." : "▶ SPUSTIT KÓD"}
+            </button>
           </div>
         </div>
       `;
 
-      document.getElementById("btn-code-clear").addEventListener("click", () => this.loadMap(this.mapIdx));
-      document.getElementById("btn-code-run").addEventListener("click", () => this.runProgram());
+      document.getElementById("btn-code-undo").addEventListener("click", () => {
+        if (this.isRunning || !this.commands.length) return;
+        this.commands.pop();
+        this.px = this.startPos[0];
+        this.py = this.startPos[1];
+        this.trace = [];
+        this.activeStepIdx = -1;
+        this.failedStepIdx = -1;
+        this.mascot.audio.playSfx("pop");
+        this.render();
+      });
+
+      document.getElementById("btn-code-clear").addEventListener("click", () => {
+        if (this.isRunning) return;
+        this.loadMap(this.mapIdx);
+      });
+
+      document.getElementById("btn-code-run").addEventListener("click", () => {
+        if (this.isRunning) return;
+        this.runProgram();
+      });
 
       this.hostEl.querySelectorAll("[data-cmd]").forEach((btn) => {
         btn.addEventListener("click", () => {
+          if (this.isRunning) return;
           const [dx, dy, icon, spoken] = btn.dataset.cmd.split(",");
-          this.commands.push({ dx: Number(dx), dy: Number(dy), icon });
+          this.commands.push({ dx: Number(dx), dy: Number(dy), icon, spoken });
           this.mascot.audio.playSfx("pop");
           this.mascot.audio.speakCustom(spoken);
+          this.render();
+        });
+      });
+
+      this.hostEl.querySelectorAll("[data-remove-step]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (this.isRunning) return;
+          const idx = Number(btn.dataset.removeStep);
+          this.commands.splice(idx, 1);
+          this.px = this.startPos[0];
+          this.py = this.startPos[1];
+          this.trace = [];
+          this.activeStepIdx = -1;
+          this.failedStepIdx = -1;
+          this.mascot.audio.playSfx("pop");
           this.render();
         });
       });
     }
 
     destroy() {
+      this.isRunning = false;
       this.mascot.clearInactivityTimer();
     }
   }
@@ -4966,44 +5783,17 @@
         });
       });
       this.items = shuffleArray(this.items);
-      this.selectedKey = null;
-      this.selectedCell = null;
       this.render();
       this.mascot.audio.speakCustom(
-        "Zařaď kartičky do správného řádku podle tvaru a do sloupce podle barvy! Můžeš je dávat v libovolném pořadí!",
-        "🗂️ ZAŘAĎ KARTIČKY PODLE TVARU A BARVY (LZE I NA PŘESKÁČKU)!"
+        "Třídění v tabulce! Přetáhni prstem kartičku do správného řádku a sloupce. Můžeš je dávat v libovolném pořadí!",
+        "🗂️ PŘETÁHNI KARTIČKY DO TABULKY (LZE I NA PŘESKÁČKU)!"
       );
-    }
-
-    tryPlaceMatrix(itemKey, cellKey, el) {
-      if (itemKey === cellKey) {
-        this.filled[cellKey] = true;
-        this.selectedKey = null;
-        this.selectedCell = null;
-        this.mascot.audio.playSfx("snap");
-        this.render();
-        if (Object.keys(this.filled).length === this.items.length) {
-          this.mascot.celebrate("celebrate_02");
-          this.onComplete();
-          showContinueBanner(this.hostEl, {
-            icon: "🗂️",
-            title: "CELÁ TABULKA JE SPRÁVNĚ VYPLNĚNÁ!",
-            subtitle: "Všechny tvary a barvy sedí! Vyplníme další tabulku?",
-            spokenText: "Výborně! Celá tabulka je správně vyplněná! Pojďme na další tabulku!",
-            nextLabel: "▶️ DALŠÍ TABULKA ➔",
-            onNext: () => this.loadNextSet()
-          });
-        }
-      } else {
-        if (el) el.classList.add("gentle-nudge-anim");
-        this.mascot.gentleNudge("hint_shape_size");
-      }
     }
 
     render() {
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">🗂️ ZAŘAĎ KARTIČKY DO ŘÁDKU A SLOUPCE (LZE I NA PŘESKÁČKU)!</h2>
+          <h2 class="workspace-title">🗂️ ZAŘAĎ KARTIČKY DO TABULKY (PŘETÁHNI PRSTEM I NA PŘESKÁČKU)!</h2>
           <div class="workspace-actions">
             <span class="step-pill current">ZAŘAZENO: ${Object.keys(this.filled).length} / ${this.items.length}</span>
           </div>
@@ -5027,8 +5817,7 @@
                       .map((c) => {
                         const key = `${r.id}_${c.id}`;
                         const done = this.filled[key];
-                        const isSel = this.selectedCell === key && !done;
-                        return `<td class="matrix-cell ${done ? "filled" : ""}" data-cell="${key}" style="background:${done ? c.bg : isSel ? "#fff9db" : "#f8fcff"}; ${isSel ? "outline:3px solid #ffb703;" : ""}">${done ? r.emoji : "❓"}</td>`;
+                        return `<td class="matrix-cell ${done ? "filled" : ""}" data-cell="${key}" style="background:${done ? c.bg : "#f8fcff"};">${done ? r.emoji : "❓"}</td>`;
                       })
                       .join("")}
                   </tr>
@@ -5039,14 +5828,13 @@
             </table>
           </div>
           <div class="bowl-panel" style="justify-content:center;">
-            <div class="panel-heading">ŤUKNI NA KARTIČKU NEBO DO POLÍČKA TABULKY:</div>
+            <div class="panel-heading">ŤUKNI PRO POSLECH NEBO PŘETÁHNI DO TABULKY:</div>
             <div class="cards-grid">
               ${this.items
                 .map((it) => {
                   const done = this.filled[it.key];
-                  const sel = this.selectedKey === it.key && !done;
                   return `
-                    <button class="game-card ${done ? "matched" : sel ? "selected" : ""}" data-item="${it.key}" style="background:${it.bg};" ${done ? "disabled" : ""}>
+                    <button class="game-card ${done ? "matched" : ""}" data-item="${it.key}" style="background:${it.bg}; cursor:${done ? "default" : "grab"}; touch-action:none;" ${done ? "disabled" : ""}>
                       <span class="game-card-emoji">${it.emoji}</span>
                       <span class="game-card-label">${it.label}</span>
                     </button>
@@ -5059,34 +5847,55 @@
       `;
 
       this.hostEl.querySelectorAll("[data-item]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const itemKey = btn.dataset.item;
-          if (this.filled[itemKey]) return;
-          const it = this.items.find((x) => x.key === itemKey);
-          this.mascot.audio.playSfx("pop");
-          if (it) this.mascot.audio.speakCustom(it.label);
+        const itemKey = btn.dataset.item;
+        const it = this.items.find((x) => x.key === itemKey);
+        if (!it) return;
 
-          if (this.selectedCell && !this.filled[this.selectedCell]) {
-            this.tryPlaceMatrix(itemKey, this.selectedCell, btn);
-          } else {
-            this.selectedKey = itemKey;
-            this.render();
+        bindPointerDragDrop(btn, {
+          dragClass: "dragging-active",
+          onDragStart: () => {
+            this.mascot.audio.playSfx("pop");
+          },
+          onDrop: (dropTarget) => {
+            const cell = dropTarget ? dropTarget.closest(".matrix-cell") : null;
+            if (!cell) {
+              this.mascot.audio.playSfx("gentle_nudge");
+              return false;
+            }
+            const cellKey = cell.dataset.cell;
+            if (this.filled[cellKey]) return false;
+            if (cellKey === it.key) {
+              this.filled[cellKey] = true;
+              this.mascot.audio.playSfx("snap");
+              this.render();
+              if (Object.keys(this.filled).length === this.items.length) {
+                this.mascot.celebrate("celebrate_02");
+                this.onComplete();
+                showContinueBanner(this.hostEl, {
+                  icon: "🗂️",
+                  title: "CELÁ TABULKA JE SPRÁVNĚ VYPLNĚNÁ!",
+                  subtitle: "Všechny tvary a barvy sedí! Vyplníme další tabulku?",
+                  spokenText: "Výborně! Celá tabulka je správně vyplněná! Pojďme na další tabulku!",
+                  nextLabel: "▶️ DALŠÍ TABULKA ➔",
+                  onNext: () => this.loadNextSet()
+                });
+              }
+              return true;
+            } else {
+              cell.classList.add("gentle-nudge-anim");
+              setTimeout(() => cell.classList.remove("gentle-nudge-anim"), 500);
+              this.mascot.audio.playSfx("gentle_nudge");
+              this.mascot.gentleNudge("hint_shape_size");
+              return false;
+            }
           }
         });
-      });
 
-      this.hostEl.querySelectorAll("[data-cell]").forEach((cell) => {
-        cell.addEventListener("click", () => {
-          const cellKey = cell.dataset.cell;
-          if (this.filled[cellKey]) return;
+        // Samostatný klik pro hlasové přečtení názvu kartičky (žádné automatické vložení)
+        btn.addEventListener("click", () => {
+          if (this.filled[itemKey]) return;
           this.mascot.audio.playSfx("pop");
-
-          if (this.selectedKey) {
-            this.tryPlaceMatrix(this.selectedKey, cellKey, cell);
-          } else {
-            this.selectedCell = cellKey;
-            this.render();
-          }
+          this.mascot.audio.speakCustom(it.label);
         });
       });
     }
@@ -5162,7 +5971,8 @@
       this.holdBtn.addEventListener("pointercancel", cancelHold);
     }
 
-    openMathGate() {
+    openMathGate(isBedtimeUnlock = false) {
+      this.isBedtimeUnlock = isBedtimeUnlock;
       const a = 11 + Math.floor(Math.random() * 8);
       const b = 4 + Math.floor(Math.random() * 6);
       this.gateAnswer = a + b;
@@ -5186,6 +5996,10 @@
             if (Number(this.gateTyped) === this.gateAnswer) {
               this.gateModal.classList.add("hidden");
               this.openDashboard();
+              if (this.isBedtimeUnlock) {
+                this.pzModal.querySelectorAll(".pz-tab").forEach((t) => t.classList.toggle("active", t.dataset.tab === "screentime"));
+                this.pzModal.querySelectorAll(".pz-tab-panel").forEach((p) => p.classList.toggle("active", p.id === "pz-tab-screentime"));
+              }
             } else {
               document.getElementById("gate-error-msg").classList.remove("hidden");
               this.gateTyped = "";
@@ -5239,13 +6053,23 @@
         this.triggerBedtimeMode();
       });
 
+      // Odemčení spánku přes matematický zámek (rodičovský přístup)
       document.getElementById("btn-bedtime-parent-unlock").addEventListener("click", () => {
-        this.bedtimeOverlay.classList.add("hidden");
-        this.mascot.setState("IDLE");
-        this.remainingSec = (this.store.state.settings.limitMinutes || 30) * 60;
-        this.updateTimerBadge();
-        this.audio.speak("intro_welcome");
+        this.openMathGate(true);
       });
+
+      // Tlačítko pro restart časovače v záložce Screentime
+      const btnRestartTimer = document.getElementById("btn-pz-restart-timer");
+      if (btnRestartTimer) {
+        btnRestartTimer.addEventListener("click", () => {
+          this.remainingSec = (this.store.state.settings.limitMinutes || 30) * 60;
+          this.bedtimeOverlay.classList.add("hidden");
+          this.pzModal.classList.add("hidden");
+          this.mascot.setState("IDLE");
+          this.updateTimerBadge();
+          this.audio.speak("intro_welcome");
+        });
+      }
 
       // Hlasitost
       const bindSlider = (id, key, valId) => {
@@ -5573,29 +6397,18 @@
         .map((act) => {
           const earned = this.store.state.starsEarned[act.id] || 0;
           const starBadge = earned ? "⭐".repeat(earned) : "⭐";
-          const goal = ACTIVITY_CHILD_GOALS[act.id] || {
-            visual: `${act.icon} ➔ ⭐`,
-            goalText: act.subtitle || act.title,
-            spoken: `${act.title}. ${act.subtitle || ""}`
-          };
           return `
             <div class="activity-card-row ${act.implementedInPrototype ? "playable" : ""}">
-              <div class="activity-row-info" data-act-goal="${act.id}" style="cursor:pointer;" title="Klikni pro přečtení cíle úkolu">
+              <div class="activity-row-info">
                 <span class="activity-row-icon">${act.icon}</span>
-                <div>
-                  <div class="activity-row-title">${act.title.toUpperCase()}</div>
-                  <div class="activity-goal-pill">
-                    <span class="goal-icons">${goal.visual}</span>
-                    <span>${goal.goalText}</span>
-                  </div>
-                </div>
+                <div class="activity-row-title">${act.title.toUpperCase()}</div>
               </div>
-              <div class="activity-row-actions" style="display:flex; gap:10px; align-items:center;">
-                <button class="btn-speak-goal" data-act-goal="${act.id}" aria-label="Přečíst cíl úkolu">🔊 CO JE CÍLEM?</button>
+              <div class="activity-row-actions">
+                <button class="btn-touch btn-help-act" data-help-act="${act.id}" title="Co se v tomto úkolu dělá?" aria-label="Nápověda">?</button>
                 ${
                   act.implementedInPrototype
                     ? `<button class="btn-touch btn-primary btn-launch-act" data-act-id="${act.id}">▶ HRÁT ${starBadge}</button>`
-                    : `<button class="btn-touch btn-secondary btn-preview-act" data-act-id="${act.id}">🔊 POSLECHNOUT</button>`
+                    : `<button class="btn-touch btn-secondary btn-preview-act" data-act-id="${act.id}">🔊 INFO</button>`
                 }
               </div>
             </div>
@@ -5603,14 +6416,13 @@
         })
         .join("");
 
-      listEl.querySelectorAll("[data-act-goal]").forEach((el) => {
-        el.addEventListener("click", (e) => {
+      listEl.querySelectorAll("[data-help-act]").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
           e.stopPropagation();
-          const actId = el.dataset.actGoal;
-          const goal = ACTIVITY_CHILD_GOALS[actId];
-          if (goal) {
+          const act = this.catalog.activities.find((a) => a.id === btn.dataset.helpAct);
+          if (act) {
             this.audio.playSfx("pop");
-            this.audio.speakCustom(goal.spoken, goal.goalText.toUpperCase());
+            this.audio.speak(act.audioIntroId);
           }
         });
       });
@@ -5762,6 +6574,7 @@
       const engineMap = {
         step_draw: StepDrawActivity,
         color_mix: ColorMixActivity,
+        build_color: BuildColorActivity,
         symmetry_draw: SymmetryDrawActivity,
         story_draw: StoryDrawActivity,
         connect_dots: ConnectDotsActivity,
@@ -5806,8 +6619,8 @@
     if (window.location.protocol !== "file:") {
       try {
         const [actRes, audRes] = await Promise.all([
-          fetch("./data/activities.json?v=7"),
-          fetch("./data/audio_manifest.json?v=7")
+          fetch("./data/activities.json?v=8"),
+          fetch("./data/audio_manifest.json?v=8")
         ]);
         if (actRes.ok) catalog = await actRes.json();
         if (audRes.ok) manifest = await audRes.json();
@@ -5820,7 +6633,7 @@
           .keys()
           .then((keys) =>
             Promise.all(
-              keys.filter((k) => k !== "tucnakuv-svet-v7").map((k) => caches.delete(k))
+              keys.filter((k) => k !== "tucnakuv-svet-v8").map((k) => caches.delete(k))
             )
           )
           .catch(() => {});
@@ -5828,7 +6641,7 @@
 
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
-          .register("./sw.js?v=7")
+          .register("./sw.js?v=8")
           .then((reg) => {
             reg.update().catch(() => {});
           })
