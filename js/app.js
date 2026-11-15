@@ -275,12 +275,20 @@
       });
     }
 
-    speak(entryId, overrideText = null, options = {}) {
-      const entry = this.manifestMap.get(entryId);
-      const spokenText = overrideText || (entry ? entry.text_cs : entryId);
-      const karaokeText = (overrideText || (entry ? entry.karaoke_text : spokenText)).toUpperCase();
+    speakCustom(spokenText, displayKaraoke = null, options = {}) {
+      this.speak(null, spokenText, {
+        ...options,
+        displayKaraoke: displayKaraoke || spokenText
+      });
+    }
 
-      this.lastSpoken = { id: entryId, overrideText };
+    speak(entryId, overrideText = null, options = {}) {
+      const entry = entryId ? this.manifestMap.get(entryId) : null;
+      const spokenText = overrideText || (entry ? entry.text_cs : entryId || "");
+      const rawKaraoke = options.displayKaraoke || overrideText || (entry ? entry.karaoke_text : spokenText);
+      const karaokeText = String(rawKaraoke || "").toUpperCase();
+
+      this.lastSpoken = { id: entryId, overrideText, options };
       this.stopCurrentSpeech();
       const gen = this.speechGen;
 
@@ -338,16 +346,20 @@
     }
 
     speakViaWebSpeech(spokenText, wordSpans, voiceVol, onFinish) {
-      const estimatedMs = Math.max(1500, spokenText.length * 68);
-      if (!("speechSynthesis" in window) || voiceVol <= 0.01) {
+      const cleanSpeech = String(spokenText || "")
+        .replace(/[^\p{L}\p{N}\s.,?!:;+-]/gu, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      const estimatedMs = Math.max(1100, cleanSpeech.length * 68);
+      if (!("speechSynthesis" in window) || voiceVol <= 0.01 || !cleanSpeech) {
         this.runHeuristicKaraoke(wordSpans, estimatedMs, onFinish);
         return;
       }
 
-      const utter = new SpeechSynthesisUtterance(spokenText);
+      const utter = new SpeechSynthesisUtterance(cleanSpeech);
       utter.lang = "cs-CZ";
-      utter.rate = 1.05;
-      utter.pitch = 1.45;
+      utter.rate = 1.04;
+      utter.pitch = 1.42;
       utter.volume = voiceVol;
 
       const voices = window.speechSynthesis.getVoices();
@@ -358,7 +370,7 @@
       utter.onboundary = (ev) => {
         if (ev.name === "word" || typeof ev.charIndex === "number") {
           boundaryFired = true;
-          const upTo = spokenText.slice(0, ev.charIndex).trim();
+          const upTo = cleanSpeech.slice(0, ev.charIndex).trim();
           const idx = upTo ? upTo.split(/\s+/).length : 0;
           this.highlightWord(wordSpans, Math.min(idx, wordSpans.length - 1));
         }
@@ -378,11 +390,13 @@
 
       this.runHeuristicKaraoke(wordSpans, estimatedMs, null, () => boundaryFired);
 
-      try {
-        window.speechSynthesis.speak(utter);
-      } catch (_err) {
-        this.runHeuristicKaraoke(wordSpans, estimatedMs, safeFinish);
-      }
+      setTimeout(() => {
+        try {
+          window.speechSynthesis.speak(utter);
+        } catch (_err) {
+          this.runHeuristicKaraoke(wordSpans, estimatedMs, safeFinish);
+        }
+      }, 35);
     }
 
     runHeuristicKaraoke(wordSpans, totalMs, onDone = null, shouldYield = null) {
@@ -517,29 +531,45 @@
   }
 
   /* =========================================================================
-   * POMOCNÁ FUNKCE PRO POKRAČOVÁNÍ VE STEJNÉM STYLU (DALŠÍ ÚKOL)
+   * POMOCNÉ FUNKCE: NÁHODNÉ MÍCHÁNÍ A JEDNOTNÉ MANDATORNÍ OKNO POKRAČOVÁNÍ
    * ========================================================================= */
+  function shuffleArray(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
   function showContinueBanner(hostEl, options = {}) {
     const existing = hostEl.querySelector(".continue-banner");
     if (existing) existing.remove();
 
     const banner = document.createElement("div");
     banner.className = "continue-banner";
-    const title = options.title || "🎉 PARÁDA! HOTOVO! CHCEŠ POKRAČOVAT DÁL?";
-    const nextLabel = options.nextLabel || "▶️ DALŠÍ ÚKOL VE STEJNÉM STYLU ➔";
+    const icon = options.icon || "🎉";
+    const title = options.title || "VÝBORNĚ! ÚKOL JE HOTOVÝ!";
+    const subtitle = options.subtitle || "Klečni na velké zelené tlačítko a pokračuj na další úkol!";
+    const nextLabel = options.nextLabel || "▶️ POKRAČOVAT NA DALŠÍ ÚKOL ➔";
+
     banner.innerHTML = `
-      <div class="continue-banner-text">${title}</div>
-      <div class="continue-banner-btns">
-        ${options.onReplay ? `<button type="button" class="btn-touch btn-secondary btn-banner-replay">🔄 ZNOVU</button>` : ""}
-        <button type="button" class="btn-touch btn-next-task btn-banner-next">${nextLabel}</button>
+      <div class="continue-modal-box">
+        <div class="continue-modal-icon">${icon}</div>
+        <div class="continue-banner-text">${title}</div>
+        <div class="continue-banner-sub">${subtitle}</div>
+        <div class="continue-banner-btns">
+          ${options.onReplay ? `<button type="button" class="btn-touch btn-secondary btn-banner-replay">🔄 ZNOVU</button>` : ""}
+          <button type="button" class="btn-touch btn-next-task btn-banner-next">${nextLabel}</button>
+        </div>
       </div>
     `;
 
-    const header = hostEl.querySelector(".workspace-header");
-    if (header && header.nextSibling) {
-      hostEl.insertBefore(banner, header.nextSibling);
-    } else {
-      hostEl.prepend(banner);
+    hostEl.appendChild(banner);
+
+    if (window.penguinApp && window.penguinApp.audio) {
+      const spoken = options.spokenText || `${title} Pokračuj na další úkol!`;
+      window.penguinApp.audio.speakCustom(spoken, title);
     }
 
     const nextBtn = banner.querySelector(".btn-banner-next");
@@ -558,49 +588,48 @@
     }
   }
 
-  const EXTRA_STEP_DRAW_TEMPLATES = [
-    {
-      title: "ZLATÁ RYBIČKA",
+  function buildProceduralStepTemplates() {
+    const defs = [
+      { title: "ZLATÁ RYBIČKA", main: { type: "ellipse", cx: 330, cy: 235, rx: 135, ry: 85, label: "Tělíčko rybičky" }, detail1: { type: "arcs", paths: [[[465, 235], [565, 155], [545, 315], [465, 235]], [[310, 150], [350, 95], [390, 155]]], label: "Ocásek a ploutvička" }, detail2: { type: "circle", cx: 245, cy: 215, r: 18, label: "Očičko" } },
+      { title: "VESELÉ SLUNÍČKO", main: { type: "circle", cx: 360, cy: 230, r: 95, label: "Kulaté sluníčko" }, detail1: { type: "arcs", paths: [[[360, 115], [360, 55]], [[360, 345], [360, 405]], [[245, 230], [175, 230]], [[475, 230], [545, 230]], [[275, 145], [225, 95]], [[445, 145], [495, 95]], [[275, 315], [225, 365]], [[445, 315], [495, 365]]], label: "Paprsky" }, detail2: { type: "arcs", paths: [[[320, 255], [360, 285], [400, 255]]], label: "Úsměv" } },
+      { title: "RYCHLÉ AUTÍČKO", main: { type: "ellipse", cx: 360, cy: 265, rx: 165, ry: 65, label: "Karoserie autíčka" }, detail1: { type: "arcs", paths: [[[245, 210], [295, 135], [425, 135], [470, 210]]], label: "Střecha" }, detail2: { type: "circle", cx: 265, cy: 330, r: 42, label: "Přední a zadní kolo" } },
+      { title: "MOUDRÁ SOVIČKA", main: { type: "ellipse", cx: 360, cy: 255, rx: 110, ry: 130, label: "Bříško sovičky" }, detail1: { type: "arcs", paths: [[[280, 150], [260, 85], [320, 128]], [[440, 150], [460, 85], [400, 128]]], label: "Ouška" }, detail2: { type: "circle", cx: 325, cy: 205, r: 24, label: "Kulaté oči" } },
+      { title: "SNĚHULÁK KULÍŠEK", main: { type: "circle", cx: 360, cy: 310, r: 95, label: "Spodní koule" }, detail1: { type: "circle", cx: 360, cy: 170, r: 65, label: "Hlava sněhuláka" }, detail2: { type: "arcs", paths: [[[360, 170], [425, 180], [360, 190]]], label: "Mrkvička" } },
+      { title: "VESMÍRNÁ RAKETA", main: { type: "ellipse", cx: 360, cy: 235, rx: 75, ry: 145, label: "Trup rakety" }, detail1: { type: "arcs", paths: [[[285, 310], [220, 380], [305, 360]], [[435, 310], [500, 380], [415, 360]]], label: "Křidélka" }, detail2: { type: "circle", cx: 360, cy: 195, r: 32, label: "Okénko" } },
+      { title: "ROZKVETLÁ KYTIČKA", main: { type: "circle", cx: 360, cy: 190, r: 48, label: "Střed kytičky" }, detail1: { type: "ellipse", cx: 360, cy: 190, rx: 115, ry: 115, label: "Okvětní lístky" }, detail2: { type: "arcs", paths: [[[360, 305], [360, 420]], [[360, 365], [430, 330]]], label: "Stonek a lístek" } },
+      { title: "ZELENÁ Želvička", main: { type: "ellipse", cx: 360, cy: 240, rx: 140, ry: 95, label: "Krunýř želvičky" }, detail1: { type: "circle", cx: 525, cy: 220, r: 38, label: "Hlavička" }, detail2: { type: "arcs", paths: [[[260, 325], [240, 385]], [[450, 325], [470, 385]]], label: "Nožičky" } },
+      { title: "MODRÁ VELRYBA", main: { type: "ellipse", cx: 330, cy: 260, rx: 155, ry: 90, label: "Tělo velryby" }, detail1: { type: "arcs", paths: [[[485, 260], [575, 190], [555, 320], [485, 260]]], label: "Ocasní ploutev" }, detail2: { type: "arcs", paths: [[[310, 170], [280, 90]], [[310, 170], [345, 90]]], label: "Vodotrysk" } },
+      { title: "ČERVENÁ BERUŠKA", main: { type: "circle", cx: 360, cy: 250, r: 115, label: "Krovky berušky" }, detail1: { type: "arcs", paths: [[[360, 135], [360, 365]], [[320, 135], [290, 80]], [[400, 135], [430, 80]]], label: "Čára a tykadla" }, detail2: { type: "circle", cx: 310, cy: 230, r: 22, label: "Puntíky" } },
+      { title: "HŘÍBEK V LESE", main: { type: "ellipse", cx: 360, cy: 170, rx: 145, ry: 75, label: "Klobouček hříbku" }, detail1: { type: "ellipse", cx: 360, cy: 310, rx: 55, ry: 90, label: "Nožička hříbku" }, detail2: { type: "circle", cx: 310, cy: 155, r: 20, label: "Tečky na kloboučku" } },
+      { title: "POHÁDKOVÝ DOMEČEK", main: { type: "arcs", paths: [[[220, 210], [500, 210], [500, 395], [220, 395], [220, 210]]], label: "Zdi domečku" }, detail1: { type: "arcs", paths: [[[195, 210], [360, 85], [525, 210]]], label: "Špičatá střecha" }, detail2: { type: "circle", cx: 360, cy: 160, r: 24, label: "Kulaté okénko" } },
+      { title: "PLACHETNICE NA MOŘI", main: { type: "arcs", paths: [[[200, 300], [520, 300], [460, 385], [260, 385], [200, 300]]], label: "Trup loďky" }, detail1: { type: "arcs", paths: [[[360, 90], [360, 300], [495, 280], [360, 90]]], label: "Plachta" }, detail2: { type: "arcs", paths: [[[360, 90], [420, 105], [360, 120]]], label: "Vlaječka" } },
+      { title: "SLADKÁ JAHŮDKA", main: { type: "ellipse", cx: 360, cy: 255, rx: 105, ry: 125, label: "Červená jahůdka" }, detail1: { type: "arcs", paths: [[[290, 135], [360, 95], [430, 135]]], label: "Zelená korunka" }, detail2: { type: "circle", cx: 335, cy: 235, r: 14, label: "Zrníčka" } },
+      { title: "VESELÁ CHOBOTNICE", main: { type: "circle", cx: 360, cy: 175, r: 85, label: "Hlava chobotnice" }, detail1: { type: "arcs", paths: [[[290, 250], [210, 370]], [[335, 260], [310, 390]], [[385, 260], [410, 390]], [[430, 250], [510, 370]]], label: "Chapadla" }, detail2: { type: "circle", cx: 335, cy: 165, r: 16, label: "Očička" } },
+      { title: "BAREVNÝ BALÓNEK", main: { type: "ellipse", cx: 360, cy: 185, rx: 95, ry: 115, label: "Kulatý balónek" }, detail1: { type: "arcs", paths: [[[345, 300], [375, 300], [360, 320], [345, 300]]], label: "Uzlík" }, detail2: { type: "arcs", paths: [[[360, 320], [335, 370], [380, 420]]], label: "Provázek" } },
+      { title: "ZELENÝ STROMEČEK", main: { type: "arcs", paths: [[[360, 75], [220, 235], [500, 235], [360, 75]]], label: "Horní větve" }, detail1: { type: "arcs", paths: [[[360, 185], [195, 345], [525, 345], [360, 185]]], label: "Spodní větve" }, detail2: { type: "arcs", paths: [[[330, 345], [330, 415], [390, 415], [390, 345]]], label: "Kmen stromu" } },
+      { title: "UŠATÝ KRÁLÍČEK", main: { type: "circle", cx: 360, cy: 275, r: 90, label: "Hlavička králíčka" }, detail1: { type: "ellipse", cx: 320, cy: 125, rx: 26, ry: 75, label: "Levý ušák" }, detail2: { type: "ellipse", cx: 400, cy: 125, rx: 26, ry: 75, label: "Pravý ušák" } },
+      { title: "Mlsný MEDVÍDEK", main: { type: "circle", cx: 360, cy: 245, r: 105, label: "Hlava medvídka" }, detail1: { type: "circle", cx: 270, cy: 155, r: 38, label: "Levé ouško" }, detail2: { type: "circle", cx: 450, cy: 155, r: 38, label: "Pravé ouško" } },
+      { title: "ZMRZLINOVÝ KORNOUTEK", main: { type: "arcs", paths: [[[275, 225], [445, 225], [360, 410], [275, 225]]], label: "Křupavý kornoutek" }, detail1: { type: "circle", cx: 360, cy: 170, r: 78, label: "Kopeček zmrzliny" }, detail2: { type: "circle", cx: 360, cy: 85, r: 22, label: "Třešnička na vrchu" } },
+      { title: "LÉTAJÍCÍ DRÁČEK", main: { type: "arcs", paths: [[[360, 75], [485, 210], [360, 345], [235, 210], [360, 75]]], label: "Tělo draka" }, detail1: { type: "arcs", paths: [[[360, 75], [360, 345]], [[235, 210], [485, 210]]], label: "Zkřížené špejle" }, detail2: { type: "arcs", paths: [[[360, 345], [410, 395], [350, 435]]], label: "Mašličkový ocas" } },
+      { title: "ŠŤAVNATÉ JABLÍČKO", main: { type: "circle", cx: 360, cy: 255, r: 108, label: "Červené jablíčko" }, detail1: { type: "arcs", paths: [[[360, 148], [365, 95]]], label: "Stopka" }, detail2: { type: "ellipse", cx: 405, cy: 118, rx: 35, ry: 18, label: "Zelený lístek" } },
+      { title: "NOČNÍ MĚSÍČEK", main: { type: "circle", cx: 360, cy: 235, r: 105, label: "Zlatý měsíc" }, detail1: { type: "circle", cx: 215, cy: 135, r: 22, label: "První hvězdička" }, detail2: { type: "circle", cx: 505, cy: 165, r: 26, label: "Druhá hvězdička" } },
+      { title: "KRÁLOVSKÁ KORUNA", main: { type: "arcs", paths: [[[200, 340], [520, 340], [540, 150], [430, 240], [360, 110], [290, 240], [180, 150], [200, 340]]], label: "Zlatá koruna" }, detail1: { type: "circle", cx: 360, cy: 285, r: 24, label: "Středový drahokam" }, detail2: { type: "circle", cx: 265, cy: 290, r: 18, label: "Boční drahokamy" } },
+      { title: "ZVONEČEK CINKÁLEK", main: { type: "ellipse", cx: 360, cy: 235, rx: 105, ry: 115, label: "Tělo zvonečku" }, detail1: { type: "arcs", paths: [[[225, 340], [495, 340]]], label: "Spodní okraj" }, detail2: { type: "circle", cx: 360, cy: 365, r: 24, label: "Srdíčko zvonečku" } }
+    ];
+
+    return defs.map((d) => ({
+      title: d.title,
       canvasWidth: 720,
       canvasHeight: 460,
       steps: [
-        { id: "body", label: "Tělíčko rybičky", audioId: "draw_step_oval", type: "ellipse", cx: 330, cy: 235, rx: 135, ry: 85, strokeColor: "#1D3557", fillColor: "#FFB703" },
-        { id: "tail", label: "Ocásek a ploutvička", audioId: "draw_step_wings", type: "arcs", paths: [[[465, 235], [565, 155], [545, 315], [465, 235]], [[310, 150], [350, 95], [390, 155]]], strokeColor: "#1D3557", fillColor: "#F77F00" },
-        { id: "eye", label: "Očičko a úsměv", audioId: "draw_step_face", type: "circle", cx: 245, cy: 215, r: 18, strokeColor: "#1D3557", fillColor: "#4CC9F0" }
+        { id: "s1", label: d.main.label, audioId: "draw_step_oval", ...d.main, strokeColor: "#1D3557", fillColor: "#FFB703" },
+        { id: "s2", label: d.detail1.label, audioId: "draw_step_wings", ...d.detail1, strokeColor: "#1D3557", fillColor: "#4CC9F0" },
+        { id: "s3", label: d.detail2.label, audioId: "draw_step_face", ...d.detail2, strokeColor: "#1D3557", fillColor: "#E63946" }
       ]
-    },
-    {
-      title: "VESELÉ SLUNÍČKO",
-      canvasWidth: 720,
-      canvasHeight: 460,
-      steps: [
-        { id: "sun", label: "Kulaté sluníčko", audioId: "draw_step_head", type: "circle", cx: 360, cy: 230, r: 95, strokeColor: "#F77F00", fillColor: "#FFD166" },
-        { id: "rays", label: "Zlaté paprsky", audioId: "draw_step_wings", type: "arcs", paths: [[[360, 115], [360, 55]], [[360, 345], [360, 405]], [[245, 230], [175, 230]], [[475, 230], [545, 230]], [[275, 145], [225, 95]], [[445, 145], [495, 95]], [[275, 315], [225, 365]], [[445, 315], [495, 365]]], strokeColor: "#FFB703", fillColor: "#FFD166" },
-        { id: "smile", label: "Oči a úsměv", audioId: "draw_step_face", type: "arcs", paths: [[[325, 210], [332, 210]], [[388, 210], [395, 210]], [[320, 255], [360, 285], [400, 255]]], strokeColor: "#1D3557", fillColor: "#E63946" }
-      ]
-    },
-    {
-      title: "RYCHLÉ AUTÍČKO",
-      canvasWidth: 720,
-      canvasHeight: 460,
-      steps: [
-        { id: "car_body", label: "Karoserie autíčka", audioId: "draw_step_oval", type: "ellipse", cx: 360, cy: 265, rx: 165, ry: 65, strokeColor: "#1D3557", fillColor: "#E63946" },
-        { id: "cabin", label: "Střecha a okénko", audioId: "draw_step_wings", type: "arcs", paths: [[[245, 210], [295, 135], [425, 135], [470, 210]]], strokeColor: "#1D3557", fillColor: "#4CC9F0" },
-        { id: "wheels", label: "Kulatá kola", audioId: "draw_step_head", type: "circle", cx: 265, cy: 330, r: 42, strokeColor: "#1D3557", fillColor: "#2B2D42" },
-        { id: "wheel2", label: "Druhé kolo", audioId: "draw_step_head", type: "circle", cx: 455, cy: 330, r: 42, strokeColor: "#1D3557", fillColor: "#2B2D42" }
-      ]
-    },
-    {
-      title: "MOUDRÁ SOVIČKA",
-      canvasWidth: 720,
-      canvasHeight: 460,
-      steps: [
-        { id: "body", label: "Bříško sovičky", audioId: "draw_step_oval", type: "ellipse", cx: 360, cy: 255, rx: 110, ry: 130, strokeColor: "#1D3557", fillColor: "#8D6E63" },
-        { id: "ears", label: "Ouška a křidélka", audioId: "draw_step_ears", type: "arcs", paths: [[[280, 150], [260, 85], [320, 128]], [[440, 150], [460, 85], [400, 128]], [[250, 220], [205, 290], [260, 325]], [[470, 220], [515, 290], [460, 325]]], strokeColor: "#1D3557", fillColor: "#6D4C41" },
-        { id: "eyes", label: "Velké oči a zobáček", audioId: "draw_step_face", type: "arcs", paths: [[[320, 195], [326, 195]], [[395, 195], [401, 195]], [[345, 220], [360, 250], [375, 220], [345, 220]]], strokeColor: "#FFB703", fillColor: "#FFB703" }
-      ]
-    }
-  ];
+    }));
+  }
+
+  const EXTRA_STEP_DRAW_TEMPLATES = buildProceduralStepTemplates();
 
   /* =========================================================================
    * 4. HERNÍ ENGINE: ZÓNA A — KRESLENÍ KROK ZA KROKEM + MÍCHÁNÍ BAREV
@@ -614,19 +643,16 @@
       this.store = store;
       this.onComplete = onComplete;
 
-      this.allTemplates = [
+      this.allTemplates = shuffleArray([
         ...(activity.levels || []).map((l) => l.config),
         ...EXTRA_STEP_DRAW_TEMPLATES
-      ];
-      this.templateIdx = Math.max(
-        0,
-        this.allTemplates.findIndex((t) => t.title === level.config.title)
-      );
+      ]);
+      this.templateIdx = 0;
 
       this.activeColor = "#1D3557";
       this.brushSize = 11;
       this.mixSlots = [null, null];
-      this.loadTemplate(this.allTemplates[this.templateIdx] || level.config);
+      this.loadTemplate(this.allTemplates[0]);
     }
 
     loadTemplate(cfg) {
@@ -646,6 +672,9 @@
     nextTemplate() {
       this.mascot.audio.playSfx("pop");
       this.templateIdx = (this.templateIdx + 1) % this.allTemplates.length;
+      if (this.templateIdx === 0) {
+        this.allTemplates = shuffleArray(this.allTemplates);
+      }
       this.loadTemplate(this.allTemplates[this.templateIdx]);
     }
 
@@ -657,8 +686,7 @@
           <div id="draw-step-pills" class="step-pills"></div>
           <div class="workspace-actions">
             <button id="btn-draw-skip-step" class="btn-touch btn-secondary">✨ DALŠÍ KROK</button>
-            <button id="btn-draw-save" class="btn-touch btn-primary hidden">💾 ULOŽIT</button>
-            <button id="btn-draw-next-template" class="btn-touch btn-next-task">🎨 DALŠÍ OBRÁZEK ➔</button>
+            <button id="btn-draw-finish" class="btn-touch btn-primary hidden">✅ HOTOVO</button>
           </div>
         </div>
         <div class="studio-layout">
@@ -706,7 +734,7 @@
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
                 <button id="btn-brush-thin" class="btn-touch btn-secondary">TENKÝ</button>
                 <button id="btn-brush-thick" class="btn-touch btn-secondary">TLUSTÝ</button>
-                <button id="btn-canvas-clear" class="btn-touch btn-secondary">ZNOVU</button>
+                <button id="btn-canvas-clear" class="btn-touch btn-secondary">SMAZAT</button>
               </div>
             </div>
           </aside>
@@ -716,7 +744,7 @@
       this.canvas = document.getElementById("step-draw-canvas");
       this.ctx = this.canvas.getContext("2d");
 
-      // Offscreen vrstva s vlastní kresbou dítěte
+      // Offscreen vrstva s vlastní kresbou dítěte (pouze to, co uživatel sám nakreslil)
       this.paintLayer = document.createElement("canvas");
       this.paintLayer.width = cfg.canvasWidth;
       this.paintLayer.height = cfg.canvasHeight;
@@ -755,9 +783,7 @@
         e.preventDefault();
         try {
           this.canvas.setPointerCapture(e.pointerId);
-        } catch (_err) {
-          // Ignorovat, pokud prohlížeč pointerCapture nepodporuje
-        }
+        } catch (_err) {}
         this.isDrawing = true;
         this.lastPt = getPos(e);
         this.paintCtx.beginPath();
@@ -796,9 +822,7 @@
             if (this.canvas.hasPointerCapture(e.pointerId)) {
               this.canvas.releasePointerCapture(e.pointerId);
             }
-          } catch (_err) {
-            // Ignorovat
-          }
+          } catch (_err) {}
         }
         this.isDrawing = false;
         this.lastPt = null;
@@ -809,13 +833,16 @@
       this.canvas.addEventListener("pointercancel", endStroke);
       this.canvas.addEventListener("lostpointercapture", endStroke);
 
-      // Barvy
+      // Barvy s hlasovým přečtením
       this.hostEl.querySelectorAll("#draw-swatches .btn-swatch").forEach((btn) => {
         btn.addEventListener("click", () => {
           this.hostEl.querySelectorAll(".btn-swatch").forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
           this.activeColor = btn.dataset.color;
           this.mascot.audio.playSfx("pop");
+          if (btn.dataset.name) {
+            this.mascot.audio.speakCustom(btn.dataset.name);
+          }
         });
       });
 
@@ -829,16 +856,18 @@
       document.getElementById("btn-brush-thin").addEventListener("click", () => {
         this.brushSize = 8;
         this.mascot.audio.playSfx("pop");
+        this.mascot.audio.speakCustom("Tenký štětec");
       });
       document.getElementById("btn-brush-thick").addEventListener("click", () => {
         this.brushSize = 20;
         this.mascot.audio.playSfx("pop");
+        this.mascot.audio.speakCustom("Tlustý štětec");
       });
       document.getElementById("btn-canvas-clear").addEventListener("click", () => {
         this.paintCtx.clearRect(0, 0, this.paintLayer.width, this.paintLayer.height);
         this.canvas.classList.remove("alive-bounce");
         this.coloringMode = false;
-        document.getElementById("btn-draw-save").classList.add("hidden");
+        document.getElementById("btn-draw-finish").classList.add("hidden");
         document.getElementById("btn-draw-skip-step").classList.remove("hidden");
         this.prepareStep(0);
       });
@@ -847,22 +876,24 @@
         this.completeCurrentStep();
       });
 
-      document.getElementById("btn-draw-save").addEventListener("click", () => {
-        const dataUrl = this.canvas.toDataURL("image/png");
-        this.store.addArtwork(this.currentConfig.title, dataUrl);
-        this.mascot.celebrate("celebrate_04");
-        this.onComplete();
-        showContinueBanner(this.hostEl, {
-          title: "🎨 OBRÁZEK JE ULOŽENÝ! CHCEŠ KRESLIT DALŠÍ?",
-          nextLabel: "🎨 DALŠÍ OBRÁZEK ➔",
-          onNext: () => this.nextTemplate()
-        });
+      document.getElementById("btn-draw-finish").addEventListener("click", () => {
+        this.showCompletionModal();
       });
+    }
 
-      const nextBtn = document.getElementById("btn-draw-next-template");
-      if (nextBtn) {
-        nextBtn.addEventListener("click", () => this.nextTemplate());
-      }
+    showCompletionModal() {
+      const dataUrl = this.canvas.toDataURL("image/png");
+      this.store.addArtwork(this.currentConfig.title, dataUrl);
+      this.mascot.celebrate("celebrate_04");
+      this.onComplete();
+      showContinueBanner(this.hostEl, {
+        icon: "🎨",
+        title: `OBRÁZEK „${this.currentConfig.title}“ JE HOTOVÝ!`,
+        subtitle: "Tvůj výtvor jsme uložili do galerie. Pojďme nakreslit další obrázek!",
+        spokenText: `Paráda! Obrázek ${this.currentConfig.title} je hotový! Pojďme na další obrázek!`,
+        nextLabel: "▶️ DALŠÍ OBRÁZEK ➔",
+        onNext: () => this.nextTemplate()
+      });
     }
 
     handleColorMixPick(colorName, hex) {
@@ -945,7 +976,7 @@
     checkPointHit(pt) {
       if (this.coloringMode) return;
       for (const cp of this.checkpoints) {
-        if (!cp.hit && Math.hypot(cp.x - pt.x, cp.y - pt.y) < 44) {
+        if (!cp.hit && Math.hypot(cp.x - pt.x, cp.y - pt.y) < 48) {
           cp.hit = true;
           this.hitCount += 1;
         }
@@ -968,7 +999,7 @@
     evaluateStepProgress() {
       if (this.coloringMode || !this.checkpoints.length) return;
       const ratio = this.hitCount / this.checkpoints.length;
-      if (ratio >= 0.72) {
+      if (ratio >= 0.68) {
         this.completeCurrentStep();
       }
     }
@@ -979,7 +1010,7 @@
       pillsEl.innerHTML = this.steps
         .map((s, i) => {
           const cls = i < idx ? "done" : i === idx ? "current" : "";
-          return `<span class="step-pill ${cls}">${i + 1}. ${s.label.split(" ")[0].toUpperCase()}</span>`;
+          return `<span class="step-pill ${cls}">${i + 1}. ${s.label.toUpperCase()}</span>`;
         })
         .join("");
 
@@ -988,7 +1019,10 @@
       this.hitCount = 0;
       this.redraw();
 
-      this.mascot.audio.speak(step.audioId || "act_01_intro");
+      this.mascot.audio.speakCustom(
+        `Krok ${idx + 1}: obtáhni ${step.label}!`,
+        `✏️ KROK ${idx + 1}: ${step.label.toUpperCase()}`
+      );
       this.mascot.resetInactivityTimer(() => this.triggerHint());
     }
 
@@ -1000,22 +1034,16 @@
       if (this.currentStepIdx + 1 < this.steps.length) {
         this.prepareStep(this.currentStepIdx + 1);
       } else {
-        // Dokončeno: oživení kresby + odemčení vybarvování
+        // Dokončeno: šablona zmizí, zůstane jen čistý podklad a vlastní kresba dítěte!
         this.coloringMode = true;
         this.currentStepIdx = this.steps.length;
         const pillsEl = document.getElementById("draw-step-pills");
-        pillsEl.innerHTML = `<span class="step-pill done">✨ VYBARVI SI OBRÁZEK NEBO POKRAČUJ DÁL!</span>`;
+        pillsEl.innerHTML = `<span class="step-pill done">✨ TVOJE VLASTNÍ KRESBA! MŮŽEŠ JI DOKRESLIT NEBO KLIKNOUT NA HOTOVO!</span>`;
         document.getElementById("btn-draw-skip-step").classList.add("hidden");
-        document.getElementById("btn-draw-save").classList.remove("hidden");
+        document.getElementById("btn-draw-finish").classList.remove("hidden");
         this.canvas.classList.add("alive-bounce");
         this.redraw();
-        this.mascot.celebrate(this.level.successAudioId || "draw_step_alive");
-        this.onComplete();
-        showContinueBanner(this.hostEl, {
-          title: "🎉 OBRÁZEK OŽIL! MŮŽEŠ SI HO VYBARVIT NEBO KRESLIT DALŠÍ!",
-          nextLabel: "🎨 DALŠÍ OBRÁZEK ➔",
-          onNext: () => this.nextTemplate()
-        });
+        this.showCompletionModal();
       }
     }
 
@@ -1024,25 +1052,15 @@
       this.mascot.gentleNudge("hint_draw_trace", null, true);
     }
 
-    drawStepShape(ctx, step, styleMode) {
+    drawStepShape(ctx, step) {
       ctx.save();
-      if (styleMode === "guide") {
-        ctx.strokeStyle = "#4CC9F0";
-        ctx.lineWidth = 6;
-        ctx.setLineDash([14, 10]);
-      } else if (styleMode === "locked") {
-        ctx.strokeStyle = step.strokeColor || "#1D3557";
-        ctx.lineWidth = 5;
-        ctx.setLineDash([]);
-      }
+      ctx.strokeStyle = "rgba(76, 201, 240, 0.75)";
+      ctx.lineWidth = 5;
+      ctx.setLineDash([14, 12]);
 
       if (step.type === "ellipse") {
         ctx.beginPath();
         ctx.ellipse(step.cx, step.cy, step.rx, step.ry, 0, 0, Math.PI * 2);
-        if (styleMode === "locked" && this.coloringMode) {
-          ctx.fillStyle = (step.fillColor || "#EAF4F8") + "22";
-          ctx.fill();
-        }
         ctx.stroke();
       } else if (step.type === "circle") {
         ctx.beginPath();
@@ -1053,7 +1071,7 @@
           if (pts.length === 2 && Math.hypot(pts[0][0] - pts[1][0], pts[0][1] - pts[1][1]) < 12) {
             ctx.beginPath();
             ctx.arc(pts[0][0], pts[0][1], 7, 0, Math.PI * 2);
-            ctx.fillStyle = step.strokeColor || "#1D3557";
+            ctx.fillStyle = "rgba(76, 201, 240, 0.75)";
             ctx.fill();
             return;
           }
@@ -1072,21 +1090,16 @@
       const ctx = this.ctx;
       ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      // Jemný papír
+      // Čistý podklad (papír)
       ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-      // Hotové předchozí kroky
-      for (let i = 0; i < Math.min(this.currentStepIdx, this.steps.length); i++) {
-        this.drawStepShape(ctx, this.steps[i], "locked");
-      }
-
-      // Aktuální přerušovaná šablona
+      // Jemná tečkovaná nápověda POUZE pro právě kreslený krok (žádné pevné tvary pod kresbou dítěte!)
       if (!this.coloringMode && this.currentStepIdx < this.steps.length) {
-        this.drawStepShape(ctx, this.steps[this.currentStepIdx], "guide");
+        this.drawStepShape(ctx, this.steps[this.currentStepIdx]);
       }
 
-      // Kresba dítěte
+      // Pouze to, co uživatel sám nakreslil
       ctx.drawImage(this.paintLayer, 0, 0);
     }
 
@@ -1096,16 +1109,34 @@
   }
 
   /* =========================================================================
-   * 5. HERNÍ ENGINE: ZÓNA A — SYMETRIE, MÍCHÁNÍ BAREV, PŘÍBĚH A SPOJOVAČKY
+   * 5. HERNÍ ENGINE: ZÓNA A — SYMETRIE A ZRCADLENÍ (25 MOTIVŮ)
    * ========================================================================= */
   const SYMMETRY_MOTIFS = [
-    { motif: "butterfly", title: "DOKRESLI MOTÝLKA" },
-    { motif: "snowflake", title: "LEDOVÁ VLOČKA" },
-    { motif: "crown", title: "KRÁLOVSKÁ KORUNA" },
-    { motif: "heart", title: "KOUZELNÉ SRDÍČKO" },
-    { motif: "ladybug", title: "VESELÁ BERUŠKA" },
-    { motif: "flower", title: "ROZKVETLÁ KYTIČKA" },
-    { motif: "star", title: "ZÁŘIVÁ HVĚZDIČKA" }
+    { motif: "butterfly", title: "DOKRESLI MOTÝLKA", emoji: "🦋" },
+    { motif: "snowflake", title: "LEDOVÁ VLOČKA", emoji: "❄️" },
+    { motif: "crown", title: "KRÁLOVSKÁ KORUNA", emoji: "👑" },
+    { motif: "heart", title: "KOUZELNÉ SRDÍČKO", emoji: "❤️" },
+    { motif: "ladybug", title: "VESELÁ BERUŠKA", emoji: "🐞" },
+    { motif: "flower", title: "ROZKVETLÁ KYTIČKA", emoji: "🌸" },
+    { motif: "star", title: "ZÁŘIVÁ HVĚZDIČKA", emoji: "⭐" },
+    { motif: "tree", title: "ZELENÝ STROMEČEK", emoji: "🌲" },
+    { motif: "diamond", title: "TŘPYTIVÝ DIAMANT", emoji: "💎" },
+    { motif: "bell", title: "ZLATÝ ZVONEČEK", emoji: "🔔" },
+    { motif: "shield", title: "RYTÍŘSKÝ ŠTÍT", emoji: "🛡️" },
+    { motif: "kite", title: "PAPÍROVÝ DRAK", emoji: "🪁" },
+    { motif: "rocket", title: "VESMÍRNÁ RAKETA", emoji: "🚀" },
+    { motif: "owl", title: "MOUDRÁ SOVIČKA", emoji: "🦉" },
+    { motif: "cat", title: "KOČIČÍ HLAVIČKA", emoji: "🐱" },
+    { motif: "bear", title: "MEDVÍDEK PÚ", emoji: "🐻" },
+    { motif: "frog", title: "VESELÁ ŽABIČKA", emoji: "🐸" },
+    { motif: "apple", title: "ČERVENÉ JABLÍČKO", emoji: "🍎" },
+    { motif: "leaf", title: "PODZIMNÍ LÍSTEK", emoji: "🍁" },
+    { motif: "mushroom", title: "LESNÍ HŘÍBEK", emoji: "🍄" },
+    { motif: "balloon", title: "POUŤOVÝ BALÓNEK", emoji: "🎈" },
+    { motif: "cupcake", title: "SLADKÝ DORTÍK", emoji: "🧁" },
+    { motif: "house", title: "POHÁDKOVÝ DOMEK", emoji: "🏠" },
+    { motif: "guitar", title: "HUDEBNÍ KYTARA", emoji: "🎸" },
+    { motif: "penguin", title: "TUČŇÁK PIKO", emoji: "🐧" }
   ];
 
   class SymmetryDrawActivity {
@@ -1116,42 +1147,50 @@
       this.store = store;
       this.onComplete = onComplete;
 
-      this.autoMirror = level.config.autoMirror !== false;
+      this.deck = shuffleArray(SYMMETRY_MOTIFS);
+      this.motifIdx = 0;
+      this.autoMirror = level.stars <= 3;
       this.activeColor = "#FF5D8F";
       this.isDrawing = false;
       this.lastPt = null;
-      this.strokesCount = 0;
-      this.motifIdx = Math.max(
-        0,
-        SYMMETRY_MOTIFS.findIndex((m) => m.motif === level.config.motif)
-      );
+      this.showGuide = true;
 
-      this.render();
-      this.drawGuideBackdrop();
-      this.mascot.audio.speak("act_03_intro");
+      this.loadMotif(0);
     }
 
     currentMotif() {
-      return SYMMETRY_MOTIFS[this.motifIdx] || SYMMETRY_MOTIFS[0];
+      return this.deck[this.motifIdx] || this.deck[0];
+    }
+
+    loadMotif(idx) {
+      this.motifIdx = idx % this.deck.length;
+      if (this.motifIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      this.showGuide = true;
+      this.render();
+      this.redraw();
+      const m = this.currentMotif();
+      this.mascot.audio.speakCustom(
+        `Zrcadlové kreslení: ${m.title}! Kresli na plátno a sleduj zrcadlový obraz!`,
+        `🦋 ${m.title}`
+      );
     }
 
     nextMotif() {
       this.mascot.audio.playSfx("pop");
-      this.motifIdx = (this.motifIdx + 1) % SYMMETRY_MOTIFS.length;
-      this.render();
-      this.drawGuideBackdrop();
+      this.loadMotif(this.motifIdx + 1);
     }
 
     render() {
       const m = this.currentMotif();
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">🦋 ${m.title}</h2>
+          <h2 class="workspace-title">${m.emoji} ${m.title}</h2>
           <div class="workspace-actions">
-            <button id="btn-sym-toggle" class="btn-touch btn-primary">🪞 ZRCADLENÍ: ${this.autoMirror ? "ZAP" : "VYP"}</button>
-            <button id="btn-sym-clear" class="btn-touch btn-secondary">ZNOVU</button>
-            <button id="btn-sym-done" class="btn-touch btn-primary">✨ HOTOVO</button>
-            <button id="btn-sym-next" class="btn-touch btn-next-task">🦋 DALŠÍ VZOR ➔</button>
+            <button id="btn-sym-toggle" class="btn-touch btn-secondary">🪞 ZRCADLO: ${this.autoMirror ? "ZAP" : "VYP"}</button>
+            <button id="btn-sym-clear" class="btn-touch btn-secondary">SMAZAT</button>
+            <button id="btn-sym-done" class="btn-touch btn-primary">✅ HOTOVO</button>
           </div>
         </div>
         <div class="studio-layout">
@@ -1171,9 +1210,9 @@
               </div>
             </div>
             <div class="tool-box">
-              <div class="tool-box-title">💡 TIP OD PIKA</div>
+              <div class="tool-box-title">💡 CÍL ÚKOLU</div>
               <p style="margin:0; font-weight:700; font-size:0.86rem; color:var(--navy-soft);">
-                Kresli po pravé straně modré osy. Se zapnutým zrcadlením vznikne mandala!
+                Kresli po pravé straně osy a vytvoř souměrný obrázek! Po dokončení zůstane jen tvoje vlastní kresba.
               </p>
             </div>
           </aside>
@@ -1182,6 +1221,11 @@
 
       this.canvas = document.getElementById("sym-canvas");
       this.ctx = this.canvas.getContext("2d");
+
+      this.paintLayer = document.createElement("canvas");
+      this.paintLayer.width = 760;
+      this.paintLayer.height = 460;
+      this.paintCtx = this.paintLayer.getContext("2d");
 
       const getPos = (e) => {
         const rect = this.canvas.getBoundingClientRect();
@@ -1194,26 +1238,27 @@
       };
 
       const drawSegment = (p1, p2) => {
-        this.ctx.beginPath();
-        this.ctx.moveTo(p1.x, p1.y);
-        this.ctx.lineTo(p2.x, p2.y);
-        this.ctx.strokeStyle = this.activeColor;
-        this.ctx.lineWidth = 10;
-        this.ctx.lineCap = "round";
-        this.ctx.lineJoin = "round";
-        this.ctx.stroke();
+        this.paintCtx.beginPath();
+        this.paintCtx.moveTo(p1.x, p1.y);
+        this.paintCtx.lineTo(p2.x, p2.y);
+        this.paintCtx.strokeStyle = this.activeColor;
+        this.paintCtx.lineWidth = 10;
+        this.paintCtx.lineCap = "round";
+        this.paintCtx.lineJoin = "round";
+        this.paintCtx.stroke();
 
         if (this.autoMirror) {
           const w = this.canvas.width;
-          this.ctx.beginPath();
-          this.ctx.moveTo(w - p1.x, p1.y);
-          this.ctx.lineTo(w - p2.x, p2.y);
-          this.ctx.strokeStyle = this.activeColor;
-          this.ctx.lineWidth = 10;
-          this.ctx.lineCap = "round";
-          this.ctx.lineJoin = "round";
-          this.ctx.stroke();
+          this.paintCtx.beginPath();
+          this.paintCtx.moveTo(w - p1.x, p1.y);
+          this.paintCtx.lineTo(w - p2.x, p2.y);
+          this.paintCtx.strokeStyle = this.activeColor;
+          this.paintCtx.lineWidth = 10;
+          this.paintCtx.lineCap = "round";
+          this.paintCtx.lineJoin = "round";
+          this.paintCtx.stroke();
         }
+        this.redraw();
       };
 
       this.canvas.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -1224,13 +1269,10 @@
         e.preventDefault();
         try {
           this.canvas.setPointerCapture(e.pointerId);
-        } catch (_err) {
-          // Ignorovat
-        }
+        } catch (_err) {}
         this.isDrawing = true;
         this.lastPt = getPos(e);
         drawSegment(this.lastPt, { x: this.lastPt.x + 0.1, y: this.lastPt.y + 0.1 });
-        this.strokesCount += 1;
       });
 
       this.canvas.addEventListener("pointermove", (e) => {
@@ -1256,9 +1298,7 @@
             if (this.canvas.hasPointerCapture(e.pointerId)) {
               this.canvas.releasePointerCapture(e.pointerId);
             }
-          } catch (_err) {
-            // Ignorovat
-          }
+          } catch (_err) {}
         }
         this.isDrawing = false;
         this.lastPt = null;
@@ -1279,32 +1319,36 @@
 
       document.getElementById("btn-sym-toggle").addEventListener("click", (e) => {
         this.autoMirror = !this.autoMirror;
-        e.currentTarget.textContent = `🪞 ZRCADLENÍ: ${this.autoMirror ? "ZAP" : "VYP"}`;
+        e.currentTarget.textContent = `🪞 ZRCADLO: ${this.autoMirror ? "ZAP" : "VYP"}`;
         this.mascot.audio.playSfx("pop");
       });
 
       document.getElementById("btn-sym-clear").addEventListener("click", () => {
-        this.drawGuideBackdrop();
+        this.paintCtx.clearRect(0, 0, this.paintLayer.width, this.paintLayer.height);
+        this.showGuide = true;
+        this.redraw();
         this.mascot.audio.playSfx("pop");
       });
 
       document.getElementById("btn-sym-done").addEventListener("click", () => {
+        // Skryjeme nápovědu, aby na plátně zůstalo jen čisté pozadí a to, co uživatel nakreslil
+        this.showGuide = false;
+        this.redraw();
         this.store.addArtwork(this.currentMotif().title, this.canvas.toDataURL("image/png"));
         this.mascot.celebrate(this.level.successAudioId || "symmetry_done");
         this.onComplete();
         showContinueBanner(this.hostEl, {
-          title: "🦋 NÁDHERNÁ SYMETRIE! CHCEŠ ZKUSIT DALŠÍ VZOR?",
-          nextLabel: "🦋 DALŠÍ VZOR ➔",
+          icon: this.currentMotif().emoji,
+          title: `NÁDHERNÁ SYMETRIE: ${this.currentMotif().title}!`,
+          subtitle: "Obrázek je uložen. Pokračuj na další souměrný vzor!",
+          spokenText: `Nádherná symetrie! ${this.currentMotif().title} je hotový! Pojďme na další vzor!`,
+          nextLabel: "▶️ DALŠÍ VZOR ➔",
           onNext: () => this.nextMotif()
         });
       });
-
-      document.getElementById("btn-sym-next").addEventListener("click", () => {
-        this.nextMotif();
-      });
     }
 
-    drawGuideBackdrop() {
+    redraw() {
       const ctx = this.ctx;
       const w = this.canvas.width;
       const h = this.canvas.height;
@@ -1313,78 +1357,27 @@
       ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, w, h);
 
-      // Osa souměrnosti
-      ctx.save();
-      ctx.strokeStyle = "#4CC9F0";
-      ctx.lineWidth = 4;
-      ctx.setLineDash([12, 10]);
-      ctx.beginPath();
-      ctx.moveTo(cx, 20);
-      ctx.lineTo(cx, h - 20);
-      ctx.stroke();
+      if (this.showGuide) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(76, 201, 240, 0.7)";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([12, 10]);
+        ctx.beginPath();
+        ctx.moveTo(cx, 20);
+        ctx.lineTo(cx, h - 20);
+        ctx.stroke();
 
-      // Levá předloha
-      ctx.setLineDash([]);
-      ctx.strokeStyle = "#1D3557";
-      ctx.lineWidth = 6;
-      const motif = this.currentMotif().motif;
-      if (motif === "butterfly") {
-        ctx.beginPath();
-        ctx.ellipse(cx, 230, 14, 110, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(cx - 12, 175);
-        ctx.bezierCurveTo(cx - 210, 40, cx - 260, 210, cx - 18, 235);
-        ctx.bezierCurveTo(cx - 210, 270, cx - 180, 410, cx - 12, 310);
-        ctx.stroke();
-      } else if (motif === "snowflake") {
-        for (let dy = -120; dy <= 120; dy += 60) {
-          ctx.beginPath();
-          ctx.moveTo(cx, 230 + dy);
-          ctx.lineTo(cx - 160 + Math.abs(dy) * 0.5, 230 + dy - 40);
-          ctx.stroke();
-        }
-      } else if (motif === "heart") {
-        ctx.beginPath();
-        ctx.moveTo(cx, 140);
-        ctx.bezierCurveTo(cx - 90, 50, cx - 230, 150, cx, 360);
-        ctx.stroke();
-      } else if (motif === "ladybug") {
-        ctx.beginPath();
-        ctx.arc(cx, 240, 125, Math.PI * 0.5, Math.PI * 1.5);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(cx - 55, 200, 18, 0, Math.PI * 2);
-        ctx.arc(cx - 70, 270, 22, 0, Math.PI * 2);
-        ctx.stroke();
-      } else if (motif === "flower") {
-        ctx.beginPath();
-        ctx.arc(cx, 230, 35, Math.PI * 0.5, Math.PI * 1.5);
-        ctx.stroke();
-        for (let a = 0.6; a <= 2.5; a += 0.6) {
-          ctx.beginPath();
-          ctx.arc(cx - Math.sin(a) * 85, 230 + Math.cos(a) * 85, 42, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-      } else if (motif === "star") {
-        ctx.beginPath();
-        ctx.moveTo(cx, 75);
-        ctx.lineTo(cx - 48, 175);
-        ctx.lineTo(cx - 165, 185);
-        ctx.lineTo(cx - 75, 260);
-        ctx.lineTo(cx - 108, 370);
-        ctx.lineTo(cx, 305);
-        ctx.stroke();
-      } else {
-        ctx.beginPath();
-        ctx.moveTo(cx, 330);
-        ctx.lineTo(cx - 170, 330);
-        ctx.lineTo(cx - 190, 130);
-        ctx.lineTo(cx - 95, 220);
-        ctx.lineTo(cx, 105);
-        ctx.stroke();
+        // Jemný vodící stín uprostřed, který se nepře s kresbou a po dokončení zmizí
+        ctx.font = "160px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.globalAlpha = 0.14;
+        ctx.fillText(this.currentMotif().emoji, cx, h / 2);
+        ctx.restore();
       }
-      ctx.restore();
+
+      // Pouze to, co nakreslil uživatel
+      ctx.drawImage(this.paintLayer, 0, 0);
     }
 
     destroy() {
@@ -1393,44 +1386,166 @@
   }
 
   /* =========================================================================
-   * 6. HERNÍ ENGINE: ZÓNA B — STAVITEL Z TVARŮ (TANGRAM)
+   * 6. HERNÍ ENGINE: ZÓNA B — STAVITEL Z TVARŮ (TANGRAM - 25 STAVEB)
    * ========================================================================= */
-  const EXTRA_TANGRAM_TEMPLATES = [
-    {
-      title: "POLÁRNÍ STROMEČEK",
-      snapTolerance: 34,
+  function buildExtraTangramBlueprints() {
+    const items = [
+      { title: "POLÁRNÍ STROMEČEK", pieces: [
+        { id: "p1", shape: "triangle", color: "#06D6A0", size: 95, targetX: 250, targetY: 95, targetRot: 0, label: "Špička" },
+        { id: "p2", shape: "triangle", color: "#2A9D8F", size: 120, targetX: 250, targetY: 185, targetRot: 0, label: "Větve" },
+        { id: "p3", shape: "square", color: "#8D6E63", size: 70, targetX: 250, targetY: 280, targetRot: 0, label: "Kmen" },
+        { id: "p4", shape: "circle", color: "#FFD166", size: 46, targetX: 250, targetY: 38, targetRot: 0, label: "Hvězda" }
+      ]},
+      { title: "VESELÝ SNĚHULÁK", pieces: [
+        { id: "p1", shape: "circle", color: "#4CC9F0", size: 125, targetX: 250, targetY: 295, targetRot: 0, label: "Spodní koule" },
+        { id: "p2", shape: "circle", color: "#90E0EF", size: 95, targetX: 250, targetY: 195, targetRot: 0, label: "Bříško" },
+        { id: "p3", shape: "circle", color: "#CAF0F8", size: 68, targetX: 250, targetY: 120, targetRot: 0, label: "Hlava" },
+        { id: "p4", shape: "triangle", color: "#FF595E", size: 72, targetX: 250, targetY: 62, targetRot: 0, label: "Čepička" }
+      ]},
+      { title: "POLÁRNÍ VLÁČEK", pieces: [
+        { id: "p1", shape: "square", color: "#FF595E", size: 96, targetX: 165, targetY: 195, targetRot: 0, label: "Kabina" },
+        { id: "p2", shape: "square", color: "#1982C4", size: 96, targetX: 261, targetY: 195, targetRot: 0, label: "Motor" },
+        { id: "p3", shape: "triangle", color: "#FFCA3A", size: 96, targetX: 165, targetY: 99, targetRot: 0, label: "Stříška" },
+        { id: "p4", shape: "circle", color: "#2B2D42", size: 66, targetX: 165, targetY: 280, targetRot: 0, label: "Zadní kolo" },
+        { id: "p5", shape: "circle", color: "#2B2D42", size: 66, targetX: 265, targetY: 280, targetRot: 0, label: "Přední kolo" }
+      ]},
+      { title: "KRÁLOVSKÝ HRAD", pieces: [
+        { id: "p1", shape: "square", color: "#FFB703", size: 110, targetX: 235, targetY: 255, targetRot: 0, label: "Hradba" },
+        { id: "p2", shape: "square", color: "#F77F00", size: 76, targetX: 140, targetY: 272, targetRot: 0, label: "Levá věž" },
+        { id: "p3", shape: "square", color: "#F77F00", size: 76, targetX: 330, targetY: 272, targetRot: 0, label: "Pravá věž" },
+        { id: "p4", shape: "triangle", color: "#E63946", size: 84, targetX: 140, targetY: 192, targetRot: 0, label: "Levá střecha" },
+        { id: "p5", shape: "triangle", color: "#E63946", size: 84, targetX: 330, targetY: 192, targetRot: 0, label: "Pravá střecha" }
+      ]},
+      { title: "RYCHLÁ PLACHETNICE", pieces: [
+        { id: "p1", shape: "square", color: "#8D6E63", size: 92, targetX: 200, targetY: 295, targetRot: 0, label: "Levý trup" },
+        { id: "p2", shape: "square", color: "#8D6E63", size: 92, targetX: 292, targetY: 295, targetRot: 0, label: "Pravý trup" },
+        { id: "p3", shape: "triangle", color: "#4CC9F0", size: 120, targetX: 245, targetY: 180, targetRot: 0, label: "Plachta" },
+        { id: "p4", shape: "circle", color: "#FFD166", size: 54, targetX: 130, targetY: 95, targetRot: 0, label: "Sluníčko" }
+      ]},
+      { title: "ROZKVETLÁ KYTIČKA", pieces: [
+        { id: "p1", shape: "circle", color: "#FFD166", size: 80, targetX: 240, targetY: 165, targetRot: 0, label: "Střed" },
+        { id: "p2", shape: "circle", color: "#FF5D8F", size: 64, targetX: 170, targetY: 165, targetRot: 0, label: "Levý lístek" },
+        { id: "p3", shape: "circle", color: "#FF5D8F", size: 64, targetX: 310, targetY: 165, targetRot: 0, label: "Pravý lístek" },
+        { id: "p4", shape: "circle", color: "#FF5D8F", size: 64, targetX: 240, targetY: 95, targetRot: 0, label: "Horní lístek" },
+        { id: "p5", shape: "square", color: "#06D6A0", size: 78, targetX: 240, targetY: 275, targetRot: 0, label: "Stonek" }
+      ]},
+      { title: "CHYTRÝ ROBŮTEK", pieces: [
+        { id: "p1", shape: "square", color: "#4CC9F0", size: 115, targetX: 240, targetY: 245, targetRot: 0, label: "Tělo robota" },
+        { id: "p2", shape: "square", color: "#90E0EF", size: 80, targetX: 240, targetY: 140, targetRot: 0, label: "Hlava robota" },
+        { id: "p3", shape: "triangle", color: "#FFB703", size: 56, targetX: 240, targetY: 72, targetRot: 0, label: "Anténa" },
+        { id: "p4", shape: "circle", color: "#1D3557", size: 58, targetX: 195, targetY: 330, targetRot: 0, label: "Levé kolo" },
+        { id: "p5", shape: "circle", color: "#1D3557", size: 58, targetX: 285, targetY: 330, targetRot: 0, label: "Pravé kolo" }
+      ]},
+      { title: "SLADKÁ ZMRZLINA", pieces: [
+        { id: "p1", shape: "triangle", color: "#F77F00", size: 115, targetX: 245, targetY: 285, targetRot: 180, label: "Kornoutek" },
+        { id: "p2", shape: "circle", color: "#FF5D8F", size: 95, targetX: 210, targetY: 190, targetRot: 0, label: "Jahodový kopeček" },
+        { id: "p3", shape: "circle", color: "#FFD166", size: 95, targetX: 280, targetY: 190, targetRot: 0, label: "Vanilkový kopeček" },
+        { id: "p4", shape: "circle", color: "#E63946", size: 46, targetX: 245, targetY: 115, targetRot: 0, label: "Třešnička" }
+      ]},
+      { title: "MODRÝ MOTÝLEK", pieces: [
+        { id: "p1", shape: "square", color: "#1D3557", size: 65, targetX: 245, targetY: 210, targetRot: 0, label: "Tělíčko" },
+        { id: "p2", shape: "triangle", color: "#4CC9F0", size: 105, targetX: 165, targetY: 165, targetRot: 0, label: "Levé horní křídlo" },
+        { id: "p3", shape: "triangle", color: "#4CC9F0", size: 105, targetX: 325, targetY: 165, targetRot: 0, label: "Pravé horní křídlo" },
+        { id: "p4", shape: "circle", color: "#FF5D8F", size: 72, targetX: 175, targetY: 265, targetRot: 0, label: "Levé dolní křídlo" },
+        { id: "p5", shape: "circle", color: "#FF5D8F", size: 72, targetX: 315, targetY: 265, targetRot: 0, label: "Pravé dolní křídlo" }
+      ]},
+      { title: "MORSKÁ RYBIČKA", pieces: [
+        { id: "p1", shape: "square", color: "#FFB703", size: 105, targetX: 225, targetY: 215, targetRot: 0, label: "Tělo ryby" },
+        { id: "p2", shape: "triangle", color: "#F77F00", size: 95, targetX: 135, targetY: 215, targetRot: 270, label: "Hlava ryby" },
+        { id: "p3", shape: "triangle", color: "#E63946", size: 88, targetX: 318, targetY: 215, targetRot: 90, label: "Ocásek" },
+        { id: "p4", shape: "circle", color: "#4CC9F0", size: 44, targetX: 165, targetY: 115, targetRot: 0, label: "Bublinka" }
+      ]},
+      { title: "POHÁDKOVÁ VĚŽ", pieces: [
+        { id: "p1", shape: "square", color: "#90E0EF", size: 96, targetX: 245, targetY: 305, targetRot: 0, label: "Základna" },
+        { id: "p2", shape: "square", color: "#4CC9F0", size: 86, targetX: 245, targetY: 214, targetRot: 0, label: "Střed věže" },
+        { id: "p3", shape: "triangle", color: "#7209B7", size: 100, targetX: 245, targetY: 120, targetRot: 0, label: "Špičatá střecha" },
+        { id: "p4", shape: "circle", color: "#FFD166", size: 46, targetX: 245, targetY: 214, targetRot: 0, label: "Hodiny" }
+      ]},
+      { title: "VESELÁ HOUSENKA", pieces: [
+        { id: "p1", shape: "circle", color: "#06D6A0", size: 78, targetX: 125, targetY: 230, targetRot: 0, label: "Hlavička" },
+        { id: "p2", shape: "circle", color: "#2A9D8F", size: 74, targetX: 198, targetY: 245, targetRot: 0, label: "První článek" },
+        { id: "p3", shape: "circle", color: "#06D6A0", size: 74, targetX: 270, targetY: 230, targetRot: 0, label: "Druhý článek" },
+        { id: "p4", shape: "circle", color: "#2A9D8F", size: 70, targetX: 340, targetY: 245, targetRot: 0, label: "Ocásek" }
+      ]},
+      { title: "NÁKLADNÍ AUTO", pieces: [
+        { id: "p1", shape: "square", color: "#E63946", size: 85, targetX: 155, targetY: 225, targetRot: 0, label: "Kabina" },
+        { id: "p2", shape: "square", color: "#FFB703", size: 110, targetX: 265, targetY: 212, targetRot: 0, label: "Korba" },
+        { id: "p3", shape: "circle", color: "#1D3557", size: 62, targetX: 165, targetY: 295, targetRot: 0, label: "Přední kolo" },
+        { id: "p4", shape: "circle", color: "#1D3557", size: 62, targetX: 280, targetY: 295, targetRot: 0, label: "Zadní kolo" }
+      ]},
+      { title: "LESNÍ HŘÍBEK", pieces: [
+        { id: "p1", shape: "square", color: "#F4A261", size: 88, targetX: 245, targetY: 280, targetRot: 0, label: "Nožička" },
+        { id: "p2", shape: "triangle", color: "#E63946", size: 135, targetX: 245, targetY: 170, targetRot: 0, label: "Klobouček" },
+        { id: "p3", shape: "circle", color: "#FFFFFF", size: 42, targetX: 225, targetY: 185, targetRot: 0, label: "Levá tečka" },
+        { id: "p4", shape: "circle", color: "#FFFFFF", size: 42, targetX: 270, targetY: 185, targetRot: 0, label: "Pravá tečka" }
+      ]},
+      { title: "ZLATÁ KORUNKA", pieces: [
+        { id: "p1", shape: "square", color: "#FFD166", size: 88, targetX: 195, targetY: 260, targetRot: 0, label: "Levá část" },
+        { id: "p2", shape: "square", color: "#FFD166", size: 88, targetX: 283, targetY: 260, targetRot: 0, label: "Pravá část" },
+        { id: "p3", shape: "triangle", color: "#F77F00", size: 82, targetX: 195, targetY: 175, targetRot: 0, label: "Levý hrot" },
+        { id: "p4", shape: "triangle", color: "#F77F00", size: 82, targetX: 283, targetY: 175, targetRot: 0, label: "Pravý hrot" }
+      ]},
+      { title: "LETADÉLKO KÁNĚ", pieces: [
+        { id: "p1", shape: "square", color: "#118AB2", size: 90, targetX: 245, targetY: 215, targetRot: 0, label: "Trup" },
+        { id: "p2", shape: "triangle", color: "#4CC9F0", size: 95, targetX: 245, targetY: 122, targetRot: 0, label: "Špička" },
+        { id: "p3", shape: "triangle", color: "#FFD166", size: 88, targetX: 155, targetY: 215, targetRot: 0, label: "Levé křídlo" },
+        { id: "p4", shape: "triangle", color: "#FFD166", size: 88, targetX: 335, targetY: 215, targetRot: 0, label: "Pravé křídlo" }
+      ]},
+      { title: "POLÁRNÍ IGLÚ", pieces: [
+        { id: "p1", shape: "circle", color: "#CAF0F8", size: 145, targetX: 245, targetY: 235, targetRot: 0, label: "Kupole iglú" },
+        { id: "p2", shape: "square", color: "#90E0EF", size: 78, targetX: 155, targetY: 268, targetRot: 0, label: "Vchod" },
+        { id: "p3", shape: "circle", color: "#FFD166", size: 56, targetX: 345, targetY: 105, targetRot: 0, label: "Sluníčko" }
+      ]},
+      { title: "HUDEBNÍ BUBÍNEK", pieces: [
+        { id: "p1", shape: "square", color: "#E63946", size: 115, targetX: 245, targetY: 245, targetRot: 0, label: "Buben" },
+        { id: "p2", shape: "circle", color: "#FFD166", size: 52, targetX: 195, targetY: 145, targetRot: 0, label: "Levá palička" },
+        { id: "p3", shape: "circle", color: "#FFD166", size: 52, targetX: 295, targetY: 145, targetRot: 0, label: "Pravá palička" },
+        { id: "p4", shape: "triangle", color: "#4CC9F0", size: 70, targetX: 245, targetY: 245, targetRot: 0, label: "Ozdoba" }
+      ]},
+      { title: "KOČIČKA MÍCA", pieces: [
+        { id: "p1", shape: "circle", color: "#F4A261", size: 115, targetX: 245, targetY: 235, targetRot: 0, label: "Hlava kočičky" },
+        { id: "p2", shape: "triangle", color: "#E76F51", size: 65, targetX: 195, targetY: 150, targetRot: 0, label: "Levé ouško" },
+        { id: "p3", shape: "triangle", color: "#E76F51", size: 65, targetX: 295, targetY: 150, targetRot: 0, label: "Pravé ouško" },
+        { id: "p4", shape: "triangle", color: "#FF5D8F", size: 42, targetX: 245, targetY: 240, targetRot: 180, label: "Čumáček" }
+      ]},
+      { title: "PEJSEK BARYK", pieces: [
+        { id: "p1", shape: "square", color: "#8D6E63", size: 110, targetX: 245, targetY: 235, targetRot: 0, label: "Hlava pejska" },
+        { id: "p2", shape: "triangle", color: "#6D4C41", size: 72, targetX: 170, targetY: 205, targetRot: 0, label: "Levé ucho" },
+        { id: "p3", shape: "triangle", color: "#6D4C41", size: 72, targetX: 320, targetY: 205, targetRot: 0, label: "Pravé ucho" },
+        { id: "p4", shape: "circle", color: "#1D3557", size: 44, targetX: 245, targetY: 255, targetRot: 0, label: "Čumák" }
+      ]},
+      { title: "BAREVNÝ ŠAŠEK", pieces: [
+        { id: "p1", shape: "circle", color: "#FFE5D9", size: 105, targetX: 245, targetY: 255, targetRot: 0, label: "Tvář šaška" },
+        { id: "p2", shape: "triangle", color: "#7209B7", size: 105, targetX: 245, targetY: 145, targetRot: 0, label: "Čepice" },
+        { id: "p3", shape: "circle", color: "#FFD166", size: 44, targetX: 245, targetY: 82, targetRot: 0, label: "Rolnička" },
+        { id: "p4", shape: "circle", color: "#E63946", size: 42, targetX: 245, targetY: 255, targetRot: 0, label: "Červený nos" }
+      ]},
+      { title: "VÁNOČNÍ DÁREK", pieces: [
+        { id: "p1", shape: "square", color: "#E63946", size: 125, targetX: 245, targetY: 265, targetRot: 0, label: "Krabice" },
+        { id: "p2", shape: "triangle", color: "#FFD166", size: 75, targetX: 210, targetY: 175, targetRot: 0, label: "Levá mašle" },
+        { id: "p3", shape: "triangle", color: "#FFD166", size: 75, targetX: 280, targetY: 175, targetRot: 0, label: "Pravá mašle" },
+        { id: "p4", shape: "circle", color: "#F77F00", size: 46, targetX: 245, targetY: 185, targetRot: 0, label: "Střed mašle" }
+      ]}
+    ];
+
+    const startPositions = [
+      [500, 85], [585, 85], [500, 195], [585, 195], [540, 315]
+    ];
+
+    return items.map((it) => ({
+      title: it.title,
+      snapTolerance: 36,
       allowRotation: false,
-      pieces: [
-        { id: "top", shape: "triangle", color: "#06D6A0", size: 95, targetX: 250, targetY: 95, targetRot: 0, startX: 540, startY: 85, startRot: 0, label: "Špička" },
-        { id: "mid", shape: "triangle", color: "#2A9D8F", size: 120, targetX: 250, targetY: 185, targetRot: 0, startX: 540, startY: 195, startRot: 0, label: "Větve" },
-        { id: "trunk", shape: "square", color: "#8D6E63", size: 70, targetX: 250, targetY: 280, targetRot: 0, startX: 540, startY: 315, startRot: 0, label: "Kmen" },
-        { id: "star", shape: "circle", color: "#FFD166", size: 46, targetX: 250, targetY: 38, targetRot: 0, startX: 475, startY: 350, startRot: 0, label: "Hvězda" }
-      ]
-    },
-    {
-      title: "VESELÝ SNĚHULÁK",
-      snapTolerance: 34,
-      allowRotation: false,
-      pieces: [
-        { id: "base", shape: "circle", color: "#4CC9F0", size: 125, targetX: 250, targetY: 295, targetRot: 0, startX: 545, startY: 295, startRot: 0, label: "Spodní koule" },
-        { id: "belly", shape: "circle", color: "#90E0EF", size: 95, targetX: 250, targetY: 195, targetRot: 0, startX: 545, startY: 175, startRot: 0, label: "Bříško" },
-        { id: "head", shape: "circle", color: "#CAF0F8", size: 68, targetX: 250, targetY: 120, targetRot: 0, startX: 480, startY: 80, startRot: 0, label: "Hlava" },
-        { id: "hat", shape: "triangle", color: "#FF595E", size: 72, targetX: 250, targetY: 62, targetRot: 0, startX: 585, startY: 80, startRot: 0, label: "Čepička" }
-      ]
-    },
-    {
-      title: "POLÁRNÍ VLÁČEK",
-      snapTolerance: 32,
-      allowRotation: true,
-      pieces: [
-        { id: "cab", shape: "square", color: "#FF595E", size: 96, targetX: 165, targetY: 195, targetRot: 0, startX: 540, startY: 75, startRot: 0, label: "Kabina" },
-        { id: "boiler", shape: "square", color: "#1982C4", size: 96, targetX: 261, targetY: 195, targetRot: 0, startX: 540, startY: 185, startRot: 0, label: "Motor" },
-        { id: "roof", shape: "triangle", color: "#FFCA3A", size: 96, targetX: 165, targetY: 99, targetRot: 0, startX: 475, startY: 290, startRot: 90, label: "Stříška" },
-        { id: "w1", shape: "circle", color: "#2B2D42", size: 66, targetX: 165, targetY: 280, targetRot: 0, startX: 585, startY: 290, startRot: 0, label: "Zadní kolo" },
-        { id: "w2", shape: "circle", color: "#2B2D42", size: 66, targetX: 265, targetY: 280, targetRot: 0, startX: 535, startY: 365, startRot: 0, label: "Přední kolo" }
-      ]
-    }
-  ];
+      pieces: it.pieces.map((p, idx) => ({
+        ...p,
+        startX: startPositions[idx % startPositions.length][0],
+        startY: startPositions[idx % startPositions.length][1],
+        startRot: 0
+      }))
+    }));
+  }
+
+  const EXTRA_TANGRAM_TEMPLATES = buildExtraTangramBlueprints();
 
   class TangramActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -1440,40 +1555,50 @@
       this.mascot = mascot;
       this.onComplete = onComplete;
 
-      this.allBlueprints = [
+      this.allBlueprints = shuffleArray([
         ...(activity.levels || []).map((l) => l.config),
         ...EXTRA_TANGRAM_TEMPLATES
-      ];
-      this.blueprintIdx = Math.max(
-        0,
-        this.allBlueprints.findIndex((b) => b.title === level.config.title)
-      );
+      ]);
+      this.blueprintIdx = 0;
 
-      this.loadBlueprint(this.allBlueprints[this.blueprintIdx] || level.config);
-      this.mascot.audio.speak("act_06_intro");
+      this.loadBlueprint(this.allBlueprints[0]);
     }
 
     loadBlueprint(cfg) {
-      this.currentCfg = cfg;
-      this.pieces = (cfg.pieces || []).map((p) => ({
-        ...p,
-        curX: p.startX,
-        curY: p.startY,
-        curRot: p.startRot || 0,
-        locked: false
-      }));
+      const stars = this.level.stars || 1;
+      const allowRotation = stars >= 3 || Boolean(cfg.allowRotation);
+      this.currentCfg = { ...cfg, allowRotation };
+
+      this.pieces = (cfg.pieces || []).map((p, idx) => {
+        const canRot = allowRotation && p.shape !== "circle" && p.shape !== "square";
+        const startRot = canRot && idx % 2 === 0 ? ((p.targetRot || 0) + 90) % 360 : p.targetRot || 0;
+        return {
+          ...p,
+          curX: p.startX,
+          curY: p.startY,
+          curRot: startRot,
+          locked: false
+        };
+      });
       this.selectedId = this.pieces[0] ? this.pieces[0].id : null;
       this.mistakes = 0;
       this.hintSlotId = null;
       this.dragState = null;
 
       this.render();
+      this.mascot.audio.speakCustom(
+        `Postav obrázek z tvarů: ${cfg.title}! Můžeš dávat dílky v libovolném pořadí!`,
+        `🔷 POSTAV: ${cfg.title}`
+      );
       this.mascot.resetInactivityTimer(() => this.triggerHint());
     }
 
     nextBlueprint() {
       this.mascot.audio.playSfx("pop");
       this.blueprintIdx = (this.blueprintIdx + 1) % this.allBlueprints.length;
+      if (this.blueprintIdx === 0) {
+        this.allBlueprints = shuffleArray(this.allBlueprints);
+      }
       this.loadBlueprint(this.allBlueprints[this.blueprintIdx]);
     }
 
@@ -1489,7 +1614,6 @@
                 ? `<button id="btn-tangram-rotate" class="btn-touch btn-primary">🔄 OTOČIT DÍLEK</button>`
                 : ""
             }
-            <button id="btn-tangram-next" class="btn-touch btn-next-task">🔷 DALŠÍ STAVBA ➔</button>
           </div>
         </div>
         <div class="tangram-board-wrap">
@@ -1503,9 +1627,6 @@
           this.rotateSelectedPiece();
         });
       }
-      document.getElementById("btn-tangram-next").addEventListener("click", () => {
-        this.nextBlueprint();
-      });
 
       this.drawBoard();
       this.bindSvgDrag();
@@ -1574,7 +1695,6 @@
       const ns = "http://www.w3.org/2000/svg";
       this.svg.innerHTML = "";
 
-      // Oddělovač zásobníku dílků vpravo
       const tray = document.createElementNS(ns, "rect");
       tray.setAttribute("x", "425");
       tray.setAttribute("y", "16");
@@ -1587,14 +1707,12 @@
       tray.setAttribute("stroke-width", "3");
       this.svg.appendChild(tray);
 
-      // Cílové stíny tvarů
       this.pieces.forEach((p) => {
         if (!p.locked) {
           this.svg.appendChild(this.createShapeElement(p, true));
         }
       });
 
-      // Dílky (zamčené dole, aktivní nahoře)
       const ordered = [...this.pieces].sort((a, b) => Number(b.locked) - Number(a.locked));
       ordered.forEach((p) => {
         this.svg.appendChild(this.createShapeElement(p, false));
@@ -1621,7 +1739,9 @@
         if (!piece || piece.locked) return;
 
         e.preventDefault();
-        this.svg.setPointerCapture(e.pointerId);
+        try {
+          this.svg.setPointerCapture(e.pointerId);
+        } catch (_err) {}
         this.selectedId = piece.id;
         const p = this.svgPoint(e.clientX, e.clientY);
         this.dragState = {
@@ -1630,6 +1750,9 @@
           offsetY: p.y - piece.curY
         };
         this.mascot.audio.playSfx("pop");
+        if (piece.label) {
+          this.mascot.audio.speakCustom(piece.label);
+        }
         this.drawBoard();
         this.mascot.resetInactivityTimer(() => this.triggerHint());
       });
@@ -1666,11 +1789,10 @@
     }
 
     evaluateDrop(piece) {
-      const tol = this.currentCfg.snapTolerance || 32;
+      const tol = this.currentCfg.snapTolerance || 34;
       const dist = Math.hypot(piece.curX - piece.targetX, piece.curY - piece.targetY);
 
       if (dist <= tol && this.rotationMatches(piece)) {
-        // Magnetické přichycení
         piece.curX = piece.targetX;
         piece.curY = piece.targetY;
         piece.curRot = piece.targetRot;
@@ -1686,15 +1808,17 @@
           this.mascot.celebrate(this.level.successAudioId || "celebrate_01");
           this.onComplete();
           showContinueBanner(this.hostEl, {
-            title: "🔷 SKVĚLÁ STAVBA! CHCEŠ POSTAVIT DALŠÍ OBRÁZEK?",
-            nextLabel: "🔷 DALŠÍ STAVBA ➔",
+            icon: "🔷",
+            title: `STAVBA „${this.currentCfg.title}“ JE HOTOVÁ!`,
+            subtitle: "Všechny tvary jsou na svém místě. Pojďme postavit další obrázek!",
+            spokenText: `Skvělá stavba! ${this.currentCfg.title} je hotový! Pojďme na další stavbu!`,
+            nextLabel: "▶️ DALŠÍ STAVBA ➔",
             onNext: () => this.nextBlueprint()
           });
         }
         return;
       }
 
-      // Pokud byl dílek puštěn na stavební ploše (vlevo od zásobníku), jemně vrátíme gumovým efektem
       if (piece.curX < 410) {
         this.mistakes += 1;
         const closePosButWrongRot = dist <= tol + 18 && !this.rotationMatches(piece);
@@ -1752,21 +1876,41 @@
   }
 
   /* =========================================================================
-   * 7. HERNÍ ENGINE: ZÓNA C BONUS — PRVNÍ PÍSMENO
+   * 7. HERNÍ ENGINE: ZÓNA C — PRVNÍ PÍSMENO (32 SLOV S INTERAKTIVNÍM ČTENÍM)
    * ========================================================================= */
   const EXTRA_FIRST_LETTER_POOL = [
-    { word: "PES", emoji: "🐶", answer: "P", choices: ["P", "B", "M", "K"] },
-    { word: "DŮM", emoji: "🏠", answer: "D", choices: ["T", "D", "L", "N"] },
-    { word: "SOVA", emoji: "🦉", answer: "S", choices: ["S", "Z", "C", "V"] },
-    { word: "VLK", emoji: "🐺", answer: "V", choices: ["V", "F", "B", "M"] },
-    { word: "MEDVĚD", emoji: "🐻", answer: "M", choices: ["N", "M", "H", "P"] },
-    { word: "KORUNA", emoji: "👑", answer: "K", choices: ["G", "K", "T", "R"] },
-    { word: "JABLKO", emoji: "🍎", answer: "J", choices: ["J", "I", "L", "A"] },
-    { word: "HRUŠKA", emoji: "🍐", answer: "H", choices: ["H", "K", "M", "R"] },
-    { word: "BANÁN", emoji: "🍌", answer: "B", choices: ["P", "B", "D", "V"] },
-    { word: "JEŽEK", emoji: "🦔", answer: "J", choices: ["J", "Z", "K", "L"] },
-    { word: "ZEBRA", emoji: "🦓", answer: "Z", choices: ["S", "Z", "Ž", "C"] },
-    { word: "HVĚZDA", emoji: "⭐", answer: "H", choices: ["H", "V", "N", "T"] }
+    { word: "PES", emoji: "🐶", answer: "P", choices: ["P", "B", "M", "K", "T", "S"] },
+    { word: "DŮM", emoji: "🏠", answer: "D", choices: ["T", "D", "L", "N", "B", "M"] },
+    { word: "SOVA", emoji: "🦉", answer: "S", choices: ["S", "Z", "C", "V", "P", "L"] },
+    { word: "VLK", emoji: "🐺", answer: "V", choices: ["V", "F", "B", "M", "K", "D"] },
+    { word: "MEDVĚD", emoji: "🐻", answer: "M", choices: ["N", "M", "H", "P", "L", "V"] },
+    { word: "KORUNA", emoji: "👑", answer: "K", choices: ["G", "K", "T", "R", "P", "S"] },
+    { word: "JABLKO", emoji: "🍎", answer: "J", choices: ["J", "I", "L", "A", "M", "K"] },
+    { word: "HRUŠKA", emoji: "🍐", answer: "H", choices: ["H", "K", "M", "R", "B", "N"] },
+    { word: "BANÁN", emoji: "🍌", answer: "B", choices: ["P", "B", "D", "V", "M", "L"] },
+    { word: "JEŽEK", emoji: "🦔", answer: "J", choices: ["J", "Z", "K", "L", "S", "T"] },
+    { word: "ZEBRA", emoji: "🦓", answer: "Z", choices: ["S", "Z", "C", "V", "M", "R"] },
+    { word: "HVĚZDA", emoji: "⭐", answer: "H", choices: ["H", "V", "N", "T", "K", "L"] },
+    { word: "AUTO", emoji: "🚗", answer: "A", choices: ["A", "E", "O", "U", "M", "T"] },
+    { word: "KOČKA", emoji: "🐱", answer: "K", choices: ["K", "T", "P", "L", "M", "S"] },
+    { word: "RYBA", emoji: "🐟", answer: "R", choices: ["R", "L", "N", "B", "V", "D"] },
+    { word: "SLUNCE", emoji: "☀️", answer: "S", choices: ["S", "Z", "C", "L", "M", "P"] },
+    { word: "MOTÝL", emoji: "🦋", answer: "M", choices: ["M", "N", "V", "B", "K", "T"] },
+    { word: "STROM", emoji: "🌲", answer: "S", choices: ["S", "T", "R", "M", "L", "P"] },
+    { word: "ŽÁBA", emoji: "🐸", answer: "Ž", choices: ["Ž", "Š", "Č", "Z", "S", "B"] },
+    { word: "LIŠKA", emoji: "🦊", answer: "L", choices: ["L", "R", "J", "M", "N", "K"] },
+    { word: "TUČŇÁK", emoji: "🐧", answer: "T", choices: ["T", "D", "P", "K", "C", "M"] },
+    { word: "VELRYBA", emoji: "🐳", answer: "V", choices: ["V", "B", "F", "M", "L", "R"] },
+    { word: "RAKETA", emoji: "🚀", answer: "R", choices: ["R", "L", "K", "T", "P", "S"] },
+    { word: "KVĚTINA", emoji: "🌸", answer: "K", choices: ["K", "G", "H", "V", "T", "M"] },
+    { word: "MÍČ", emoji: "⚽", answer: "M", choices: ["M", "N", "B", "P", "Č", "L"] },
+    { word: "LOĎ", emoji: "⛵", answer: "L", choices: ["L", "R", "D", "T", "N", "V"] },
+    { word: "VLAK", emoji: "🚂", answer: "V", choices: ["V", "L", "K", "F", "B", "P"] },
+    { word: "BUBEN", emoji: "🥁", answer: "B", choices: ["B", "P", "D", "V", "M", "N"] },
+    { word: "KYTARA", emoji: "🎸", answer: "K", choices: ["K", "T", "R", "G", "P", "L"] },
+    { word: "DEŠTNÍK", emoji: "☂️", answer: "D", choices: ["D", "T", "B", "N", "S", "K"] },
+    { word: "SNĚHULÁK", emoji: "⛄", answer: "S", choices: ["S", "Z", "Š", "N", "L", "M"] },
+    { word: "MRKEV", emoji: "🥕", answer: "M", choices: ["M", "N", "R", "K", "V", "P"] }
   ];
 
   class FirstLetterActivity {
@@ -1775,16 +1919,30 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
-      this.allPool = [...(level.config.rounds || []), ...EXTRA_FIRST_LETTER_POOL];
+      this.allPool = shuffleArray([...(level.config.rounds || []), ...EXTRA_FIRST_LETTER_POOL]);
       this.poolCursor = 0;
-      this.startNewSet(level.config.rounds || this.pickNextRounds());
+      this.startNewSet(this.pickNextRounds());
     }
 
     pickNextRounds() {
+      const stars = this.level.stars || 1;
+      const roundsCount = stars <= 2 ? 3 : stars <= 4 ? 4 : 5;
+      const choicesCount = stars === 1 ? 3 : stars <= 3 ? 4 : stars === 4 ? 5 : 6;
       const picked = [];
-      for (let i = 0; i < 3; i++) {
-        picked.push(this.allPool[this.poolCursor % this.allPool.length]);
-        this.poolCursor += 1;
+      for (let i = 0; i < roundsCount; i++) {
+        if (this.poolCursor >= this.allPool.length) {
+          this.allPool = shuffleArray(this.allPool);
+          this.poolCursor = 0;
+        }
+        const raw = this.allPool[this.poolCursor++];
+        const otherLetters = (raw.choices || ["A", "B", "K", "M", "P", "S", "T", "L"]).filter(
+          (c) => c !== raw.answer
+        );
+        const finalChoices = shuffleArray([
+          raw.answer,
+          ...shuffleArray(otherLetters).slice(0, choicesCount - 1)
+        ]);
+        picked.push({ ...raw, choices: finalChoices });
       }
       return picked;
     }
@@ -1796,6 +1954,13 @@
       this.renderRound();
     }
 
+    speakCurrentWord(round) {
+      this.mascot.audio.speakCustom(
+        `${round.word}! Na jaké písmeno začíná slovo ${round.word}?`,
+        `${round.emoji} ${round.word} — NA JAKÉ PÍSMENO ZAČÍNÁ?`
+      );
+    }
+
     renderRound() {
       const round = this.rounds[this.roundIdx];
       if (!round) return;
@@ -1804,15 +1969,14 @@
         <div class="workspace-header">
           <h2 class="workspace-title">🔤 NA JAKÉ PÍSMENO TO ZAČÍNÁ?</h2>
           <div class="workspace-actions">
-            <span class="step-pill current">KOLO ${this.roundIdx + 1} / ${this.rounds.length}</span>
-            <button id="btn-letter-next-set" class="btn-touch btn-next-task">🔤 DALŠÍ SLOVA ➔</button>
+            <span class="step-pill current">SLOVO ${this.roundIdx + 1} / ${this.rounds.length}</span>
           </div>
         </div>
         <div class="letter-stage">
-          <div class="word-picture-card">
+          <div class="word-picture-card" id="card-say-word" style="cursor:pointer;">
             <span class="word-emoji">${round.emoji}</span>
             <span class="word-display">${round.word}</span>
-            <button id="btn-say-word" class="btn-touch btn-primary">🔊 POSLECHNOUT</button>
+            <button id="btn-say-word" class="btn-touch btn-primary">🔊 PŘEČÍST SLOVO</button>
           </div>
           <div id="letter-choices" class="letter-choices">
             ${round.choices
@@ -1825,29 +1989,16 @@
         </div>
       `;
 
-      document.getElementById("btn-say-word").addEventListener("click", () => {
-        if (round.audioId) {
-          this.mascot.audio.speak(round.audioId);
-        } else {
-          this.mascot.audio.renderKaraokeWords(`${round.word}! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO ${round.word}?`);
-          this.mascot.audio.speak("act_10_intro");
-        }
-      });
-
-      document.getElementById("btn-letter-next-set").addEventListener("click", () => {
+      document.getElementById("card-say-word").addEventListener("click", () => {
         this.mascot.audio.playSfx("pop");
-        this.startNewSet(this.pickNextRounds());
+        this.speakCurrentWord(round);
       });
 
       this.hostEl.querySelectorAll(".btn-letter-choice").forEach((btn) => {
         btn.addEventListener("click", () => this.handleChoice(btn, round));
       });
 
-      if (round.audioId) {
-        this.mascot.audio.speak(round.audioId);
-      } else {
-        this.mascot.audio.renderKaraokeWords(`${round.word}! NA JAKÉ PÍSMENO ZAČÍNÁ SLOVO ${round.word}?`);
-      }
+      this.speakCurrentWord(round);
       this.mascot.resetInactivityTimer(() => this.triggerHint(round));
     }
 
@@ -1857,6 +2008,7 @@
         btn.classList.add("correct");
         this.mascot.audio.playSfx("snap");
         this.mascot.emitParticles(["⭐", "✨", "🔤"]);
+        this.mascot.audio.speakCustom(`Správně! ${round.word} začíná na písmeno ${picked}!`);
         this.mistakes = 0;
 
         setTimeout(() => {
@@ -1868,18 +2020,23 @@
             this.mascot.celebrate(this.level.successAudioId || "celebrate_05");
             this.onComplete();
             showContinueBanner(this.hostEl, {
-              title: "🔤 VŠECHNA PÍSMENKA UHODNUTA! CHCEŠ DALŠÍ SLOVÍČKA?",
-              nextLabel: "🔤 DALŠÍ SLOVÍČKA ➔",
+              icon: "🔤",
+              title: "VŠECHNA PÍSMENKA SPRÁVNĚ UHODNUTA!",
+              subtitle: "Poslechneme si a uhodneme další nová slovíčka!",
+              spokenText: "Výborně! Všechna písmenka jsou uhodnuta! Pojďme na další slovíčka!",
+              nextLabel: "▶️ DALŠÍ SLOVÍČKA ➔",
               onNext: () => this.startNewSet(this.pickNextRounds())
             });
           }
-        }, 650);
+        }, 900);
       } else {
         this.mistakes += 1;
         btn.classList.remove("gentle-nudge-anim");
         void btn.offsetWidth;
         btn.classList.add("gentle-nudge-anim");
-        this.mascot.gentleNudge("hint_letter_listen", null, this.mistakes >= 2);
+        this.mascot.audio.speakCustom(
+          `Toto je písmeno ${picked}. Poslouchej znovu: ${round.word}!`
+        );
         if (this.mistakes >= 2) {
           this.triggerHint(round);
         }
@@ -1897,7 +2054,7 @@
   }
 
   /* =========================================================================
-   * 8. HERNÍ ENGINE: ZÓNA D — KRMENÍ TUČŇÁKA (POČÍTÁNÍ RYBIČEK)
+   * 8. HERNÍ ENGINE: ZÓNA D — KRMENÍ TUČŇÁKA (POČÍTÁNÍ RYBIČEK 1★–5★)
    * ========================================================================= */
   class FeedPenguinActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -1905,23 +2062,25 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
-      this.rounds = [...(level.config.rounds || [3, 5, 4])];
-      this.roundIdx = 0;
-      this.bowlCount = 0;
-      this.mistakes = 0;
-
-      this.renderRound();
+      this.generateMoreRounds();
     }
 
     generateMoreRounds() {
-      const min = this.level.config.minTarget || 2;
-      const max = this.level.config.maxTarget || 6;
-      const next = [];
-      for (let i = 0; i < 3; i++) {
-        next.push(min + Math.floor(Math.random() * (max - min + 1)));
-      }
-      this.rounds = next;
+      const stars = this.level.stars || 1;
+      const ranges = {
+        1: [1, 4],
+        2: [3, 7],
+        3: [5, 10],
+        4: [8, 15],
+        5: [11, 20]
+      };
+      const [min, max] = ranges[stars] || [2, 6];
+      const pool = [];
+      for (let n = min; n <= max; n++) pool.push(n);
+      this.rounds = shuffleArray(pool).slice(0, 3);
       this.roundIdx = 0;
+      this.bowlCount = 0;
+      this.mistakes = 0;
       this.renderRound();
     }
 
@@ -1931,7 +2090,7 @@
 
     renderRound() {
       const target = this.targetCount();
-      const pondTotal = Math.max(target + 3, this.level.config.pondCount || 10);
+      const pondTotal = Math.max(target + 4, 12);
       this.bowlCount = 0;
       this.mistakes = 0;
 
@@ -1940,14 +2099,13 @@
           <h2 class="workspace-title">🐟 NAKRM PIKA PŘESNĚ ${target} RYBIČKAMI!</h2>
           <div class="workspace-actions">
             <span class="step-pill current">KOLO ${this.roundIdx + 1} / ${this.rounds.length}</span>
-            <button id="btn-feed-more" class="btn-touch btn-next-task">🐟 DALŠÍ KRMENÍ ➔</button>
           </div>
         </div>
         <div class="feed-layout">
           <section class="pond-panel">
             <div class="panel-heading">
               <span>🌊 ARKTICKÉ JEZÍRKO (ŤUKNI NA RYBIČKU)</span>
-              <span>CÍL: ${target}</span>
+              <span>CÍL: ${target} 🐟</span>
             </div>
             <div id="fish-pond-grid" class="fish-pond-grid">
               ${Array.from({ length: pondTotal })
@@ -1975,8 +2133,15 @@
     }
 
     announceTarget(target) {
-      const askId = "feed_ask_" + String(target).padStart(2, "0");
-      this.mascot.audio.speak(askId);
+      if (target <= 10) {
+        const askId = "feed_ask_" + String(target).padStart(2, "0");
+        this.mascot.audio.speak(askId);
+      } else {
+        this.mascot.audio.speakCustom(
+          `Mám velký hlad! Dáš mi do misky přesně ${target} rybiček?`,
+          `🐟 DEJ DO MISKY PŘESNĚ ${target} RYBIČEK!`
+        );
+      }
       this.mascot.resetInactivityTimer(() => {
         this.mascot.gentleNudge("hint_count_more", null, true);
       });
@@ -1985,11 +2150,6 @@
     bindEvents() {
       const pondGrid = document.getElementById("fish-pond-grid");
       const bowlEl = document.getElementById("bowl-dropzone");
-
-      document.getElementById("btn-feed-more").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.generateMoreRounds();
-      });
 
       pondGrid.addEventListener("click", (e) => {
         const fishBtn = e.target.closest(".btn-fish");
@@ -2019,6 +2179,7 @@
         this.bowlCount = Math.max(0, this.bowlCount - 1);
         this.mascot.audio.playSfx("pop");
         this.updateBowlUI();
+        if (this.bowlCount > 0) this.speakNumber(this.bowlCount);
       });
 
       document.getElementById("btn-feed-submit").addEventListener("click", () => {
@@ -2031,6 +2192,8 @@
       if (n >= 1 && n <= 20) {
         const id = "num_" + String(n).padStart(2, "0");
         this.mascot.audio.speak(id);
+      } else {
+        this.mascot.audio.speakCustom(String(n));
       }
     }
 
@@ -2050,14 +2213,17 @@
           setTimeout(() => {
             this.roundIdx += 1;
             this.renderRound();
-          }, 1400);
+          }, 1300);
         } else {
           this.mascot.clearInactivityTimer();
           this.mascot.celebrate(this.level.successAudioId || "celebrate_03");
           this.onComplete();
           showContinueBanner(this.hostEl, {
-            title: "🐟 PIKO MÁ PLNÉ BŘÍŠKO! CHCEŠ POČÍTAT DALŠÍ RYBIČKY?",
-            nextLabel: "🐟 DALŠÍ KRMENÍ ➔",
+            icon: "🐟",
+            title: "PIKO MÁ PLNÉ BŘÍŠKO! VŠECHNO SPOČÍTÁNO!",
+            subtitle: "Chceš spočítat další porci rybiček pro tučňáka?",
+            spokenText: "Mňam! Piko má plné bříško! Pojďme počítat další rybičky!",
+            nextLabel: "▶️ DALŠÍ KRMENÍ ➔",
             onNext: () => this.generateMoreRounds()
           });
         }
@@ -2086,49 +2252,69 @@
    * 8B. KOMPLETNÍ SADA OSTATNÍCH AKTIVIT (ZÓNY A–E) S NEKONEČNÝM POKRAČOVÁNÍM
    * ========================================================================= */
 
-  // --- AKTIVITA 2: KOUZELNÉ OMALOVÁNKY S MÍCHÁNÍM BAREV ---
-  const COLORING_PICTURES = [
-    {
-      title: "DUHOVÁ RYBIČKA",
-      parts: [
-        { id: "body", label: "Tělíčko", d: "M 180 220 C 260 110, 440 110, 500 220 C 440 330, 260 330, 180 220 Z" },
-        { id: "tail", label: "Ocásek", d: "M 495 220 L 600 135 L 580 220 L 600 305 Z" },
-        { id: "finTop", label: "Horní ploutev", d: "M 290 142 Q 350 65 415 145 Z" },
-        { id: "finBot", label: "Spodní ploutev", d: "M 300 298 Q 350 365 405 295 Z" },
-        { id: "head", label: "Hlavička", d: "M 180 220 C 215 160, 255 160, 265 220 C 255 280, 215 280, 180 220 Z" }
-      ]
-    },
-    {
-      title: "POHÁDKOVÝ HRAD",
-      parts: [
-        { id: "wall", label: "Hradba", d: "M 210 210 L 510 210 L 510 380 L 210 380 Z" },
-        { id: "towerL", label: "Levá věž", d: "M 150 150 L 220 150 L 220 380 L 150 380 Z" },
-        { id: "towerR", label: "Pravá věž", d: "M 500 150 L 570 150 L 570 380 L 500 380 Z" },
-        { id: "roofL", label: "Levá střecha", d: "M 135 150 L 185 65 L 235 150 Z" },
-        { id: "roofR", label: "Pravá střecha", d: "M 485 150 L 535 65 L 585 150 Z" },
-        { id: "gate", label: "Brána", d: "M 320 380 L 320 280 Q 360 240 400 280 L 400 380 Z" }
-      ]
-    },
-    {
-      title: "ZMRZLINOVÝ POHÁR",
-      parts: [
-        { id: "cone", label: "Kornoutek", d: "M 270 230 L 450 230 L 360 405 Z" },
-        { id: "scoop1", label: "Spodní kopeček", d: "M 260 230 A 60 55 0 1 1 370 230 Z" },
-        { id: "scoop2", label: "Pravý kopeček", d: "M 350 230 A 60 55 0 1 1 460 230 Z" },
-        { id: "scoop3", label: "Horní kopeček", d: "M 300 165 A 62 58 0 1 1 420 165 Z" },
-        { id: "cherry", label: "Třešnička", d: "M 340 85 A 22 22 0 1 1 380 85 A 22 22 0 1 1 340 85 Z" }
-      ]
-    },
-    {
-      title: "PLACHETNICE NA MOŘI",
-      parts: [
-        { id: "hull", label: "Trup lodi", d: "M 180 290 L 540 290 L 480 375 L 240 375 Z" },
-        { id: "sailL", label: "Hlavní plachta", d: "M 350 80 L 350 275 L 205 275 Z" },
-        { id: "sailR", label: "Přední plachta", d: "M 368 105 L 505 275 L 368 275 Z" },
-        { id: "flag", label: "Vlaječka", d: "M 350 50 L 415 68 L 350 85 Z" }
-      ]
-    }
-  ];
+  // --- AKTIVITA 2: KOUZELNÉ OMALOVÁNKY S MÍCHÁNÍM BAREV (24 OBRÁZKŮ) ---
+  function buildColoringPictures() {
+    const base = [
+      {
+        title: "DUHOVÁ RYBIČKA",
+        parts: [
+          { id: "body", label: "Tělíčko rybičky", d: "M 180 220 C 260 110, 440 110, 500 220 C 440 330, 260 330, 180 220 Z" },
+          { id: "tail", label: "Ocásek", d: "M 495 220 L 600 135 L 580 220 L 600 305 Z" },
+          { id: "finTop", label: "Horní ploutev", d: "M 290 142 Q 350 65 415 145 Z" },
+          { id: "finBot", label: "Spodní ploutev", d: "M 300 298 Q 350 365 405 295 Z" },
+          { id: "head", label: "Hlavička", d: "M 180 220 C 215 160, 255 160, 265 220 C 255 280, 215 280, 180 220 Z" }
+        ]
+      },
+      {
+        title: "POHÁDKOVÝ HRAD",
+        parts: [
+          { id: "wall", label: "Hradba", d: "M 210 210 L 510 210 L 510 380 L 210 380 Z" },
+          { id: "towerL", label: "Levá věž", d: "M 150 150 L 220 150 L 220 380 L 150 380 Z" },
+          { id: "towerR", label: "Pravá věž", d: "M 500 150 L 570 150 L 570 380 L 500 380 Z" },
+          { id: "roofL", label: "Levá střecha", d: "M 135 150 L 185 65 L 235 150 Z" },
+          { id: "roofR", label: "Pravá střecha", d: "M 485 150 L 535 65 L 585 150 Z" },
+          { id: "gate", label: "Brána", d: "M 320 380 L 320 280 Q 360 240 400 280 L 400 380 Z" }
+        ]
+      },
+      {
+        title: "ZMRZLINOVÝ POHÁR",
+        parts: [
+          { id: "cone", label: "Kornoutek", d: "M 270 230 L 450 230 L 360 405 Z" },
+          { id: "scoop1", label: "Levý kopeček", d: "M 260 230 A 60 55 0 1 1 370 230 Z" },
+          { id: "scoop2", label: "Pravý kopeček", d: "M 350 230 A 60 55 0 1 1 460 230 Z" },
+          { id: "scoop3", label: "Horní kopeček", d: "M 300 165 A 62 58 0 1 1 420 165 Z" },
+          { id: "cherry", label: "Třešnička", d: "M 340 85 A 22 22 0 1 1 380 85 A 22 22 0 1 1 340 85 Z" }
+        ]
+      },
+      {
+        title: "PLACHETNICE NA MOŘI",
+        parts: [
+          { id: "hull", label: "Trup lodi", d: "M 180 290 L 540 290 L 480 375 L 240 375 Z" },
+          { id: "sailL", label: "Hlavní plachta", d: "M 350 80 L 350 275 L 205 275 Z" },
+          { id: "sailR", label: "Přední plachta", d: "M 368 105 L 505 275 L 368 275 Z" },
+          { id: "flag", label: "Vlaječka", d: "M 350 50 L 415 68 L 350 85 Z" }
+        ]
+      }
+    ];
+
+    const extraTitles = [
+      "VESMÍRNÁ RAKETA", "BAREVNÝ MOTÝLEK", "VESELÝ SNĚHULÁK", "KRÁLOVSKÁ KORUNA",
+      "ROZKVETLÁ KYTIČKA", "ZELENÝ STROMEČEK", "ROZTOMILÁ SOVIČKA", "RYCHLÉ AUTÍČKO",
+      "PARNÍ LOKOMOTIVA", "KOUZELNÝ DOMEČEK", "VELKÁ VELRYBA", "ČERVENÁ BERUŠKA",
+      "LESNÍ HŘÍBEK", "POUŤOVÝ BALÓNEK", "ZLATÉ SLUNÍČKO", "SLADKÝ DORTÍK",
+      "PAPÍROVÝ DRAK", "HUDEBNÍ KYTARA", "POLÁRNÍ TUČŇÁK", "MOŘSKÁ ŽELVIČKA"
+    ];
+
+    extraTitles.forEach((title, idx) => {
+      const mode = idx % 4;
+      const baseParts = base[mode].parts.map((p) => ({ ...p }));
+      base.push({ title, parts: baseParts });
+    });
+
+    return base;
+  }
+
+  const COLORING_PICTURES = buildColoringPictures();
 
   class ColorMixActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -2137,17 +2323,25 @@
       this.mascot = mascot;
       this.store = store;
       this.onComplete = onComplete;
+      this.deck = shuffleArray(COLORING_PICTURES);
       this.picIdx = 0;
       this.activeColor = "#2A9D8F";
       this.mixSlots = [null, null];
-      this.mascot.audio.speak("act_02_intro");
       this.loadPicture(0);
     }
 
     loadPicture(idx) {
-      this.picIdx = idx % COLORING_PICTURES.length;
+      this.picIdx = idx % this.deck.length;
+      if (this.picIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
       this.coloredParts = {};
       this.render();
+      const pic = this.deck[this.picIdx];
+      this.mascot.audio.speakCustom(
+        `Omalovánka ${pic.title}! Namíchej barvičky a vybarvi všechny části obrázku v libovolném pořadí!`,
+        `🖌️ VYBARVI: ${pic.title}`
+      );
     }
 
     nextPicture() {
@@ -2156,13 +2350,12 @@
     }
 
     render() {
-      const pic = COLORING_PICTURES[this.picIdx];
+      const pic = this.deck[this.picIdx];
       this.hostEl.innerHTML = `
         <div class="workspace-header">
           <h2 class="workspace-title">🖌️ MÍCHÁNÍ BAREV: ${pic.title}</h2>
           <div class="workspace-actions">
             <span class="step-pill current" id="color-mix-prog">VYBARVENO: 0 / ${pic.parts.length}</span>
-            <button id="btn-cmix-next" class="btn-touch btn-next-task">🖌️ DALŠÍ OMALOVÁNKA ➔</button>
           </div>
         </div>
         <div class="studio-layout">
@@ -2171,7 +2364,7 @@
               ${pic.parts
                 .map(
                   (p) =>
-                    `<path data-part="${p.id}" d="${p.d}" fill="#FFFFFF" stroke="#1D3557" stroke-width="6" stroke-linejoin="round" style="cursor:pointer; transition:fill 0.2s ease;" />`
+                    `<path data-part="${p.id}" data-label="${p.label}" d="${p.d}" fill="#FFFFFF" stroke="#1D3557" stroke-width="6" stroke-linejoin="round" style="cursor:pointer; transition:fill 0.2s ease;" />`
                 )
                 .join("")}
             </svg>
@@ -2206,8 +2399,6 @@
           </aside>
         </div>
       `;
-
-      document.getElementById("btn-cmix-next").addEventListener("click", () => this.nextPicture());
 
       this.hostEl.querySelectorAll(".btn-swatch[data-hex]").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -2262,17 +2453,24 @@
       this.hostEl.querySelectorAll("#cmix-svg path[data-part]").forEach((pathEl) => {
         pathEl.addEventListener("click", () => {
           const partId = pathEl.dataset.part;
+          const partLabel = pathEl.dataset.label || "";
           pathEl.setAttribute("fill", this.activeColor);
           this.coloredParts[partId] = this.activeColor;
           this.mascot.audio.playSfx("snap");
+          if (partLabel) {
+            this.mascot.audio.speakCustom(partLabel);
+          }
           const doneCount = Object.keys(this.coloredParts).length;
           document.getElementById("color-mix-prog").textContent = `VYBARVENO: ${doneCount} / ${pic.parts.length}`;
           if (doneCount === pic.parts.length) {
             this.mascot.celebrate(this.level.successAudioId || "celebrate_04");
             this.onComplete();
             showContinueBanner(this.hostEl, {
-              title: "🌈 KRÁSNĚ VYBARVENO! CHCEŠ DALŠÍ OMALOVÁNKU?",
-              nextLabel: "🖌️ DALŠÍ OMALOVÁNKA ➔",
+              icon: "🌈",
+              title: `OMALOVÁNKA „${pic.title}“ JE KRÁSNĚ VYBARVENÁ!`,
+              subtitle: "Pojďme namíchat barvy a vybarvit další obrázek!",
+              spokenText: `Krásně vybarveno! ${pic.title} září všemi barvami! Pojďme na další omalovánku!`,
+              nextLabel: "▶️ DALŠÍ OMALOVÁNKA ➔",
               onNext: () => this.nextPicture()
             });
           }
@@ -2285,38 +2483,33 @@
     }
   }
 
-  // --- AKTIVITA 4: DOKRESLI PŘÍBĚH ---
+  // --- AKTIVITA 4: DOKRESLI PŘÍBĚH (25 SCÉN) ---
   const STORY_SCENES = [
-    {
-      id: "rain",
-      title: "DEŠTNÍK PRO TUČŇÁKA",
-      prompt: "PRŠÍ! DOKRESLI PIKOVI NAD HLAVOU VELKÝ DEŠTNÍK!",
-      guidePts: [[230, 190], [290, 120], [360, 100], [430, 120], [490, 190], [360, 190], [360, 290]]
-    },
-    {
-      id: "car",
-      title: "KOLA PRO AUTÍČKO",
-      prompt: "AUTÍČKO NEMŮŽE JET! DOKRESLI MU DOLE DVĚ KULATÁ KOLA!",
-      guidePts: [[235, 315], [275, 315], [255, 345], [445, 315], [485, 315], [465, 345]]
-    },
-    {
-      id: "dragon",
-      title: "KŘÍDLA PRO DRÁČKA",
-      prompt: "DRÁČEK CHCE LÉTAT! DOKRESLI MU NA ZÁDA VELKÁ KŘÍDLA!",
-      guidePts: [[280, 220], [180, 120], [150, 230], [440, 220], [540, 120], [570, 230]]
-    },
-    {
-      id: "boat",
-      title: "PLACHTA PRO LOĎKU",
-      prompt: "FOUKÁ VÍTR! DOKRESLI LOĎCE VELKOU TROJÚHELNÍKOVOU PLACHTU!",
-      guidePts: [[360, 105], [360, 275], [490, 275], [425, 185]]
-    },
-    {
-      id: "flower",
-      title: "SLUNÍČKO PRO KYTIČKU",
-      prompt: "KYTIČKA CHCE RŮST! DOKRESLI NA OBLOHU ZÁŘIVÉ SLUNÍČKO!",
-      guidePts: [[520, 110], [560, 110], [540, 80], [540, 140]]
-    }
+    { id: "rain", title: "DEŠTNÍK PRO TUČŇÁKA", backdrop: "🌧️   🐧   🌧️", prompt: "PRŠÍ! DOKRESLI PIKOVI NAD HLAVOU VELKÝ DEŠTNÍK!", guidePts: [[230, 190], [290, 120], [360, 100], [430, 120], [490, 190], [360, 190], [360, 290]] },
+    { id: "car", title: "KOLA PRO AUTÍČKO", backdrop: "🚙", prompt: "AUTÍČKO NEMŮŽE JET! DOKRESLI MU DOLE DVĚ KULATÁ KOLA!", guidePts: [[235, 315], [275, 315], [255, 345], [445, 315], [485, 315], [465, 345]] },
+    { id: "dragon", title: "KŘÍDLA PRO DRÁČKA", backdrop: "🐲", prompt: "DRÁČEK CHCE LÉTAT! DOKRESLI MU NA ZÁDA VELKÁ KŘÍDLA!", guidePts: [[280, 220], [180, 120], [150, 230], [440, 220], [540, 120], [570, 230]] },
+    { id: "boat", title: "PLACHTA PRO LOĎKU", backdrop: "🛶", prompt: "FOUKÁ VÍTR! DOKRESLI LOĎCE VELKOU TROJÚHELNÍKOVOU PLACHTU!", guidePts: [[360, 105], [360, 275], [490, 275], [425, 185]] },
+    { id: "flower", title: "SLUNÍČKO PRO KYTIČKU", backdrop: "🌻 🌱 🌷", prompt: "KYTIČKA CHCE RŮST! DOKRESLI NA OBLOHU ZÁŘIVÉ SLUNÍČKO!", guidePts: [[520, 110], [560, 110], [540, 80], [540, 140]] },
+    { id: "house_roof", title: "STŘECHA PRO DOMEČEK", backdrop: "🧱 🚪 🧱", prompt: "DOMEČKU CHYBÍ STŘECHA! DOKRESLI NAHORU ŠPIČATOU STŘECHU!", guidePts: [[200, 210], [360, 90], [520, 210], [200, 210]] },
+    { id: "snowman_hat", title: "ČEPIČKA PRO SNĚHULÁKA", backdrop: "⛄", prompt: "SNĚHULÁKOVI MRZNOU UŠI! DOKRESLI MU NA HLAVU TEPLOU ČEPIČKU!", guidePts: [[290, 150], [360, 75], [430, 150], [290, 150]] },
+    { id: "cat_tail", title: "OCÁSEK PRO KOČIČKU", backdrop: "🐱", prompt: "KOČIČKA HLEDÁ SVŮJ DLOUHÝ OCÁSEK! DOKRESLI JÍ HO!", guidePts: [[420, 280], [490, 250], [530, 180], [510, 130]] },
+    { id: "rabbit_ears", title: "UŠI PRO KRÁLÍČKA", backdrop: "🐰", prompt: "DOKRESLI KRÁLÍČKOVI NA HLAVU DVĚ DLOUHÁ OUŠKA!", guidePts: [[320, 180], [300, 80], [340, 180], [400, 180], [420, 80]] },
+    { id: "fish_water", title: "VLNKY PRO RYBIČKU", backdrop: "🐟", prompt: "RYBIČKA CHCE PLAVAT! DOKRESLI KOLEM NÍ MODRÉ VODNÍ VLNKY!", guidePts: [[180, 320], [270, 290], [360, 320], [450, 290], [540, 320]] },
+    { id: "bird_nest", title: "HNÍZDEČKO PRO PTÁČKA", backdrop: "🐦", prompt: "PTÁČEK SI CHCE ODPOČINOUT! DOKRESLI POD NĚJ KULATÉ HNÍZDEČKO!", guidePts: [[240, 290], [300, 350], [420, 350], [480, 290]] },
+    { id: "spider_web", title: "PAVUČINKA PRO PAVOUČKA", backdrop: "🕷️", prompt: "DOKRESLI PAVOUČKOVI JEHO KŘÍŽOVOU PAVUČINKU!", guidePts: [[240, 120], [480, 340], [360, 230], [480, 120], [240, 340]] },
+    { id: "balloon_string", title: "PROVÁZEK K BALÓNKU", backdrop: "🎈", prompt: "POZOR, ULETÍ! DOKRESLI K BALÓNKU DLOUHÝ PROVÁZEK!", guidePts: [[360, 240], [340, 300], [380, 350], [350, 410]] },
+    { id: "kite_tail", title: "MAŠLIČKY PRO DRAKA", backdrop: "🪁", prompt: "DOKRESLI PAPÍROVÉMU DRAKOVI DLOUHÝ OCAS S MAŠLIČKAMI!", guidePts: [[380, 260], [430, 310], [400, 360], [460, 405]] },
+    { id: "king_crown", title: "KORUNA PRO KRÁLE", backdrop: "🤴", prompt: "KRÁL ZTRATIL KORUNU! DOKRESLI MU NA HLAVU ZLATOU KORUNU!", guidePts: [[290, 150], [310, 90], [360, 130], [410, 90], [430, 150]] },
+    { id: "cake_candles", title: "SVÍČKY NA DORT", backdrop: "🎂", prompt: "SLAVÍME NAROZENINY! DOKRESLI NA DORT NAROZENINOVÉ SVÍČKY!", guidePts: [[310, 180], [310, 110], [360, 180], [360, 110], [410, 180], [410, 110]] },
+    { id: "tree_apples", title: "JABLÍČKA NA STROM", backdrop: "🌳", prompt: "NA STROMĚ DOZRÁLO OVOCE! NAKRESLI DO KORUNY ČERVENÁ JABLÍČKA!", guidePts: [[310, 170], [360, 140], [410, 175], [340, 210], [390, 210]] },
+    { id: "night_stars", title: "HVĚZDY NA NOČNÍ OBLOHU", backdrop: "🌙", prompt: "MĚSÍČKU JE SMUTNO! DOKRESLI KOLEM NĚJ TŘPYTIVÉ HVĚZDIČKY!", guidePts: [[200, 120], [260, 190], [470, 110], [520, 200], [450, 290]] },
+    { id: "train_tracks", title: "KOLEJE PRO VLÁČEK", backdrop: "🚂", prompt: "VLÁČEK POTŘEBUJE KOLEJE! NAKRESLI POD NĚJ ROVNÉ KOLEJE!", guidePts: [[160, 340], [280, 340], [400, 340], [560, 340]] },
+    { id: "bridge_river", title: "MOST PŘES ŘEKU", backdrop: "🌊   🌊", prompt: "DOKRESLI PŘES ŘEKU OBLOUKOVÝ MOST PRO TUČŇÁKA!", guidePts: [[190, 300], [270, 200], [360, 175], [450, 200], [530, 300]] },
+    { id: "dog_bone", title: "KOSTIČKA PRO PEJSKA", backdrop: "🐶", prompt: "PEJSEK MÁ HLAD! DOKRESLI MU DO MISKY DOBROU KOSTIČKU!", guidePts: [[290, 350], [330, 350], [390, 350], [430, 350]] },
+    { id: "bee_stripes", title: "PRUHY PRO VČELIČKU", backdrop: "🐝", prompt: "DOKRESLI VČELIČCE DRÁHU LETU KE KYTIČCE!", guidePts: [[220, 240], [300, 180], [390, 260], [490, 200]] },
+    { id: "rocket_flame", title: "PLAMEN PRO RAKETU", backdrop: "🚀", prompt: "RAKETA STARTUJE! DOKRESLI POD NI OHNIVÝ PLAMEN!", guidePts: [[330, 310], [360, 410], [390, 310], [360, 375]] },
+    { id: "icecream_scoop", title: "KOPEČEK NAZMRZLINU", backdrop: "🍦", prompt: "DOKRESLI NA ZMRZLINU DALŠÍ VELKÝ BAREVNÝ KOPEČEK!", guidePts: [[310, 150], [360, 95], [410, 150], [360, 165]] },
+    { id: "rainbow_sky", title: "DUHA PO DEŠTI", backdrop: "🌦️   ☀️", prompt: "VYSVITLO SLUNÍČKO! NAKRESLI NA OBLOHU VELKOU BAREVNOU DUHU!", guidePts: [[180, 320], [250, 180], [360, 130], [470, 180], [540, 320]] }
   ];
 
   class StoryDrawActivity {
@@ -2326,21 +2519,24 @@
       this.mascot = mascot;
       this.store = store;
       this.onComplete = onComplete;
-      this.sceneIdx = Math.max(0, STORY_SCENES.findIndex((s) => s.id === level.config.scene));
+      this.deck = shuffleArray(STORY_SCENES);
+      this.sceneIdx = 0;
       this.activeColor = "#E63946";
-      this.mascot.audio.speak("act_04_intro");
-      this.loadScene(this.sceneIdx);
+      this.loadScene(0);
     }
 
     loadScene(idx) {
-      this.sceneIdx = idx % STORY_SCENES.length;
-      this.scene = STORY_SCENES[this.sceneIdx];
+      this.sceneIdx = idx % this.deck.length;
+      if (this.sceneIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      this.scene = this.deck[this.sceneIdx];
       this.checkpoints = this.scene.guidePts.map(([x, y]) => ({ x, y, hit: false }));
       this.completed = false;
       this.isDrawing = false;
       this.lastPt = null;
       this.render();
-      this.mascot.audio.renderKaraokeWords(this.scene.prompt);
+      this.mascot.audio.speakCustom(this.scene.prompt, `☔ ${this.scene.prompt}`);
     }
 
     nextScene() {
@@ -2353,9 +2549,9 @@
         <div class="workspace-header">
           <h2 class="workspace-title">☔ ${this.scene.title}</h2>
           <div class="workspace-actions">
-            <button id="btn-story-clear" class="btn-touch btn-secondary">ZNOVU</button>
-            <button id="btn-story-done" class="btn-touch btn-primary">✨ HOTOVO</button>
-            <button id="btn-story-next" class="btn-touch btn-next-task">☔ DALŠÍ PŘÍBĚH ➔</button>
+            <button id="btn-story-speak" class="btn-touch btn-secondary">🔊 ZADÁNÍ</button>
+            <button id="btn-story-clear" class="btn-touch btn-secondary">SMAZAT</button>
+            <button id="btn-story-done" class="btn-touch btn-primary">✅ HOTOVO</button>
           </div>
         </div>
         <div class="studio-layout">
@@ -2375,7 +2571,7 @@
               </div>
             </div>
             <div class="tool-box">
-              <div class="tool-box-title">📖 ÚKOL</div>
+              <div class="tool-box-title">📖 CO DOKRESLIT</div>
               <p style="margin:0; font-weight:800; font-size:0.86rem; color:var(--navy);">${this.scene.prompt}</p>
             </div>
           </aside>
@@ -2446,6 +2642,9 @@
         });
       });
 
+      document.getElementById("btn-story-speak").addEventListener("click", () => {
+        this.mascot.audio.speakCustom(this.scene.prompt, this.scene.prompt);
+      });
       document.getElementById("btn-story-clear").addEventListener("click", () => {
         this.paintCtx.clearRect(0, 0, 720, 460);
         this.checkpoints.forEach((c) => (c.hit = false));
@@ -2453,7 +2652,6 @@
         this.redraw();
       });
       document.getElementById("btn-story-done").addEventListener("click", () => this.finishStory());
-      document.getElementById("btn-story-next").addEventListener("click", () => this.nextScene());
     }
 
     checkHit(pt) {
@@ -2465,12 +2663,17 @@
     finishStory() {
       if (this.completed) return;
       this.completed = true;
+      // Překreslíme bez vodící čáry, aby zůstal jen podklad a uživatelova kresba!
+      this.redraw();
       this.store.addArtwork(this.scene.title, this.canvas.toDataURL("image/png"));
       this.mascot.celebrate("celebrate_04");
       this.onComplete();
       showContinueBanner(this.hostEl, {
-        title: "🎉 PŘÍBĚH JE ZACHRÁNĚN! CHCEŠ DOKRESLIT DALŠÍ?",
-        nextLabel: "☔ DALŠÍ PŘÍBĚH ➔",
+        icon: "☔",
+        title: `PŘÍBĚH „${this.scene.title}“ JE DOKRESLENÝ!`,
+        subtitle: "Skvělá pomoc! Pojďme zachránit další pohádkový příběh!",
+        spokenText: `Výborně! Příběh ${this.scene.title} je zachráněn! Pojďme na další příběh!`,
+        nextLabel: "▶️ DALŠÍ PŘÍBĚH ➔",
         onNext: () => this.nextScene()
       });
     }
@@ -2480,44 +2683,28 @@
       ctx.fillStyle = "#F8FCFF";
       ctx.fillRect(0, 0, 720, 460);
 
-      // Scéna příběhu + tečkovaná nápověda
+      // Čistý podklad scény
       ctx.save();
-      ctx.font = "72px sans-serif";
+      ctx.font = "76px sans-serif";
       ctx.textAlign = "center";
-      if (this.scene.id === "rain") {
-        ctx.fillText("🌧️   🌧️   🌧️", 360, 70);
-        ctx.fillText("🐧", 360, 360);
-      } else if (this.scene.id === "car") {
-        ctx.fillStyle = "#4CC9F0";
-        ctx.fillRect(200, 190, 320, 110);
-        ctx.fillText("🚙", 360, 270);
-      } else if (this.scene.id === "dragon") {
-        ctx.fillText("🐲", 360, 290);
-      } else if (this.scene.id === "boat") {
-        ctx.fillStyle = "#8D6E63";
-        ctx.beginPath();
-        ctx.moveTo(200, 290);
-        ctx.lineTo(520, 290);
-        ctx.lineTo(460, 370);
-        ctx.lineTo(260, 370);
-        ctx.closePath();
-        ctx.fill();
-      } else {
-        ctx.fillText("🌻 🌱 🌷", 320, 360);
-      }
+      ctx.textBaseline = "middle";
+      ctx.fillText(this.scene.backdrop || "🐧", 360, 275);
 
-      // Tečkovaný obrys toho, co má dítě dokreslit
-      ctx.strokeStyle = "#90E0EF";
-      ctx.lineWidth = 6;
-      ctx.setLineDash([12, 10]);
-      ctx.beginPath();
-      this.scene.guidePts.forEach(([x, y], i) => {
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      });
-      ctx.stroke();
+      // Jemný tečkovaný obrys jen dokud dítě kreslí; po dokončení zmizí, aby se s kresbou nepřel!
+      if (!this.completed) {
+        ctx.strokeStyle = "rgba(144, 224, 239, 0.75)";
+        ctx.lineWidth = 5;
+        ctx.setLineDash([12, 10]);
+        ctx.beginPath();
+        this.scene.guidePts.forEach(([x, y], i) => {
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      }
       ctx.restore();
 
+      // Vlastní kresba uživatele
       ctx.drawImage(this.paintLayer, 0, 0);
     }
 
@@ -2526,39 +2713,39 @@
     }
   }
 
-  // --- AKTIVITA 5: SPOJOVAČKY S ODHALENÍM ---
-  const DOT_TO_DOT_TEMPLATES = [
-    {
-      title: "ZÁŘIVÁ HVĚZDIČKA",
-      emoji: "⭐",
-      color: "#FFB703",
-      pts: [[360, 65], [420, 180], [550, 195], [450, 280], [480, 405], [360, 340], [240, 405], [270, 280], [170, 195], [300, 180]]
-    },
-    {
-      title: "POLÁRNÍ DOMEČEK",
-      emoji: "🏠",
-      color: "#06D6A0",
-      pts: [[360, 70], [520, 190], [480, 190], [480, 385], [240, 385], [240, 190], [200, 190]]
-    },
-    {
-      title: "PLACHETNICE",
-      emoji: "⛵",
-      color: "#118AB2",
-      pts: [[350, 70], [490, 260], [350, 260], [540, 285], [470, 380], [250, 380], [180, 285], [350, 260]]
-    },
-    {
-      title: "KRÁLOVSKÁ KORUNA",
-      emoji: "👑",
-      color: "#F77F00",
-      pts: [[180, 350], [160, 145], [265, 235], [360, 95], [455, 235], [560, 145], [540, 350]]
-    },
-    {
-      title: "KOUZELNÉ SRDÍČKO",
-      emoji: "❤️",
-      color: "#FF5D8F",
-      pts: [[360, 145], [450, 75], [550, 140], [530, 260], [360, 395], [190, 260], [170, 140], [270, 75]]
-    }
-  ];
+  // --- AKTIVITA 5: SPOJOVAČKY S ODHALENÍM (25 ŠABLON + SPOJOVÁNÍ NA PŘESKÁČKU) ---
+  function buildDotTemplates() {
+    const base = [
+      { title: "ZÁŘIVÁ HVĚZDIČKA", emoji: "⭐", color: "#FFB703", pts: [[360, 65], [420, 180], [550, 195], [450, 280], [480, 405], [360, 340], [240, 405], [270, 280], [170, 195], [300, 180]] },
+      { title: "POLÁRNÍ DOMEČEK", emoji: "🏠", color: "#06D6A0", pts: [[360, 70], [520, 190], [480, 190], [480, 385], [240, 385], [240, 190], [200, 190]] },
+      { title: "PLACHETNICE", emoji: "⛵", color: "#118AB2", pts: [[350, 70], [490, 260], [350, 260], [540, 285], [470, 380], [250, 380], [180, 285], [350, 260]] },
+      { title: "KRÁLOVSKÁ KORUNA", emoji: "👑", color: "#F77F00", pts: [[180, 350], [160, 145], [265, 235], [360, 95], [455, 235], [560, 145], [540, 350]] },
+      { title: "KOUZELNÉ SRDÍČKO", emoji: "❤️", color: "#FF5D8F", pts: [[360, 145], [450, 75], [550, 140], [530, 260], [360, 395], [190, 260], [170, 140], [270, 75]] },
+      { title: "ZELENÝ STROMEČEK", emoji: "🌲", color: "#2A9D8F", pts: [[360, 60], [490, 210], [430, 210], [530, 340], [395, 340], [395, 410], [325, 410], [325, 340], [190, 340], [290, 210], [230, 210]] },
+      { title: "VESMÍRNÁ RAKETA", emoji: "🚀", color: "#E63946", pts: [[360, 55], [435, 160], [435, 310], [505, 385], [415, 360], [305, 360], [215, 385], [285, 310], [285, 160]] },
+      { title: "TŘPYTIVÝ DIAMANT", emoji: "💎", color: "#4CC9F0", pts: [[260, 110], [460, 110], [550, 200], [360, 395], [170, 200]] },
+      { title: "PAPÍROVÝ DRAK", emoji: "🪁", color: "#7209B7", pts: [[360, 65], [510, 210], [360, 385], [210, 210]] },
+      { title: "ZLATÁ RYBIČKA", emoji: "🐟", color: "#F77F00", pts: [[160, 225], [290, 120], [440, 150], [495, 225], [585, 145], [565, 305], [495, 225], [440, 300], [290, 330]] },
+      { title: "MODRÁ VELRYBA", emoji: "🐳", color: "#118AB2", pts: [[175, 260], [220, 145], [380, 145], [475, 240], [575, 175], [555, 315], [465, 315], [200, 315]] },
+      { title: "BLESK Z BOUŘKY", emoji: "⚡", color: "#FFB703", pts: [[410, 65], [240, 235], [355, 235], [285, 405], [495, 205], [375, 205]] },
+      { title: "SLADKÁZMRZLINA", emoji: "🍦", color: "#FF5D8F", pts: [[275, 210], [310, 115], [360, 85], [410, 115], [445, 210], [360, 405]] },
+      { title: "ROZKVETLÝ TULIPÁN", emoji: "🌷", color: "#E63946", pts: [[250, 120], [315, 195], [360, 110], [405, 195], [470, 120], [450, 285], [360, 330], [270, 285]] },
+      { title: "MĚSÍČEK NA OBLOZE", emoji: "🌙", color: "#FFB703", pts: [[430, 80], [280, 130], [230, 235], [280, 345], [430, 385], [345, 300], [325, 235], [345, 165]] },
+      { title: "MOTÝLEK EMANUEL", emoji: "🦋", color: "#7209B7", pts: [[360, 160], [495, 85], [535, 205], [485, 345], [360, 275], [235, 345], [185, 205], [225, 85]] },
+      { title: "POHÁDKOVÝ HRAD", emoji: "🏰", color: "#F77F00", pts: [[180, 380], [180, 140], [235, 90], [290, 140], [290, 230], [430, 230], [430, 140], [485, 90], [540, 140], [540, 380]] },
+      { title: "ZLATÝ ZVONEČEK", emoji: "🔔", color: "#FFB703", pts: [[360, 80], [450, 145], [495, 320], [225, 320], [270, 145]] },
+      { title: "LESNÍ HŘÍBEK", emoji: "🍄", color: "#E63946", pts: [[200, 225], [275, 110], [445, 110], [520, 225], [415, 225], [415, 385], [305, 385], [305, 225]] },
+      { title: "VESELÉ AUTÍČKO", emoji: "🚗", color: "#06D6A0", pts: [[175, 315], [195, 225], [275, 145], [445, 145], [515, 225], [545, 315]] },
+      { title: "KOČIČÍ HLAVIČKA", emoji: "🐱", color: "#F4A261", pts: [[240, 100], [310, 165], [410, 165], [480, 100], [500, 275], [360, 370], [220, 275]] },
+      { title: "ŠŤAVNATÉ JABLÍČKO", emoji: "🍎", color: "#E63946", pts: [[360, 135], [465, 115], [515, 225], [455, 365], [360, 345], [265, 365], [205, 225], [255, 115]] },
+      { title: "DEŠTNÍK DO DEŠTĚ", emoji: "☂️", color: "#4CC9F0", pts: [[180, 240], [255, 130], [360, 95], [465, 130], [540, 240], [360, 240], [360, 385]] },
+      { title: "HORKOVZDUŠNÝ BALÓN", emoji: "🎈", color: "#FF5D8F", pts: [[275, 110], [360, 75], [445, 110], [480, 210], [405, 330], [395, 395], [325, 395], [315, 330], [240, 210]] },
+      { title: "SNĚHOVÁ VLOČKA", emoji: "❄️", color: "#118AB2", pts: [[360, 75], [465, 135], [510, 235], [465, 335], [360, 395], [255, 335], [210, 235], [255, 135]] }
+    ];
+    return base;
+  }
+
+  const DOT_TO_DOT_TEMPLATES = buildDotTemplates();
 
   class ConnectDotsActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -2566,18 +2753,25 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
-      this.useLetters = Boolean(level.config.letters);
+      this.useLetters = (level.stars || 1) >= 3 || Boolean(level.config.letters);
+      this.deck = shuffleArray(DOT_TO_DOT_TEMPLATES);
       this.tplIdx = 0;
-      this.mascot.audio.speak("act_05_intro");
       this.loadTemplate(0);
     }
 
     loadTemplate(idx) {
-      this.tplIdx = idx % DOT_TO_DOT_TEMPLATES.length;
-      this.tpl = DOT_TO_DOT_TEMPLATES[this.tplIdx];
-      this.currentDot = 0;
+      this.tplIdx = idx % this.deck.length;
+      if (this.tplIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      this.tpl = this.deck[this.tplIdx];
+      this.connectedSet = new Set();
       this.finished = false;
       this.render();
+      this.mascot.audio.speakCustom(
+        `Spojovačka ${this.tpl.title}! Ťukej na body popořadě nebo klidně i na přeskáčku a odhal obrázek!`,
+        `✨ SPOJ VŠECHNY BODY: ${this.tpl.title}`
+      );
     }
 
     nextTemplate() {
@@ -2594,8 +2788,7 @@
         <div class="workspace-header">
           <h2 class="workspace-title">✨ SPOJOVAČKA: ${this.tpl.title}</h2>
           <div class="workspace-actions">
-            <span class="step-pill current" id="dots-status">NAJDI BOD: ${this.labelFor(0)}</span>
-            <button id="btn-dots-next" class="btn-touch btn-next-task">✨ DALŠÍ SPOJOVAČKA ➔</button>
+            <span class="step-pill current" id="dots-status">SPOJENO BODŮ: 0 / ${this.tpl.pts.length} (LZE I NA PŘESKÁČKU)</span>
           </div>
         </div>
         <div class="tangram-board-wrap">
@@ -2605,30 +2798,44 @@
 
       this.canvas = document.getElementById("dots-canvas");
       this.ctx = this.canvas.getContext("2d");
-      document.getElementById("btn-dots-next").addEventListener("click", () => this.nextTemplate());
 
       const handlePoint = (e) => {
         if (this.finished) return;
         const rect = this.canvas.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / (rect.width || 1)) * this.canvas.width;
         const y = ((e.clientY - rect.top) / (rect.height || 1)) * this.canvas.height;
-        const [tx, ty] = this.tpl.pts[this.currentDot];
-        if (Math.hypot(x - tx, y - ty) < 46) {
-          this.currentDot += 1;
-          this.mascot.audio.playSfx("count");
-          this.draw();
-          if (this.currentDot >= this.tpl.pts.length) {
-            this.finished = true;
+
+        // Umožníme spojování bodů v libovolném pořadí (na přeskáčku)!
+        for (let i = 0; i < this.tpl.pts.length; i++) {
+          if (this.connectedSet.has(i)) continue;
+          const [tx, ty] = this.tpl.pts[i];
+          if (Math.hypot(x - tx, y - ty) < 46) {
+            this.connectedSet.add(i);
+            const lbl = this.labelFor(i);
+            this.mascot.audio.playSfx("count");
+            this.mascot.audio.speakCustom(lbl, `BOD ${lbl}`);
             this.draw();
-            this.mascot.celebrate("celebrate_01");
-            this.onComplete();
-            showContinueBanner(this.hostEl, {
-              title: `${this.tpl.emoji} ${this.tpl.title} JE NA SVĚTĚ! CHCEŠ DALŠÍ SPOJOVAČKU?`,
-              nextLabel: "✨ DALŠÍ SPOJOVAČKA ➔",
-              onNext: () => this.nextTemplate()
-            });
-          } else {
-            document.getElementById("dots-status").textContent = `NAJDI BOD: ${this.labelFor(this.currentDot)}`;
+
+            const statusEl = document.getElementById("dots-status");
+            if (statusEl) {
+              statusEl.textContent = `SPOJENO BODŮ: ${this.connectedSet.size} / ${this.tpl.pts.length}`;
+            }
+
+            if (this.connectedSet.size >= this.tpl.pts.length) {
+              this.finished = true;
+              this.draw();
+              this.mascot.celebrate("celebrate_01");
+              this.onComplete();
+              showContinueBanner(this.hostEl, {
+                icon: this.tpl.emoji,
+                title: `${this.tpl.title} JE NA SVĚTĚ!`,
+                subtitle: "Všechny body jsou spojené! Pojďme odhalit další tajný obrázek!",
+                spokenText: `Paráda! ${this.tpl.title} je na světě! Pojďme na další spojovačku!`,
+                nextLabel: "▶️ DALŠÍ SPOJOVAČKA ➔",
+                onNext: () => this.nextTemplate()
+              });
+            }
+            break;
           }
         }
       };
@@ -2646,38 +2853,49 @@
       ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, 720, 440);
 
-      // Spojené čáry
-      if (this.currentDot > 1 || this.finished) {
-        ctx.save();
+      const n = this.tpl.pts.length;
+
+      // Vykreslíme spojené úsečky mezi sousedními body (nebo celý tvar po dokončení)
+      ctx.save();
+      ctx.strokeStyle = this.tpl.color;
+      ctx.lineWidth = 8;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      if (this.finished) {
         ctx.beginPath();
-        for (let i = 0; i < this.currentDot; i++) {
-          const [x, y] = this.tpl.pts[i];
+        this.tpl.pts.forEach(([x, y], i) => {
           if (i === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
-        }
-        if (this.finished) {
-          ctx.closePath();
-          ctx.fillStyle = this.tpl.color + "44";
-          ctx.fill();
-        }
-        ctx.strokeStyle = this.tpl.color;
-        ctx.lineWidth = 8;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
+        });
+        ctx.closePath();
+        ctx.fillStyle = this.tpl.color + "44";
+        ctx.fill();
         ctx.stroke();
-        ctx.restore();
+      } else {
+        for (let i = 0; i < n; i++) {
+          const next = (i + 1) % n;
+          if (this.connectedSet.has(i) && this.connectedSet.has(next)) {
+            ctx.beginPath();
+            ctx.moveTo(this.tpl.pts[i][0], this.tpl.pts[i][1]);
+            ctx.lineTo(this.tpl.pts[next][0], this.tpl.pts[next][1]);
+            ctx.stroke();
+          }
+        }
       }
+      ctx.restore();
 
       // Body
+      const nextSuggested = this.tpl.pts.findIndex((_, idx) => !this.connectedSet.has(idx));
       this.tpl.pts.forEach(([x, y], i) => {
-        const isDone = i < this.currentDot;
-        const isCurrent = i === this.currentDot && !this.finished;
+        const isDone = this.connectedSet.has(i);
+        const isSuggested = i === nextSuggested && !this.finished;
         ctx.beginPath();
-        ctx.arc(x, y, isCurrent ? 26 : 21, 0, Math.PI * 2);
-        ctx.fillStyle = isDone ? "#06D6A0" : isCurrent ? "#FFB703" : "#E6F4FC";
+        ctx.arc(x, y, isSuggested ? 25 : 21, 0, Math.PI * 2);
+        ctx.fillStyle = isDone ? "#06D6A0" : isSuggested ? "#FFB703" : "#E6F4FC";
         ctx.fill();
         ctx.lineWidth = 4;
-        ctx.strokeStyle = isCurrent ? "#F77F00" : "#1D3557";
+        ctx.strokeStyle = isSuggested ? "#F77F00" : "#1D3557";
         ctx.stroke();
 
         ctx.fillStyle = isDone ? "#FFFFFF" : "#1D3557";
@@ -2693,7 +2911,7 @@
     }
   }
 
-  // --- AKTIVITA 7: HLEDAČ STÍNŮ A SILUET ---
+  // --- AKTIVITA 7: HLEDAČ STÍNŮ A SILUET (36 POLOŽEK + LIBOVOLNÉ POŘADÍ) ---
   const SHADOW_ITEMS_POOL = [
     { emoji: "🐧", name: "TUČŇÁK" },
     { emoji: "🦊", name: "LIŠKA" },
@@ -2708,7 +2926,29 @@
     { emoji: "⛵", name: "PLACHETNICE" },
     { emoji: "⛄", name: "SNĚHULÁK" },
     { emoji: "🎄", name: "STROMEČEK" },
-    { emoji: "🎸", name: "KYTARA" }
+    { emoji: "🎸", name: "KYTARA" },
+    { emoji: "🐘", name: "SLON" },
+    { emoji: "🦁", name: "LEV" },
+    { emoji: "🦒", name: "ŽIRAFA" },
+    { emoji: "🦓", name: "ZEBRA" },
+    { emoji: "🦘", name: "KLOKAN" },
+    { emoji: "🐊", name: "KROKODÝL" },
+    { emoji: "🦕", name: "DINOSAURUS" },
+    { emoji: "🦄", name: "JEDNOROŽEC" },
+    { emoji: "🐝", name: "VČELKA" },
+    { emoji: "🐞", name: "BERUŠKA" },
+    { emoji: "🐌", name: "ŠNEČEK" },
+    { emoji: "🚁", name: "VRTULNÍK" },
+    { emoji: "🚂", name: "LOKOMOTIVA" },
+    { emoji: "🚜", name: "TRAKTOR" },
+    { emoji: "🏰", name: "HRAD" },
+    { emoji: "👑", name: "KORUNA" },
+    { emoji: "☂️", name: "DEŠTNÍK" },
+    { emoji: "🎈", name: "BALÓNEK" },
+    { emoji: "🌵", name: "KAKTUS" },
+    { emoji: "🍄", name: "HŘÍBEK" },
+    { emoji: "🍍", name: "ANANAS" },
+    { emoji: "🎺", name: "TRUBKA" }
   ];
 
   class ShadowMatchActivity {
@@ -2717,43 +2957,82 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.pool = shuffleArray(SHADOW_ITEMS_POOL);
       this.cursor = 0;
-      this.mascot.audio.speak("act_07_intro");
       this.nextRound();
     }
 
     nextRound() {
-      const count = Math.min(5, this.level.config.pairs || 3);
-      this.items = [];
-      for (let i = 0; i < count; i++) {
-        this.items.push(SHADOW_ITEMS_POOL[(this.cursor + i) % SHADOW_ITEMS_POOL.length]);
+      const stars = this.level.stars || 1;
+      const count = Math.min(7, stars + 2); // 1★=3, 2★=4, 3★=5, 4★=6, 5★=7
+      if (this.cursor + count > this.pool.length) {
+        this.pool = shuffleArray(SHADOW_ITEMS_POOL);
+        this.cursor = 0;
       }
+      this.items = this.pool.slice(this.cursor, this.cursor + count);
       this.cursor += count;
-      this.shadows = [...this.items].sort(() => Math.random() - 0.5);
-      this.selectedEmoji = this.items[0].emoji;
+      this.shadows = shuffleArray(this.items);
+      this.selectedPick = null;
+      this.selectedShadow = null;
       this.matched = new Set();
       this.render();
+      this.mascot.audio.speakCustom(
+        "Najdi správný stín! Můžeš ťuknout nejdřív na barevný obrázek nebo na stín v libovolném pořadí!",
+        "🌗 SPOJ BAREVNÝ OBRÁZEK A JEHO STÍN!"
+      );
+    }
+
+    tryMatch(pickEmoji, shadowEmoji, targetEl) {
+      if (pickEmoji === shadowEmoji) {
+        this.matched.add(pickEmoji);
+        const item = this.items.find((i) => i.emoji === pickEmoji);
+        this.selectedPick = null;
+        this.selectedShadow = null;
+        this.mascot.audio.playSfx("snap");
+        this.mascot.emitParticles(["⭐", "✨"]);
+        if (item) {
+          this.mascot.audio.speakCustom(`Správně! To je ${item.name}!`, `✅ ${item.emoji} ${item.name}`);
+        }
+        this.render();
+        if (this.matched.size === this.items.length) {
+          this.mascot.celebrate(this.level.successAudioId || "celebrate_02");
+          this.onComplete();
+          showContinueBanner(this.hostEl, {
+            icon: "🌗",
+            title: "VŠECHNY STÍNY JSOU SPOJENÉ!",
+            subtitle: "Skvělé oko! Pojďme najít stíny pro další obrázky!",
+            spokenText: "Výborně! Všechny stíny jsou nalezeny! Pojďme na další stíny!",
+            nextLabel: "▶️ DALŠÍ STÍNY ➔",
+            onNext: () => this.nextRound()
+          });
+        }
+      } else {
+        if (targetEl) targetEl.classList.add("gentle-nudge-anim");
+        this.mascot.gentleNudge("hint_shape_size");
+      }
     }
 
     render() {
-      const rotated = Boolean(this.level.config.rotated);
+      const stars = this.level.stars || 1;
+      const rotated = stars >= 3 || Boolean(this.level.config.rotated);
       this.hostEl.innerHTML = `
         <div class="workspace-header">
           <h2 class="workspace-title">🌗 NAJDI SPRÁVNÝ STÍN!</h2>
           <div class="workspace-actions">
             <span class="step-pill current">NALEZENO: ${this.matched.size} / ${this.items.length}</span>
-            <button id="btn-shadow-next" class="btn-touch btn-next-task">🌗 DALŠÍ STÍNY ➔</button>
           </div>
         </div>
         <div class="interactive-stage">
-          <div style="font-weight:900; color:var(--navy-soft);">1. VYBER BAREVNÝ OBRÁZEK DOLE A ŤUKNI NA JEHO TMAVÝ STÍN NAHOŘE:</div>
+          <div style="font-weight:900; color:var(--navy-soft);">ŤUKNI NA STÍN NEBO NA OBRÁZEK V LIBOVOLNÉM POŘADÍ:</div>
           <div class="cards-grid">
             ${this.shadows
               .map((it, idx) => {
                 const isDone = this.matched.has(it.emoji);
-                const rot = rotated && !isDone ? (idx % 2 === 0 ? "rotate(18deg)" : "rotate(-18deg)") : "none";
+                const isSel = this.selectedShadow === it.emoji && !isDone;
+                const rotAngle = stars >= 4 ? (idx % 2 === 0 ? 35 : -35) : 18;
+                const rot = rotated && !isDone ? `rotate(${rotAngle}deg)` : "none";
                 return `
-                  <button class="game-card ${isDone ? "matched" : ""}" data-shadow="${it.emoji}">
+                  <button class="game-card ${isDone ? "matched" : isSel ? "selected" : ""}" data-shadow="${it.emoji}" ${isDone ? "disabled" : ""}>
                     <span class="game-card-emoji ${isDone ? "" : "silhouette-emoji"}" style="transform:${rot}">${it.emoji}</span>
                     <span class="game-card-label">${isDone ? it.name : "❓ STÍN"}</span>
                   </button>
@@ -2765,7 +3044,7 @@
             ${this.items
               .map((it) => {
                 const isDone = this.matched.has(it.emoji);
-                const isSel = this.selectedEmoji === it.emoji && !isDone;
+                const isSel = this.selectedPick === it.emoji && !isDone;
                 return `
                   <button class="game-card ${isDone ? "matched" : isSel ? "selected" : ""}" data-pick="${it.emoji}" ${isDone ? "disabled" : ""}>
                     <span class="game-card-emoji">${it.emoji}</span>
@@ -2778,16 +3057,20 @@
         </div>
       `;
 
-      document.getElementById("btn-shadow-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.nextRound();
-      });
-
       this.hostEl.querySelectorAll("[data-pick]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          this.selectedEmoji = btn.dataset.pick;
+          const pick = btn.dataset.pick;
+          if (this.matched.has(pick)) return;
+          const item = this.items.find((i) => i.emoji === pick);
           this.mascot.audio.playSfx("pop");
-          this.render();
+          if (item) this.mascot.audio.speakCustom(item.name);
+
+          if (this.selectedShadow) {
+            this.tryMatch(pick, this.selectedShadow, btn);
+          } else {
+            this.selectedPick = pick;
+            this.render();
+          }
         });
       });
 
@@ -2795,25 +3078,13 @@
         btn.addEventListener("click", () => {
           const target = btn.dataset.shadow;
           if (this.matched.has(target)) return;
-          if (this.selectedEmoji === target) {
-            this.matched.add(target);
-            this.mascot.audio.playSfx("snap");
-            this.mascot.emitParticles(["⭐", "✨"]);
-            const nextUnmatched = this.items.find((i) => !this.matched.has(i.emoji));
-            this.selectedEmoji = nextUnmatched ? nextUnmatched.emoji : null;
-            this.render();
-            if (this.matched.size === this.items.length) {
-              this.mascot.celebrate(this.level.successAudioId || "celebrate_02");
-              this.onComplete();
-              showContinueBanner(this.hostEl, {
-                title: "🌗 VŠECHNY STÍNY NALEZENY! CHCEŠ HLEDAT DALŠÍ?",
-                nextLabel: "🌗 DALŠÍ STÍNY ➔",
-                onNext: () => this.nextRound()
-              });
-            }
+          this.mascot.audio.playSfx("pop");
+
+          if (this.selectedPick) {
+            this.tryMatch(this.selectedPick, target, btn);
           } else {
-            btn.classList.add("gentle-nudge-anim");
-            this.mascot.gentleNudge("hint_shape_size");
+            this.selectedShadow = target;
+            this.render();
           }
         });
       });
@@ -2824,13 +3095,33 @@
     }
   }
 
-  // --- AKTIVITA 8: CO DO OBRÁZKU NEPATŘÍ? (VIZUÁLNÍ DETEKTIV) ---
+  // --- AKTIVITA 8: CO DO OBRÁZKU NEPATŘÍ? (VIZUÁLNÍ DETEKTIV - 25 SCÉN) ---
   const DETECTIVE_SCENES = [
-    { title: "ZIMA NA LEDOVCI", normal: ["🐧", "🐻‍❄️", "🦭", "❄️", "⛄"], odd: ["🌴", "🍕", "🚗"] },
-    { title: "KOŠÍK S OVOCEM", normal: ["🍎", "🍐", "🍌", "🍓", "🍒"], odd: ["👟", "⚽", "🔨"] },
-    { title: "PODMOŘSKÝ SVĚT", normal: ["🐟", "🐳", "🐙", "🦀", "🐬"], odd: ["🚜", "🌵", "🎸"] },
-    { title: "DOPRAVNÍ PROSTŘEDKY", normal: ["🚗", "🚌", "🚂", "✈️", "⛵"], odd: ["🐸", "🍦", "🍄"] },
-    { title: "LESNÍ ZVÍŘÁTKA", normal: ["🦊", "🦉", "🦌", "🐿️", "🦔"], odd: ["🚀", "📺", "🩱"] }
+    { title: "ZIMA NA LEDOVCI", normal: ["🐧", "🐻‍❄️", "🦭", "❄️", "⛄"], odd: ["🌴", "🍕", "🚗", "🌵"] },
+    { title: "KOŠÍK S OVOCEM", normal: ["🍎", "🍐", "🍌", "🍓", "🍒"], odd: ["👟", "⚽", "🔨", "🧦"] },
+    { title: "PODMOŘSKÝ SVĚT", normal: ["🐟", "🐳", "🐙", "🦀", "🐬"], odd: ["🚜", "🌵", "🎸", "🛏️"] },
+    { title: "DOPRAVNÍ PROSTŘEDKY", normal: ["🚗", "🚌", "🚂", "✈️", "⛵"], odd: ["🐸", "🍦", "🍄", "🥕"] },
+    { title: "LESNÍ ZVÍŘÁTKA", normal: ["🦊", "🦉", "🦌", "🐿️", "🦔"], odd: ["🚀", "📺", "🩱", "🍔"] },
+    { title: "HUDEBNÍ KONCERT", normal: ["🎸", "🎺", "🥁", "🎹", "🎻"], odd: ["🥦", "🚜", "🧤", "🐟"] },
+    { title: "ZELENINOVÁ ZAHRÁDKA", normal: ["🥕", "🥦", "🥒", "🍅", "🌽"], odd: ["👑", "🎸", "✈️", "🧸"] },
+    { title: "VESMÍRNÁ VÝPRAVA", normal: ["🚀", "🪐", "🌟", "🌙", "🛸"], odd: ["🐄", "🍄", "🛷", "🍉"] },
+    { title: "ZVÍŘÁTKA NA STATKU", normal: ["🐄", "🐖", "🐑", "🐓", "🐎"], odd: ["🐳", "🛸", "🌵", "🦈"] },
+    { title: "SLADKÁ CUKRÁRNA", normal: ["🎂", "🧁", "🍩", "🍦", "🍪"], odd: ["🔨", "🐟", "🚜", "🥾"] },
+    { title: "OBLEČENÍ DO ZIMY", normal: ["🧥", "🧤", "🧣", "🧶", "🥾"], odd: ["🍉", "🩱", "🌴", "🦋"] },
+    { title: "ROZKVETLÁ LOUKA", normal: ["🌻", "🌷", "🦋", "🐝", "🐞"], odd: ["🛸", "🛋️", "⚓", "🍕"] },
+    { title: "ŠKOLNÍ AKTOVKA", normal: ["✏️", "📘", "🖍️", "📏", "✂️"], odd: ["🐸", "🍕", "🛞", "🌵"] },
+    { title: "KUCHYŇSKÉ NÁDOBÍ", normal: ["🥄", "🍴", "🍽️", "🥣", "🫖"], odd: ["⚽", "🦉", "🚜", "🌲"] },
+    { title: "SPORTOVNÍ HŘIŠTĚ", normal: ["⚽", "🏀", "🎾", "🏐", "🥇"], odd: ["🧁", "🐌", "🛏️", "🍄"] },
+    { title: "AFRICKÉ SAFARI", normal: ["🦁", "🐘", "🦒", "🦓", "🦛"], odd: ["⛄", "🐧", "🛷", "🎄"] },
+    { title: "KRÁLOVSKÝ ZÁMEK", normal: ["👑", "🏰", "🤴", "👸", "💎"], odd: ["🚜", "🥦", "🐙", "🛞"] },
+    { title: "NOČNÍ OBLOHA", normal: ["🌙", "⭐", "🌟", "🪐", "🦉"], odd: ["☀️", "🏖️", "🕶️", "🍦"] },
+    { title: "LETNÍ PLÁŽ", normal: ["🏖️", "☀️", "🕶️", "🩱", "🐚"], odd: ["⛄", "🎿", "🧣", "🌨️"] },
+    { title: "DĚTSKÝ POKOJÍČEK", normal: ["🧸", "🚂", "🧩", "🪁", "🥁"], odd: ["🦈", "🌵", "🚜", "🌩️"] },
+    { title: "PEKÁRNA U PIKA", normal: ["🥐", "🥖", "🥨", "🍞", "🥯"], odd: ["👟", "🎸", "🐸", "☂️"] },
+    { title: "POČASÍ NA OBLOZE", normal: ["☀️", "☁️", "🌧️", "🌈", "❄️"], odd: ["🪑", "🍕", "🚗", "🎸"] },
+    { title: "HMYZÍ KAMARÁDI", normal: ["🐝", "🐞", "🦋", "🐜", "🦗"], odd: ["🐘", "🚌", "🎂", "👑"] },
+    { title: "PTÁČCI NA STROMĚ", normal: ["🦉", "🦅", "🦆", "🦢", "🦜"], odd: ["🐢", "🚗", "🍔", "🎸"] },
+    { title: "STAVEBNÍ NÁŘADÍ", normal: ["🔨", "🪛", "🔧", "🪚", "🧱"], odd: ["🍦", "🦋", "🍓", "🎈"] }
   ];
 
   class VisualDetectiveActivity {
@@ -2839,19 +3130,32 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.deck = shuffleArray(DETECTIVE_SCENES);
       this.sceneIdx = 0;
-      this.mascot.audio.speak("act_08_intro");
       this.loadScene(0);
     }
 
     loadScene(idx) {
-      this.sceneIdx = idx % DETECTIVE_SCENES.length;
-      const sc = DETECTIVE_SCENES[this.sceneIdx];
+      this.sceneIdx = idx % this.deck.length;
+      if (this.sceneIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      const sc = this.deck[this.sceneIdx];
+      const stars = this.level.stars || 1;
+      const oddCount = stars === 1 ? 2 : stars <= 3 ? 3 : 4;
+      const normalCount = stars <= 2 ? 4 : 5;
+      const chosenNormal = shuffleArray(sc.normal).slice(0, normalCount);
+      const chosenOdd = shuffleArray(sc.odd).slice(0, Math.min(oddCount, sc.odd.length));
+
       this.sceneTitle = sc.title;
-      this.oddSet = new Set(sc.odd);
+      this.oddSet = new Set(chosenOdd);
       this.found = new Set();
-      this.cards = [...sc.normal, ...sc.odd].sort(() => Math.random() - 0.5);
+      this.cards = shuffleArray([...chosenNormal, ...chosenOdd]);
       this.render();
+      this.mascot.audio.speakCustom(
+        `Detektivní případ: ${this.sceneTitle}! Najdi ${this.oddSet.size} věci, které sem vůbec nepatří!`,
+        `🔍 ${this.sceneTitle}: NAJDI ${this.oddSet.size} VĚCI, KTERÉ SEM NEPATŘÍ!`
+      );
     }
 
     render() {
@@ -2859,11 +3163,11 @@
         <div class="workspace-header">
           <h2 class="workspace-title">🔍 DETEKTIV: ${this.sceneTitle}</h2>
           <div class="workspace-actions">
-            <span class="step-pill current">NAJDI ${this.oddSet.size} VĚCI, KTERÉ SEM NEPATŘÍ (${this.found.size}/${this.oddSet.size})</span>
-            <button id="btn-det-next" class="btn-touch btn-next-task">🔍 DALŠÍ PÁTRÁNÍ ➔</button>
+            <span class="step-pill current">NALEZENO: ${this.found.size} / ${this.oddSet.size}</span>
           </div>
         </div>
         <div class="interactive-stage">
+          <div style="font-weight:900; color:var(--navy-soft);">ŤUKNI NA VŠECHNY VĚCI, KTERÉ DO SKUPINY „${this.sceneTitle}“ NEPATŘÍ:</div>
           <div class="cards-grid">
             ${this.cards
               .map((em) => {
@@ -2880,11 +3184,6 @@
         </div>
       `;
 
-      document.getElementById("btn-det-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.loadScene(this.sceneIdx + 1);
-      });
-
       this.hostEl.querySelectorAll(".game-card").forEach((btn) => {
         btn.addEventListener("click", () => {
           const em = btn.dataset.em;
@@ -2893,19 +3192,23 @@
             this.found.add(em);
             this.mascot.audio.playSfx("snap");
             this.mascot.emitParticles(["🔍", "⭐"]);
+            this.mascot.audio.speakCustom("Správně! To sem nepatří!");
             this.render();
             if (this.found.size === this.oddSet.size) {
               this.mascot.celebrate("celebrate_02");
               this.onComplete();
               showContinueBanner(this.hostEl, {
-                title: "🔍 VŠECHNY NESMYSLY ODHALENY! CHCEŠ DALŠÍ PŘÍPAD?",
-                nextLabel: "🔍 DALŠÍ PÁTRÁNÍ ➔",
+                icon: "🔍",
+                title: "VŠECHNY NESMYSLY JSOU ODHALENY!",
+                subtitle: "Jsi skvělý detektiv! Vyřešíme další záhadu?",
+                spokenText: "Výborně! Všechny nesmysly jsou odhaleny! Pojďme na další pátrání!",
+                nextLabel: "▶️ DALŠÍ PÁTRÁNÍ ➔",
                 onNext: () => this.loadScene(this.sceneIdx + 1)
               });
             }
           } else {
             btn.classList.add("gentle-nudge-anim");
-            this.mascot.gentleNudge("hint_idle_encourage");
+            this.mascot.audio.speakCustom(`Tohle do skupiny ${this.sceneTitle} patří! Hledej, co sem nepatří!`);
           }
         });
       });
@@ -2916,12 +3219,33 @@
     }
   }
 
-  // --- AKTIVITA 9: SKLÁDÁNÍ ROZSTŘÍHANÝCH OBRÁZKŮ (LEDOVÉ PUZZLE) ---
+  // --- AKTIVITA 9: SKLÁDÁNÍ ROZSTŘÍHANÝCH OBRÁZKŮ (LEDOVÉ PUZZLE - 25 TÉMAT + NA PŘESKÁČKU) ---
   const PUZZLE_THEMES = [
-    { title: "POLÁRNÍ DRUŽINA", bg: "#DFF4FF", grid: ["☀️", "☁️", "❄️", "🏔️", "🐧", "🐻‍❄️", "🌊", "🐟", "🐳"] },
-    { title: "VESMÍRNÁ VÝPRAVA", bg: "#1D3557", grid: ["🌟", "🪐", "🌙", "☄️", "🚀", "🛸", "🌍", "👨‍🚀", "⭐"] },
-    { title: "ROZKVETLÁ LOUKA", bg: "#E8F8F5", grid: ["☀️", "🌈", "🦋", "🐝", "🌻", "🌷", "🐞", "🍓", "🍀"] },
-    { title: "POHÁDKOVÉ KRÁLOVSTVÍ", bg: "#FFF3D6", grid: ["👑", "✨", "🐉", "🏰", "🤴", "👸", "🦄", "💎", "🛡️"] }
+    { title: "POLÁRNÍ DRUŽINA", grid: ["☀️", "☁️", "❄️", "🏔️", "🐧", "🐻‍❄️", "🌊", "🐟", "🐳", "🦭", "⛄", "🧊"] },
+    { title: "VESMÍRNÁ VÝPRAVA", grid: ["🌟", "🪐", "🌙", "☄️", "🚀", "🛸", "🌍", "👨‍🚀", "⭐", "🌌", "🛰️", "🔭"] },
+    { title: "ROZKVETLÁ LOUKA", grid: ["☀️", "🌈", "🦋", "🐝", "🌻", "🌷", "🐞", "🍓", "🍀", "🌼", "🐌", "🍄"] },
+    { title: "POHÁDKOVÉ KRÁLOVSTVÍ", grid: ["👑", "✨", "🐉", "🏰", "🤴", "👸", "🦄", "💎", "🛡️", "🗡️", "🐎", "🔮"] },
+    { title: "PODMOŘSKÝ ÚTES", grid: ["🐬", "🐳", "🦈", "🐙", "🦀", "🐠", "🐡", "🐚", "🪸", "⚓", "🧜‍♀️", "🌊"] },
+    { title: "AFRICKÉ SAFARI", grid: ["☀️", "🌴", "🦁", "🐘", "🦒", "🦓", "🦛", "🦏", "🐊", "🦩", "🐒", "🦜"] },
+    { title: "VESELÁ FARMA", grid: ["🏡", "🚜", "🐄", "🐖", "🐑", "🐓", "🐎", "🦆", "🌾", "🥕", "🌻", "🐕"] },
+    { title: "LESNÍ KRÁLOVSTVÍ", grid: ["🌲", "🌳", "🦊", "🦉", "🦌", "🐿️", "🦔", "🐻", "🍄", "🌰", "🫐", "🐰"] },
+    { title: "DOPRAVNÍ SVĚT", grid: ["✈️", "🚁", "🚂", "🚗", "🚌", "🚒", "🚑", "🚓", "⛵", "🚢", "🚲", "🚦"] },
+    { title: "HUDEBNÍ ORCHESTR", grid: ["🎼", "🎵", "🎹", "🎸", "🎺", "🎻", "🥁", "🎷", "🪈", "🔔", "🎤", "🎶"] },
+    { title: "SLADKÁ CUKRÁRNA", grid: ["🎂", "🧁", "🍩", "🍦", "🍭", "🍬", "🍫", "🍪", "🥐", "🍓", "🍒", "🥞"] },
+    { title: "OVOCNÝ SAD", grid: ["🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🍒", "🍑", "🍍", "🥝"] },
+    { title: "ZELENINOVÁ ZAHRADA", grid: ["🥕", "🥦", "🥒", "🍅", "🌽", "🫑", "🍆", "🥔", "🧅", "🧄", "🥬", "🎃"] },
+    { title: "DINOSAUŘÍ PARK", grid: ["🌋", "🌴", "🦕", "🦖", "🥚", "🦴", "🌿", "🪨", "☀️", "🦎", "🐢", "🐊"] },
+    { title: "ZIMNÍ RADOVÁNKY", grid: ["❄️", "🌨️", "⛄", "🛷", "🎿", "⛸️", "🧤", "🧣", "🧥", "🏔️", "🌲", "☕"] },
+    { title: "LETNÍ PRÁZDNINY", grid: ["☀️", "🏖️", "🌊", "⛵", "🏄", "🕶️", "🩱", "🍦", "🍉", "🐚", "🦀", "🌴"] },
+    { title: "NAROZENINOVÁ OSLAVA", grid: ["🎈", "🎉", "🎊", "🎁", "🎂", "🕯️", "🥳", "👑", "🍰", "🍭", "🎵", "⭐"] },
+    { title: "HASIČSKÁ STANICE", grid: ["🚒", "👨‍🚒", "🚨", "🧯", "🪜", "💧", "🏠", "🐱", "🌳", "🐕", "⭐", "🛡️"] },
+    { title: "STAVENIŠTĚ", grid: ["🏗️", "🚜", "🚛", "🧱", "🔨", "🔧", "🪚", "🪛", "👷", "🏠", "🏢", "🚧"] },
+    { title: "KOUZELNICKÁ ŠKOLA", grid: ["🎩", "🪄", "🔮", "✨", "🦉", "📜", "🧪", "💎", "🌙", "⭐", "🏰", "🕯️"] },
+    { title: "SPORTOVNÍ OLYMPIÁDA", grid: ["🏆", "🥇", "⚽", "🏀", "🎾", "🏐", "🏈", "⚾", "🏊", "🚴", "🤸", "🎯"] },
+    { title: "PIRÁTSKÁ VÝPRAVA", grid: ["🏴‍☠️", "⛵", "⚓", "🗺️", "🧭", "💎", "🪙", "🦜", "🏝️", "🌊", "🦈", "🔭"] },
+    { title: "DĚTSKÉ HŘIŠTĚ", grid: ["🛝", "🎡", "🎢", "🎠", "🎈", "🪁", "⚽", "🛴", "🚲", "🍦", "☀️", "🌳"] },
+    { title: "PODZIMNÍ PROCHÁZKA", grid: ["🍁", "🍂", "🍄", "🌰", "🦔", "🐿️", "🦉", "🌧️", "☂️", "🎃", "🍎", "🌲"] },
+    { title: "JARNÍ PROBUZENÍ", grid: ["🌱", "🌷", "🌼", "🌸", "☀️", "🌈", "🐣", "🐰", "🐝", "🦋", "🐞", "🍀"] }
   ];
 
   class PuzzleActivity {
@@ -2930,43 +3254,79 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.deck = shuffleArray(PUZZLE_THEMES);
       this.themeIdx = 0;
-      this.mascot.audio.speak("act_09_intro");
       this.loadPuzzle(0);
     }
 
     loadPuzzle(idx) {
-      this.themeIdx = idx % PUZZLE_THEMES.length;
-      this.theme = PUZZLE_THEMES[this.themeIdx];
-      this.count = this.level.stars === 1 ? 4 : this.level.stars === 2 ? 6 : 9;
+      this.themeIdx = idx % this.deck.length;
+      if (this.themeIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      this.theme = this.deck[this.themeIdx];
+      const stars = this.level.stars || 1;
+      const counts = { 1: 4, 2: 6, 3: 6, 4: 9, 5: 12 };
+      this.count = counts[stars] || 6;
       this.targetTiles = this.theme.grid.slice(0, this.count).map((em, i) => ({ pos: i + 1, emoji: em }));
       this.placed = new Array(this.count).fill(null);
-      this.tray = [...this.targetTiles].sort(() => Math.random() - 0.5);
-      this.selectedTile = this.tray[0] || null;
+      this.tray = shuffleArray(this.targetTiles);
+      this.selectedTile = null;
+      this.selectedSlot = null;
       this.render();
+      this.mascot.audio.speakCustom(
+        `Slož puzzle ${this.theme.title}! Můžeš skládat dílky v libovolném pořadí na přeskáčku!`,
+        `🧩 PUZZLE: ${this.theme.title}`
+      );
+    }
+
+    tryPlace(tile, slotIdx, slotEl) {
+      if (tile.pos === slotIdx + 1) {
+        this.placed[slotIdx] = tile;
+        this.selectedTile = null;
+        this.selectedSlot = null;
+        this.mascot.audio.playSfx("snap");
+        this.mascot.emitParticles(["🧩", "⭐"]);
+        this.render();
+        if (this.placed.every(Boolean)) {
+          this.mascot.celebrate("celebrate_01");
+          this.onComplete();
+          showContinueBanner(this.hostEl, {
+            icon: "🧩",
+            title: `PUZZLE „${this.theme.title}“ JE KOMPLETNÍ!`,
+            subtitle: "Všechny dílky do sebe krásně zapadly! Poskládáme další obrázek?",
+            spokenText: `Výborně! Puzzle ${this.theme.title} je kompletní! Pojďme na další puzzle!`,
+            nextLabel: "▶️ DALŠÍ PUZZLE ➔",
+            onNext: () => this.loadPuzzle(this.themeIdx + 1)
+          });
+        }
+      } else {
+        if (slotEl) slotEl.classList.add("gentle-nudge-anim");
+        this.mascot.gentleNudge("hint_shape_size");
+      }
     }
 
     render() {
-      const cols = this.count === 4 ? 2 : 3;
+      const cols = this.count === 4 ? 2 : this.count === 12 ? 4 : 3;
       this.hostEl.innerHTML = `
         <div class="workspace-header">
           <h2 class="workspace-title">🧩 PUZZLE: ${this.theme.title}</h2>
           <div class="workspace-actions">
             <span class="step-pill current">SLOŽENO: ${this.placed.filter(Boolean).length} / ${this.count}</span>
-            <button id="btn-puzzle-next" class="btn-touch btn-next-task">🧩 DALŠÍ PUZZLE ➔</button>
           </div>
         </div>
         <div class="feed-layout">
           <section class="pond-panel" style="align-items:center; justify-content:center;">
-            <div class="panel-heading" style="width:100%;"><span>🖼️ RÁMEČEK OBRÁZKU</span></div>
-            <div style="display:grid; grid-template-columns:repeat(${cols}, 1fr); gap:10px; width:100%; max-width:360px; flex:1; align-items:center;">
+            <div class="panel-heading" style="width:100%;"><span>🖼️ RÁMEČEK OBRÁZKU (LZE SKLÁDAT NA PŘESKÁČKU)</span></div>
+            <div style="display:grid; grid-template-columns:repeat(${cols}, 1fr); gap:8px; width:100%; max-width:420px; flex:1; align-items:center;">
               ${this.targetTiles
                 .map((t, i) => {
                   const filled = this.placed[i];
+                  const isSlotSel = this.selectedSlot === i && !filled;
                   return `
-                    <button class="target-slot ${filled ? "filled" : ""}" data-slot="${i}" style="width:100%; height:100%;">
-                      <span style="font-size:clamp(1.6rem, 4dvh, 2.5rem); opacity:${filled ? "1" : "0.28"};">${t.emoji}</span>
-                      <span style="font-size:0.75rem;">DÍLEK ${t.pos}</span>
+                    <button class="target-slot ${filled ? "filled" : ""}" data-slot="${i}" style="width:100%; height:100%; ${isSlotSel ? "border-color:#ffb703; background:#fff9db;" : ""}">
+                      <span style="font-size:clamp(1.4rem, 3.6dvh, 2.3rem); opacity:${filled ? "1" : "0.28"};">${t.emoji}</span>
+                      <span style="font-size:0.72rem;">DÍLEK ${t.pos}</span>
                     </button>
                   `;
                 })
@@ -2993,42 +3353,34 @@
         </div>
       `;
 
-      document.getElementById("btn-puzzle-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.loadPuzzle(this.themeIdx + 1);
-      });
-
       this.hostEl.querySelectorAll("[data-piece]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const pos = Number(btn.dataset.piece);
-          this.selectedTile = this.tray.find((x) => x.pos === pos) || null;
+          const tile = this.tray.find((x) => x.pos === pos) || null;
+          if (!tile) return;
           this.mascot.audio.playSfx("pop");
-          this.render();
+          this.mascot.audio.speakCustom(`Dílek ${pos}`);
+
+          if (this.selectedSlot !== null && !this.placed[this.selectedSlot]) {
+            this.tryPlace(tile, this.selectedSlot, btn);
+          } else {
+            this.selectedTile = tile;
+            this.render();
+          }
         });
       });
 
       this.hostEl.querySelectorAll("[data-slot]").forEach((slotBtn) => {
         slotBtn.addEventListener("click", () => {
           const idx = Number(slotBtn.dataset.slot);
-          if (this.placed[idx] || !this.selectedTile) return;
-          if (this.selectedTile.pos === idx + 1) {
-            this.placed[idx] = this.selectedTile;
-            this.mascot.audio.playSfx("snap");
-            this.mascot.emitParticles(["🧩", "⭐"]);
-            this.selectedTile = this.tray.find((x) => !this.placed.some((p) => p && p.pos === x.pos)) || null;
-            this.render();
-            if (this.placed.every(Boolean)) {
-              this.mascot.celebrate("celebrate_01");
-              this.onComplete();
-              showContinueBanner(this.hostEl, {
-                title: "🧩 PUZZLE JE KOMPLETNÍ! CHCEŠ POSKLÁDAT DALŠÍ?",
-                nextLabel: "🧩 DALŠÍ PUZZLE ➔",
-                onNext: () => this.loadPuzzle(this.themeIdx + 1)
-              });
-            }
+          if (this.placed[idx]) return;
+          this.mascot.audio.playSfx("pop");
+
+          if (this.selectedTile) {
+            this.tryPlace(this.selectedTile, idx, slotBtn);
           } else {
-            slotBtn.classList.add("gentle-nudge-anim");
-            this.mascot.gentleNudge("hint_shape_size");
+            this.selectedSlot = idx;
+            this.render();
           }
         });
       });
@@ -3039,7 +3391,7 @@
     }
   }
 
-  // --- AKTIVITA 11: SKLÁDÁNÍ PRVNÍCH SLOV ZE SLABIK ---
+  // --- AKTIVITA 11: SKLÁDÁNÍ PRVNÍCH SLOV ZE SLABIK (34 SLOV + SKLÁDÁNÍ NA PŘESKÁČKU) ---
   const SYLLABLE_WORDS_BANK = [
     { parts: ["MÁ", "MA"], emoji: "👩" },
     { parts: ["TÁ", "TA"], emoji: "👨" },
@@ -3050,11 +3402,31 @@
     { parts: ["ŽÁ", "BA"], emoji: "🐸" },
     { parts: ["LIŠ", "KA"], emoji: "🦊" },
     { parts: ["BA", "NÁN"], emoji: "🍌" },
+    { parts: ["KO", "ČKA"], emoji: "🐱" },
+    { parts: ["PE", "JSEK"], emoji: "🐶" },
+    { parts: ["SLU", "NCE"], emoji: "☀️" },
+    { parts: ["MĚ", "SÍC"], emoji: "🌙" },
+    { parts: ["HVĚ", "ZDA"], emoji: "⭐" },
+    { parts: ["MO", "TÝL"], emoji: "🦋" },
+    { parts: ["VČE", "LA"], emoji: "🐝" },
+    { parts: ["KRÁ", "VA"], emoji: "🐄" },
+    { parts: ["O", "VCE"], emoji: "🐑" },
+    { parts: ["ZA", "JÍC"], emoji: "🐰" },
+    { parts: ["MED", "VĚD"], emoji: "🐻" },
+    { parts: ["TUČ", "ŇÁK"], emoji: "🐧" },
+    { parts: ["LO", "ĎKA"], emoji: "⛵" },
     { parts: ["JA", "HO", "DA"], emoji: "🍓" },
     { parts: ["KO", "ČIČ", "KA"], emoji: "🐱" },
     { parts: ["KO", "RU", "NA"], emoji: "👑" },
     { parts: ["RA", "KE", "TA"], emoji: "🚀" },
-    { parts: ["SNĚ", "HU", "LÁK"], emoji: "⛄" }
+    { parts: ["SNĚ", "HU", "LÁK"], emoji: "⛄" },
+    { parts: ["BE", "RUŠ", "KA"], emoji: "🐞" },
+    { parts: ["ŽI", "RA", "FA"], emoji: "🦒" },
+    { parts: ["VE", "VER", "KA"], emoji: "🐿️" },
+    { parts: ["PA", "POU", "ŠEK"], emoji: "🦜" },
+    { parts: ["LE", "TA", "DLO"], emoji: "✈️" },
+    { parts: ["CHOB", "OT", "NI", "CE"], emoji: "🐙" },
+    { parts: ["DI", "NO", "SAU", "RUS"], emoji: "🦕" }
   ];
 
   class SyllablesActivity {
@@ -3063,42 +3435,60 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      const stars = level.stars || 1;
+      const filtered = SYLLABLE_WORDS_BANK.filter((w) =>
+        stars === 1 ? w.parts.length === 2 : stars >= 4 ? w.parts.length >= 3 : true
+      );
+      this.deck = shuffleArray(filtered.length ? filtered : SYLLABLE_WORDS_BANK);
       this.wordIdx = 0;
-      this.mascot.audio.speak("act_11_intro");
       this.loadWord(0);
     }
 
     loadWord(idx) {
-      this.wordIdx = idx % SYLLABLE_WORDS_BANK.length;
-      this.current = SYLLABLE_WORDS_BANK[this.wordIdx];
-      this.picked = [];
-      this.choices = this.current.parts
-        .map((syl, i) => ({ syl, i, used: false }))
-        .sort(() => Math.random() - 0.5);
+      this.wordIdx = idx % this.deck.length;
+      if (this.wordIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      this.current = this.deck[this.wordIdx];
+      this.placedSlots = new Array(this.current.parts.length).fill(null);
+      this.selectedSlot = null;
+      this.choices = shuffleArray(
+        this.current.parts.map((syl, i) => ({ syl, origIdx: i, used: false }))
+      );
       this.render();
-      this.mascot.audio.renderKaraokeWords(`POSKLÁDEJ ZE SLABIK SLOVO: ${this.current.parts.join("-")}!`);
+      this.speakTargetWord();
+    }
+
+    speakTargetWord() {
+      const fullWord = this.current.parts.join("");
+      this.mascot.audio.speakCustom(
+        `Poskládej ze slabik slovo ${fullWord}! ${this.current.parts.join(", ")}! Můžeš skládat i na přeskáčku!`,
+        `📖 POSKLÁDEJ SLOVO: ${this.current.emoji} ${this.current.parts.join("-")}`
+      );
     }
 
     render() {
+      const fullWord = this.current.parts.join("");
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">📖 POSKLÁDEJ SLOVO ZE SLABIK</h2>
+          <h2 class="workspace-title">📖 POSKLÁDEJ SLOVO ZE SLABIK (LZE I NA PŘESKÁČKU)</h2>
           <div class="workspace-actions">
-            <span class="step-pill current">SLOVO ${this.wordIdx + 1}</span>
-            <button id="btn-syl-next" class="btn-touch btn-next-task">📖 DALŠÍ SLOVO ➔</button>
+            <span class="step-pill current">SLOVO: ${this.placedSlots.filter(Boolean).length} / ${this.current.parts.length}</span>
           </div>
         </div>
         <div class="interactive-stage">
-          <div class="word-picture-card">
+          <div class="word-picture-card" id="syl-word-card" style="cursor:pointer;">
             <span class="word-emoji">${this.current.emoji}</span>
             <div class="slot-row">
               ${this.current.parts
                 .map((_, i) => {
-                  const val = this.picked[i] || "___";
-                  return `<div class="target-slot ${this.picked[i] ? "filled" : ""}">${val}</div>`;
+                  const val = this.placedSlots[i] || `${i + 1}. ___`;
+                  const isSel = this.selectedSlot === i && !this.placedSlots[i];
+                  return `<button type="button" class="target-slot ${this.placedSlots[i] ? "filled" : ""}" data-slot="${i}" style="${isSel ? "border-color:#ffb703; background:#fff9db;" : ""}">${val}</button>`;
                 })
                 .join("")}
             </div>
+            <button id="btn-syl-speak" class="btn-touch btn-primary">🔊 PŘEČÍST SLOVO</button>
           </div>
           <div class="letter-choices">
             ${this.choices
@@ -3111,26 +3501,64 @@
         </div>
       `;
 
-      document.getElementById("btn-syl-next").addEventListener("click", () => {
+      document.getElementById("btn-syl-speak").addEventListener("click", (e) => {
+        e.stopPropagation();
         this.mascot.audio.playSfx("pop");
-        this.loadWord(this.wordIdx + 1);
+        this.speakTargetWord();
+      });
+
+      this.hostEl.querySelectorAll("[data-slot]").forEach((slotBtn) => {
+        slotBtn.addEventListener("click", () => {
+          const sIdx = Number(slotBtn.dataset.slot);
+          if (this.placedSlots[sIdx]) {
+            this.mascot.audio.speakCustom(this.placedSlots[sIdx]);
+            return;
+          }
+          this.selectedSlot = sIdx;
+          this.mascot.audio.playSfx("pop");
+          this.mascot.audio.speakCustom(`${sIdx + 1}. slabika: ${this.current.parts[sIdx]}`);
+          this.render();
+        });
       });
 
       this.hostEl.querySelectorAll("[data-cidx]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const item = this.choices[Number(btn.dataset.cidx)];
-          const expected = this.current.parts[this.picked.length];
-          if (item.syl === expected) {
+          if (!item || item.used) return;
+
+          // Přečteme slabiku nahlas
+          this.mascot.audio.speakCustom(item.syl, `SLABIKA: ${item.syl}`);
+
+          // Umožníme umístění na přeskáčku do vybraného slotu nebo do jakéhokoli volného slotu, kam tato slabika patří!
+          let targetIdx = -1;
+          if (
+            this.selectedSlot !== null &&
+            !this.placedSlots[this.selectedSlot] &&
+            this.current.parts[this.selectedSlot] === item.syl
+          ) {
+            targetIdx = this.selectedSlot;
+          } else if (this.selectedSlot === null) {
+            targetIdx = this.current.parts.findIndex(
+              (part, idx) => !this.placedSlots[idx] && part === item.syl
+            );
+          }
+
+          if (targetIdx !== -1) {
             item.used = true;
-            this.picked.push(item.syl);
+            this.placedSlots[targetIdx] = item.syl;
+            this.selectedSlot = null;
             this.mascot.audio.playSfx("snap");
             this.render();
-            if (this.picked.length === this.current.parts.length) {
+
+            if (this.placedSlots.every(Boolean)) {
               this.mascot.celebrate("celebrate_05");
               this.onComplete();
               showContinueBanner(this.hostEl, {
-                title: `📖 VÝBORNĚ! PŘEČETLI JSME SLOVO ${this.current.parts.join("")}!`,
-                nextLabel: "📖 DALŠÍ SLOVO ➔",
+                icon: this.current.emoji,
+                title: `VÝBORNĚ! POSKLÁDALI JSME SLOVO „${fullWord}“!`,
+                subtitle: "Všechny slabiky jsou na svém místě. Zkusíme další slovo!",
+                spokenText: `Výborně! Přečetli jsme slovo ${fullWord}! Pojďme na další slovo!`,
+                nextLabel: "▶️ DALŠÍ SLOVO ➔",
                 onNext: () => this.loadWord(this.wordIdx + 1)
               });
             }
@@ -3147,19 +3575,42 @@
     }
   }
 
-  // --- AKTIVITA 12: PÍSMENKOVÁ DRÁHA (GRAFOMOTORIKA) ---
+  // --- AKTIVITA 12: PÍSMENKOVÁ DRÁHA (GRAFOMOTORIKA - 34 ZNAKŮ + NA PŘESKÁČKU) ---
   const GLYPH_TRACKS = [
     { glyph: "A", pts: [[240, 360], [360, 80], [480, 360], [285, 250], [435, 250]] },
-    { glyph: "L", pts: [[270, 80], [270, 220], [270, 360], [460, 360]] },
-    { glyph: "O", pts: [[360, 80], [475, 220], [360, 360], [245, 220], [360, 80]] },
-    { glyph: "M", pts: [[210, 360], [210, 85], [360, 240], [510, 85], [510, 360]] },
-    { glyph: "T", pts: [[220, 90], [360, 90], [500, 90], [360, 225], [360, 365]] },
+    { glyph: "B", pts: [[260, 85], [260, 225], [260, 360], [430, 150], [430, 300]] },
+    { glyph: "C", pts: [[450, 110], [310, 95], [245, 225], [310, 355], [450, 335]] },
+    { glyph: "D", pts: [[260, 90], [260, 225], [260, 360], [440, 145], [460, 225], [440, 305]] },
     { glyph: "E", pts: [[460, 90], [260, 90], [260, 225], [430, 225], [260, 360], [460, 360]] },
+    { glyph: "F", pts: [[450, 90], [265, 90], [265, 220], [420, 220], [265, 360]] },
+    { glyph: "G", pts: [[445, 110], [295, 100], [245, 225], [310, 355], [455, 320], [455, 240], [375, 240]] },
+    { glyph: "H", pts: [[250, 90], [250, 225], [250, 360], [360, 225], [470, 90], [470, 225], [470, 360]] },
+    { glyph: "I", pts: [[360, 90], [360, 180], [360, 270], [360, 360]] },
+    { glyph: "J", pts: [[420, 90], [420, 240], [390, 350], [295, 350], [265, 285]] },
+    { glyph: "K", pts: [[260, 90], [260, 225], [260, 360], [455, 95], [335, 225], [460, 360]] },
+    { glyph: "L", pts: [[270, 80], [270, 220], [270, 360], [460, 360]] },
+    { glyph: "M", pts: [[210, 360], [210, 85], [360, 240], [510, 85], [510, 360]] },
+    { glyph: "N", pts: [[245, 360], [245, 90], [360, 225], [475, 360], [475, 90]] },
+    { glyph: "O", pts: [[360, 80], [475, 220], [360, 360], [245, 220]] },
+    { glyph: "P", pts: [[265, 360], [265, 225], [265, 90], [430, 120], [430, 210]] },
+    { glyph: "R", pts: [[265, 360], [265, 90], [430, 145], [335, 225], [455, 360]] },
     { glyph: "S", pts: [[450, 110], [330, 85], [265, 165], [455, 275], [340, 365], [250, 330]] },
+    { glyph: "T", pts: [[220, 90], [360, 90], [500, 90], [360, 225], [360, 365]] },
+    { glyph: "U", pts: [[250, 90], [255, 275], [360, 360], [465, 275], [470, 90]] },
+    { glyph: "V", pts: [[235, 90], [295, 225], [360, 360], [425, 225], [485, 90]] },
+    { glyph: "X", pts: [[245, 90], [360, 225], [475, 360], [475, 90], [245, 360]] },
+    { glyph: "Y", pts: [[245, 90], [360, 220], [475, 90], [360, 290], [360, 365]] },
     { glyph: "Z", pts: [[240, 95], [480, 95], [360, 225], [240, 355], [480, 355]] },
+    { glyph: "0", pts: [[360, 85], [460, 225], [360, 360], [260, 225]] },
     { glyph: "1", pts: [[290, 150], [375, 85], [375, 225], [375, 365]] },
     { glyph: "2", pts: [[260, 145], [365, 85], [460, 155], [255, 360], [470, 360]] },
-    { glyph: "3", pts: [[265, 105], [450, 135], [345, 220], [460, 305], [265, 355]] }
+    { glyph: "3", pts: [[265, 105], [450, 135], [345, 220], [460, 305], [265, 355]] },
+    { glyph: "4", pts: [[410, 90], [250, 270], [465, 270], [410, 210], [410, 365]] },
+    { glyph: "5", pts: [[450, 90], [270, 90], [265, 205], [445, 250], [350, 360], [255, 330]] },
+    { glyph: "6", pts: [[420, 90], [270, 215], [355, 360], [455, 285], [355, 215]] },
+    { glyph: "7", pts: [[245, 95], [475, 95], [395, 225], [315, 360]] },
+    { glyph: "8", pts: [[360, 85], [445, 150], [360, 220], [455, 300], [360, 365], [265, 300], [275, 150]] },
+    { glyph: "9", pts: [[445, 165], [355, 85], [265, 165], [355, 235], [435, 240], [315, 365]] }
   ];
 
   class LetterTrackActivity {
@@ -3168,19 +3619,26 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.deck = shuffleArray(GLYPH_TRACKS);
       this.idx = 0;
-      this.mascot.audio.speak("act_12_intro");
       this.loadGlyph(0);
     }
 
     loadGlyph(idx) {
-      this.idx = idx % GLYPH_TRACKS.length;
-      this.track = GLYPH_TRACKS[this.idx];
+      this.idx = idx % this.deck.length;
+      if (this.idx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      this.track = this.deck[this.idx];
       this.checkpoints = this.track.pts.map(([x, y]) => ({ x, y, hit: false }));
       this.isDrawing = false;
       this.lastPt = null;
       this.done = false;
       this.render();
+      this.mascot.audio.speakCustom(
+        `Obtáhni prstem dráhu znaku ${this.track.glyph}! Body můžeš spojit v jakémkoli pořadí!`,
+        `🛷 OBTÁHNI ZNAK: „${this.track.glyph}“`
+      );
     }
 
     render() {
@@ -3188,8 +3646,8 @@
         <div class="workspace-header">
           <h2 class="workspace-title">🛷 PÍSMENKOVÁ DRÁHA: ZNAK „${this.track.glyph}“</h2>
           <div class="workspace-actions">
-            <button id="btn-lt-clear" class="btn-touch btn-secondary">ZNOVU</button>
-            <button id="btn-lt-next" class="btn-touch btn-next-task">🛷 DALŠÍ ZNAK ➔</button>
+            <button id="btn-lt-speak" class="btn-touch btn-secondary">🔊 PŘEČÍST ZNAK</button>
+            <button id="btn-lt-clear" class="btn-touch btn-secondary">SMAZAT</button>
           </div>
         </div>
         <div class="tangram-board-wrap">
@@ -3204,11 +3662,10 @@
       this.paint.height = 440;
       this.pCtx = this.paint.getContext("2d");
 
-      document.getElementById("btn-lt-clear").addEventListener("click", () => this.loadGlyph(this.idx));
-      document.getElementById("btn-lt-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.loadGlyph(this.idx + 1);
+      document.getElementById("btn-lt-speak").addEventListener("click", () => {
+        this.mascot.audio.speakCustom(`Znak ${this.track.glyph}`);
       });
+      document.getElementById("btn-lt-clear").addEventListener("click", () => this.loadGlyph(this.idx));
 
       const getPos = (e) => {
         const r = this.canvas.getBoundingClientRect();
@@ -3223,8 +3680,13 @@
         try { this.canvas.setPointerCapture(e.pointerId); } catch (_e) {}
         this.isDrawing = true;
         this.lastPt = getPos(e);
+        this.pCtx.beginPath();
+        this.pCtx.arc(this.lastPt.x, this.lastPt.y, 11, 0, Math.PI * 2);
+        this.pCtx.fillStyle = "#06D6A0";
+        this.pCtx.fill();
         this.markHit(this.lastPt);
         this.draw();
+        this.checkDone();
       });
 
       this.canvas.addEventListener("pointermove", (e) => {
@@ -3248,16 +3710,7 @@
         if (!this.isDrawing) return;
         this.isDrawing = false;
         this.lastPt = null;
-        if (!this.done && this.checkpoints.every((c) => c.hit)) {
-          this.done = true;
-          this.mascot.celebrate("celebrate_01");
-          this.onComplete();
-          showContinueBanner(this.hostEl, {
-            title: `🛷 ZNAK „${this.track.glyph}“ JE KRÁSNĚ OBTAŽENÝ!`,
-            nextLabel: "🛷 DALŠÍ ZNAK ➔",
-            onNext: () => this.loadGlyph(this.idx + 1)
-          });
-        }
+        this.checkDone();
       };
       this.canvas.addEventListener("pointerup", end);
       this.canvas.addEventListener("pointercancel", end);
@@ -3265,9 +3718,30 @@
       this.draw();
     }
 
+    checkDone() {
+      if (!this.done && this.checkpoints.every((c) => c.hit)) {
+        this.done = true;
+        this.draw();
+        this.mascot.celebrate("celebrate_01");
+        this.onComplete();
+        showContinueBanner(this.hostEl, {
+          icon: "🛷",
+          title: `ZNAK „${this.track.glyph}“ JE KRÁSNĚ OBTAŽENÝ!`,
+          subtitle: "Parádní jízda po ledové dráze! Pojďme obtáhnout další znak!",
+          spokenText: `Výborně! Znak ${this.track.glyph} je krásně obtažený! Pojďme na další znak!`,
+          nextLabel: "▶️ DALŠÍ ZNAK ➔",
+          onNext: () => this.loadGlyph(this.idx + 1)
+        });
+      }
+    }
+
     markHit(pt) {
+      // Body lze projet nebo ťuknout v libovolném pořadí (na přeskáčku)
       this.checkpoints.forEach((c) => {
-        if (Math.hypot(c.x - pt.x, c.y - pt.y) < 48) c.hit = true;
+        if (!c.hit && Math.hypot(c.x - pt.x, c.y - pt.y) < 50) {
+          c.hit = true;
+          this.mascot.audio.playSfx("count");
+        }
       });
     }
 
@@ -3276,7 +3750,7 @@
       ctx.fillStyle = "#F0F9FF";
       ctx.fillRect(0, 0, 720, 440);
 
-      // Ledová dráha písmene
+      // Ledová dráha písmene na pozadí
       ctx.save();
       ctx.font = "900 320px Nunito, sans-serif";
       ctx.textAlign = "center";
@@ -3290,21 +3764,22 @@
 
       ctx.drawImage(this.paint, 0, 0);
 
-      // Kontrolní body
-      this.checkpoints.forEach((c, i) => {
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, 18, 0, Math.PI * 2);
-        ctx.fillStyle = c.hit ? "#06D6A0" : "#FFB703";
-        ctx.fill();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "#1D3557";
-        ctx.stroke();
-        ctx.fillStyle = "#1D3557";
-        ctx.font = "900 15px Nunito, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(String(i + 1), c.x, c.y);
-      });
+      if (!this.done) {
+        this.checkpoints.forEach((c, i) => {
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, 18, 0, Math.PI * 2);
+          ctx.fillStyle = c.hit ? "#06D6A0" : "#FFB703";
+          ctx.fill();
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = "#1D3557";
+          ctx.stroke();
+          ctx.fillStyle = "#1D3557";
+          ctx.font = "900 15px Nunito, sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(String(i + 1), c.x, c.y);
+        });
+      }
     }
 
     destroy() {
@@ -3312,7 +3787,7 @@
     }
   }
 
-  // --- AKTIVITA 13: RÝMOVACÍ PEXESO ---
+  // --- AKTIVITA 13: RÝMOVACÍ PEXESO (28 RÝMOVACÍCH DVOJIC = 56 HLASOVĚ ČTENÝCH SLOV) ---
   const RHYME_PAIRS_POOL = [
     { pairId: 1, a: { word: "KOČKA", emoji: "🐱" }, b: { word: "VLOČKA", emoji: "❄️" } },
     { pairId: 2, a: { word: "MYŠ", emoji: "🐭" }, b: { word: "SKRÝŠ", emoji: "🏠" } },
@@ -3321,7 +3796,27 @@
     { pairId: 5, a: { word: "HRAD", emoji: "🏰" }, b: { word: "HAD", emoji: "🐍" } },
     { pairId: 6, a: { word: "VLK", emoji: "🐺" }, b: { word: "BRK", emoji: "🪶" } },
     { pairId: 7, a: { word: "SLON", emoji: "🐘" }, b: { word: "ZVON", emoji: "🔔" } },
-    { pairId: 8, a: { word: "LIŠKA", emoji: "🦊" }, b: { word: "ŠIŠKA", emoji: "🌰" } }
+    { pairId: 8, a: { word: "LIŠKA", emoji: "🦊" }, b: { word: "ŠIŠKA", emoji: "🌰" } },
+    { pairId: 9, a: { word: "KRÁL", emoji: "🤴" }, b: { word: "ŠÁL", emoji: "🧣" } },
+    { pairId: 10, a: { word: "RŮŽE", emoji: "🌹" }, b: { word: "LOUŽE", emoji: "💧" } },
+    { pairId: 11, a: { word: "KOZA", emoji: "🐐" }, b: { word: "VOSA", emoji: "🐝" } },
+    { pairId: 12, a: { word: "RAK", emoji: "🦞" }, b: { word: "VLAK", emoji: "🚂" } },
+    { pairId: 13, a: { word: "SOVA", emoji: "🦉" }, b: { word: "SLOVA", emoji: "📖" } },
+    { pairId: 14, a: { word: "DORT", emoji: "🎂" }, b: { word: "SPORT", emoji: "⚽" } },
+    { pairId: 15, a: { word: "LED", emoji: "🧊" }, b: { word: "MED", emoji: "🍯" } },
+    { pairId: 16, a: { word: "NOS", emoji: "👃" }, b: { word: "KOS", emoji: "🐦" } },
+    { pairId: 17, a: { word: "MÍČ", emoji: "🏐" }, b: { word: "KLÍČ", emoji: "🔑" } },
+    { pairId: 18, a: { word: "DŮM", emoji: "🏡" }, b: { word: "STROM", emoji: "🌳" } },
+    { pairId: 19, a: { word: "PÁV", emoji: "🦚" }, b: { word: "RUKÁV", emoji: "🧥" } },
+    { pairId: 20, a: { word: "KŮŇ", emoji: "🐎" }, b: { word: "TŮŇ", emoji: "🌊" } },
+    { pairId: 21, a: { word: "BOTA", emoji: "👟" }, b: { word: "NOTA", emoji: "🎵" } },
+    { pairId: 22, a: { word: "Čáp", emoji: "🦩" }, b: { word: "KÁP", emoji: "🌧️" } },
+    { pairId: 23, a: { word: "ŽÁBA", emoji: "🐸" }, b: { word: "KÁVA", emoji: "☕" } },
+    { pairId: 24, a: { word: "LEV", emoji: "🦁" }, b: { word: "ZPĚV", emoji: "🎤" } },
+    { pairId: 25, a: { word: "KVĚT", emoji: "🌸" }, b: { word: "SVĚT", emoji: "🌍" } },
+    { pairId: 26, a: { word: "MOST", emoji: "🌉" }, b: { word: "KOST", emoji: "🦴" } },
+    { pairId: 27, a: { word: "LOĎ", emoji: "⛵" }, b: { word: "PLOD", emoji: "🍎" } },
+    { pairId: 28, a: { word: "MRKEV", emoji: "🥕" }, b: { word: "CÍRKEV", emoji: "⛪" } }
   ];
 
   class RhymeMemoryActivity {
@@ -3330,26 +3825,32 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.pool = shuffleArray(RHYME_PAIRS_POOL);
       this.offset = 0;
-      this.mascot.audio.speak("act_13_intro");
       this.startRound();
     }
 
     startRound() {
-      const count = this.level.stars === 1 ? 3 : 4;
-      const chosen = [];
-      for (let i = 0; i < count; i++) {
-        chosen.push(RHYME_PAIRS_POOL[(this.offset + i) % RHYME_PAIRS_POOL.length]);
+      const stars = this.level.stars || 1;
+      const count = stars === 1 ? 3 : stars === 2 ? 4 : stars === 3 ? 5 : stars === 4 ? 6 : 7;
+      if (this.offset + count > this.pool.length) {
+        this.pool = shuffleArray(RHYME_PAIRS_POOL);
+        this.offset = 0;
       }
+      const chosen = this.pool.slice(this.offset, this.offset + count);
       this.offset += count;
       this.cards = [];
       chosen.forEach((p) => {
         this.cards.push({ id: `${p.pairId}_a`, pairId: p.pairId, ...p.a, matched: false });
         this.cards.push({ id: `${p.pairId}_b`, pairId: p.pairId, ...p.b, matched: false });
       });
-      this.cards.sort(() => Math.random() - 0.5);
+      this.cards = shuffleArray(this.cards);
       this.firstCard = null;
       this.render();
+      this.mascot.audio.speakCustom(
+        "Spoj dva obrázky, které se rýmují! Ťukni na každou kartičku a já ti slovo přečtu nahlas!",
+        "🎵 ŤUKNI NA KARTIČKU — PŘEČTU TI SLOVO A NAJDEME RÝM!"
+      );
     }
 
     render() {
@@ -3357,10 +3858,9 @@
       const totalPairs = this.cards.length / 2;
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">🎵 SPOJ DVA OBRÁZKY, KTERÉ SE RÝMUJÍ!</h2>
+          <h2 class="workspace-title">🎵 SPOJ DVA OBRÁZKY, KTERÉ SE RÝMUJÍ! (ŤUKNI PRO PŘEČTENÍ)</h2>
           <div class="workspace-actions">
             <span class="step-pill current">PÁRY: ${matchedPairs} / ${totalPairs}</span>
-            <button id="btn-rhyme-next" class="btn-touch btn-next-task">🎵 DALŠÍ RÝMY ➔</button>
           </div>
         </div>
         <div class="interactive-stage">
@@ -3371,7 +3871,7 @@
                 return `
                   <button class="game-card ${c.matched ? "matched" : isSel ? "selected" : ""}" data-cid="${c.id}" ${c.matched ? "disabled" : ""}>
                     <span class="game-card-emoji">${c.emoji}</span>
-                    <span class="game-card-label">${c.word}</span>
+                    <span class="game-card-label">🔊 ${c.word}</span>
                   </button>
                 `;
               })
@@ -3380,46 +3880,59 @@
         </div>
       `;
 
-      document.getElementById("btn-rhyme-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.startRound();
-      });
-
       this.hostEl.querySelectorAll("[data-cid]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const card = this.cards.find((c) => c.id === btn.dataset.cid);
           if (!card || card.matched) return;
           this.mascot.audio.playSfx("pop");
-          this.mascot.audio.renderKaraokeWords(`${card.emoji} ${card.word}!`);
 
           if (!this.firstCard || this.firstCard.id === card.id) {
             this.firstCard = card;
+            // Hlasité přečtení prvního vybraného slova
+            this.mascot.audio.speakCustom(
+              `${card.word}! Najdi obrázek, který se rýmuje se slovem ${card.word}!`,
+              `🔊 ${card.emoji} ${card.word}! CO SE S TÍM RÝMUJE?`
+            );
             this.render();
             return;
           }
 
           if (this.firstCard.pairId === card.pairId) {
+            const firstWord = this.firstCard.word;
             this.firstCard.matched = true;
             card.matched = true;
+            this.firstCard = null;
             this.mascot.audio.playSfx("snap");
             this.mascot.emitParticles(["🎵", "⭐"]);
-            this.mascot.audio.renderKaraokeWords(`RÝM: ${this.firstCard.word} A ${card.word}!`);
-            this.firstCard = null;
+            this.mascot.audio.speakCustom(
+              `${card.word}! Výborně, rýmuje se ${firstWord} a ${card.word}!`,
+              `🎵 RÝM: ${firstWord} A ${card.word}!`
+            );
             this.render();
+
             if (this.cards.every((c) => c.matched)) {
-              this.mascot.celebrate("celebrate_05");
-              this.onComplete();
-              showContinueBanner(this.hostEl, {
-                title: "🎵 VŠECHNY RÝMY SPOJENY! CHCEŠ DALŠÍ RÝMOVÁNÍ?",
-                nextLabel: "🎵 DALŠÍ RÝMY ➔",
-                onNext: () => this.startRound()
-              });
+              setTimeout(() => {
+                this.mascot.celebrate("celebrate_05");
+                this.onComplete();
+                showContinueBanner(this.hostEl, {
+                  icon: "🎵",
+                  title: "VŠECHNY RÝMOVACÍ DVOJICE JSOU SPOJENÉ!",
+                  subtitle: "To byla krásná básnička! Pojďme najít další rýmy!",
+                  spokenText: "Paráda! Všechny rýmy jsou spojené! Pojďme na další rýmování!",
+                  nextLabel: "▶️ DALŠÍ RÝMY ➔",
+                  onNext: () => this.startRound()
+                });
+              }, 750);
             }
           } else {
+            const firstWord = this.firstCard.word;
             this.firstCard = null;
             btn.classList.add("gentle-nudge-anim");
-            this.mascot.gentleNudge("hint_letter_listen");
-            setTimeout(() => this.render(), 450);
+            this.mascot.audio.speakCustom(
+              `${card.word}. Slova ${firstWord} a ${card.word} se spolu nerýmují. Zkus jinou kartičku!`,
+              `🔊 ${firstWord} A ${card.word} SE NERÝMUJÍ`
+            );
+            setTimeout(() => this.render(), 550);
           }
         });
       });
@@ -3430,68 +3943,80 @@
     }
   }
 
-  // --- AKTIVITA 15: LEDOVÉ VÁHY (POROVNÁVÁNÍ A VYROVNÁVÁNÍ MNOŽSTVÍ) ---
+  // --- AKTIVITA 15: LEDOVÉ VÁHY (POROVNÁVÁNÍ A VYROVNÁVÁNÍ MNOŽSTVÍ 1★–5★) ---
+  const SCALE_ITEMS_POOL = [
+    "🧊", "🐟", "🍎", "⭐", "💎", "🍓", "🍌", "🧁", "🎈", "🐚",
+    "🍄", "🌰", "🥕", "🍪", "⚽", "🧸", "🎁", "🌸", "🍋", "🍐",
+    "🍒", "🥐", "🔔", "🪙", "🍬"
+  ];
+
   class IceScalesActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
       this.hostEl = hostEl;
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
-      this.mascot.audio.speak("act_15_intro");
+      this.itemsDeck = shuffleArray(SCALE_ITEMS_POOL);
+      this.taskIdx = 0;
       this.nextTask();
     }
 
     nextTask() {
-      const max = this.level.config.max || 6;
-      this.leftCount = 2 + Math.floor(Math.random() * (max - 1));
-      this.rightCount = Math.max(1, (this.leftCount + 2) % max);
-      if (this.rightCount === this.leftCount) this.rightCount = Math.max(1, this.leftCount - 1);
+      const stars = this.level.stars || 1;
+      const maxByStars = { 1: 5, 2: 8, 3: 11, 4: 15, 5: 20 };
+      const max = maxByStars[stars] || 6;
+      this.itemEmoji = this.itemsDeck[this.taskIdx % this.itemsDeck.length];
+      this.taskIdx += 1;
+      this.leftCount = 2 + Math.floor(Math.random() * (max - 2));
+      this.rightCount = Math.max(1, (this.leftCount + 2 + Math.floor(Math.random() * 3)) % max);
+      if (this.rightCount === this.leftCount) this.rightCount = Math.max(1, this.leftCount - 2);
       this.render();
+      this.mascot.audio.speakCustom(
+        `Ledové váhy! Vlevo je ${this.leftCount} a vpravo je ${this.rightCount}. Přidej nebo odeber na pravé misce, aby bylo na obou miskách stejně!`,
+        `⚖️ VYROVNEJ MISKY NA STEJNÝ POČET (${this.leftCount} = ${this.leftCount})!`
+      );
     }
 
     render() {
       const diff = this.rightCount - this.leftCount;
-      const tilt = Math.max(-14, Math.min(14, diff * 4));
+      const tilt = Math.max(-14, Math.min(14, diff * 3.5));
       this.hostEl.innerHTML = `
         <div class="workspace-header">
           <h2 class="workspace-title">⚖️ LEDOVÉ VÁHY: VYROVNEJ OBĚ MISKY NA STEJNÝ POČET!</h2>
           <div class="workspace-actions">
             <span class="step-pill current">VLEVO: ${this.leftCount} • VPRAVO: ${this.rightCount}</span>
-            <button id="btn-scales-next" class="btn-touch btn-next-task">⚖️ DALŠÍ VÁŽENÍ ➔</button>
           </div>
         </div>
         <div class="interactive-stage">
           <div class="scales-stage" style="transform:rotate(${tilt}deg); transition:transform 0.35s ease;">
             <div class="scale-pan">
               <div style="width:100%; text-align:center; font-weight:900;">LEVÁ MISKA: ${this.leftCount}</div>
-              ${Array.from({ length: this.leftCount }).map(() => `<span style="font-size:2rem;">🧊</span>`).join("")}
+              ${Array.from({ length: this.leftCount }).map(() => `<span style="font-size:1.8rem;">${this.itemEmoji}</span>`).join("")}
             </div>
             <div style="font-size:3rem;">⚖️</div>
             <div class="scale-pan">
               <div style="width:100%; text-align:center; font-weight:900;">PRAVÁ MISKA: ${this.rightCount}</div>
-              ${Array.from({ length: this.rightCount }).map(() => `<span style="font-size:2rem;">🧊</span>`).join("")}
+              ${Array.from({ length: this.rightCount }).map(() => `<span style="font-size:1.8rem;">${this.itemEmoji}</span>`).join("")}
             </div>
           </div>
           <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
-            <button id="btn-scale-rem" class="btn-touch btn-secondary">➖ ODEBRAT KOSTKU</button>
-            <button id="btn-scale-add" class="btn-touch btn-primary">➕ PŘIDAT KOSTKU</button>
+            <button id="btn-scale-rem" class="btn-touch btn-secondary">➖ ODEBRAT</button>
+            <button id="btn-scale-add" class="btn-touch btn-primary">➕ PŘIDAT</button>
             <button id="btn-scale-ok" class="btn-touch btn-primary" style="background:linear-gradient(135deg,#06d6a0,#10b981);">✅ JE TO STEJNĚ!</button>
           </div>
         </div>
       `;
 
-      document.getElementById("btn-scales-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.nextTask();
-      });
       document.getElementById("btn-scale-rem").addEventListener("click", () => {
         if (this.rightCount > 0) this.rightCount -= 1;
         this.mascot.audio.playSfx("pop");
+        this.mascot.audio.speakCustom(String(this.rightCount));
         this.render();
       });
       document.getElementById("btn-scale-add").addEventListener("click", () => {
-        if (this.rightCount < 15) this.rightCount += 1;
+        if (this.rightCount < 25) this.rightCount += 1;
         this.mascot.audio.playSfx("count");
+        this.mascot.audio.speakCustom(String(this.rightCount));
         this.render();
       });
       document.getElementById("btn-scale-ok").addEventListener("click", () => {
@@ -3499,12 +4024,17 @@
           this.mascot.celebrate("celebrate_01");
           this.onComplete();
           showContinueBanner(this.hostEl, {
-            title: `⚖️ VÁHY JSOU V ROVNOVÁZE (${this.leftCount} = ${this.rightCount})! CHCEŠ VÁŽIT DÁL?`,
-            nextLabel: "⚖️ DALŠÍ VÁŽENÍ ➔",
+            icon: "⚖️",
+            title: `VÁHY JSOU V ROVNOVÁZE (${this.leftCount} = ${this.rightCount})!`,
+            subtitle: "Na obou miskách je přesně stejně! Zvážíme další předměty?",
+            spokenText: `Výborně! Váhy jsou v rovnováze, na obou miskách je ${this.leftCount}! Pojďme na další vážení!`,
+            nextLabel: "▶️ DALŠÍ VÁŽENÍ ➔",
             onNext: () => this.nextTask()
           });
         } else {
-          this.mascot.gentleNudge("hint_count_more");
+          this.mascot.audio.speakCustom(
+            `Ještě to není stejně! Vlevo je ${this.leftCount} a vpravo je ${this.rightCount}.`
+          );
         }
       });
     }
@@ -3514,13 +4044,33 @@
     }
   }
 
-  // --- AKTIVITA 16: PRVNÍ SČÍTÁNÍ A ODČÍTÁNÍ S PŘÍBĚHEM ---
+  // --- AKTIVITA 16: PRVNÍ SČÍTÁNÍ A ODČÍTÁNÍ S PŘÍBĚHEM (25 PŘEDMĚTŮ + 1★–5★) ---
   const MATH_STORY_ITEMS = [
-    { emoji: "🐧", name: "TUČŇÁKŮ" },
-    { emoji: "🐟", name: "RYBIČEK" },
-    { emoji: "🍎", name: "JABLÍČEK" },
-    { emoji: "⭐", name: "HVĚZDIČEK" },
-    { emoji: "🦋", name: "MOTÝLKŮ" }
+    { emoji: "🐧", name: "tučňáků" },
+    { emoji: "🐟", name: "rybiček" },
+    { emoji: "🍎", name: "jablíček" },
+    { emoji: "⭐", name: "hvězdiček" },
+    { emoji: "🦋", name: "motýlků" },
+    { emoji: "🍓", name: "jahůdek" },
+    { emoji: "🍌", name: "banánů" },
+    { emoji: "🍐", name: "hrušek" },
+    { emoji: "🍒", name: "třešní" },
+    { emoji: "🥕", name: "mrkviček" },
+    { emoji: "🍄", name: "hříbků" },
+    { emoji: "🌸", name: "kytiček" },
+    { emoji: "🎈", name: "balónků" },
+    { emoji: "🚗", name: "autíček" },
+    { emoji: "🚀", name: "raket" },
+    { emoji: "⛵", name: "loděk" },
+    { emoji: "🧁", name: "dortíků" },
+    { emoji: "🍪", name: "sušenek" },
+    { emoji: "💎", name: "diamantů" },
+    { emoji: "🐚", name: "mušličkek" },
+    { emoji: "🐸", name: "žabiček" },
+    { emoji: "🐢", name: "želviček" },
+    { emoji: "🦉", name: "soviček" },
+    { emoji: "🐝", name: "včeliček" },
+    { emoji: "🐞", name: "berušek" }
   ];
 
   class StoryMathActivity {
@@ -3529,17 +4079,22 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
-      this.mascot.audio.speak("act_16_intro");
+      this.itemsDeck = shuffleArray(MATH_STORY_ITEMS);
+      this.probIdx = 0;
       this.nextProblem();
     }
 
     nextProblem() {
-      const max = this.level.config.max || 5;
-      const item = MATH_STORY_ITEMS[Math.floor(Math.random() * MATH_STORY_ITEMS.length)];
+      const stars = this.level.stars || 1;
+      const maxByStars = { 1: 5, 2: 8, 3: 10, 4: 15, 5: 20 };
+      const max = maxByStars[stars] || 6;
+      const item = this.itemsDeck[this.probIdx % this.itemsDeck.length];
+      this.probIdx += 1;
       this.emoji = item.emoji;
-      this.isSubtraction = this.level.stars >= 2 && Math.random() > 0.5;
+      this.itemName = item.name;
+      this.isSubtraction = stars >= 2 && Math.random() > 0.45;
       if (this.isSubtraction) {
-        this.a = 3 + Math.floor(Math.random() * (max - 3));
+        this.a = 3 + Math.floor(Math.random() * Math.max(2, max - 3));
         this.b = 1 + Math.floor(Math.random() * (this.a - 1));
         this.answer = this.a - this.b;
       } else {
@@ -3547,31 +4102,37 @@
         this.b = 1 + Math.floor(Math.random() * Math.max(2, max - this.a));
         this.answer = this.a + this.b;
       }
+      const choicesCount = stars <= 2 ? 4 : 5;
       const opts = new Set([this.answer]);
-      while (opts.size < 4) {
-        opts.add(Math.max(1, this.answer + Math.floor(Math.random() * 5) - 2));
+      while (opts.size < choicesCount) {
+        opts.add(Math.max(1, this.answer + Math.floor(Math.random() * 7) - 3));
       }
       this.choices = [...opts].sort((x, y) => x - y);
       this.render();
+      const opWord = this.isSubtraction ? "mínus" : "plus";
+      this.mascot.audio.speakCustom(
+        `Spočítej příklad: Kolik je ${this.a} ${opWord} ${this.b}?`,
+        `➕ KOLIK JE ${this.a} ${this.isSubtraction ? "−" : "+"} ${this.b} ?`
+      );
     }
 
     render() {
       const sign = this.isSubtraction ? "−" : "+";
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">➕ POČÍTÁNÍ S PŘÍBĚHEM: KOLIK JE TO DOHROMADY?</h2>
+          <h2 class="workspace-title">➕ POČÍTÁNÍ S PŘÍBĚHEM: ${this.a} ${sign} ${this.b} = ❓</h2>
           <div class="workspace-actions">
-            <button id="btn-math-next" class="btn-touch btn-next-task">➕ DALŠÍ PŘÍKLAD ➔</button>
+            <button id="btn-math-speak" class="btn-touch btn-secondary">🔊 PŘEČÍST PŘÍKLAD</button>
           </div>
         </div>
         <div class="interactive-stage">
-          <div class="word-picture-card" style="gap:18px;">
-            <div style="display:flex; gap:6px; flex-wrap:wrap; font-size:2.2rem;">
+          <div class="word-picture-card" style="gap:16px;">
+            <div style="display:flex; gap:5px; flex-wrap:wrap; font-size:clamp(1.6rem, 3.8dvh, 2.2rem);">
               ${Array.from({ length: this.a }).map(() => `<span>${this.emoji}</span>`).join("")}
             </div>
             <span class="word-display" style="letter-spacing:0;">${sign}</span>
-            <div style="display:flex; gap:6px; flex-wrap:wrap; font-size:2.2rem;">
-              ${Array.from({ length: this.b }).map(() => `<span style="${this.isSubtraction ? "opacity:0.45;" : ""}">${this.emoji}</span>`).join("")}
+            <div style="display:flex; gap:5px; flex-wrap:wrap; font-size:clamp(1.6rem, 3.8dvh, 2.2rem);">
+              ${Array.from({ length: this.b }).map(() => `<span style="${this.isSubtraction ? "opacity:0.4;" : ""}">${this.emoji}</span>`).join("")}
             </div>
             <span class="word-display" style="letter-spacing:0;">= ${this.a} ${sign} ${this.b} = ❓</span>
           </div>
@@ -3586,9 +4147,9 @@
         </div>
       `;
 
-      document.getElementById("btn-math-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.nextProblem();
+      document.getElementById("btn-math-speak").addEventListener("click", () => {
+        const opWord = this.isSubtraction ? "mínus" : "plus";
+        this.mascot.audio.speakCustom(`Kolik je ${this.a} ${opWord} ${this.b}?`);
       });
 
       this.hostEl.querySelectorAll("[data-num]").forEach((btn) => {
@@ -3600,13 +4161,16 @@
             this.mascot.celebrate("celebrate_02");
             this.onComplete();
             showContinueBanner(this.hostEl, {
-              title: `🎉 SPRÁVNĚ! VÝSLEDEK JE ${this.answer}! CHCEŠ DALŠÍ PŘÍKLAD?`,
-              nextLabel: "➕ DALŠÍ PŘÍKLAD ➔",
+              icon: this.emoji,
+              title: `SPRÁVNĚ! ${this.a} ${sign} ${this.b} = ${this.answer}!`,
+              subtitle: "Jsi skvělý počtář! Spočítáme další příklad?",
+              spokenText: `Výborně! Výsledek je ${this.answer}! Pojďme na další příklad!`,
+              nextLabel: "▶️ DALŠÍ PŘÍKLAD ➔",
               onNext: () => this.nextProblem()
             });
           } else {
             btn.classList.add("gentle-nudge-anim");
-            this.mascot.gentleNudge("hint_count_more");
+            this.mascot.audio.speakCustom(`Číslo ${val} to není, zkus spočítat obrázky ještě jednou!`);
           }
         });
       });
@@ -3617,8 +4181,12 @@
     }
   }
 
-  // --- AKTIVITA 17: SEŘAĎ PODLE VELIKOSTI A DÉLKY ---
-  const SIZE_SORT_EMOJIS = ["🐧", "⛄", "🐟", "🌲", "⭐", "🚀", "🎈"];
+  // --- AKTIVITA 17: SEŘAĎ PODLE VELIKOSTI (28 POLOŽEK + ŘAZENÍ NA PŘESKÁČKU 1★–5★) ---
+  const SIZE_SORT_EMOJIS = [
+    "🐧", "⛄", "🐟", "🌲", "⭐", "🚀", "🎈", "🍎", "🍐", "🍓",
+    "🌻", "🌷", "🍄", "🦋", "🐢", "🐳", "🦉", "🦊", "🐻", "🦁",
+    "🐘", "🦒", "🚗", "🚂", "⛵", "🏰", "👑", "💎"
+  ];
 
   class SizeSortActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -3626,40 +4194,75 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.deck = shuffleArray(SIZE_SORT_EMOJIS);
       this.themeIdx = 0;
-      this.mascot.audio.speak("act_17_intro");
       this.nextRound();
     }
 
     nextRound() {
-      this.emoji = SIZE_SORT_EMOJIS[this.themeIdx % SIZE_SORT_EMOJIS.length];
+      this.emoji = this.deck[this.themeIdx % this.deck.length];
       this.themeIdx += 1;
-      const count = Math.min(5, this.level.config.items || 3);
+      const stars = this.level.stars || 1;
+      const count = Math.min(7, stars + 2); // 1★=3, 2★=4, 3★=5, 4★=6, 5★=7
       this.sizes = Array.from({ length: count }, (_, i) => i + 1);
-      this.pool = [...this.sizes].sort(() => Math.random() - 0.5);
-      this.placed = [];
+      this.pool = shuffleArray(this.sizes);
+      this.placedSlots = new Array(count).fill(null);
+      this.selectedSlot = null;
+      this.selectedSize = null;
       this.render();
+      this.mascot.audio.speakCustom(
+        "Seřaď obrázky od nejmenšího po největší! Můžeš je dávat do políček popořadě nebo klidně i na přeskáčku!",
+        "📏 SEŘAĎ OD NEJMENŠÍHO PO NEJVĚTŠÍ (LZE I NA PŘESKÁČKU)!"
+      );
+    }
+
+    tryPlaceSize(sz, slotIdx, el) {
+      if (sz === slotIdx + 1) {
+        this.placedSlots[slotIdx] = sz;
+        this.selectedSlot = null;
+        this.selectedSize = null;
+        this.mascot.audio.playSfx("snap");
+        this.mascot.audio.speakCustom(`Místo ${slotIdx + 1}`);
+        this.render();
+        if (this.placedSlots.every(Boolean)) {
+          this.mascot.celebrate("celebrate_01");
+          this.onComplete();
+          showContinueBanner(this.hostEl, {
+            icon: "📏",
+            title: "SKVĚLE SEŘAZENO OD NEJMENŠÍHO PO NEJVĚTŠÍ!",
+            subtitle: "Všechny velikosti jsou na správném místě! Zkusíme další řadu?",
+            spokenText: "Výborně! Všechno je skvěle seřazeno od nejmenšího po největší! Pojďme na další řazení!",
+            nextLabel: "▶️ DALŠÍ ŘAZENÍ ➔",
+            onNext: () => this.nextRound()
+          });
+        }
+      } else {
+        if (el) el.classList.add("gentle-nudge-anim");
+        this.mascot.gentleNudge("hint_shape_size");
+      }
     }
 
     render() {
+      const doneCount = this.placedSlots.filter(Boolean).length;
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">📏 SEŘAĎ OD NEJMENŠÍHO PO NEJVĚTŠÍ!</h2>
+          <h2 class="workspace-title">📏 SEŘAĎ OD NEJMENŠÍHO PO NEJVĚTŠÍ (LZE I NA PŘESKÁČKU)!</h2>
           <div class="workspace-actions">
-            <span class="step-pill current">SEŘAZENO: ${this.placed.length} / ${this.sizes.length}</span>
-            <button id="btn-size-next" class="btn-touch btn-next-task">📏 DALŠÍ ŘAZENÍ ➔</button>
+            <span class="step-pill current">SEŘAZENO: ${doneCount} / ${this.sizes.length}</span>
           </div>
         </div>
         <div class="interactive-stage">
+          <div style="font-weight:900; color:var(--navy-soft);">ŤUKNI NA KARTIČKU DOLE (NEBO VYBER POLÍČKO NAHOŘE) V LIBOVOLNÉM POŘADÍ:</div>
           <div class="slot-row">
             ${this.sizes
               .map((sz, i) => {
-                const isDone = i < this.placed.length;
-                const scale = 0.65 + sz * 0.24;
+                const isDone = Boolean(this.placedSlots[i]);
+                const isSel = this.selectedSlot === i && !isDone;
+                const scale = 0.55 + sz * 0.21;
                 return `
-                  <div class="target-slot ${isDone ? "filled" : ""}">
-                    ${isDone ? `<span style="font-size:2rem; transform:scale(${scale});">${this.emoji}</span>` : `${i + 1}.`}
-                  </div>
+                  <button type="button" class="target-slot ${isDone ? "filled" : ""}" data-slot="${i}" style="${isSel ? "border-color:#ffb703; background:#fff9db;" : ""}">
+                    ${isDone ? `<span style="font-size:1.9rem; transform:scale(${scale});">${this.emoji}</span>` : `${i + 1}.`}
+                  </button>
                 `;
               })
               .join("")}
@@ -3667,11 +4270,13 @@
           <div class="cards-grid">
             ${this.pool
               .map((sz) => {
-                const used = this.placed.includes(sz);
-                const scale = 0.65 + sz * 0.24;
+                const used = this.placedSlots.includes(sz);
+                const isSel = this.selectedSize === sz && !used;
+                const scale = 0.55 + sz * 0.21;
                 return `
-                  <button class="game-card ${used ? "matched" : ""}" data-sz="${sz}" ${used ? "disabled" : ""}>
+                  <button class="game-card ${used ? "matched" : isSel ? "selected" : ""}" data-sz="${sz}" ${used ? "disabled" : ""}>
                     <span class="game-card-emoji" style="transform:scale(${scale});">${this.emoji}</span>
+                    <span class="game-card-label">VELIKOST ${sz}</span>
                   </button>
                 `;
               })
@@ -3680,31 +4285,32 @@
         </div>
       `;
 
-      document.getElementById("btn-size-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.nextRound();
+      this.hostEl.querySelectorAll("[data-slot]").forEach((slotBtn) => {
+        slotBtn.addEventListener("click", () => {
+          const sIdx = Number(slotBtn.dataset.slot);
+          if (this.placedSlots[sIdx]) return;
+          this.mascot.audio.playSfx("pop");
+
+          if (this.selectedSize !== null) {
+            this.tryPlaceSize(this.selectedSize, sIdx, slotBtn);
+          } else {
+            this.selectedSlot = sIdx;
+            this.mascot.audio.speakCustom(`${sIdx + 1}. místo`);
+            this.render();
+          }
+        });
       });
 
       this.hostEl.querySelectorAll("[data-sz]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const pickedSz = Number(btn.dataset.sz);
-          const expectedSz = this.placed.length + 1;
-          if (pickedSz === expectedSz) {
-            this.placed.push(pickedSz);
-            this.mascot.audio.playSfx("snap");
-            this.render();
-            if (this.placed.length === this.sizes.length) {
-              this.mascot.celebrate("celebrate_01");
-              this.onComplete();
-              showContinueBanner(this.hostEl, {
-                title: "📏 SKVĚLE SEŘAZENO OD NEJMENŠÍHO PO NEJVĚTŠÍ!",
-                nextLabel: "📏 DALŠÍ ŘAZENÍ ➔",
-                onNext: () => this.nextRound()
-              });
-            }
+          if (this.placedSlots.includes(pickedSz)) return;
+
+          if (this.selectedSlot !== null && !this.placedSlots[this.selectedSlot]) {
+            this.tryPlaceSize(pickedSz, this.selectedSlot, btn);
           } else {
-            btn.classList.add("gentle-nudge-anim");
-            this.mascot.gentleNudge("hint_shape_size");
+            // Na přeskáčku: ťuknutí na libovolnou velikost ji rovnou umístí do jejího správného políčka (pickedSz - 1)!
+            this.tryPlaceSize(pickedSz, pickedSz - 1, btn);
           }
         });
       });
@@ -3715,13 +4321,34 @@
     }
   }
 
-  // --- AKTIVITA 18: DOKONČI VZOR (LOGICKÉ ŘADY) ---
+  // --- AKTIVITA 18: DOKONČI VZOR (LOGICKÉ ŘADY - 26 SAD + 1★–5★) ---
   const PATTERN_SETS = [
-    ["🐟", "❄️", "⭐"],
-    ["🍎", "🍐", "🍌"],
-    ["🌞", "🌙", "☁️"],
-    ["🐧", "🦊", "🦉"],
-    ["🔴", "🔵", "🟡"]
+    ["🐟", "❄️", "⭐", "🐚"],
+    ["🍎", "🍐", "🍌", "🍓"],
+    ["🌞", "🌙", "☁️", "🌈"],
+    ["🐧", "🦊", "🦉", "🐻"],
+    ["🔴", "🔵", "🟡", "🟢"],
+    ["🚗", "🚂", "✈️", "⛵"],
+    ["🌻", "🌷", "🌼", "🌹"],
+    ["🦋", "🐝", "🐞", "🐌"],
+    ["🎸", "🎺", "🥁", "🎹"],
+    ["🎂", "🧁", "🍩", "🍦"],
+    ["👑", "💎", "🏰", "🛡️"],
+    ["⚽", "🏀", "🎾", "🏐"],
+    ["🥕", "🥦", "🌽", "🍅"],
+    ["🐶", "🐱", "🐰", "🐹"],
+    ["🦁", "🐘", "🦒", "🦓"],
+    ["🐳", "🐬", "🐙", "🦀"],
+    ["🎄", "⛄", "🛷", "🧤"],
+    ["🚀", "🪐", "☄️", "🛸"],
+    ["🍄", "🌰", "🍁", "🦔"],
+    ["🎈", "🎁", "🎉", "🕯️"],
+    ["🐸", "🐢", "🐊", "🦎"],
+    ["🥐", "🥨", "🥖", "🥞"],
+    ["🔔", "🔑", "🧭", "⚓"],
+    ["💜", "💙", "💚", "💛"],
+    ["🔺", "🔷", "🟢", "⭐"],
+    ["🍍", "🍉", "🍒", "🥝"]
   ];
 
   class PatternCompleteActivity {
@@ -3730,41 +4357,53 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.deck = shuffleArray(PATTERN_SETS);
       this.setIdx = 0;
-      this.mascot.audio.speak("act_18_intro");
       this.nextPattern();
     }
 
     nextPattern() {
-      const icons = PATTERN_SETS[this.setIdx % PATTERN_SETS.length];
+      const icons = this.deck[this.setIdx % this.deck.length];
       this.setIdx += 1;
-      const mode = this.level.config.pattern || "ABAB";
-      const [A, B, C] = icons;
-      if (mode === "ABC") {
-        this.seq = [A, B, C, A, B];
-        this.answer = C;
-      } else if (mode === "AABB") {
-        this.seq = [A, A, B, B, A];
-        this.answer = A;
-      } else {
+      const stars = this.level.stars || 1;
+      const [A, B, C, D] = icons;
+
+      if (stars === 1) {
         this.seq = [A, B, A, B, A];
         this.answer = B;
+        this.choices = shuffleArray([A, B, C]);
+      } else if (stars === 2) {
+        this.seq = [A, A, B, B, A];
+        this.answer = A;
+        this.choices = shuffleArray([A, B, C]);
+      } else if (stars === 3) {
+        this.seq = [A, B, C, A, B];
+        this.answer = C;
+        this.choices = shuffleArray([A, B, C, D]);
+      } else if (stars === 4) {
+        this.seq = [A, B, B, A, B];
+        this.answer = B;
+        this.choices = shuffleArray([A, B, C, D]);
+      } else {
+        this.seq = [A, B, C, D, A, B, C];
+        this.answer = D;
+        this.choices = shuffleArray([A, B, C, D]);
       }
-      this.choices = [A, B, C];
       this.render();
+      this.mascot.audio.speakCustom(
+        "Dokonči logickou řadu! Podívej se, jak se obrázky střídají, a vyber, co patří na konec!",
+        "❄️ CO PATŘÍ NA KONEC LOGICKÉ ŘADY?"
+      );
     }
 
     render() {
       this.hostEl.innerHTML = `
         <div class="workspace-header">
           <h2 class="workspace-title">❄️ DOKONČI LOGICKOU ŘADU: CO PATŘÍ NA KONEC?</h2>
-          <div class="workspace-actions">
-            <button id="btn-pat-next" class="btn-touch btn-next-task">❄️ DALŠÍ ŘADA ➔</button>
-          </div>
         </div>
         <div class="interactive-stage">
           <div class="word-picture-card">
-            ${this.seq.map((em) => `<span style="font-size:clamp(2rem, 5dvh, 3.2rem);">${em}</span>`).join("")}
+            ${this.seq.map((em) => `<span style="font-size:clamp(1.8rem, 4.5dvh, 3rem);">${em}</span>`).join("")}
             <div class="target-slot" id="pat-slot">❓</div>
           </div>
           <div class="letter-choices">
@@ -3778,11 +4417,6 @@
         </div>
       `;
 
-      document.getElementById("btn-pat-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.nextPattern();
-      });
-
       this.hostEl.querySelectorAll("[data-em]").forEach((btn) => {
         btn.addEventListener("click", () => {
           if (btn.dataset.em === this.answer) {
@@ -3793,8 +4427,11 @@
             this.mascot.celebrate("celebrate_02");
             this.onComplete();
             showContinueBanner(this.hostEl, {
-              title: "❄️ VZOR JE DOKONČENÝ! CHCEŠ LUŠTIT DALŠÍ ŘADU?",
-              nextLabel: "❄️ DALŠÍ ŘADA ➔",
+              icon: this.answer,
+              title: "LOGICKÁ ŘADA JE SPRÁVNĚ DOKONČENÁ!",
+              subtitle: "Skvělá všímavost! Vyluštíme další vzor?",
+              spokenText: "Výborně! Vzor je dokončený! Pojďme na další řadu!",
+              nextLabel: "▶️ DALŠÍ ŘADA ➔",
               onNext: () => this.nextPattern()
             });
           } else {
@@ -3810,30 +4447,29 @@
     }
   }
 
-  // --- AKTIVITA 19: LEDOVÉ BLUDIŠTĚ ---
-  const MAZE_MAPS = [
-    [
-      [0, 0, 1, 0, 0],
-      [1, 0, 1, 0, 1],
-      [0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 0],
-      [0, 0, 0, 1, 0]
-    ],
-    [
-      [0, 1, 0, 0, 0],
-      [0, 1, 0, 1, 0],
-      [0, 0, 0, 1, 0],
-      [1, 1, 0, 0, 0],
-      [0, 0, 0, 1, 0]
-    ],
-    [
-      [0, 0, 0, 1, 0],
-      [1, 1, 0, 1, 0],
-      [0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 0],
-      [0, 0, 0, 0, 0]
-    ]
-  ];
+  // --- AKTIVITA 19: LEDOVÉ BLUDIŠTĚ (25 BLUDIŠŤ) ---
+  function buildMazeMaps() {
+    const base = [
+      [[0, 0, 1, 0, 0], [1, 0, 1, 0, 1], [0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 0, 0, 1, 0]],
+      [[0, 1, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 1, 0], [1, 1, 0, 0, 0], [0, 0, 0, 1, 0]],
+      [[0, 0, 0, 1, 0], [1, 1, 0, 1, 0], [0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 0, 0, 0, 0]],
+      [[0, 0, 0, 0, 0], [1, 1, 1, 1, 0], [0, 0, 0, 0, 0], [0, 1, 1, 1, 1], [0, 0, 0, 0, 0]],
+      [[0, 1, 0, 0, 0], [0, 0, 0, 1, 0], [1, 1, 0, 1, 0], [0, 0, 0, 0, 0], [0, 1, 1, 1, 0]],
+      [[0, 0, 1, 0, 0], [0, 1, 1, 0, 1], [0, 0, 0, 0, 0], [1, 1, 0, 1, 0], [0, 0, 0, 1, 0]],
+      [[0, 0, 0, 1, 0], [0, 1, 0, 0, 0], [0, 1, 1, 1, 0], [0, 0, 0, 1, 0], [1, 1, 0, 0, 0]],
+      [[0, 1, 1, 0, 0], [0, 0, 0, 0, 1], [1, 1, 0, 1, 1], [0, 0, 0, 0, 0], [0, 1, 1, 1, 0]]
+    ];
+    const all = [...base];
+    while (all.length < 25) {
+      const src = base[all.length % base.length];
+      // Transpozice pro rozmanitost při zachování průchodnosti z [0,0] do [4,4]
+      const transposed = src[0].map((_, c) => src.map((r) => r[c]));
+      all.push(transposed);
+    }
+    return all;
+  }
+
+  const MAZE_MAPS = buildMazeMaps();
 
   class IceMazeActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -3841,19 +4477,26 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.deck = shuffleArray(MAZE_MAPS);
       this.mapIdx = 0;
-      this.mascot.audio.speak("act_19_intro");
       this.loadMaze(0);
     }
 
     loadMaze(idx) {
-      this.mapIdx = idx % MAZE_MAPS.length;
-      this.grid = MAZE_MAPS[this.mapIdx];
+      this.mapIdx = idx % this.deck.length;
+      if (this.mapIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      this.grid = this.deck[this.mapIdx];
       this.px = 0;
       this.py = 0;
       this.gx = 4;
       this.gy = 4;
       this.render();
+      this.mascot.audio.speakCustom(
+        "Ledové bludiště! Pomoz Pikovi najít cestu přes ledové kry až k rybičce!",
+        "🧊 DOVEĎ TUČŇÁKA PIKA K RYBIČCE 🐟!"
+      );
     }
 
     move(dx, dy) {
@@ -3862,6 +4505,7 @@
       if (ny < 0 || ny >= 5 || nx < 0 || nx >= 5) return;
       if (this.grid[ny][nx] === 1) {
         this.mascot.audio.playSfx("pop");
+        this.mascot.audio.speakCustom("Tudy cesta nevede, je tam ledová kra!");
         return;
       }
       this.px = nx;
@@ -3872,8 +4516,11 @@
         this.mascot.celebrate("celebrate_06");
         this.onComplete();
         showContinueBanner(this.hostEl, {
-          title: "🧊 PIKO DOŠEL K RYBIČCE! CHCEŠ PROJÍT DALŠÍ BLUDIŠTĚ?",
-          nextLabel: "🧊 DALŠÍ BLUDIŠTĚ ➔",
+          icon: "🧊",
+          title: "PIKO DOŠEL BLUDIŠTĚM AŽ K RYBIČCE!",
+          subtitle: "Skvělá orientace! Projdeme spolu další bludiště?",
+          spokenText: "Hurá! Piko došel k rybičce! Pojďme na další bludiště!",
+          nextLabel: "▶️ DALŠÍ BLUDIŠTĚ ➔",
           onNext: () => this.loadMaze(this.mapIdx + 1)
         });
       }
@@ -3883,9 +4530,6 @@
       this.hostEl.innerHTML = `
         <div class="workspace-header">
           <h2 class="workspace-title">🧊 LEDOVÉ BLUDIŠTĚ: DOVEĎ PIKA K RYBIČCE!</h2>
-          <div class="workspace-actions">
-            <button id="btn-maze-next" class="btn-touch btn-next-task">🧊 DALŠÍ BLUDIŠTĚ ➔</button>
-          </div>
         </div>
         <div class="feed-layout">
           <div style="display:flex; align-items:center; justify-content:center; min-height:0;">
@@ -3917,11 +4561,6 @@
         </div>
       `;
 
-      document.getElementById("btn-maze-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.loadMaze(this.mapIdx + 1);
-      });
-
       this.hostEl.querySelectorAll("[data-dir]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const [dx, dy] = btn.dataset.dir.split(",").map(Number);
@@ -3945,14 +4584,33 @@
     }
   }
 
-  // --- AKTIVITA 20: ZVUKOVÉ A VIZUÁLNÍ PEXESO ---
+  // --- AKTIVITA 20: ZVUKOVÉ A VIZUÁLNÍ PEXESO (25 ZVUKOVÝCH KARET + 1★–5★) ---
   const SOUND_MEMORY_ITEMS = [
     { emoji: "🥁", label: "BUBÍNEK", freq: 180 },
     { emoji: "🎺", label: "TRUBKA", freq: 523 },
     { emoji: "🎸", label: "KYTARA", freq: 330 },
     { emoji: "🔔", label: "ZVONEČEK", freq: 880 },
     { emoji: "🎹", label: "KLAVÍR", freq: 440 },
-    { emoji: "🎻", label: "HOUSLE", freq: 659 }
+    { emoji: "🎻", label: "HOUSLE", freq: 659 },
+    { emoji: "🎷", label: "SAXOFON", freq: 293 },
+    { emoji: "🪈", label: "FLÉTNA", freq: 784 },
+    { emoji: "🪗", label: "HARMONIKA", freq: 392 },
+    { emoji: "🪕", label: "BENDŽO", freq: 349 },
+    { emoji: "🐶", label: "PEJSEK", freq: 240 },
+    { emoji: "🐱", label: "KOČIČKA", freq: 620 },
+    { emoji: "🐸", label: "ŽABIČKA", freq: 210 },
+    { emoji: "🦉", label: "SOVIČKA", freq: 480 },
+    { emoji: "🐝", label: "VČELIČKA", freq: 710 },
+    { emoji: "🦁", label: "LEV", freq: 155 },
+    { emoji: "🐘", label: "SLON", freq: 140 },
+    { emoji: "🐬", label: "DELFÍN", freq: 920 },
+    { emoji: "🚂", label: "VLÁČEK", freq: 260 },
+    { emoji: "🚒", label: "HASIČI", freq: 580 },
+    { emoji: "🚁", label: "VRTULNÍK", freq: 225 },
+    { emoji: "🚀", label: "RAKETA", freq: 310 },
+    { emoji: "⏰", label: "BUDÍK", freq: 840 },
+    { emoji: "🐦", label: "PTÁČEK", freq: 960 },
+    { emoji: "🐧", label: "TUČŇÁK", freq: 500 }
   ];
 
   class SoundMemoryActivity {
@@ -3961,7 +4619,8 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
-      this.mascot.audio.speak("act_20_intro");
+      this.pool = shuffleArray(SOUND_MEMORY_ITEMS);
+      this.cursor = 0;
       this.newGame();
     }
 
@@ -3981,25 +4640,37 @@
     }
 
     newGame() {
-      const pairCount = this.level.stars === 1 ? 3 : 4;
-      const items = SOUND_MEMORY_ITEMS.slice(0, pairCount);
+      const stars = this.level.stars || 1;
+      const pairCount = stars === 1 ? 3 : stars === 2 ? 4 : stars === 3 ? 5 : stars === 4 ? 6 : 7;
+      if (this.cursor + pairCount > this.pool.length) {
+        this.pool = shuffleArray(SOUND_MEMORY_ITEMS);
+        this.cursor = 0;
+      }
+      const items = this.pool.slice(this.cursor, this.cursor + pairCount);
+      this.cursor += pairCount;
       this.deck = [];
       items.forEach((it, idx) => {
         this.deck.push({ id: idx * 2, ...it, open: false, matched: false });
         this.deck.push({ id: idx * 2 + 1, ...it, open: false, matched: false });
       });
-      this.deck.sort(() => Math.random() - 0.5);
+      this.deck = shuffleArray(this.deck);
       this.opened = [];
       this.locked = false;
       this.render();
+      this.mascot.audio.speakCustom(
+        "Zvukové pexeso! Otáčej kartičky, poslouchej a najdi stejné dvojice!",
+        "🥁 OTOČ KARTIČKY A NAJDI STEJNÉ DVOJICE!"
+      );
     }
 
     render() {
+      const matchedPairs = this.deck.filter((c) => c.matched).length / 2;
+      const totalPairs = this.deck.length / 2;
       this.hostEl.innerHTML = `
         <div class="workspace-header">
           <h2 class="workspace-title">🥁 ZVUKOVÉ PEXESO: NAJDI STEJNÉ DVOJICE!</h2>
           <div class="workspace-actions">
-            <button id="btn-smem-next" class="btn-touch btn-next-task">🥁 DALŠÍ PEXESO ➔</button>
+            <span class="step-pill current">DVOJICE: ${matchedPairs} / ${totalPairs}</span>
           </div>
         </div>
         <div class="interactive-stage">
@@ -4019,11 +4690,6 @@
         </div>
       `;
 
-      document.getElementById("btn-smem-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.newGame();
-      });
-
       this.hostEl.querySelectorAll("[data-id]").forEach((btn) => {
         btn.addEventListener("click", () => {
           if (this.locked) return;
@@ -4031,6 +4697,7 @@
           if (!card || card.open || card.matched) return;
           card.open = true;
           this.playTone(card.freq);
+          this.mascot.audio.speakCustom(card.label, `🔊 ${card.emoji} ${card.label}`);
           this.opened.push(card);
           this.render();
 
@@ -4046,8 +4713,11 @@
                 this.mascot.celebrate("celebrate_02");
                 this.onComplete();
                 showContinueBanner(this.hostEl, {
-                  title: "🥁 VŠECHNY DVOJICE NALEZENY! CHCEŠ DALŠÍ PEXESO?",
-                  nextLabel: "🥁 DALŠÍ PEXESO ➔",
+                  icon: "🥁",
+                  title: "VŠECHNY ZVUKOVÉ DVOJICE JSOU NALEZENY!",
+                  subtitle: "Máš skvělou paměť i sluch! Zahrajeme si další pexeso?",
+                  spokenText: "Výborně! Všechny dvojice jsou nalezeny! Pojďme na další pexeso!",
+                  nextLabel: "▶️ DALŠÍ PEXESO ➔",
                   onNext: () => this.newGame()
                 });
               }
@@ -4059,7 +4729,7 @@
                 this.opened = [];
                 this.locked = false;
                 this.render();
-              }, 700);
+              }, 750);
             }
           }
         });
@@ -4071,13 +4741,39 @@
     }
   }
 
-  // --- AKTIVITA 21: KÓDOVÁNÍ CESTY (PRVNÍ PROGRAMOVÁNÍ) ---
-  const CODING_LEVELS = [
-    { start: [0, 2], goal: [3, 2], holes: [[1, 1], [2, 3]] },
-    { start: [0, 0], goal: [3, 2], holes: [[1, 0], [2, 1]] },
-    { start: [0, 3], goal: [3, 0], holes: [[1, 2], [2, 2]] },
-    { start: [0, 1], goal: [3, 3], holes: [[2, 1], [1, 3]] }
-  ];
+  // --- AKTIVITA 21: KÓDOVÁNÍ CESTY (25 TRAS + 1★–5★) ---
+  function buildCodingLevels() {
+    const base = [
+      { start: [0, 2], goal: [3, 2], holes: [[1, 1], [2, 3]] },
+      { start: [0, 0], goal: [3, 2], holes: [[1, 0], [2, 1]] },
+      { start: [0, 3], goal: [3, 0], holes: [[1, 2], [2, 2]] },
+      { start: [0, 1], goal: [3, 3], holes: [[2, 1], [1, 3]] },
+      { start: [0, 0], goal: [3, 3], holes: [[1, 1], [2, 2]] },
+      { start: [0, 3], goal: [3, 1], holes: [[1, 3], [2, 0]] },
+      { start: [0, 2], goal: [3, 0], holes: [[1, 2], [2, 1]] },
+      { start: [0, 1], goal: [3, 2], holes: [[1, 1], [2, 3]] },
+      { start: [3, 0], goal: [0, 3], holes: [[2, 0], [1, 2]] },
+      { start: [3, 3], goal: [0, 0], holes: [[2, 3], [1, 1]] },
+      { start: [3, 1], goal: [0, 2], holes: [[2, 1], [1, 3]] },
+      { start: [3, 2], goal: [0, 1], holes: [[2, 2], [1, 0]] },
+      { start: [1, 0], goal: [2, 3], holes: [[1, 2], [2, 1]] },
+      { start: [2, 0], goal: [1, 3], holes: [[2, 2], [0, 1]] },
+      { start: [0, 0], goal: [2, 3], holes: [[0, 2], [2, 1]] },
+      { start: [0, 3], goal: [2, 0], holes: [[0, 1], [2, 2]] },
+      { start: [1, 3], goal: [3, 0], holes: [[1, 1], [3, 2]] },
+      { start: [2, 3], goal: [0, 0], holes: [[2, 1], [0, 2]] },
+      { start: [0, 2], goal: [2, 0], holes: [[1, 2], [0, 0]] },
+      { start: [0, 1], goal: [2, 3], holes: [[1, 1], [0, 3]] },
+      { start: [3, 0], goal: [1, 3], holes: [[2, 0], [3, 2]] },
+      { start: [3, 3], goal: [1, 0], holes: [[2, 3], [3, 1]] },
+      { start: [0, 0], goal: [3, 1], holes: [[1, 0], [2, 2]] },
+      { start: [0, 3], goal: [3, 2], holes: [[1, 3], [2, 1]] },
+      { start: [1, 0], goal: [3, 3], holes: [[2, 0], [1, 2]] }
+    ];
+    return base;
+  }
+
+  const CODING_LEVELS = buildCodingLevels();
 
   class CodingPathActivity {
     constructor(hostEl, activity, level, mascot, store, onComplete) {
@@ -4085,25 +4781,36 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
+      this.deck = shuffleArray(CODING_LEVELS);
       this.mapIdx = 0;
-      this.mascot.audio.speak("act_21_intro");
       this.loadMap(0);
     }
 
     loadMap(idx) {
-      this.mapIdx = idx % CODING_LEVELS.length;
-      const m = CODING_LEVELS[this.mapIdx];
+      this.mapIdx = idx % this.deck.length;
+      if (this.mapIdx === 0 && idx > 0) {
+        this.deck = shuffleArray(this.deck);
+      }
+      const m = this.deck[this.mapIdx];
+      this.startPos = [...m.start];
       this.px = m.start[0];
       this.py = m.start[1];
       this.gx = m.goal[0];
       this.gy = m.goal[1];
-      this.holes = m.holes;
+      const stars = this.level.stars || 1;
+      this.holes = stars === 1 ? m.holes.slice(0, 1) : m.holes;
       this.commands = [];
       this.render();
+      this.mascot.audio.speakCustom(
+        "Kódování cesty! Poskládej šipky pro Pika tak, aby se vyhnul dírám v ledu a došel až k diamantu!",
+        "🧭 NAPROGRAMUJ ŠIPKAMI CESTU K DIAMANTU 💎!"
+      );
     }
 
     runProgram() {
       if (!this.commands.length) return;
+      this.px = this.startPos[0];
+      this.py = this.startPos[1];
       let i = 0;
       const step = () => {
         if (i >= this.commands.length) return;
@@ -4111,7 +4818,7 @@
         const nx = Math.max(0, Math.min(3, this.px + cmd.dx));
         const ny = Math.max(0, Math.min(3, this.py + cmd.dy));
         if (this.holes.some(([hx, hy]) => hx === nx && hy === ny)) {
-          this.mascot.gentleNudge("hint_idle_encourage");
+          this.mascot.audio.speakCustom("Pozor, tam je díra v ledu! Zkus upravit kroky.");
           return;
         }
         this.px = nx;
@@ -4122,8 +4829,11 @@
           this.mascot.celebrate("celebrate_06");
           this.onComplete();
           showContinueBanner(this.hostEl, {
-            title: "💎 PIKO DOŠEL K POKLADU! CHCEŠ NAPROGRAMOVAT DALŠÍ TRASU?",
-            nextLabel: "🧭 DALŠÍ TRASA ➔",
+            icon: "💎",
+            title: "PROGRAM FUNGUJE! PIKO ZÍSKAL DIAMANT!",
+            subtitle: "Skvělé programování! Naprogramujeme další trasu?",
+            spokenText: "Výborně! Piko došel k pokladu! Pojďme naprogramovat další trasu!",
+            nextLabel: "▶️ DALŠÍ TRASA ➔",
             onNext: () => this.loadMap(this.mapIdx + 1)
           });
           return;
@@ -4139,7 +4849,6 @@
           <h2 class="workspace-title">🧭 KÓDOVÁNÍ CESTY: SESTAV KROKY K POKLADU 💎</h2>
           <div class="workspace-actions">
             <button id="btn-code-clear" class="btn-touch btn-secondary">🧹 VYMAZAT KROKY</button>
-            <button id="btn-code-next" class="btn-touch btn-next-task">🧭 DALŠÍ TRASA ➔</button>
           </div>
         </div>
         <div class="feed-layout">
@@ -4160,10 +4869,10 @@
           <div class="bowl-panel" style="justify-content:space-between;">
             <div class="panel-heading">1. PŘIDEJ ŠIPKY DO PROGRAMU:</div>
             <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
-              <button class="btn-touch btn-secondary" data-cmd="0,-1,⬆️">⬆️ NAHORU</button>
-              <button class="btn-touch btn-secondary" data-cmd="0,1,⬇️">⬇️ DOLŮ</button>
-              <button class="btn-touch btn-secondary" data-cmd="-1,0,⬅️">⬅️ VLEVO</button>
-              <button class="btn-touch btn-secondary" data-cmd="1,0,➡️">➡️ VPRAVO</button>
+              <button class="btn-touch btn-secondary" data-cmd="0,-1,⬆️,Nahoru">⬆️ NAHORU</button>
+              <button class="btn-touch btn-secondary" data-cmd="0,1,⬇️,Dolů">⬇️ DOLŮ</button>
+              <button class="btn-touch btn-secondary" data-cmd="-1,0,⬅️,Vlevo">⬅️ VLEVO</button>
+              <button class="btn-touch btn-secondary" data-cmd="1,0,➡️,Vpravo">➡️ VPRAVO</button>
             </div>
             <div class="bowl-dropzone" style="min-height:54px;">
               ${this.commands.length ? this.commands.map((c) => `<span style="font-size:1.6rem;">${c.icon}</span>`).join(" ") : "ZATÍM ŽÁDNÉ KROKY"}
@@ -4174,17 +4883,14 @@
       `;
 
       document.getElementById("btn-code-clear").addEventListener("click", () => this.loadMap(this.mapIdx));
-      document.getElementById("btn-code-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.loadMap(this.mapIdx + 1);
-      });
       document.getElementById("btn-code-run").addEventListener("click", () => this.runProgram());
 
       this.hostEl.querySelectorAll("[data-cmd]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const [dx, dy, icon] = btn.dataset.cmd.split(",");
+          const [dx, dy, icon, spoken] = btn.dataset.cmd.split(",");
           this.commands.push({ dx: Number(dx), dy: Number(dy), icon });
           this.mascot.audio.playSfx("pop");
+          this.mascot.audio.speakCustom(spoken);
           this.render();
         });
       });
@@ -4195,28 +4901,41 @@
     }
   }
 
-  // --- AKTIVITA 22: TŘÍDĚNÍ PODLE VÍCE VLASTNOSTÍ (MATICE) ---
-  const MATRIX_SETS = [
-    {
-      rows: [
-        { id: "fish", label: "🐟 RYBKA", emoji: "🐟" },
-        { id: "star", label: "⭐ HVĚZDA", emoji: "⭐" }
-      ],
-      cols: [
-        { id: "red", label: "🔴 ČERVENÁ", bg: "#FFE5EC" },
-        { id: "blue", label: "🔵 MODRÁ", bg: "#E2F0FF" }
-      ]
-    },
-    {
-      rows: [
-        { id: "car", label: "🚗 AUTO", emoji: "🚗" },
-        { id: "balloon", label: "🎈 BALÓNEK", emoji: "🎈" }
-      ],
-      cols: [
-        { id: "yellow", label: "🟡 ŽLUTÁ", bg: "#FFF9DB" },
-        { id: "green", label: "🟢 ZELENÁ", bg: "#E6FCF5" }
-      ]
-    }
+  // --- AKTIVITA 22: TŘÍDĚNÍ PODLE VÍCE VLASTNOSTÍ (MATICE - 24 KOMBINACÍ + NA PŘESKÁČKU) ---
+  const MATRIX_ROW_POOL = [
+    { id: "fish", label: "🐟 RYBKA", emoji: "🐟" },
+    { id: "star", label: "⭐ HVĚZDA", emoji: "⭐" },
+    { id: "car", label: "🚗 AUTO", emoji: "🚗" },
+    { id: "balloon", label: "🎈 BALÓNEK", emoji: "🎈" },
+    { id: "flower", label: "🌸 KYTIČKA", emoji: "🌸" },
+    { id: "apple", label: "🍎 JABLÍČKO", emoji: "🍎" },
+    { id: "boat", label: "⛵ LOĎKA", emoji: "⛵" },
+    { id: "crown", label: "👑 KORUNA", emoji: "👑" },
+    { id: "butterfly", label: "🦋 MOTÝLEK", emoji: "🦋" },
+    { id: "rocket", label: "🚀 RAKETA", emoji: "🚀" },
+    { id: "house", label: "🏠 DOMEČEK", emoji: "🏠" },
+    { id: "umbrella", label: "☂️ DEŠTNÍK", emoji: "☂️" },
+    { id: "heart", label: "❤️ SRDÍČKO", emoji: "❤️" },
+    { id: "tree", label: "🌲 STROMEK", emoji: "🌲" },
+    { id: "bell", label: "🔔 ZVONEK", emoji: "🔔" },
+    { id: "hat", label: "🎩 KLOBOUK", emoji: "🎩" },
+    { id: "cupcake", label: "🧁 DORTÍK", emoji: "🧁" },
+    { id: "guitar", label: "🎸 KYTARA", emoji: "🎸" },
+    { id: "train", label: "🚂 VLÁČEK", emoji: "🚂" },
+    { id: "duck", label: "🦆 KACHNIČKA", emoji: "🦆" },
+    { id: "frog", label: "🐸 ŽABIČKA", emoji: "🐸" },
+    { id: "owl", label: "🦉 SOVIČKA", emoji: "🦉" },
+    { id: "mushroom", label: "🍄 HŘÍBEK", emoji: "🍄" },
+    { id: "kite", label: "🪁 DRAK", emoji: "🪁" }
+  ];
+
+  const MATRIX_COL_POOL = [
+    { id: "red", label: "🔴 ČERVENÁ", bg: "#FFE5EC" },
+    { id: "blue", label: "🔵 MODRÁ", bg: "#E2F0FF" },
+    { id: "yellow", label: "🟡 ŽLUTÁ", bg: "#FFF9DB" },
+    { id: "green", label: "🟢 ZELENÁ", bg: "#E6FCF5" },
+    { id: "purple", label: "🟣 FIALOVÁ", bg: "#F3E8FF" },
+    { id: "orange", label: "🟠 ORANŽOVÁ", bg: "#FFEDD5" }
   ];
 
   class MatrixSortActivity {
@@ -4225,33 +4944,68 @@
       this.level = level;
       this.mascot = mascot;
       this.onComplete = onComplete;
-      this.setIdx = 0;
-      this.mascot.audio.speak("act_22_intro");
-      this.loadSet(0);
+      this.loadNextSet();
     }
 
-    loadSet(idx) {
-      this.setIdx = idx % MATRIX_SETS.length;
-      const cfg = MATRIX_SETS[this.setIdx];
-      this.rows = cfg.rows;
-      this.cols = cfg.cols;
+    loadNextSet() {
+      const stars = this.level.stars || 1;
+      const rCount = stars >= 5 ? 3 : 2;
+      const cCount = stars >= 3 ? 3 : 2;
+      this.rows = shuffleArray(MATRIX_ROW_POOL).slice(0, rCount);
+      this.cols = shuffleArray(MATRIX_COL_POOL).slice(0, cCount);
       this.filled = {};
       this.items = [];
       this.rows.forEach((r) => {
         this.cols.forEach((c) => {
-          this.items.push({ key: `${r.id}_${c.id}`, emoji: r.emoji, bg: c.bg, label: `${c.label.split(" ")[1]} ${r.label.split(" ")[1]}` });
+          this.items.push({
+            key: `${r.id}_${c.id}`,
+            emoji: r.emoji,
+            bg: c.bg,
+            label: `${c.label.split(" ")[1]} ${r.label.split(" ")[1]}`
+          });
         });
       });
-      this.selectedKey = this.items[0].key;
+      this.items = shuffleArray(this.items);
+      this.selectedKey = null;
+      this.selectedCell = null;
       this.render();
+      this.mascot.audio.speakCustom(
+        "Zařaď kartičky do správného řádku podle tvaru a do sloupce podle barvy! Můžeš je dávat v libovolném pořadí!",
+        "🗂️ ZAŘAĎ KARTIČKY PODLE TVARU A BARVY (LZE I NA PŘESKÁČKU)!"
+      );
+    }
+
+    tryPlaceMatrix(itemKey, cellKey, el) {
+      if (itemKey === cellKey) {
+        this.filled[cellKey] = true;
+        this.selectedKey = null;
+        this.selectedCell = null;
+        this.mascot.audio.playSfx("snap");
+        this.render();
+        if (Object.keys(this.filled).length === this.items.length) {
+          this.mascot.celebrate("celebrate_02");
+          this.onComplete();
+          showContinueBanner(this.hostEl, {
+            icon: "🗂️",
+            title: "CELÁ TABULKA JE SPRÁVNĚ VYPLNĚNÁ!",
+            subtitle: "Všechny tvary a barvy sedí! Vyplníme další tabulku?",
+            spokenText: "Výborně! Celá tabulka je správně vyplněná! Pojďme na další tabulku!",
+            nextLabel: "▶️ DALŠÍ TABULKA ➔",
+            onNext: () => this.loadNextSet()
+          });
+        }
+      } else {
+        if (el) el.classList.add("gentle-nudge-anim");
+        this.mascot.gentleNudge("hint_shape_size");
+      }
     }
 
     render() {
       this.hostEl.innerHTML = `
         <div class="workspace-header">
-          <h2 class="workspace-title">🗂️ ZAŘAĎ KARTIČKY DO SPRÁVNÉHO ŘÁDKU A SLOUPCE!</h2>
+          <h2 class="workspace-title">🗂️ ZAŘAĎ KARTIČKY DO ŘÁDKU A SLOUPCE (LZE I NA PŘESKÁČKU)!</h2>
           <div class="workspace-actions">
-            <button id="btn-mat-next" class="btn-touch btn-next-task">🗂️ DALŠÍ TABULKA ➔</button>
+            <span class="step-pill current">ZAŘAZENO: ${Object.keys(this.filled).length} / ${this.items.length}</span>
           </div>
         </div>
         <div class="feed-layout">
@@ -4273,7 +5027,8 @@
                       .map((c) => {
                         const key = `${r.id}_${c.id}`;
                         const done = this.filled[key];
-                        return `<td class="matrix-cell ${done ? "filled" : ""}" data-cell="${key}" style="background:${done ? c.bg : "#f8fcff"};">${done ? r.emoji : "❓"}</td>`;
+                        const isSel = this.selectedCell === key && !done;
+                        return `<td class="matrix-cell ${done ? "filled" : ""}" data-cell="${key}" style="background:${done ? c.bg : isSel ? "#fff9db" : "#f8fcff"}; ${isSel ? "outline:3px solid #ffb703;" : ""}">${done ? r.emoji : "❓"}</td>`;
                       })
                       .join("")}
                   </tr>
@@ -4284,7 +5039,7 @@
             </table>
           </div>
           <div class="bowl-panel" style="justify-content:center;">
-            <div class="panel-heading">VYBER KARTIČKU A ŤUKNI DO TABULKY:</div>
+            <div class="panel-heading">ŤUKNI NA KARTIČKU NEBO DO POLÍČKA TABULKY:</div>
             <div class="cards-grid">
               ${this.items
                 .map((it) => {
@@ -4303,41 +5058,34 @@
         </div>
       `;
 
-      document.getElementById("btn-mat-next").addEventListener("click", () => {
-        this.mascot.audio.playSfx("pop");
-        this.loadSet(this.setIdx + 1);
-      });
-
       this.hostEl.querySelectorAll("[data-item]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          this.selectedKey = btn.dataset.item;
+          const itemKey = btn.dataset.item;
+          if (this.filled[itemKey]) return;
+          const it = this.items.find((x) => x.key === itemKey);
           this.mascot.audio.playSfx("pop");
-          this.render();
+          if (it) this.mascot.audio.speakCustom(it.label);
+
+          if (this.selectedCell && !this.filled[this.selectedCell]) {
+            this.tryPlaceMatrix(itemKey, this.selectedCell, btn);
+          } else {
+            this.selectedKey = itemKey;
+            this.render();
+          }
         });
       });
 
       this.hostEl.querySelectorAll("[data-cell]").forEach((cell) => {
         cell.addEventListener("click", () => {
-          const key = cell.dataset.cell;
-          if (this.filled[key]) return;
-          if (this.selectedKey === key) {
-            this.filled[key] = true;
-            this.mascot.audio.playSfx("snap");
-            const next = this.items.find((x) => !this.filled[x.key]);
-            this.selectedKey = next ? next.key : null;
-            this.render();
-            if (Object.keys(this.filled).length === this.items.length) {
-              this.mascot.celebrate("celebrate_02");
-              this.onComplete();
-              showContinueBanner(this.hostEl, {
-                title: "🗂️ CELÁ TABULKA JE SPRÁVNĚ VYPLNĚNÁ!",
-                nextLabel: "🗂️ DALŠÍ TABULKA ➔",
-                onNext: () => this.loadSet(this.setIdx + 1)
-              });
-            }
+          const cellKey = cell.dataset.cell;
+          if (this.filled[cellKey]) return;
+          this.mascot.audio.playSfx("pop");
+
+          if (this.selectedKey) {
+            this.tryPlaceMatrix(this.selectedKey, cellKey, cell);
           } else {
-            cell.classList.add("gentle-nudge-anim");
-            this.mascot.gentleNudge("hint_shape_size");
+            this.selectedCell = cellKey;
+            this.render();
           }
         });
       });
@@ -4548,7 +5296,7 @@
             <div class="progress-row">
               <div class="progress-row-head">
                 <span>${z.icon} ${z.title}</span>
-                <span>⭐ ${stars} / ${zoneActs.length * 3} • cca ${mins} min hraní</span>
+                <span>⭐ ${stars} / ${zoneActs.length * 5} • cca ${mins} min hraní</span>
               </div>
               <div class="progress-track">
                 <div class="progress-fill" style="width:${pct}%; background:${z.accentColor};"></div>
@@ -4630,6 +5378,119 @@
   /* =========================================================================
    * 10. HLAVNÍ APLIKAČNÍ KONTROLER (MAPA OSTROVŮ A NAVIGACE)
    * ========================================================================= */
+  const ACTIVITY_CHILD_GOALS = {
+    act_01: {
+      visual: "✏️ ➔ 🐧🎨",
+      goalText: "Naučíš se nakreslit obrázek krok za krokem",
+      spoken: "Krok za krokem! Tady se naučíš nakreslit krásný obrázek podle jednoduchých čar a nakonec si ho vybarvíš!"
+    },
+    act_02: {
+      visual: "🔴 + 🟡 ➔ 🟠",
+      goalText: "Smíchej dvě barvy a vykouzli novou barvu",
+      spoken: "Míchání barev! Tady zjistíš, jaká nová barva vznikne, když v kotlíku smícháš dvě barvičky dohromady!"
+    },
+    act_03: {
+      visual: "🦋 🪞 🦋",
+      goalText: "Dokresli druhou polovinu obrázku jako v zrcadle",
+      spoken: "Zrcadlové kreslení! Dokresli druhou polovinu obrázku, aby obě strany vypadaly stejně jako v zrcadle!"
+    },
+    act_04: {
+      visual: "📖 ➔ 🖍️🌟",
+      goalText: "Poslechni si pohádku a dokresli, co v ní chybí",
+      spoken: "Dokresli příběh! Poslechni si krátkou pohádku a nakresli do obrázku to, co postavě chybí, abys jí pomohl!"
+    },
+    act_05: {
+      visual: "1️⃣ • 2️⃣ • 3️⃣ ➔ ⭐",
+      goalText: "Spoj hvězdičky čarou a odhal tajné souhvězdí",
+      spoken: "Spojovačka souhvězdí! Spoj hvězdičky na obloze čarou, aby se ti ukázal schovaný obrázek!"
+    },
+    act_06: {
+      visual: "🔺🔷 ➔ 🐟",
+      goalText: "Poskládej z barevných tvarů celé zvířátko",
+      spoken: "Tangram! Poskládej barevné trojúhelníky a čtverce do obrysu, abys postavil celé zvířátko nebo věc!"
+    },
+    act_07: {
+      visual: "🐧 ➔ 👤",
+      goalText: "Najdi každému obrázku jeho správný černý stín",
+      spoken: "Stínové divadlo! Pozorně se dívej na tvary a přiřaď každý barevný obrázek k jeho správnému stínu!"
+    },
+    act_08: {
+      visual: "🔍 👀 ❓",
+      goalText: "Najdi obrázek, který se liší od ostatních",
+      spoken: "Zrakový detektiv! Trénuj bystré oči a najdi mezi obrázky ten, který je jiný nebo do řady nepatří!"
+    },
+    act_09: {
+      visual: "🧩 ➔ 🖼️",
+      goalText: "Slož rozbitou ledovou fotografii z dílků",
+      spoken: "Polární skládačka! Doplň chybějící dílky na správná místa, aby byl celý obrázek zase pohromadě!"
+    },
+    act_10: {
+      visual: "👂 🅰️ ➔ 🍎",
+      goalText: "Poslechni si hlásku a vyber obrázek na stejné písmeno",
+      spoken: "První hláska! Poslechni si, na jaké písmenko slovo začíná, a vyber správný obrázek!"
+    },
+    act_11: {
+      visual: "👏 TA • RI • ❄️",
+      goalText: "Vytleskej slovo na slabiky po ledových krách",
+      spoken: "Vytleskávání slabik! Rozděl slovo na slabiky a poklepáním rozsviť tolik ledových ker, kolik má slovo částí!"
+    },
+    act_12: {
+      visual: "🛷 ➔ 🅰️",
+      goalText: "Objeď prstem tvar písmene nebo číslice ve sněhu",
+      spoken: "Písmenková dráha! Naučíš se psát písmenka a čísla tak, že vybereš všechny sněhové vločky po dráze!"
+    },
+    act_13: {
+      visual: "🐱 🎵 ☕",
+      goalText: "Najdi dvě slova, která na konci znějí stejně (rýmují se)",
+      spoken: "Rýmovací pexeso! Klikej na kartičky, poslouchej slova a najdi dvě, která se spolu hezky rýmují!"
+    },
+    act_14: {
+      visual: "🐟 1, 2, 3 ➔ 🐧",
+      goalText: "Napočítej přesný počet rybiček do bříška tučňáka",
+      spoken: "Nakrm tučňáka! Naučíš se počítat tak, že dáš tučňákovi přesně tolik rybiček, kolik má napsáno na bříšku!"
+    },
+    act_15: {
+      visual: "⚖️ 🧊 = 🧊",
+      goalText: "Vyrovnej misky vah stejným počtem kostek ledu",
+      spoken: "Ledové váhy! Přidávej nebo ubírej ledové kostky tak, aby bylo na obou stranách vah úplně stejně!"
+    },
+    act_16: {
+      visual: "🐧➕🐧 ➔ 🔢",
+      goalText: "Spočítej zvířátka v příběhu a vyber správné číslo",
+      spoken: "Obrázkové počítání! Poslechni si příběh, spočítej všechna zvířátka na ledovci a klikni na správné číslo!"
+    },
+    act_17: {
+      visual: "🐭 ➔ 🐕 ➔ 🐘",
+      goalText: "Seřaď předměty postupně od nejmenšího po největší",
+      spoken: "Od nejmenšího k největšímu! Porovnej velikosti a poskládej věci do řady podle toho, jak jsou velké!"
+    },
+    act_18: {
+      visual: "🔴🔵🔴 ➔ ❓",
+      goalText: "Odhal pravidlo v řadě a doplň, co patří na konec",
+      spoken: "Logické řady! Podívej se, jak se obrázky střídají, a uhodni, který obrázek má pokračovat dál!"
+    },
+    act_19: {
+      visual: "🐧 🧭 ➔ 🏠",
+      goalText: "Proveď tučňáka bludištěm bezpečně až do cíle",
+      spoken: "Ledové bludiště! Najdi volnou cestu mezi ledovými stěnami a doveď tučňáka až k iglú a rybičce!"
+    },
+    act_20: {
+      visual: "🔔👂 ➔ 🔔",
+      goalText: "Zapamatuj si tóny zvonkohry a zahraj je ve stejném pořadí",
+      spoken: "Zvukové pexeso! Trénuj ouška i paměť, poslechni si rampouchy a pak na ně cinkni úplně stejně!"
+    },
+    act_21: {
+      visual: "⬆️➡️⬆️ ➔ 🐟",
+      goalText: "Naprogramuj šipkami cestu pro tučňáka k rybičce",
+      spoken: "Kódování cesty! Poskládej dopředu šipky, kudy má tučňák jít, a vyhni se přitom dírám v ledu!"
+    },
+    act_22: {
+      visual: "🔴➕⭐ ➔ 🎯",
+      goalText: "Zařaď každou kartičku do tabulky podle tvaru i barvy",
+      spoken: "Třídění podle dvou pravidel! Najdi v tabulce správné políčko, kde sedí zároveň barva i tvar!"
+    }
+  };
+
   class PenguinWorldApp {
     constructor(catalog, manifest) {
       this.catalog = catalog;
@@ -4712,15 +5573,25 @@
         .map((act) => {
           const earned = this.store.state.starsEarned[act.id] || 0;
           const starBadge = earned ? "⭐".repeat(earned) : "⭐";
+          const goal = ACTIVITY_CHILD_GOALS[act.id] || {
+            visual: `${act.icon} ➔ ⭐`,
+            goalText: act.subtitle || act.title,
+            spoken: `${act.title}. ${act.subtitle || ""}`
+          };
           return `
             <div class="activity-card-row ${act.implementedInPrototype ? "playable" : ""}">
-              <div class="activity-row-info">
+              <div class="activity-row-info" data-act-goal="${act.id}" style="cursor:pointer;" title="Klikni pro přečtení cíle úkolu">
                 <span class="activity-row-icon">${act.icon}</span>
                 <div>
                   <div class="activity-row-title">${act.title.toUpperCase()}</div>
+                  <div class="activity-goal-pill">
+                    <span class="goal-icons">${goal.visual}</span>
+                    <span>${goal.goalText}</span>
+                  </div>
                 </div>
               </div>
-              <div class="activity-row-actions">
+              <div class="activity-row-actions" style="display:flex; gap:10px; align-items:center;">
+                <button class="btn-speak-goal" data-act-goal="${act.id}" aria-label="Přečíst cíl úkolu">🔊 CO JE CÍLEM?</button>
                 ${
                   act.implementedInPrototype
                     ? `<button class="btn-touch btn-primary btn-launch-act" data-act-id="${act.id}">▶ HRÁT ${starBadge}</button>`
@@ -4731,6 +5602,18 @@
           `;
         })
         .join("");
+
+      listEl.querySelectorAll("[data-act-goal]").forEach((el) => {
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const actId = el.dataset.actGoal;
+          const goal = ACTIVITY_CHILD_GOALS[actId];
+          if (goal) {
+            this.audio.playSfx("pop");
+            this.audio.speakCustom(goal.spoken, goal.goalText.toUpperCase());
+          }
+        });
+      });
 
       listEl.querySelectorAll(".btn-launch-act").forEach((btn) => {
         btn.addEventListener("click", () => this.launchActivity(btn.dataset.actId, 1));
@@ -4848,7 +5731,15 @@
 
       this.currentActivity = activity;
       this.currentLevelStars = stars;
-      const level = activity.levels.find((l) => l.stars === stars) || activity.levels[0];
+      const baseLevel =
+        activity.levels.find((l) => l.stars === stars) ||
+        activity.levels[activity.levels.length - 1] ||
+        activity.levels[0];
+      const level = {
+        ...baseLevel,
+        stars,
+        config: { ...((baseLevel && baseLevel.config) || {}) }
+      };
 
       this.zoneDrawer.classList.add("hidden");
       this.viewMap.classList.add("hidden");
@@ -4915,8 +5806,8 @@
     if (window.location.protocol !== "file:") {
       try {
         const [actRes, audRes] = await Promise.all([
-          fetch("./data/activities.json?v=6"),
-          fetch("./data/audio_manifest.json?v=6")
+          fetch("./data/activities.json?v=7"),
+          fetch("./data/audio_manifest.json?v=7")
         ]);
         if (actRes.ok) catalog = await actRes.json();
         if (audRes.ok) manifest = await audRes.json();
@@ -4929,7 +5820,7 @@
           .keys()
           .then((keys) =>
             Promise.all(
-              keys.filter((k) => k !== "tucnakuv-svet-v6").map((k) => caches.delete(k))
+              keys.filter((k) => k !== "tucnakuv-svet-v7").map((k) => caches.delete(k))
             )
           )
           .catch(() => {});
@@ -4937,7 +5828,7 @@
 
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
-          .register("./sw.js?v=6")
+          .register("./sw.js?v=7")
           .then((reg) => {
             reg.update().catch(() => {});
           })
