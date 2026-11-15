@@ -2038,7 +2038,51 @@
       this.zoneDrawer.classList.remove("hidden");
     }
 
+    isFullscreenActive() {
+      return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+    }
+
+    toggleFullscreen() {
+      this.audio.playSfx("pop");
+      const docEl = document.documentElement;
+      if (!this.isFullscreenActive()) {
+        const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen;
+        if (req) {
+          Promise.resolve(req.call(docEl))
+            .then(() => {
+              if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock("landscape").catch(() => {});
+              }
+            })
+            .catch(() => {});
+        }
+      } else {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exit) {
+          Promise.resolve(exit.call(document)).catch(() => {});
+        }
+      }
+    }
+
+    updateFullscreenUI() {
+      const btn = document.getElementById("btn-fullscreen");
+      const icon = document.getElementById("fullscreen-icon");
+      const label = document.getElementById("fullscreen-label");
+      if (!btn || !icon || !label) return;
+      const active = this.isFullscreenActive();
+      btn.classList.toggle("active", active);
+      icon.textContent = active ? "🗗" : "⛶";
+      label.textContent = active ? "UKONČIT" : "CELÁ OBRAZOVKA";
+    }
+
     bindNavigation() {
+      const fsBtn = document.getElementById("btn-fullscreen");
+      if (fsBtn) {
+        fsBtn.addEventListener("click", () => this.toggleFullscreen());
+      }
+      document.addEventListener("fullscreenchange", () => this.updateFullscreenUI());
+      document.addEventListener("webkitfullscreenchange", () => this.updateFullscreenUI());
+
       document.getElementById("btn-close-drawer").addEventListener("click", () => {
         this.zoneDrawer.classList.add("hidden");
       });

@@ -172,6 +172,27 @@ body {
   border-color: var(--ocean-blue);
 }
 
+.btn-fullscreen {
+  background: #e6f4fc;
+  color: var(--navy);
+  border: 2px solid #9fd4f2;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.btn-fullscreen.active {
+  background: var(--mint);
+  color: #ffffff;
+  border-color: #059669;
+}
+
+@media (max-width: 1180px) {
+  .fullscreen-label {
+    display: none;
+  }
+}
+
 .timer-badge {
   display: flex;
   align-items: center;

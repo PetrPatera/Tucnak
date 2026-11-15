@@ -1,4 +1,4 @@
-const CACHE_NAME = "tucnakuv-svet-v1";
+const CACHE_NAME = "tucnakuv-svet-v2";
 const CORE_ASSETS = [
   "./",
   "./index.html",
